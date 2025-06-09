@@ -15,7 +15,11 @@ jobs:
           node-version: 20
           cache: 'pnpm'
 
-      - run: npm install -g pnpm # ✅ pnpm 수동 설치 추가
+      - name: Install pnpm globally & add to PATH
+        run: |
+          npm install -g pnpm
+          echo "$(npm bin -g)" >> $GITHUB_PATH
+          pnpm -v
 
       - run: pnpm install
       - run: pnpm lint
@@ -34,10 +38,16 @@ jobs:
           node-version: 20
           cache: 'pnpm'
 
-      - run: npm install -g pnpm # ✅ pnpm 수동 설치 추가
+      - name: Install pnpm globally & add to PATH
+        run: |
+          npm install -g pnpm
+          echo "$(npm bin -g)" >> $GITHUB_PATH
+          pnpm -v
 
       - run: pnpm install
-      - run: |
+
+      - name: Push to personal fork
+        run: |
           git config --global user.name "CI Bot"
           git config --global user.email "ci-bot@example.com"
           git remote add fork https://x-access-token:${{ secrets.PERSONAL_FORK_TOKEN }}@github.com/dnjfht/be-beam.site.git
