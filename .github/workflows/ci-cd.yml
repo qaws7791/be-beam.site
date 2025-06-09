@@ -5,6 +5,7 @@ on:
     branches: [main, dev]
   pull_request:
     branches: [main, dev]
+  workflow_dispatch: # ✅ 이 줄이 있어야 "Run workflow" 버튼이 뜹니다
 
 jobs:
   ci:
