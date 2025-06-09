@@ -1,5 +1,3 @@
-import { Welcome } from '../welcome/welcome';
-
 export function meta() {
   return [
     { title: 'New React Router App' },
@@ -7,5 +5,9 @@ export function meta() {
   ];
 }
 export default function Home() {
-  return <Welcome message="Hello from Vercel" />;
+  return (
+    <div>
+      <h1>홈 페이지</h1>
+    </div>
+  );
 }
