@@ -45,8 +45,8 @@ jobs:
 
       - name: Set up Git user
         run: |
-          git config --global user.name "CI Bot"
-          git config --global user.email "ci-bot@example.com"
+          git config --global user.name "dnjfht"
+          git config --global user.email "dnjfht@example.com"
 
       - name: Push to personal fork
         env:
