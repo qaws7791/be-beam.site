@@ -1,3 +1,5 @@
+name: CI and Sync Fork
+
 on:
   push:
     branches: [main, dev]
@@ -40,29 +42,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-
-      - name: Install pnpm globally & ensure in PATH
-        run: |
-          npm install -g pnpm
-          echo "$(npm bin -g)" >> $GITHUB_PATH
-          pnpm -v
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Set up Git credentials
-        run: |
-          git config --global credential.helper store
-          echo "https://x-access-token:${{ secrets.PERSONAL_FORK_TOKEN }}@github.com" > ~/.git-credentials
-
-      - name: Push to personal fork
+      - name: Set up Git user
         run: |
           git config --global user.name "CI Bot"
           git config --global user.email "ci-bot@example.com"
-          git remote remove fork || true
-          git remote add fork https://x-access-token:${{ secrets.PERSONAL_FORK_TOKEN }}@github.com/dnjfht/be-beam.site.git
-          git push -f fork main
+
+      - name: Push to personal fork
+        env:
+          TOKEN: ${{ secrets.PERSONAL_FORK_TOKEN }}
+        run: |
+          git remote remove origin || true
+          git remote add origin https://x-access-token:${TOKEN}@github.com/dnjfht/be-beam.site.git
+          git push -f origin main
