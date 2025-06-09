@@ -46,7 +46,7 @@ jobs:
       - name: Set up Git user
         run: |
           git config --global user.name "dnjfht"
-          git config --global user.email "dnjfht@example.com"
+          git config --global user.email "117057638+dnjfht@users.noreply.github.com"
 
       - name: Push to personal fork
         env:
