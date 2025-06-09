@@ -10,21 +10,28 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: 'pnpm'
 
-      - name: Install pnpm globally & add to PATH
+      - name: Install pnpm globally & ensure in PATH
         run: |
           npm install -g pnpm
           echo "$(npm bin -g)" >> $GITHUB_PATH
           pnpm -v
 
-      - run: pnpm install
-      - run: pnpm lint
-      - run: pnpm format:check || echo "Prettier issues (not blocking)"
-      - run: pnpm test
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Prettier check (non-blocking)
+        run: pnpm format:check || echo "Prettier issues (not blocking)"
+
+      - name: Test
+        run: pnpm test
 
   sync-to-fork:
     needs: ci
@@ -33,18 +40,19 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: 'pnpm'
 
-      - name: Install pnpm globally & add to PATH
+      - name: Install pnpm globally & ensure in PATH
         run: |
           npm install -g pnpm
           echo "$(npm bin -g)" >> $GITHUB_PATH
           pnpm -v
 
-      - run: pnpm install
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Push to personal fork
         run: |
