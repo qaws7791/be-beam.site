@@ -9,10 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-node@v3
         with:
           node-version: 20
           cache: 'pnpm'
+
+      - run: npm install -g pnpm # ✅ pnpm 수동 설치 추가
+
       - run: pnpm install
       - run: pnpm lint
       - run: pnpm format:check || echo "Prettier issues (not blocking)"
@@ -24,10 +28,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-node@v3
         with:
           node-version: 20
           cache: 'pnpm'
+
+      - run: npm install -g pnpm # ✅ pnpm 수동 설치 추가
+
       - run: pnpm install
       - run: |
           git config --global user.name "CI Bot"
