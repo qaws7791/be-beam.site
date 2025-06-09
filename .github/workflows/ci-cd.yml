@@ -58,5 +58,6 @@ jobs:
         run: |
           git config --global user.name "CI Bot"
           git config --global user.email "ci-bot@example.com"
-          git remote add fork https://x-access-token:${{ secrets.PERSONAL_FORK_TOKEN }}@github.com/dnjfht/be-beam.site.git
+          git remote remove fork || true
+          git remote add fork https://x-access-token:${{ secrets.PERSONAL_FORK_TOKEN }}@github.com/내계정/be-beam.site.git
           git push -f fork main
