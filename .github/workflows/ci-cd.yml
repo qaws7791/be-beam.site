@@ -47,6 +47,12 @@ jobs:
           git config --global user.name "CI Bot"
           git config --global user.email "ci-bot@example.com"
 
+      - name: Check TOKEN
+        env:
+          TOKEN: ${{ secrets.PERSONAL_FORK_TOKEN }}
+        run: |
+          echo "TOKEN length: ${#TOKEN}"
+
       - name: Push to personal fork
         env:
           TOKEN: ${{ secrets.PERSONAL_FORK_TOKEN }}
