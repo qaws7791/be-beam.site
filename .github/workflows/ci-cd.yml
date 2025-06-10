@@ -42,16 +42,129 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # 전체 히스토리 가져오기
 
       - name: Set up Git user
         run: |
           git config --global user.name "dnjfht"
           git config --global user.email "117057638+dnjfht@users.noreply.github.com"
 
-      - name: Push to personal fork
+      - name: Detailed debugging and push
         env:
           TOKEN: ${{ secrets.PERSONAL_FORK_TOKEN }}
         run: |
+          echo "=== 1. Environment check ==="
+          echo "Current branch: $(git branch --show-current)"
+          echo "Current commit: $(git rev-parse HEAD)"
+          echo "Repository: ${{ github.repository }}"
+          echo "Token exists: $(if [ -n "${TOKEN}" ]; then echo "YES"; else echo "NO"; fi)"
+
+          echo "=== 2. Token validation ==="
+          user_response=$(curl -s -w "\nHTTP_CODE:%{http_code}" -H "Authorization: token ${TOKEN}" https://api.github.com/user)
+          echo "User API response:"
+          echo "$user_response"
+
+          echo "=== 3. Target repository access check ==="
+          repo_response=$(curl -s -w "\nHTTP_CODE:%{http_code}" -H "Authorization: token ${TOKEN}" https://api.github.com/repos/dnjfht/be-beam.site)
+          echo "Repository API response:"
+          echo "$repo_response"
+
+          echo "=== 4. Repository permissions check ==="
+          permissions=$(curl -s -H "Authorization: token ${TOKEN}" https://api.github.com/repos/dnjfht/be-beam.site | jq '.permissions // "No permissions field"')
+          echo "Permissions: $permissions"
+
+          echo "=== 5. Current git status ==="
+          git status --porcelain
+          git log --oneline -3
+
+          echo "=== 6. Test different authentication methods ==="
+
+          # Clean up any existing remotes
           git remote remove origin || true
-          git remote add origin https://x-access-token:${TOKEN}@github.com/dnjfht/be-beam.site.git
-          git push -f origin main
+          git remote remove personal-fork || true
+
+          # Method 1: x-access-token
+          echo "Testing Method 1: x-access-token"
+          git remote add test-origin https://x-access-token:${TOKEN}@github.com/dnjfht/be-beam.site.git
+          if git ls-remote test-origin main; then
+            echo "✅ Method 1 (x-access-token) - Remote access successful"
+            WORKING_METHOD="x-access-token"
+            WORKING_URL="https://x-access-token:${TOKEN}@github.com/dnjfht/be-beam.site.git"
+          else
+            echo "❌ Method 1 (x-access-token) - Remote access failed"
+          fi
+          git remote remove test-origin
+
+          # Method 2: username:token
+          echo "Testing Method 2: username:token"
+          git remote add test-origin https://dnjfht:${TOKEN}@github.com/dnjfht/be-beam.site.git
+          if git ls-remote test-origin main; then
+            echo "✅ Method 2 (username:token) - Remote access successful"
+            WORKING_METHOD="username:token"
+            WORKING_URL="https://dnjfht:${TOKEN}@github.com/dnjfht/be-beam.site.git"
+          else
+            echo "❌ Method 2 (username:token) - Remote access failed"
+          fi
+          git remote remove test-origin
+
+          # Method 3: token only
+          echo "Testing Method 3: token only"
+          git remote add test-origin https://${TOKEN}@github.com/dnjfht/be-beam.site.git
+          if git ls-remote test-origin main; then
+            echo "✅ Method 3 (token only) - Remote access successful"
+            WORKING_METHOD="token-only"
+            WORKING_URL="https://${TOKEN}@github.com/dnjfht/be-beam.site.git"
+          else
+            echo "❌ Method 3 (token only) - Remote access failed"
+          fi
+          git remote remove test-origin
+
+          echo "=== 7. Attempting push with working method ==="
+
+          if [ -n "$WORKING_URL" ]; then
+            echo "Using working method: $WORKING_METHOD"
+            echo "URL: ${WORKING_URL%:*}:***@github.com/dnjfht/be-beam.site.git"  # 토큰 마스킹
+            
+            git remote add origin "$WORKING_URL"
+            
+            # 현재 상태 확인
+            echo "Current branch and remote tracking:"
+            git branch -vv
+            
+            # Push 시도
+            echo "Attempting push..."
+            if git push -f origin main; then
+              echo "✅ Push successful!"
+            else
+              echo "❌ Push failed with working remote method"
+              echo "Trying alternative push strategies..."
+              
+              # 대안 1: 특정 커밋 push
+              echo "Alternative 1: Push specific commit"
+              git push -f origin HEAD:main || echo "Alternative 1 failed"
+              
+              # 대안 2: 브랜치 이름 명시적 지정
+              echo "Alternative 2: Explicit branch specification"
+              git push -f origin main:main || echo "Alternative 2 failed"
+              
+              # 대안 3: upstream 설정 후 push
+              echo "Alternative 3: Set upstream and push"
+              git branch --set-upstream-to=origin/main main || true
+              git push -f || echo "Alternative 3 failed"
+            fi
+          else
+            echo "❌ No working authentication method found!"
+            echo "All authentication methods failed. Please check:"
+            echo "1. Token permissions (repo scope)"
+            echo "2. Repository existence and access"
+            echo "3. Organization third-party access policies"
+            exit 1
+          fi
+
+          echo "=== 8. Final verification ==="
+          if git ls-remote origin main; then
+            echo "✅ Final verification: Remote repository accessible"
+          else
+            echo "❌ Final verification: Remote repository not accessible"
+          fi
