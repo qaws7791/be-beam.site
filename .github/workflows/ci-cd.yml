@@ -36,7 +36,7 @@ jobs:
       - name: Test
         run: pnpm test
 
-  sync-to-fork-alternative:
+  sync-to-fork:
     needs: ci
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -45,21 +45,78 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup GitHub CLI
+      - name: Set up Git user
         run: |
-          curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-          sudo apt update
-          sudo apt install gh
+          git config --global user.name "dnjfht"
+          git config --global user.email "117057638+dnjfht@users.noreply.github.com"
 
-      - name: Authenticate GitHub CLI
+      - name: Sync to personal fork (Fixed)
         env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_FORK_TOKEN }}
+          PERSONAL_TOKEN: ${{ secrets.PERSONAL_FORK_TOKEN }}
         run: |
-          echo "${{ secrets.PERSONAL_FORK_TOKEN }}" | gh auth login --with-token
+          echo "=== Debug Information ==="
+          echo "Current repository: ${{ github.repository }}"
+          echo "Current branch: $(git branch --show-current)"
+          echo "Current commit: $(git rev-parse HEAD)"
+          echo "Token exists: $(if [ -n "${PERSONAL_TOKEN}" ]; then echo "YES"; else echo "NO"; fi)"
 
-      - name: Sync to personal fork using GitHub CLI
-        run: |
-          echo "=== Syncing using GitHub CLI ==="
-          gh repo sync dnjfht/be-beam.site --source ${{ github.repository }} --branch main
-          echo "✅ Sync completed via GitHub CLI"
+          # 기존 GITHUB_TOKEN 환경변수 제거 (충돌 방지)
+          unset GITHUB_TOKEN
+
+          # 현재 상태 확인
+          echo "=== Current Git Status ==="
+          git remote -v
+          git branch -vv
+          git log --oneline -3
+
+          # Personal fork를 새로운 remote로 추가
+          echo "=== Adding personal fork remote ==="
+          git remote add personal-fork https://${PERSONAL_TOKEN}@github.com/dnjfht/be-beam.site.git
+
+          # Remote 연결 테스트
+          echo "=== Testing remote connection ==="
+          if git ls-remote personal-fork HEAD; then
+            echo "✅ Personal fork remote accessible"
+          else
+            echo "❌ Personal fork remote not accessible"
+            echo "Debugging remote URL (without token):"
+            echo "https://github.com/dnjfht/be-beam.site.git"
+            exit 1
+          fi
+
+          # 현재 main 브랜치를 personal fork의 main으로 푸시
+          echo "=== Pushing to personal fork ==="
+
+          # --force 제거하고 일반 푸시 시도
+          if git push personal-fork main:main; then
+            echo "✅ Successfully synced to personal fork"
+          else
+            echo "❌ Normal push failed, trying force push..."
+            if git push --force personal-fork main:main; then
+              echo "✅ Force push succeeded"
+            else
+              echo "❌ Both normal and force push failed"
+              
+              # 더 자세한 디버깅 정보
+              echo "=== Detailed Debug Info ==="
+              git show-ref | head -10
+              echo "=== Remote branches ==="
+              git branch -r | head -10
+              echo "=== Last 3 commits ==="
+              git log --oneline -3
+              exit 1
+            fi
+          fi
+
+          # 최종 확인
+          echo "=== Final Verification ==="
+          REMOTE_COMMIT=$(git ls-remote personal-fork main | cut -f1)
+          LOCAL_COMMIT=$(git rev-parse HEAD)
+          echo "Local commit: $LOCAL_COMMIT"
+          echo "Remote commit: $REMOTE_COMMIT"
+
+          if [ "$LOCAL_COMMIT" = "$REMOTE_COMMIT" ]; then
+            echo "✅ Sync verified successfully"
+          else
+            echo "⚠️ Commits don't match - Local: $LOCAL_COMMIT, Remote: $REMOTE_COMMIT"
+          fi
