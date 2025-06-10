@@ -136,22 +136,38 @@ jobs:
             echo "Attempting push..."
             if git push -f origin main; then
               echo "✅ Push successful!"
+              PUSH_SUCCESS=true
             else
-              echo "❌ Push failed with working remote method"
-              echo "Trying alternative push strategies..."
+              echo "❌ Primary push failed, trying alternatives..."
+              PUSH_SUCCESS=false
               
               # 대안 1: 특정 커밋 push
               echo "Alternative 1: Push specific commit"
-              git push -f origin HEAD:main || echo "Alternative 1 failed"
+              if git push -f origin HEAD:main; then
+                echo "✅ Alternative 1 successful!"
+                PUSH_SUCCESS=true
+              else
+                echo "❌ Alternative 1 failed"
+              fi
               
-              # 대안 2: 브랜치 이름 명시적 지정
-              echo "Alternative 2: Explicit branch specification"
-              git push -f origin main:main || echo "Alternative 2 failed"
-              
-              # 대안 3: upstream 설정 후 push
-              echo "Alternative 3: Set upstream and push"
-              git branch --set-upstream-to=origin/main main || true
-              git push -f || echo "Alternative 3 failed"
+              # 대안 2: 브랜치 이름 명시적 지정 (Alternative 1이 실패한 경우에만)
+              if [ "$PUSH_SUCCESS" = "false" ]; then
+                echo "Alternative 2: Explicit branch specification"
+                if git push -f origin main:main; then
+                  echo "✅ Alternative 2 successful!"
+                  PUSH_SUCCESS=true
+                else
+                  echo "❌ Alternative 2 failed"
+                fi
+              fi
+            fi
+            
+            # 최종 push 결과 확인
+            if [ "$PUSH_SUCCESS" = "true" ]; then
+              echo "🎉 Push operation completed successfully!"
+            else
+              echo "💥 All push attempts failed!"
+              exit 1
             fi
           else
             echo "❌ No working authentication method found!"
@@ -165,6 +181,19 @@ jobs:
           echo "=== 8. Final verification ==="
           if git ls-remote origin main; then
             echo "✅ Final verification: Remote repository accessible"
+            
+            # 원격 저장소의 최신 커밋과 현재 커밋 비교
+            REMOTE_COMMIT=$(git ls-remote origin main | cut -f1)
+            LOCAL_COMMIT=$(git rev-parse HEAD)
+            
+            echo "Local commit:  $LOCAL_COMMIT"
+            echo "Remote commit: $REMOTE_COMMIT"
+            
+            if [ "$LOCAL_COMMIT" = "$REMOTE_COMMIT" ]; then
+              echo "✅ Commits match - Push was successful!"
+            else
+              echo "❌ Commits don't match - Push might have failed"
+            fi
           else
             echo "❌ Final verification: Remote repository not accessible"
           fi
