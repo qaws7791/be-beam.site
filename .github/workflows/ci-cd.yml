@@ -5,16 +5,16 @@ on:
     branches: [main, dev]
   pull_request:
     branches: [main, dev]
-  workflow_dispatch: # ✅ 이 줄이 있어야 "Run workflow" 버튼이 뜹니다
+  workflow_dispatch:
 
 jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
 
@@ -41,159 +41,68 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # 전체 히스토리 가져오기
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }} # 기본 토큰으로 체크아웃
 
       - name: Set up Git user
         run: |
           git config --global user.name "dnjfht"
           git config --global user.email "117057638+dnjfht@users.noreply.github.com"
 
-      - name: Detailed debugging and push
+      - name: Sync to personal fork
         env:
-          TOKEN: ${{ secrets.PERSONAL_FORK_TOKEN }}
+          PERSONAL_TOKEN: ${{ secrets.PERSONAL_FORK_TOKEN }}
         run: |
-          echo "=== 1. Environment check ==="
+          echo "=== Debug Information ==="
+          echo "Current repository: ${{ github.repository }}"
           echo "Current branch: $(git branch --show-current)"
           echo "Current commit: $(git rev-parse HEAD)"
-          echo "Repository: ${{ github.repository }}"
-          echo "Token exists: $(if [ -n "${TOKEN}" ]; then echo "YES"; else echo "NO"; fi)"
+          echo "Token exists: $(if [ -n "${PERSONAL_TOKEN}" ]; then echo "YES"; else echo "NO"; fi)"
 
-          echo "=== 2. Token validation ==="
-          user_response=$(curl -s -w "\nHTTP_CODE:%{http_code}" -H "Authorization: token ${TOKEN}" https://api.github.com/user)
-          echo "User API response:"
-          echo "$user_response"
-
-          echo "=== 3. Target repository access check ==="
-          repo_response=$(curl -s -w "\nHTTP_CODE:%{http_code}" -H "Authorization: token ${TOKEN}" https://api.github.com/repos/dnjfht/be-beam.site)
-          echo "Repository API response:"
-          echo "$repo_response"
-
-          echo "=== 4. Repository permissions check ==="
-          permissions=$(curl -s -H "Authorization: token ${TOKEN}" https://api.github.com/repos/dnjfht/be-beam.site | jq '.permissions // "No permissions field"')
-          echo "Permissions: $permissions"
-
-          echo "=== 5. Current git status ==="
-          git status --porcelain
+          # 현재 상태 확인
+          echo "=== Current Git Status ==="
+          git remote -v
+          git branch -vv
           git log --oneline -3
 
-          echo "=== 6. Test different authentication methods ==="
+          # Personal fork를 새로운 remote로 추가 (origin은 건드리지 않음)
+          echo "=== Adding personal fork remote ==="
+          git remote add personal-fork https://x-access-token:${PERSONAL_TOKEN}@github.com/dnjfht/be-beam.site.git
 
-          # Clean up any existing remotes
-          git remote remove origin || true
-          git remote remove personal-fork || true
-
-          # Method 1: x-access-token
-          echo "Testing Method 1: x-access-token"
-          git remote add test-origin https://x-access-token:${TOKEN}@github.com/dnjfht/be-beam.site.git
-          if git ls-remote test-origin main; then
-            echo "✅ Method 1 (x-access-token) - Remote access successful"
-            WORKING_METHOD="x-access-token"
-            WORKING_URL="https://x-access-token:${TOKEN}@github.com/dnjfht/be-beam.site.git"
+          # Remote 연결 테스트
+          echo "=== Testing remote connection ==="
+          if git ls-remote personal-fork HEAD; then
+            echo "✅ Personal fork remote accessible"
           else
-            echo "❌ Method 1 (x-access-token) - Remote access failed"
-          fi
-          git remote remove test-origin
-
-          # Method 2: username:token
-          echo "Testing Method 2: username:token"
-          git remote add test-origin https://dnjfht:${TOKEN}@github.com/dnjfht/be-beam.site.git
-          if git ls-remote test-origin main; then
-            echo "✅ Method 2 (username:token) - Remote access successful"
-            WORKING_METHOD="username:token"
-            WORKING_URL="https://dnjfht:${TOKEN}@github.com/dnjfht/be-beam.site.git"
-          else
-            echo "❌ Method 2 (username:token) - Remote access failed"
-          fi
-          git remote remove test-origin
-
-          # Method 3: token only
-          echo "Testing Method 3: token only"
-          git remote add test-origin https://${TOKEN}@github.com/dnjfht/be-beam.site.git
-          if git ls-remote test-origin main; then
-            echo "✅ Method 3 (token only) - Remote access successful"
-            WORKING_METHOD="token-only"
-            WORKING_URL="https://${TOKEN}@github.com/dnjfht/be-beam.site.git"
-          else
-            echo "❌ Method 3 (token only) - Remote access failed"
-          fi
-          git remote remove test-origin
-
-          echo "=== 7. Attempting push with working method ==="
-
-          if [ -n "$WORKING_URL" ]; then
-            echo "Using working method: $WORKING_METHOD"
-            echo "URL: ${WORKING_URL%:*}:***@github.com/dnjfht/be-beam.site.git"  # 토큰 마스킹
-            
-            git remote add origin "$WORKING_URL"
-            
-            # 현재 상태 확인
-            echo "Current branch and remote tracking:"
-            git branch -vv
-            
-            # Push 시도
-            echo "Attempting push..."
-            if git push -f origin main; then
-              echo "✅ Push successful!"
-              PUSH_SUCCESS=true
-            else
-              echo "❌ Primary push failed, trying alternatives..."
-              PUSH_SUCCESS=false
-              
-              # 대안 1: 특정 커밋 push
-              echo "Alternative 1: Push specific commit"
-              if git push -f origin HEAD:main; then
-                echo "✅ Alternative 1 successful!"
-                PUSH_SUCCESS=true
-              else
-                echo "❌ Alternative 1 failed"
-              fi
-              
-              # 대안 2: 브랜치 이름 명시적 지정 (Alternative 1이 실패한 경우에만)
-              if [ "$PUSH_SUCCESS" = "false" ]; then
-                echo "Alternative 2: Explicit branch specification"
-                if git push -f origin main:main; then
-                  echo "✅ Alternative 2 successful!"
-                  PUSH_SUCCESS=true
-                else
-                  echo "❌ Alternative 2 failed"
-                fi
-              fi
-            fi
-            
-            # 최종 push 결과 확인
-            if [ "$PUSH_SUCCESS" = "true" ]; then
-              echo "🎉 Push operation completed successfully!"
-            else
-              echo "💥 All push attempts failed!"
-              exit 1
-            fi
-          else
-            echo "❌ No working authentication method found!"
-            echo "All authentication methods failed. Please check:"
-            echo "1. Token permissions (repo scope)"
-            echo "2. Repository existence and access"
-            echo "3. Organization third-party access policies"
+            echo "❌ Personal fork remote not accessible"
             exit 1
           fi
 
-          echo "=== 8. Final verification ==="
-          if git ls-remote origin main; then
-            echo "✅ Final verification: Remote repository accessible"
-            
-            # 원격 저장소의 최신 커밋과 현재 커밋 비교
-            REMOTE_COMMIT=$(git ls-remote origin main | cut -f1)
-            LOCAL_COMMIT=$(git rev-parse HEAD)
-            
-            echo "Local commit:  $LOCAL_COMMIT"
-            echo "Remote commit: $REMOTE_COMMIT"
-            
-            if [ "$LOCAL_COMMIT" = "$REMOTE_COMMIT" ]; then
-              echo "✅ Commits match - Push was successful!"
-            else
-              echo "❌ Commits don't match - Push might have failed"
-            fi
+          # 현재 main 브랜치를 personal fork의 main으로 강제 푸시
+          echo "=== Pushing to personal fork ==="
+          if git push --force personal-fork main:main; then
+            echo "✅ Successfully synced to personal fork"
           else
-            echo "❌ Final verification: Remote repository not accessible"
+            echo "❌ Failed to sync to personal fork"
+            
+            # 디버깅을 위한 추가 정보
+            echo "=== Additional Debug Info ==="
+            git show-ref
+            git remote show personal-fork
+            exit 1
+          fi
+
+          # 최종 확인
+          echo "=== Final Verification ==="
+          REMOTE_COMMIT=$(git ls-remote personal-fork main | cut -f1)
+          LOCAL_COMMIT=$(git rev-parse HEAD)
+          echo "Local commit: $LOCAL_COMMIT"
+          echo "Remote commit: $REMOTE_COMMIT"
+
+          if [ "$LOCAL_COMMIT" = "$REMOTE_COMMIT" ]; then
+            echo "✅ Sync verified successfully"
+          else
+            echo "⚠️ Commits don't match, but push completed"
           fi
