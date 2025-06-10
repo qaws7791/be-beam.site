@@ -36,7 +36,7 @@ jobs:
       - name: Test
         run: pnpm test
 
-  sync-to-fork:
+  sync-to-fork-api:
     needs: ci
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -45,78 +45,28 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Git user
-        run: |
-          git config --global user.name "dnjfht"
-          git config --global user.email "117057638+dnjfht@users.noreply.github.com"
-
-      - name: Sync to personal fork (Fixed)
+      - name: Sync using GitHub API
         env:
           PERSONAL_TOKEN: ${{ secrets.PERSONAL_FORK_TOKEN }}
         run: |
-          echo "=== Debug Information ==="
-          echo "Current repository: ${{ github.repository }}"
-          echo "Current branch: $(git branch --show-current)"
-          echo "Current commit: $(git rev-parse HEAD)"
-          echo "Token exists: $(if [ -n "${PERSONAL_TOKEN}" ]; then echo "YES"; else echo "NO"; fi)"
+          echo "=== Syncing fork using GitHub API ==="
 
-          # 기존 GITHUB_TOKEN 환경변수 제거 (충돌 방지)
-          unset GITHUB_TOKEN
+          # GitHub API를 사용해서 fork 동기화
+          RESPONSE=$(curl -s -X POST \
+            -H "Authorization: Bearer ${PERSONAL_TOKEN}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/dnjfht/be-beam.site/merge-upstream" \
+            -d '{"branch":"main"}')
 
-          # 현재 상태 확인
-          echo "=== Current Git Status ==="
-          git remote -v
-          git branch -vv
-          git log --oneline -3
+          echo "API Response: $RESPONSE"
 
-          # Personal fork를 새로운 remote로 추가
-          echo "=== Adding personal fork remote ==="
-          git remote add personal-fork https://${PERSONAL_TOKEN}@github.com/dnjfht/be-beam.site.git
-
-          # Remote 연결 테스트
-          echo "=== Testing remote connection ==="
-          if git ls-remote personal-fork HEAD; then
-            echo "✅ Personal fork remote accessible"
+          # 응답 확인
+          if echo "$RESPONSE" | grep -q '"merged":true'; then
+            echo "✅ Successfully synced fork via API"
+          elif echo "$RESPONSE" | grep -q '"message":"This branch is not behind the upstream"'; then
+            echo "✅ Fork is already up to date"
           else
-            echo "❌ Personal fork remote not accessible"
-            echo "Debugging remote URL (without token):"
-            echo "https://github.com/dnjfht/be-beam.site.git"
-            exit 1
-          fi
-
-          # 현재 main 브랜치를 personal fork의 main으로 푸시
-          echo "=== Pushing to personal fork ==="
-
-          # --force 제거하고 일반 푸시 시도
-          if git push personal-fork main:main; then
-            echo "✅ Successfully synced to personal fork"
-          else
-            echo "❌ Normal push failed, trying force push..."
-            if git push --force personal-fork main:main; then
-              echo "✅ Force push succeeded"
-            else
-              echo "❌ Both normal and force push failed"
-              
-              # 더 자세한 디버깅 정보
-              echo "=== Detailed Debug Info ==="
-              git show-ref | head -10
-              echo "=== Remote branches ==="
-              git branch -r | head -10
-              echo "=== Last 3 commits ==="
-              git log --oneline -3
-              exit 1
-            fi
-          fi
-
-          # 최종 확인
-          echo "=== Final Verification ==="
-          REMOTE_COMMIT=$(git ls-remote personal-fork main | cut -f1)
-          LOCAL_COMMIT=$(git rev-parse HEAD)
-          echo "Local commit: $LOCAL_COMMIT"
-          echo "Remote commit: $REMOTE_COMMIT"
-
-          if [ "$LOCAL_COMMIT" = "$REMOTE_COMMIT" ]; then
-            echo "✅ Sync verified successfully"
-          else
-            echo "⚠️ Commits don't match - Local: $LOCAL_COMMIT, Remote: $REMOTE_COMMIT"
+            echo "❌ API sync failed or returned unexpected response"
+            echo "$RESPONSE"
           fi
