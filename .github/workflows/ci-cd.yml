@@ -36,7 +36,7 @@ jobs:
       - name: Test
         run: pnpm test
 
-  sync-to-fork-api:
+  sync-to-fork:
     needs: ci
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -45,13 +45,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Sync using GitHub API
+      - name: Sync fork using GitHub API
         env:
           PERSONAL_TOKEN: ${{ secrets.PERSONAL_FORK_TOKEN }}
         run: |
-          echo "=== Syncing fork using GitHub API ==="
-
-          # GitHub API를 사용해서 fork 동기화
           RESPONSE=$(curl -s -X POST \
             -H "Authorization: Bearer ${PERSONAL_TOKEN}" \
             -H "Accept: application/vnd.github.v3+json" \
@@ -59,14 +56,12 @@ jobs:
             "https://api.github.com/repos/dnjfht/be-beam.site/merge-upstream" \
             -d '{"branch":"main"}')
 
-          echo "API Response: $RESPONSE"
-
-          # 응답 확인
           if echo "$RESPONSE" | grep -q '"merged":true'; then
-            echo "✅ Successfully synced fork via API"
+            echo "✅ Successfully synced fork"
           elif echo "$RESPONSE" | grep -q '"message":"This branch is not behind the upstream"'; then
             echo "✅ Fork is already up to date"
           else
-            echo "❌ API sync failed or returned unexpected response"
+            echo "❌ Sync failed"
             echo "$RESPONSE"
+            exit 1
           fi
