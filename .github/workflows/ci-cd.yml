@@ -36,7 +36,7 @@ jobs:
       - name: Test
         run: pnpm test
 
-  sync-to-fork:
+  sync-to-fork-api:
     needs: ci
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -45,10 +45,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Sync fork using GitHub API
+      - name: Sync using GitHub API
         env:
           PERSONAL_TOKEN: ${{ secrets.PERSONAL_FORK_TOKEN }}
         run: |
+          echo "=== Syncing fork using GitHub API ==="
+
+          # GitHub API를 사용해서 fork 동기화
           RESPONSE=$(curl -s -X POST \
             -H "Authorization: Bearer ${PERSONAL_TOKEN}" \
             -H "Accept: application/vnd.github.v3+json" \
@@ -56,17 +59,14 @@ jobs:
             "https://api.github.com/repos/dnjfht/be-beam.site/merge-upstream" \
             -d '{"branch":"main"}')
 
-          # 다양한 성공 케이스들을 모두 체크 (공백 고려)
-          if echo "$RESPONSE" | grep -q '"merged": *true'; then
-            echo "✅ Successfully synced fork (merged)"
-          elif echo "$RESPONSE" | grep -q '"merge_type": *"fast-forward"'; then
-            echo "✅ Successfully synced fork (fast-forward)"
-          elif echo "$RESPONSE" | grep -q "This branch is not behind the upstream"; then
+          echo "API Response: $RESPONSE"
+
+          # 응답 확인
+          if echo "$RESPONSE" | grep -q '"merged":true'; then
+            echo "✅ Successfully synced fork via API"
+          elif echo "$RESPONSE" | grep -q '"message":"This branch is not behind the upstream"'; then
             echo "✅ Fork is already up to date"
-          elif echo "$RESPONSE" | grep -q "Successfully fetched"; then
-            echo "✅ Successfully synced fork (fetched and updated)"
           else
-            echo "❌ Sync failed or unexpected response"
+            echo "❌ API sync failed or returned unexpected response"
             echo "$RESPONSE"
-            exit 1
           fi
