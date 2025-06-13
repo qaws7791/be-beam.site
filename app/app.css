@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import 'tw-animate-css';
 
 @theme {
   --font-sans:
@@ -20,6 +21,8 @@
   --color-primary-light: #fff8e9;
   --color-error: #ff4d4c;
   --color-success: #00ae4f;
+  --color-info: #3940e4;
+  --color-info-light: #e9eaff;
 
   --text-h1: 1.625rem;
   --text-h1--line-height: 1.4;
