@@ -10,6 +10,7 @@ import {
 import './app.css';
 import type { Route } from './+types/root';
 import Navbar from './components/organisms/Navbar';
+import { Toaster } from './components/atoms/toaster/Toaster';
 
 export const links: Route.LinksFunction = () => [
   {
@@ -46,6 +47,7 @@ export default function App() {
         <Navbar />
       </header>
       <Outlet />
+      <Toaster />
     </div>
   );
 }

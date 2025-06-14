@@ -6,13 +6,11 @@ const XIcon = (props: SVGProps<SVGSVGElement>) => (
     fill="none"
     {...props}
   >
-    <circle cx={12} cy={12} r={8} fill="currentColor" />
     <path
-      stroke="#fff"
+      stroke="currentColor"
       strokeLinecap="round"
-      strokeLinejoin="round"
       strokeWidth={1.5}
-      d="m9.334 9.333 5.333 5.334M14.667 9.333l-5.333 5.334"
+      d="m7.379 7.622 9.192 9.192M16.622 7.622 7.43 16.814"
     />
   </svg>
 );
