@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';
 
-import { cn } from '@/lib/tailwind';
+import { cn, focusVisibleRing } from '@/lib/tailwind';
 import { buttonVariants } from '../button/Button';
 
 function AlertDialog({
@@ -54,7 +54,7 @@ function AlertDialogContent({
       <AlertDialogPrimitive.Content
         data-slot="alert-dialog-content"
         className={cn(
-          'fixed top-[50%] left-[50%] z-50 grid w-full max-w-[328px] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-xl border bg-white p-6 shadow-lg duration-200 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+          'fixed top-[50%] left-[50%] z-50 grid w-full max-w-[328px] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-xl border bg-white p-6 shadow-[0_8px_36px_0_rgba(0,0,0,0.15)] duration-200 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
           className,
         )}
         {...props}
@@ -121,7 +121,12 @@ function AlertDialogAction({
 }: React.ComponentProps<typeof AlertDialogPrimitive.Action>) {
   return (
     <AlertDialogPrimitive.Action
-      className={cn(buttonVariants({ size: 'sm' }), 'w-full flex-1', className)}
+      className={cn(
+        focusVisibleRing(),
+        buttonVariants({ size: 'sm' }),
+        'w-full flex-1',
+        className,
+      )}
       {...props}
     />
   );
@@ -134,6 +139,7 @@ function AlertDialogCancel({
   return (
     <AlertDialogPrimitive.Cancel
       className={cn(
+        focusVisibleRing(),
         buttonVariants({ variant: 'tertiary', size: 'sm' }),
         'w-full flex-1',
         className,
