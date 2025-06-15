@@ -1,7 +1,7 @@
+import { Outlet } from 'react-router';
 import MyPageTemplate from '@/components/templates/MyPageTemplate';
 import SideBar from '@/components/organisms/SideBar';
 import type { Route } from './+types/myPage';
-import { Outlet } from 'react-router';
 
 export function meta() {
   return [
