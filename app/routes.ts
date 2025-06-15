@@ -18,7 +18,7 @@ export default [
       route('/requested', 'routes/requestedMeeting.tsx'),
       route('/created', 'routes/createdMeeting.tsx'),
       route('/reviews', 'routes/myReviews.tsx'),
-      route('/wishlist', 'routes/wishlist.tsx'),
+      route('/wishList', 'routes/wishList.tsx'),
       route('/edit', 'routes/editMyProfile.tsx'),
       route('/notifications', 'routes/myNotifications.tsx'),
     ]),

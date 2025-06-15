@@ -33,7 +33,7 @@ export default function SideBar({ user }: { user: UserType }) {
       onClick: () => setIsMeetingPage(false),
     },
     {
-      to: '/mypage/wishlist',
+      to: '/mypage/wishList',
       title: '💖 찜 리스트',
       onClick: () => setIsMeetingPage(false),
     },
