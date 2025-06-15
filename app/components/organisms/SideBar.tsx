@@ -50,7 +50,7 @@ export default function SideBar({ user }: { user: UserType }) {
   ];
 
   return (
-    <aside className="w-[230px] space-y-8">
+    <aside className="w-[230px]">
       <UserProfileCard user={user} />
 
       <div className="mt-6">
@@ -60,7 +60,7 @@ export default function SideBar({ user }: { user: UserType }) {
           items={navMeetingData}
         />
 
-        <div className="mt-1 border-t-1 border-[var(--color-gray-300)]">
+        <div className="mt-1 border-t-1 border-gray-300">
           {navData.map((item, idx) => (
             <SideBarNavItem
               key={idx}

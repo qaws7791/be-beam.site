@@ -13,16 +13,14 @@ export default function MeetingRecommendations({
 
       {/* 나중에 Tab으로 제작 */}
       <div className="mt-6 mb-5 flex items-center gap-3">
-        <button className="rounded-full bg-[var(--color-gray-900)] px-4 py-2">
-          <Text variant="B1_Semibold" color="white">
-            전체
-          </Text>
+        <button className="rounded-full bg-gray-900 px-4 py-2 text-b1 text-white">
+          전체
         </button>
-        <button className="rounded-full bg-[var(--color-gray-200)] px-4 py-2">
-          <Text variant="B1_Semibold">정기모임</Text>
+        <button className="rounded-full bg-gray-200 px-4 py-2 text-b1">
+          정기모임
         </button>
-        <button className="rounded-full bg-[var(--color-gray-200)] px-4 py-2">
-          <Text variant="B1_Semibold">소모임</Text>
+        <button className="rounded-full bg-gray-200 px-4 py-2 text-b1">
+          소모임
         </button>
       </div>
 

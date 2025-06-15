@@ -13,8 +13,8 @@ export default function Navbar() {
   };
 
   return (
-    <div className="h-25 w-full border-b-1 border-[var(--color-gray-300)]">
-      <div className="mx-auto flex h-full max-w-[1480px] items-center justify-between gap-x-24 px-4 sm:px-6 lg:px-8">
+    <div className="h-25 w-full border-b-1 border-gray-300">
+      <div className="mx-auto flex h-full max-w-[1480px] items-center justify-between gap-x-24 px-4">
         <div className="flex items-center gap-24">
           <Logo />
           <NavMenu />
@@ -42,7 +42,7 @@ export default function Navbar() {
             </div>
           ) : (
             <button
-              className="cursor-pointer rounded-lg bg-[var(--color-primary)] px-4 py-3 text-white"
+              className="cursor-pointer rounded-lg bg-primary px-4 py-3 text-white"
               onClick={() => navigate('/login')}
             >
               가입 / 로그인

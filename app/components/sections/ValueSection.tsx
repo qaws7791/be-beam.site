@@ -31,7 +31,7 @@ export default function ValueSection() {
   ];
 
   return (
-    <div className="mt-40 w-full bg-[var(--color-gray-100)]">
+    <div className="mt-40 w-full bg-gray-100">
       <div className="mx-auto max-w-[1480px] py-24 text-center">
         <Text variant="H2_Semibold">비빔이 추구하는 가치</Text>
         <Text variant="T4_Regular" color="gray-500" className="mt-2">

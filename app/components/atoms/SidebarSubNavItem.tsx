@@ -10,13 +10,12 @@ export default function SidebarSubNavItem({
   return (
     <NavLink
       to={to}
-      style={{ fontSize: 'text-[var(--text-b3)]' }}
       className={({ isActive }) =>
         clsx(
-          'flex w-full items-center gap-2 px-5 py-3 leading-[var(--text-b3--line-height)] font-[var(--text-b3--font-weight)]',
+          'flex w-full items-center gap-2 px-5 py-3 text-b3',
           isActive
-            ? 'bg-[var(--color-primary-light)] text-[var(--color-primary)]'
-            : 'hover:bg-[var(--color-primary-light)] hover:text-[var(--color-primary)]',
+            ? 'bg-primary-light text-primary'
+            : 'hover:bg-primary-light hover:text-primary',
         )
       }
       onClick={onClick}

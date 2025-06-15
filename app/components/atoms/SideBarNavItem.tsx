@@ -13,12 +13,12 @@ export default function SideBarNavItem({
   return (
     <NavLink
       to={to}
-      style={({ isActive }) => ({
-        color: isActive ? 'var(--color-primary)' : '',
-      })}
-      className={clsx(
-        'flex items-center gap-2 px-5 py-5 font-[var(--text-t3--font-weight)] text-[var(--text-t3)] hover:text-[var(--color-primary)]',
-      )}
+      className={({ isActive }) =>
+        clsx(
+          'flex items-center gap-2 px-5 py-5 text-t3 hover:text-primary',
+          isActive ? 'text-primary' : '',
+        )
+      }
       onClick={onClick}
     >
       {title}

@@ -8,7 +8,7 @@ export default function ValueCard({
   des: string;
 }) {
   return (
-    <div className="box-border w-full rounded-2xl border-[1px] border-[var(--color-gray-200)] bg-white p-5 text-left">
+    <div className="box-border w-full rounded-2xl border-[1px] border-gray-200 bg-white p-5 text-left">
       <Text variant="T3_Semibold" color="primary">
         {title}
       </Text>

@@ -1,3 +1,5 @@
+import CommonTemplate from '@/components/templates/CommonTemplate';
+
 export function meta() {
   return [
     { title: '모임 페이지' },
@@ -7,8 +9,8 @@ export function meta() {
 
 export default function Meetings() {
   return (
-    <div>
+    <CommonTemplate>
       <h1>모임 페이지</h1>
-    </div>
+    </CommonTemplate>
   );
 }
