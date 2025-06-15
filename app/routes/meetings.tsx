@@ -4,6 +4,7 @@ export function meta() {
     { name: 'description', content: '모임을 생성하거나 모임에 참여하세요!' },
   ];
 }
+
 export default function Meetings() {
   return (
     <div>

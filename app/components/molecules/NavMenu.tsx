@@ -23,7 +23,14 @@ export default function NavMenu() {
           key={idx}
           to={item.to}
           style={({ isActive, isPending }) => ({
-            color: isActive ? '#FF9742' : isPending ? 'blue' : 'black',
+            color: isActive
+              ? 'var(--color-primary)'
+              : isPending
+                ? 'blue'
+                : 'var(--color-gray-700)',
+            fontSize: 'var(--text-t2)',
+            fontWeight: 'var(--text-t2--font-weight)',
+            lineHeight: 'var(--text-t2--line-height)',
           })}
         >
           {item.label}

@@ -1,4 +1,4 @@
-export const baseStyles = 'px-4 py-2 rounded-lg font-semibold';
+export const baseStyles = 'px-4 py-2 rounded-lg font-semibold cursor-pointer';
 
 export const variantStyles = {
   primary: 'bg-[#FF9742] text-white',

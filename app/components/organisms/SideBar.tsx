@@ -1,0 +1,75 @@
+import { useState } from 'react';
+
+import UserProfileCard from '../molecules/UserProfileCard';
+import SidebarSection from '../molecules/SidebarSection';
+import SideBarNavItem from '../atoms/SidebarNavItem';
+import type { UserType } from '@/types/commons';
+
+export default function SideBar({ user }: { user: UserType }) {
+  const [isMeetingPage, setIsMeetingPage] = useState(true);
+
+  const navMeetingData = [
+    {
+      to: '/mypage/participated',
+      title: '참여 모임',
+      onClick: () => setIsMeetingPage(true),
+    },
+    {
+      to: '/mypage/requested',
+      title: '신청 모임',
+      onClick: () => setIsMeetingPage(true),
+    },
+    {
+      to: '/mypage/created',
+      title: '내가 개설한 모임',
+      onClick: () => setIsMeetingPage(true),
+    },
+  ];
+  const navData = [
+    {
+      to: '/mypage/reviews',
+      title: '✍️ 나의 후기',
+      onClick: () => setIsMeetingPage(false),
+    },
+    {
+      to: '/mypage/wishlist',
+      title: '💖 찜 리스트',
+      onClick: () => setIsMeetingPage(false),
+    },
+    {
+      to: '/mypage/edit',
+      title: '🙆 개인정보 수정',
+      onClick: () => setIsMeetingPage(false),
+    },
+    {
+      to: '/mypage/notifications',
+      title: '🔔 나의 알림',
+      onClick: () => setIsMeetingPage(false),
+    },
+  ];
+
+  return (
+    <aside className="w-[230px] space-y-8">
+      <UserProfileCard user={user} />
+
+      <div className="mt-6">
+        <SidebarSection
+          title="🥳 나의 모임"
+          isActive={isMeetingPage}
+          items={navMeetingData}
+        />
+
+        <div className="mt-1 border-t-1 border-[var(--color-gray-300)]">
+          {navData.map((item, idx) => (
+            <SideBarNavItem
+              key={idx}
+              to={item.to}
+              title={item.title}
+              onClick={item.onClick}
+            />
+          ))}
+        </div>
+      </div>
+    </aside>
+  );
+}

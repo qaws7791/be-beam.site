@@ -5,11 +5,13 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLocation,
 } from 'react-router';
 
 import './app.css';
 import type { Route } from './+types/root';
 import Navbar from './components/organisms/Navbar';
+import Footer from './components/organisms/Footer';
 
 export const links: Route.LinksFunction = () => [
   {
@@ -40,12 +42,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  const path = useLocation().pathname.slice(1);
   return (
     <div className="bg-white text-black">
-      <header>
-        <Navbar />
-      </header>
+      <Navbar />
       <Outlet />
+
+      {path !== 'login' && <Footer />}
     </div>
   );
 }
