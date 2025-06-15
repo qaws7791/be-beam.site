@@ -19,7 +19,7 @@ export default [
       route('/created', 'routes/createdMeeting.tsx'),
       route('/reviews', 'routes/myReviews.tsx'),
       route('/wishList', 'routes/wishList.tsx'),
-      route('/edit', 'routes/editMyProfile.tsx'),
+      route('/editProfile', 'routes/editProfile.tsx'),
       route('/notifications', 'routes/myNotifications.tsx'),
     ]),
   ]),
