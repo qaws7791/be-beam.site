@@ -1,4 +1,4 @@
-import SidebarSubNavItem from '../atoms/SideBarSubNavItem';
+import SidebarSubNavItem from '../atoms/SidebarSubNavItem';
 import Text from '../atoms/text/Text';
 import type { SideBarSectionItems } from '@/types/components';
 

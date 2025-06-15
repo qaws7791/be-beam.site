@@ -11,6 +11,7 @@ import {
 import './app.css';
 import type { Route } from './+types/root';
 import Navbar from './components/organisms/Navbar';
+import { Toaster } from './components/atoms/toaster/Toaster';
 import Footer from './components/organisms/Footer';
 
 export const links: Route.LinksFunction = () => [
@@ -47,6 +48,7 @@ export default function App() {
     <div className="bg-white text-black">
       <Navbar />
       <Outlet />
+      <Toaster />
 
       {path !== 'login' && <Footer />}
     </div>

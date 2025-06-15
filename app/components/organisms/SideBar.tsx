@@ -1,8 +1,9 @@
 import { useState } from 'react';
 
+import SideBarNavItem from '../atoms/SideBarNavItem';
 import UserProfileCard from '../molecules/UserProfileCard';
 import SidebarSection from '../molecules/SidebarSection';
-import SideBarNavItem from '../atoms/SidebarNavItem';
+
 import type { UserType } from '@/types/commons';
 
 export default function SideBar({ user }: { user: UserType }) {
