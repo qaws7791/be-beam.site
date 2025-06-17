@@ -9,6 +9,7 @@ import {
 export default [
   index('routes/home.tsx'),
   route('/meetings', 'routes/meetings.tsx'),
+  route('/meeting/:meetingId', 'routes/meetingDetail.tsx'),
   route('/reviews', 'routes/reviews.tsx'),
   route('/guideBooks', 'routes/guideBooks.tsx'),
   route('/login', 'routes/login.tsx'),

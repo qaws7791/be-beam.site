@@ -7,12 +7,27 @@ import {
   ScrollRestoration,
   useLocation,
 } from 'react-router';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import './app.css';
 import type { Route } from './+types/root';
 import Navbar from './components/organisms/Navbar';
 import { Toaster } from './components/atoms/toaster/Toaster';
 import Footer from './components/organisms/Footer';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      throwOnError: true,
+      retry: 3,
+      staleTime: 5 * 60 * 1000,
+    },
+  },
+});
+
+if (import.meta.env.DEV && typeof window !== 'undefined') {
+  import('./mocks/browser').then(({ worker }) => worker.start());
+}
 
 export const links: Route.LinksFunction = () => [
   {
@@ -45,13 +60,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
   const path = useLocation().pathname.slice(1);
   return (
-    <div className="bg-white text-black">
-      <Navbar />
-      <Outlet />
-      <Toaster />
+    <QueryClientProvider client={queryClient}>
+      <div className="bg-white text-black">
+        <Navbar />
+        <Outlet />
+        <Toaster />
 
-      {path !== 'login' && <Footer />}
-    </div>
+        {path !== 'login' && <Footer />}
+      </div>
+    </QueryClientProvider>
   );
 }
 
