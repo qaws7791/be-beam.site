@@ -1,4 +1,4 @@
-import { formatToKoreanDate } from '@/utils/data';
+import { formatToKoreanDate } from '@/utils/date';
 import Text from '../atoms/text/Text';
 import clsx from 'clsx';
 
@@ -58,7 +58,7 @@ export default function MeetingCard({
         <div className="mt-1 flex items-center gap-2">
           <img src="/images/icons/clock.svg" alt="clock_icon" />
           <Text variant="B3_Regular" color="gray-600">
-            {`${meetingType[0] === '정기모임' ? '첫 모임' : ''} ${formatToKoreanDate(meetingStartTime)}`}
+            {`모임 시작일 ${formatToKoreanDate(meetingStartTime)}`}
           </Text>
         </div>
       </div>

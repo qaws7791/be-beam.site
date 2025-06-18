@@ -15,7 +15,7 @@ import Navbar from './components/organisms/Navbar';
 import { Toaster } from './components/atoms/toaster/Toaster';
 import Footer from './components/organisms/Footer';
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       throwOnError: true,

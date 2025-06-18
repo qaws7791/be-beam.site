@@ -63,8 +63,6 @@ export default function GetMeetingsContainer() {
     selectedFilters,
   );
 
-  console.log(meetings);
-
   return (
     <div>
       <Banner

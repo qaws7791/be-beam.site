@@ -4,26 +4,28 @@ import { useNavigate } from 'react-router';
 import GridGroup from '../organisms/gridGroup/GridGroup';
 import MeetingCard from '../organisms/MeetingCard';
 
+export interface MeetingType {
+  id: number;
+  name: string;
+  address: string;
+  cost: (string | number)[];
+  edit: number;
+  image: string;
+  like: number;
+  meetingStartTime: string;
+  meetingType: string[];
+  mode: string;
+  recruitmentType: string[];
+  topic: string;
+}
+
 interface MeetingResultType {
   pageInfo: {
     hasNext: boolean;
     nextCursor: number;
     size: number;
   };
-  meetings: {
-    id: number;
-    name: string;
-    address: string;
-    cost: [string, number];
-    edit: number;
-    image: string;
-    like: number;
-    meetingStartTime: string;
-    meetingType: string[];
-    mode: string;
-    recruitmentType: string[];
-    topic: string;
-  }[];
+  meetings: MeetingType[];
 }
 
 interface MeetingListSectionProps {
