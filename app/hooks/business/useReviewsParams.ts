@@ -5,22 +5,22 @@ export default function useReviewsParams() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const params = useMemo(() => {
-    const tab = searchParams.get('tab') || 'all';
+    const recruitmentType = searchParams.get('recruitmentType') || 'all';
     const sort = searchParams.get('sort') || 'latest';
     const onlyImage = searchParams.get('onlyImage') === 'true';
     const rating = Number(searchParams.get('rating') || 0);
     return {
-      tab,
+      recruitmentType,
       sort,
       onlyImage,
       rating,
     };
   }, [searchParams]);
 
-  const handleUpdateTab = (tab: string) => {
+  const handleUpdateRecruitmentType = (recruitmentType: string) => {
     setSearchParams(
       (searchParams) => {
-        searchParams.set('tab', tab);
+        searchParams.set('recruitmentType', recruitmentType);
         return searchParams;
       },
       {
@@ -67,7 +67,7 @@ export default function useReviewsParams() {
 
   return {
     params,
-    handleUpdateTab,
+    handleUpdateRecruitmentType,
     handleUpdateSort,
     handleUpdateOnlyImage,
     handleUpdateRating,

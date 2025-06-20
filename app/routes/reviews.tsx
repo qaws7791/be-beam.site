@@ -25,7 +25,7 @@ export function meta() {
 export default function Reviews() {
   const {
     params,
-    handleUpdateTab,
+    handleUpdateRecruitmentType,
     handleUpdateSort,
     handleUpdateOnlyImage,
     handleUpdateRating,
@@ -46,8 +46,8 @@ export default function Reviews() {
         <Tabs
           defaultValue="all"
           className="w-full"
-          value={params.tab}
-          onValueChange={handleUpdateTab}
+          value={params.recruitmentType}
+          onValueChange={handleUpdateRecruitmentType}
         >
           <TabsList className="w-full">
             <TabsTrigger value="all">전체</TabsTrigger>

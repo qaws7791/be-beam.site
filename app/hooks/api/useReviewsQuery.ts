@@ -60,14 +60,14 @@ const MOCK_REVIEW_LIST: {
   },
 ];
 interface useReviewsProps {
-  tab: string;
+  recruitmentType: string;
   sort: string;
   onlyImage: boolean;
   rating: number;
 }
 
 export default function useReviewsQuery({
-  tab,
+  recruitmentType,
   sort,
   onlyImage,
   rating,
@@ -76,7 +76,7 @@ export default function useReviewsQuery({
     data: MOCK_REVIEW_LIST,
     isLoading: false,
     isError: false,
-    tab,
+    recruitmentType,
     sort,
     onlyImage,
     rating,
