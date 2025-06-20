@@ -1,9 +1,6 @@
-// dumb 컴포넌트: UI 중심
-import React from 'react';
-import { useNavigate } from 'react-router';
-
-import GridGroup from '../organisms/gridGroup/GridGroup';
 import MeetingCard from '../organisms/MeetingCard';
+import { useNavigate } from 'react-router';
+import GridGroup from '../organisms/gridGroup/GridGroup';
 
 export interface MeetingType {
   id: number;
@@ -24,12 +21,14 @@ interface MeetingListSectionProps {
   meetings: MeetingType[];
 }
 
-const MeetingCardGroup = ({ meetings }: MeetingListSectionProps) => {
+export default function MeetingCardGroup({
+  meetings,
+}: MeetingListSectionProps) {
   const navigate = useNavigate();
 
   return (
     <GridGroup columns={4} gap={5} className="mt-8">
-      {meetings.map((meeting) => (
+      {meetings?.map((meeting) => (
         <MeetingCard
           key={meeting.id}
           meetingType={meeting.meetingType[0]}
@@ -44,6 +43,4 @@ const MeetingCardGroup = ({ meetings }: MeetingListSectionProps) => {
       ))}
     </GridGroup>
   );
-};
-
-export default React.memo(MeetingCardGroup);
+}

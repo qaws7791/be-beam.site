@@ -3,15 +3,12 @@
 import { useMemo, useState } from 'react';
 import useMeetingsQuery from '@/hooks/api/useMeetingsQuery';
 import useInfiniteScroll from '@/hooks/ui/useInfiniteScroll';
-import useProgressiveRender from '@/hooks/ui/useProgressiveRender';
 import { getInitialFilters } from '@/utils/filter';
 
 import CommonTemplate from '@/components/templates/CommonTemplate';
 import Banner from '@/components/atoms/Banner';
 import MeetingFilterControls from '@/components/organisms/MeetingFilterControls';
-import MeetingCardGroup, {
-  type MeetingType,
-} from '@/components/sections/MeetingCardGroup';
+import MeetingCardGroup from '@/components/sections/MeetingCardGroup';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 
 export function meta() {
@@ -104,10 +101,9 @@ export default function Meetings() {
     isFetchingNextPage,
   } = useMeetingsQuery(search, selectedTopic, selectedFilters);
 
-  const allMeetings = useMemo(
-    () => meetings?.pages?.flatMap((page) => page.meetings) || [],
-    [meetings],
-  );
+  const allMeetings = useMemo(() => {
+    return meetings?.pages?.flatMap((page) => page.meetings) || [];
+  }, [meetings]);
 
   // 스크롤 감지 기능은 별도의 관심사. 커스텀 훅으로 분리
   useInfiniteScroll({
@@ -116,9 +112,8 @@ export default function Meetings() {
     isFetchingNextPage,
   });
 
-  // 대량 렌더링 최적화는 별도의 관심사. 커스텀 훅으로 분리
-  const { renderedItems } = useProgressiveRender<MeetingType>(allMeetings);
-  console.log(renderedItems);
+  console.log('allMeetings', allMeetings);
+  console.log('datas', meetings);
 
   return (
     <CommonTemplate>
@@ -138,7 +133,7 @@ export default function Meetings() {
         setSearch={setSearch}
       />
 
-      <MeetingCardGroup meetings={renderedItems} />
+      <MeetingCardGroup meetings={allMeetings} />
 
       {isLoading && <LoadingSpinner />}
 

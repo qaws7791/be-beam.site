@@ -25,7 +25,10 @@ export default function MeetingCard({
   classNames,
 }: MeetingCardProp) {
   return (
-    <div className={clsx('relative w-full cursor-pointer', classNames)}>
+    <div
+      className={clsx('relative w-full cursor-pointer', classNames)}
+      onClick={onClick}
+    >
       <img
         className="h-[226px] w-full rounded-2xl object-cover"
         src={image}
@@ -46,7 +49,7 @@ export default function MeetingCard({
         alt="like_icon"
       />
 
-      <div className="w-full py-3" onClick={onClick}>
+      <div className="w-full py-3">
         <Text variant="B2_Medium" color="primary" className="mb-1">
           {meetingType}
         </Text>
