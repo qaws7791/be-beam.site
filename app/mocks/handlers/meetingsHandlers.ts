@@ -69,7 +69,7 @@ const meetingHandlers = [
         pageInfo: {
           nextCursor: cursor + size,
           size,
-          hasNext: cursor + size < paginatedMeetings.length,
+          hasNext: cursor + size < filteredMeetings.length,
         },
         meetings: paginatedMeetings,
       },

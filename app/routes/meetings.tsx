@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 
 import CommonTemplate from '@/components/templates/CommonTemplate';
 import GetMeetingsContainer from '@/containers/GetMeetingsContainer';
+import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 
 export function meta() {
   return [
@@ -13,27 +14,27 @@ export function meta() {
 }
 
 // export async function loader() {
-//   // 서버에서 미리 데이터를 가져와서 해당 쿼리 캐시에 저장
-//   // 실제 api를 사용하게 되면 HydrationBoundary와 함께 사용
-//   await queryClient.prefetchQuery({
-//     queryKey: [
-//       'meetings',
-//       '',
-//       'all',
-//       {
-//         '모임 유형': 'all',
-//         '모집 상태': 'all',
-//         '모임 방식': 'all',
-//         참가비: 'all',
-//         정렬: 'recent',
-//       },
-//     ],
-//     queryFn: () => getMeetingList(),
-//   });
+// 서버에서 미리 데이터를 가져와서 해당 쿼리 캐시에 저장
+// 실제 api를 사용하게 되면 HydrationBoundary와 함께 사용
+// await queryClient.prefetchQuery({
+//   queryKey: [
+//     'meetings',
+//     '',
+//     'all',
+//     {
+//       '모임 유형': 'all',
+//       '모집 상태': 'all',
+//       '모임 방식': 'all',
+//       참가비: 'all',
+//       정렬: 'recent',
+//     },
+//   ],
+//   queryFn: () => getMeetingList(),
+// });
 
-//   return {
-//     dehydratedState: dehydrate(queryClient),
-//   };
+// return {
+//   dehydratedState: dehydrate(queryClient),
+// };
 // }
 
 export default function Meetings() {
@@ -41,7 +42,7 @@ export default function Meetings() {
 
   return (
     <CommonTemplate>
-      <Suspense fallback={<p>Loading...</p>}>
+      <Suspense fallback={<LoadingSpinner />}>
         {/* { <HydrationBoundary state={dehydratedState}></HydrationBoundary>} */}
         <GetMeetingsContainer />
       </Suspense>

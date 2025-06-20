@@ -1,5 +1,6 @@
 import { formatToKoreanDate } from '@/utils/date';
 import Text from '../atoms/text/Text';
+
 import clsx from 'clsx';
 
 export interface MeetingCardProp {
@@ -24,10 +25,7 @@ export default function MeetingCard({
   classNames,
 }: MeetingCardProp) {
   return (
-    <div
-      onClick={onClick}
-      className={clsx('relative w-full cursor-pointer', classNames)}
-    >
+    <div className={clsx('relative w-full cursor-pointer', classNames)}>
       <img
         className="h-[226px] w-full rounded-2xl object-cover"
         src={image}
@@ -42,7 +40,13 @@ export default function MeetingCard({
         {recruitmentType}
       </Text>
 
-      <div className="w-full py-3">
+      <img
+        className="absolute top-5 right-5"
+        src="/images/icons/w_like.svg"
+        alt="like_icon"
+      />
+
+      <div className="w-full py-3" onClick={onClick}>
         <Text variant="B2_Medium" color="primary" className="mb-1">
           {meetingType}
         </Text>

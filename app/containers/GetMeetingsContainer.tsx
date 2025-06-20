@@ -1,12 +1,14 @@
-// Smart 컴포넌트: 기능 중심(모임 데이터 패치)
+// Smart 컴포넌트: 기능 중심(모임 데이터 패치, 무한 스크롤)
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useMeetingsQuery } from '@/hooks/api/useMeetingsQuery';
 import { getInitialFilters } from '@/utils/filter';
+import { useInfiniteScroll } from '@/hooks/ui/useInfiniteScroll';
 
 import Banner from '@/components/atoms/Banner';
 import MeetingFilterControls from '@/components/organisms/MeetingFilterControls';
-import MeetingCardGroup from '@/components/sections/MeetingCardsGroup';
+import MeetingCardGroup from '@/components/sections/MeetingCardGroup';
+import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 
 export default function GetMeetingsContainer() {
   const filters = [
@@ -57,11 +59,24 @@ export default function GetMeetingsContainer() {
   >(() => getInitialFilters(filters));
   const [search, setSearch] = useState('');
 
-  const { data: meetings } = useMeetingsQuery(
-    search,
-    selectedTopic,
-    selectedFilters,
+  const {
+    data: meetings,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useMeetingsQuery(search, selectedTopic, selectedFilters);
+
+  const allMeetings = useMemo(
+    () => meetings?.pages?.flatMap((page) => page.meetings) || [],
+    [meetings],
   );
+
+  // 스크롤 감지 기능은 별도의 관심사. useInfiniteScroll 같은 커스텀 훅으로 분리
+  useInfiniteScroll({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  });
 
   return (
     <div>
@@ -80,7 +95,11 @@ export default function GetMeetingsContainer() {
         setSearch={setSearch}
       />
 
-      <MeetingCardGroup meetings={meetings} />
+      <MeetingCardGroup meetings={allMeetings} />
+
+      {isFetchingNextPage && (
+        <LoadingSpinner loadingComment="더 많은 미팅을 Loading..." />
+      )}
     </div>
   );
 }

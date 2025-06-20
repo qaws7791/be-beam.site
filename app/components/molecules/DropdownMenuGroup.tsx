@@ -32,6 +32,7 @@ export default function DropdownMenuGroup({
             <DropdownMenuContent className="min-w-24 bg-gray-200">
               {item.options.map((option, idx) => (
                 <DropdownMenuItem
+                  className="cursor-pointer"
                   key={option}
                   onSelect={() =>
                     onDropdownChange((prev) => ({
