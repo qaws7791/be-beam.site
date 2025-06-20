@@ -6,7 +6,7 @@ interface Props {
   isFetchingNextPage: boolean;
 }
 
-export function useInfiniteScroll({
+export default function useInfiniteScroll({
   fetchNextPage,
   hasNextPage,
   isFetchingNextPage,
