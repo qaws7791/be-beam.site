@@ -21,7 +21,12 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-8">
-          <SearchInput placeholder="원하는 검색어를 입력하세요." />
+          <SearchInput
+            placeHolder="원하는 검색어를 입력하세요."
+            inputStyle="bg-gray-200 placeholder:text-gray-500 text-t4 p-3 rounded-lg w-[400px]"
+            onSearchChange={() => console.log('나중에 작성')}
+            search=""
+          />
 
           {/* 후에 코드 교체 및 공용 컴포넌트 제작 */}
           {user ? (

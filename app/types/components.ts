@@ -22,6 +22,7 @@ export interface TextProps {
     | 'gray-300'
     | 'gray-200'
     | 'gray-100'
+    | 'purple'
     | 'brown'
     | 'primary';
   variant: TypographyVariant;
@@ -49,16 +50,10 @@ export interface LogoProps {
   className?: string;
 }
 
-export interface SearchInputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
-  className?: string;
-}
-
 export interface GridGroupProps {
   children: React.ReactNode;
   columns: 1 | 2 | 3 | 4 | 5 | 6;
   gap?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 11 | 12;
-  maxWidth?: string;
   className?: string;
 }
 
@@ -66,4 +61,10 @@ export interface SideBarSectionItems {
   to: string;
   title: string;
   onClick: () => void;
+}
+
+export interface FiltersType {
+  label: string;
+  options: string[];
+  values: string[];
 }

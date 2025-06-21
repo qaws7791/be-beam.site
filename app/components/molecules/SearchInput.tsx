@@ -1,17 +1,27 @@
-import type { SearchInputProps } from '@/types/components';
+import { Input } from '../atoms/input/Input';
 import clsx from 'clsx';
 
-export default function SearchInput({ ...props }: SearchInputProps) {
+export interface SearchInputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  placeHolder: string;
+  inputStyle?: string;
+  onSearchChange: (value: string) => void;
+  search: string;
+}
+
+export default function SearchInput({
+  placeHolder,
+  inputStyle = 'border-1 border-gray-300',
+  onSearchChange,
+  search,
+}: SearchInputProps) {
   return (
-    <div
-      className={clsx(
-        'flex w-[400px] items-center justify-between rounded-lg bg-[var(--color-gray-200)] px-6 py-3',
-      )}
-    >
-      <input
-        type="text"
-        className="border border-none text-[var(--text-t4)] placeholder-[var(--color-gray-500)] outline-none"
-        {...props}
+    <div className={clsx('flex items-center justify-between', inputStyle)}>
+      <Input
+        placeholder={placeHolder}
+        className="h-auto border-none bg-transparent py-0 shadow-none focus:border-none"
+        onChange={(e) => onSearchChange(e.target.value)}
+        value={search}
       />
       <img
         src="/images/icons/search.svg"
