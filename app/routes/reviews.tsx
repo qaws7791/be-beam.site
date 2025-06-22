@@ -11,6 +11,8 @@ import CommonTemplate from '@/components/templates/CommonTemplate';
 import useReviewsQuery from '@/hooks/api/useReviewsQuery';
 import useReviewsParams from '@/hooks/business/useReviewsParams';
 import { RadioGroup, RadioGroupItem } from '@radix-ui/react-radio-group';
+import { useInView } from 'react-intersection-observer';
+import { useEffect } from 'react';
 
 export function meta() {
   return [
@@ -27,11 +29,21 @@ export default function Reviews() {
     params,
     handleUpdateRecruitmentType,
     handleUpdateSort,
-    handleUpdateOnlyImage,
+    handleUpdateType,
     handleUpdateRating,
   } = useReviewsParams();
 
-  const { data: reviews } = useReviewsQuery(params);
+  const { ref, inView } = useInView();
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useReviewsQuery(params);
+
+  const allReviews = data?.pages.flatMap((page) => page.reviews);
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, fetchNextPage, isFetchingNextPage]);
 
   return (
     <CommonTemplate>
@@ -57,24 +69,28 @@ export default function Reviews() {
           <div className="mt-4.5 flex w-full items-center justify-between gap-5">
             <div className="flex items-center gap-5">
               <ImageFilterChip
-                isActive={params.onlyImage}
-                onToggle={handleUpdateOnlyImage}
+                isActive={params.type === 'image'}
+                onToggle={() =>
+                  handleUpdateType(params.type === 'image' ? 'text' : 'image')
+                }
               />
               <RatingFilter
-                rating={params.rating}
-                onRatingChange={handleUpdateRating}
+                rating={params.rating === 'all' ? 0 : Number(params.rating)}
+                onRatingChange={(rating) =>
+                  handleUpdateRating(rating === 0 ? 'all' : rating.toString())
+                }
               />
             </div>
             <div>
               <RadioGroup
-                defaultValue="latest"
+                defaultValue="recent"
                 className="flex rounded-lg bg-gray-200 p-2"
                 value={params.sort}
                 onValueChange={handleUpdateSort}
               >
                 <RadioGroupItem
-                  value="latest"
-                  id="sort-latest"
+                  value="recent"
+                  id="sort-recent"
                   className="rounded-md px-3 py-2 text-b1 text-gray-500 data-[state=checked]:bg-white data-[state=checked]:text-black data-[state=checked]:shadow-[0_0_1.7px_0_rgba(0,0,0,0.08)]"
                 >
                   최신순
@@ -96,9 +112,12 @@ export default function Reviews() {
               value={tab}
               className="mt-4.5 flex flex-col gap-8"
             >
-              {reviews?.map((review) => (
-                <WideReviewCard key={review.id} review={review} />
+              {allReviews?.map((review) => (
+                <WideReviewCard key={review.reviewId} review={review} />
               ))}
+              <div ref={ref}>
+                {isFetchingNextPage && <p>더 많은 후기를 Loading...</p>}
+              </div>
             </TabsContent>
           ))}
         </Tabs>

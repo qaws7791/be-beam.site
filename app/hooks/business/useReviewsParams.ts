@@ -1,19 +1,35 @@
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router';
 
-export default function useReviewsParams() {
+type useReviewsParamsType = {
+  params: {
+    sort: 'recent' | 'likes';
+    type: 'image' | 'text';
+    rating: 'all' | 1 | 2 | 3 | 4 | 5;
+    recruitmentType: 'all' | 'regular' | 'small';
+  };
+  handleUpdateRecruitmentType: (recruitmentType: string) => void;
+  handleUpdateSort: (sort: string) => void;
+  handleUpdateType: (type: string) => void;
+  handleUpdateRating: (rating: string) => void;
+};
+
+export default function useReviewsParams(): useReviewsParamsType {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const params = useMemo(() => {
     const recruitmentType = searchParams.get('recruitmentType') || 'all';
-    const sort = searchParams.get('sort') || 'latest';
-    const onlyImage = searchParams.get('onlyImage') === 'true';
-    const rating = Number(searchParams.get('rating') || 0);
+    const sort = searchParams.get('sort') || 'recent';
+    const type = searchParams.get('type') || 'text';
+    const rating =
+      searchParams.get('rating') === 'all'
+        ? 'all'
+        : Number(searchParams.get('rating'));
     return {
-      recruitmentType,
-      sort,
-      onlyImage,
-      rating,
+      recruitmentType: recruitmentType as 'all' | 'regular' | 'small',
+      sort: sort as 'recent' | 'likes',
+      type: type as 'image' | 'text',
+      rating: rating as 'all' | 1 | 2 | 3 | 4 | 5,
     };
   }, [searchParams]);
 
@@ -41,10 +57,10 @@ export default function useReviewsParams() {
     );
   };
 
-  const handleUpdateOnlyImage = (onlyImage: boolean) => {
+  const handleUpdateType = (type: string) => {
     setSearchParams(
       (searchParams) => {
-        searchParams.set('onlyImage', onlyImage.toString());
+        searchParams.set('type', type);
         return searchParams;
       },
       {
@@ -53,10 +69,10 @@ export default function useReviewsParams() {
     );
   };
 
-  const handleUpdateRating = (rating: number) => {
+  const handleUpdateRating = (rating: string) => {
     setSearchParams(
       (searchParams) => {
-        searchParams.set('rating', rating.toString());
+        searchParams.set('rating', rating);
         return searchParams;
       },
       {
@@ -69,7 +85,7 @@ export default function useReviewsParams() {
     params,
     handleUpdateRecruitmentType,
     handleUpdateSort,
-    handleUpdateOnlyImage,
+    handleUpdateType,
     handleUpdateRating,
   };
 }
