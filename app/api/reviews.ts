@@ -130,3 +130,17 @@ export const getReviewList = async ({
     },
   };
 };
+
+export const likeReview = async ({ reviewId }: { reviewId: number }) => {
+  return {
+    reviewId,
+  };
+  // await axiosInstance.post<void>(`/reviews/${reviewId}/like`);
+};
+
+export const unlikeReview = async ({ reviewId }: { reviewId: number }) => {
+  return {
+    reviewId,
+  };
+  // await axiosInstance.delete<void>(`/reviews/${reviewId}/like`);
+};

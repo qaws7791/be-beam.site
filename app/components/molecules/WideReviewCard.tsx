@@ -2,14 +2,13 @@ import ThreeDotHorizontalIcon from '../atoms/icons/ThreeDotHorizontalIcon';
 import StarIcon from '../atoms/icons/StarIcon';
 import { Link } from 'react-router';
 import ArrowRightIcon from '../atoms/icons/ArrowRightIcon';
-import HeartIcon from '../atoms/icons/HeartIcon';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../atoms/dropdown-menu/DropdownMenu';
-import { cn } from '@/lib/tailwind';
+import ReviewLikeButton from '../atoms/ReviewLikeButton';
 
 interface WideReviewCardProps {
   reviewId: number;
@@ -101,14 +100,11 @@ export default function WideReviewCard({
         </Link>
       </div>
       <div className="mt-8">
-        <button
-          className={cn(
-            'flex items-center gap-1 rounded-[28px] border border-gray-300 py-2 pr-4 pl-3 text-t4 text-gray-500',
-          )}
-        >
-          <HeartIcon className="size-6" />
-          <span>좋아요 | {review.likesCount}</span>
-        </button>
+        <ReviewLikeButton
+          reviewId={review.reviewId}
+          liked={review.liked}
+          likesCount={review.likesCount}
+        />
       </div>
     </div>
   );
