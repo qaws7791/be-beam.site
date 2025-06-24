@@ -5,7 +5,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn, focusVisibleRing } from '@/lib/tailwind';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-t3  transition-all disabled:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-t3 transition-all disabled:pointer-events-none shrink-0 [&_svg]:shrink-0 outline-none cursor-pointer',
   {
     variants: {
       variant: {
