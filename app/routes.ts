@@ -18,7 +18,12 @@ export default [
       route('/participated', 'routes/participatedMeeting.tsx'),
       route('/requested', 'routes/requestedMeeting.tsx'),
       route('/created', 'routes/createdMeeting.tsx'),
-      route('/reviews', 'routes/myReviews.tsx'),
+      ...prefix('/reviews', [
+        layout('layouts/myReview.tsx', [
+          route('/written', 'routes/writtenReviews.tsx'),
+          route('/reviewable', 'routes/reviewableReviews.tsx'),
+        ]),
+      ]),
       route('/wishList', 'routes/wishList.tsx'),
       route('/editProfile', 'routes/editProfile.tsx'),
       route('/notifications', 'routes/myNotifications.tsx'),

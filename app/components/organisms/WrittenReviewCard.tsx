@@ -1,6 +1,29 @@
+import { useState } from 'react';
 import { Button } from '../atoms/button/Button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../atoms/dialog/Dialog';
 import StarIcon from '../atoms/icons/StarIcon';
-import { Tag } from '../atoms/tag/Tag';
+import useUpdateReviewMutation from '@/hooks/api/useUpdateReviewMutation';
+import { ReviewUpdateForm } from './ReviewUpdateForm';
+import MeetingTypeTag from '../atoms/MeetingTypeTag';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '../atoms/alert-dialog/AlertDialog';
+import useDeleteReviewMutation from '@/hooks/api/useDeleteReviewMutation';
 
 interface WrittenReviewCardProps {
   review: {
@@ -28,12 +51,30 @@ interface WrittenReviewCardProps {
 }
 
 export default function WrittenReviewCard({ review }: WrittenReviewCardProps) {
+  const updateReviewMutation = useUpdateReviewMutation();
+  const deleteReviewMutation = useDeleteReviewMutation();
+  const [isOpen, setIsOpen] = useState(false);
+  const handleReviewSubmit = (review: {
+    rating: number;
+    content: string;
+    existingImages: string[];
+    newImages: File[];
+    id: number;
+  }) => {
+    updateReviewMutation.mutate({
+      reviewId: review.id,
+      rating: review.rating,
+      content: review.content,
+      existingImages: review.existingImages,
+      newImages: review.newImages,
+    });
+    setIsOpen(false);
+  };
+
   return (
     <div className="rounded-2xl border border-gray-300 px-7 pt-7 pb-6 shadow-[0_0_8px_0_rgba(0,0,0,0.04)]">
       <div>
-        <Tag variant={review.meeting.type === 'regular' ? 'blue' : 'primary'}>
-          {review.meeting.type === 'regular' ? '정기모임' : '소모임'}
-        </Tag>
+        <MeetingTypeTag type={review.meeting.type} />
         <div className="mt-3 flex items-center gap-2 border-b border-gray-300 pb-3">
           <img
             src={review.meeting.image}
@@ -50,7 +91,7 @@ export default function WrittenReviewCard({ review }: WrittenReviewCardProps) {
       <div className="mt-6 flex flex-col gap-5">
         <div className="flex">
           {Array.from({ length: review.rating }, (_, index) => (
-            <StarIcon key={index} className="size-5 text-gray-700" />
+            <StarIcon key={index} className="size-6 text-gray-700" />
           ))}
         </div>
         <p className="text-b1 text-gray-600">{review.content}</p>
@@ -61,12 +102,56 @@ export default function WrittenReviewCard({ review }: WrittenReviewCardProps) {
         ))}
       </div>
       <div className="mt-5 flex items-center gap-2.5">
-        <Button variant="tertiary" className="flex-1">
-          수정
-        </Button>
-        <Button variant="tertiary" className="flex-1">
-          삭제
-        </Button>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogTrigger asChild>
+            <Button variant="tertiary" className="flex-1">
+              수정
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-[600px]">
+            <DialogHeader>
+              <DialogTitle>후기 작성</DialogTitle>
+              <DialogDescription className="sr-only">
+                후기 작성하기
+              </DialogDescription>
+            </DialogHeader>
+            <ReviewUpdateForm
+              meeting={review.meeting}
+              onReviewSubmit={handleReviewSubmit}
+              defaultValues={{
+                rating: review.rating,
+                content: review.content,
+                existingImages: review.images,
+                id: review.id,
+              }}
+            />
+          </DialogContent>
+        </Dialog>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="tertiary" className="flex-1">
+              삭제
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>후기를 삭제할까요?</AlertDialogTitle>
+              <AlertDialogDescription className="sr-only">
+                후기를 삭제하시겠습니까?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>취소</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() =>
+                  deleteReviewMutation.mutate({ reviewId: review.id })
+                }
+              >
+                확인
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );

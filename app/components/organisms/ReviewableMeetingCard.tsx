@@ -1,12 +1,23 @@
+import { useState } from 'react';
+import { Button } from '../atoms/button/Button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../atoms/dialog/Dialog';
 import StarOutlineIcon from '../atoms/icons/StarOutlineIcon';
-import { Tag } from '../atoms/tag/Tag';
-import { ReviewDialog } from './ReviewDialog';
+import { ReviewForm } from './ReviewForm';
+import useCreateReviewMutation from '@/hooks/api/useCreateReviewMutation';
+import MeetingTypeTag from '../atoms/MeetingTypeTag';
 
 interface ReviewableMeetingCardProps {
   meeting: {
     id: number;
     title: string;
-    type: 'regular' | 'small' | 'event';
+    type: 'regular' | 'small';
     image: string;
   };
 }
@@ -14,18 +25,26 @@ interface ReviewableMeetingCardProps {
 export default function ReviewableMeetingCard({
   meeting,
 }: ReviewableMeetingCardProps) {
+  const createReviewMutation = useCreateReviewMutation();
+  const [isOpen, setIsOpen] = useState(false);
   const handleReviewSubmit = (review: {
     rating: number;
     content: string;
     images: File[];
   }) => {
-    // TODO: API 호출로 후기 제출 로직 구현
-    console.log('Review submitted:', review);
+    createReviewMutation.mutate({
+      rating: review.rating,
+      text: review.content,
+      images: review.images,
+      meetingId: meeting.id,
+    });
+    setIsOpen(false);
   };
 
   return (
-    <div className="flex flex-col gap-4 rounded-2xl border border-gray-200 p-5">
-      <div className="flex items-start justify-between">
+    <div className="flex flex-col rounded-2xl border border-gray-300 p-5 shadow-[0_0_8px_0_rgba(0,0,0,0.04)]">
+      <div className="flex flex-col items-start justify-between gap-3 border-b border-gray-300 pb-4">
+        <MeetingTypeTag type={meeting.type} />
         <div className="flex items-center gap-3">
           <img
             src={meeting.image}
@@ -35,12 +54,7 @@ export default function ReviewableMeetingCard({
             className="size-15 rounded-lg border border-gray-200"
           />
           <div className="flex flex-col">
-            <p className="text-t1 font-bold">{meeting.title}</p>
-            <div className="mt-1 flex items-center gap-1">
-              <Tag variant={meeting.type === 'regular' ? 'blue' : 'primary'}>
-                {meeting.type === 'regular' ? '정기모임' : '소모임'}
-              </Tag>
-            </div>
+            <p className="text-t3 text-gray-600">`{meeting.title}` 모임</p>
           </div>
         </div>
       </div>
@@ -57,7 +71,22 @@ export default function ReviewableMeetingCard({
         </p>
       </div>
       <div className="mt-5">
-        <ReviewDialog meeting={meeting} onReviewSubmit={handleReviewSubmit} />
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogTrigger asChild>
+            <Button variant="default" size="sm" className="w-full">
+              ✍️후기 작성하기
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-[600px]">
+            <DialogHeader>
+              <DialogTitle>후기 작성</DialogTitle>
+              <DialogDescription className="sr-only">
+                후기 작성하기
+              </DialogDescription>
+            </DialogHeader>
+            <ReviewForm meeting={meeting} onReviewSubmit={handleReviewSubmit} />
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
