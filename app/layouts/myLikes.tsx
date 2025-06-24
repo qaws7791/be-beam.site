@@ -1,0 +1,56 @@
+import { Chip } from '@/components/atoms/chip/Chip';
+import { Link, Outlet, useMatch } from 'react-router';
+
+const myLikesData = [
+  {
+    to: '/myPage/likes/regular',
+    value: 'regular',
+    title: '정기모임',
+  },
+  {
+    to: '/myPage/likes/small',
+    value: 'small',
+    title: '소모임',
+  },
+  {
+    to: '/myPage/likes/review',
+    value: 'review',
+    title: '후기',
+  },
+  {
+    to: '/myPage/likes/host',
+    value: 'host',
+    title: '찜한 모임',
+  },
+];
+
+export default function MyLikesLayout() {
+  const matchPath = useMatch({
+    path: '/myPage/likes/*',
+  });
+  const currentTab = matchPath?.params['*'];
+  return (
+    <div className="flex-1">
+      <div className="flex flex-col gap-2.5">
+        <h1 className="text-h2 text-gray-950">찜리스트</h1>
+        <p className="text-b2 text-gray-600">
+          참여 완료한 모임의 후기를 작성할 수 있어요.
+        </p>
+      </div>
+      <div className="mt-12 flex items-center gap-3">
+        {myLikesData.map((item) => (
+          <Chip
+            key={item.to}
+            variant={currentTab === item.value ? 'primary' : 'secondary'}
+            asChild
+          >
+            <Link key={item.to} to={item.to}>
+              {item.title}
+            </Link>
+          </Chip>
+        ))}
+      </div>
+      <Outlet />
+    </div>
+  );
+}
