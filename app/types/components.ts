@@ -68,3 +68,41 @@ export interface FiltersType {
   options: string[];
   values: string[];
 }
+
+interface MeetingScheduleType {
+  address: string;
+  addressDetail: string;
+  content: string;
+  meetingEndTime: string;
+  meetingStartTime: string;
+}
+
+export interface MeetingDetailType {
+  id: number;
+  name: string;
+  introduction: string;
+  topic: string;
+  hashtags: string[];
+  address: string;
+  recruitingState: string;
+  recruitmentType: string;
+  selectionType: string;
+  meetingMode: string;
+  recruitingStartTime: string;
+  recruitingEndTime: string;
+  minParticipants: number;
+  maxParticipants: number;
+  paymentAmount: number;
+  liked: boolean;
+  likesCount: number;
+  meetingImages: string[];
+  schedules: MeetingScheduleType[];
+  info: string;
+  participantCount: number;
+  reviewable: boolean;
+
+  hostId: number;
+  hostName: string;
+  hostImage: string;
+  hostDescription: string;
+}

@@ -3,6 +3,7 @@ import Logo from '../atoms/logo/Logo';
 import NavMenu from '../molecules/NavMenu';
 import SearchInput from '../molecules/SearchInput';
 import useMyProfileQuery from '@/hooks/api/useMyProfileQuery';
+
 export default function Navbar() {
   const navigate = useNavigate();
   const myProfile = useMyProfileQuery();

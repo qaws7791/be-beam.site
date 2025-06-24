@@ -69,7 +69,7 @@ export default function App() {
   const path = useLocation().pathname.slice(1);
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="bg-white text-black">
+      <div className="bg-white whitespace-pre-wrap text-black">
         <Navbar />
         <Outlet />
         <Toaster />
