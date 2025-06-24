@@ -14,6 +14,9 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
+    server: {
+      port: 3000,
+    },
     test: {
       coverage: {
         provider: 'v8',

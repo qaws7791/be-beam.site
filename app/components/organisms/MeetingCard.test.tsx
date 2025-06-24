@@ -4,7 +4,7 @@ import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/utils/date', () => ({
-  formatToKoreanDate: (date: string) => `Formatted(${date})`,
+  formatToMonthAndDayDate: (date: string) => `Formatted(${date})`,
 }));
 
 describe('MeetingCard', () => {

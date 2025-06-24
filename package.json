@@ -36,6 +36,7 @@
     "@react-router/node": "^7.5.3",
     "@tailwindcss/postcss": "^4.1.8",
     "@tanstack/react-query": "^5.80.6",
+    "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.17.18",
     "@types/react-window": "^1.8.8",
     "axios": "^1.9.0",
@@ -43,7 +44,9 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "isbot": "^5.1.27",
+    "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
+    "lucide-react": "^0.522.0",
     "react": "^19.1.0",
     "react-day-picker": "^9.7.0",
     "react-dom": "^19.1.0",
@@ -51,6 +54,7 @@
     "react-hot-toast": "^2.5.2",
     "react-intersection-observer": "^9.16.0",
     "react-router": "^7.5.3",
+    "swiper": "^11.2.8",
     "tailwind-merge": "^3.3.1",
     "tw-animate-css": "^1.3.4",
     "zod": "^3.25.46",
@@ -94,7 +98,12 @@
   "pnpm": {
     "overrides": {
       "ts-morph": "12.0.0"
-    }
+    },
+    "ignoredBuiltDependencies": [
+      "@tailwindcss/oxide",
+      "esbuild",
+      "msw"
+    ]
   },
   "packageManager": "pnpm@10.12.1+sha512.f0dda8580f0ee9481c5c79a1d927b9164f2c478e90992ad268bbb2465a736984391d6333d2c327913578b2804af33474ca554ba29c04a8b13060a717675ae3ac"
 }

@@ -14,6 +14,7 @@ import type { Route } from './+types/root';
 import Navbar from './components/organisms/Navbar';
 import { Toaster } from './components/atoms/toaster/Toaster';
 import Footer from './components/organisms/Footer';
+import { MyProfileQueryOptions } from './hooks/api/useMyProfileQuery';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -57,11 +58,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+export async function clientLoader() {
+  const cacheUser = queryClient.getQueryData(MyProfileQueryOptions.queryKey);
+  if (!cacheUser) {
+    await queryClient.fetchQuery(MyProfileQueryOptions);
+  }
+}
+
 export default function App() {
   const path = useLocation().pathname.slice(1);
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="bg-white text-black">
+      <div className="bg-white whitespace-pre-wrap text-black">
         <Navbar />
         <Outlet />
         <Toaster />
