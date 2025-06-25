@@ -131,8 +131,6 @@ export default function GuideBooks() {
     return guideBooks?.pages?.flatMap((page) => page.guideBooks) || [];
   }, [guideBooks]);
 
-  console.log('guideBooks', guideBooks, 'allGuideBooks', allGuideBooks);
-
   useInfiniteScroll({
     fetchNextPage,
     hasNextPage,
