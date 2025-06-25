@@ -4,6 +4,7 @@ import {
   API_V2_BASE_URL,
 } from '@/constants/api';
 import axios, {
+  AxiosError,
   type AxiosResponse,
   type InternalAxiosRequestConfig,
 } from 'axios';
@@ -56,15 +57,26 @@ const requestInterceptor = (config: InternalAxiosRequestConfig) => {
 };
 
 const responseInterceptor = (response: AxiosResponse) => {
-  if (response.status === 401) {
-    clearAuthTokens();
-    window.location.href = '/login';
-  }
   return response;
 };
 
+const responseErrorInterceptor = (error: AxiosError) => {
+  if (error.response?.status === 401) {
+    clearAuthTokens();
+    if (window.location.pathname !== '/login') {
+      window.location.href = '/login';
+    }
+  }
+};
+
 axiosInstance.interceptors.request.use(requestInterceptor);
-axiosInstance.interceptors.response.use(responseInterceptor);
+axiosInstance.interceptors.response.use(
+  responseInterceptor,
+  responseErrorInterceptor,
+);
 
 axiosInstanceV1.interceptors.request.use(requestInterceptor);
-axiosInstanceV1.interceptors.response.use(responseInterceptor);
+axiosInstanceV1.interceptors.response.use(
+  responseInterceptor,
+  responseErrorInterceptor,
+);

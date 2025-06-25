@@ -52,7 +52,7 @@ export interface LogoProps {
 
 export interface GridGroupProps {
   children: React.ReactNode;
-  columns: 1 | 2 | 3 | 4 | 5 | 6;
+  columns?: 1 | 2 | 3 | 4 | 5 | 6;
   gap?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 11 | 12;
   className?: string;
 }
@@ -105,4 +105,15 @@ export interface MeetingDetailType {
   hostName: string;
   hostImage: string;
   hostDescription: string;
+}
+
+export interface GuideBookType {
+  id: number;
+  title: string;
+  image: string;
+  description: string;
+  level: string;
+  time: string;
+  type: string;
+  targetType: string;
 }
