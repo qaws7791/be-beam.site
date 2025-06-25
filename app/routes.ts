@@ -12,6 +12,7 @@ export default [
   route('/meeting/:meetingId', 'routes/meetingDetail.tsx'),
   route('/reviews', 'routes/reviews.tsx'),
   route('/guideBooks', 'routes/guideBooks.tsx'),
+  route('/guideBook/:guideBookId', 'routes/guideBookDetail.tsx'),
   route('/login', 'routes/login.tsx'),
   layout('routes/myPage.tsx', [
     ...prefix('/myPage', [

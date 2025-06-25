@@ -1,12 +1,28 @@
+import { useMemo } from 'react';
+import useGuideBooksQuery from '@/hooks/api/useGuideBooksQuery';
+import useInfiniteScroll from '@/hooks/ui/useInfiniteScroll';
+import useGuideBooksParams from '@/hooks/business/useGuideBooksParams';
+
 import { Tabs } from '@/components/atoms/tabs/Tabs';
 import GuideBooksFilterDialog from '@/components/organisms/GuideBooksFilterDialog';
 import GuideBooksFilterControls from '@/components/organisms/TargetTypeTab';
 import GuideBooksContent from '@/components/sections/GuideBooksContent';
-import useGuideBooksParams from '@/hooks/business/useGuideBooksParams';
 import useGuidBookFilterDialog, {
   type FilterState,
 } from '@/hooks/ui/useGuideBookFilterDialog';
-import type { GuideBookType } from '@/types/components';
+import LoadingSpinner from '@/components/molecules/LoadingSpinner';
+
+// interface GuideBookFilters {
+//   type: string;
+//   targetType: string;
+//   level: string;
+//   time: string;
+// }
+
+export interface FilterOption {
+  text: string;
+  value: string;
+}
 
 export function meta() {
   return [
@@ -15,33 +31,40 @@ export function meta() {
   ];
 }
 
-export interface FilterOption {
-  text: string;
-  value: string;
-}
+// function getFiltersFromUrl(request: Request): GuideBookFilters {
+//   const url = new URL(request.url);
+//   const searchParams = url.searchParams;
+
+//   return {
+//     type: searchParams.get('type') || 'all',
+//     targetType: searchParams.get('target-type') || 'all',
+//     level: searchParams.get('level') || 'all',
+//     time: searchParams.get('time') || 'all',
+//   };
+// }
+
+// export async function loader({ request }: Route.LoaderArgs) {
+//   const filters = getFiltersFromUrl(request);
+//   console.log(filters);
+
+//   await queryClient.prefetchQuery({
+//     queryKey: ['guideBooks', filters],
+//     queryFn: async () => {
+//       const res = await axiosInstanceV1({
+//         method: 'GET',
+//         url: `guidebooks?type=${filters.type}&target-type=${filters.targetType}&level=${filters.level}&time=${filters.time}&cursor=0&size=9`,
+//       });
+//       const data = res.data;
+//       return data;
+//     },
+//   });
+
+//   return {
+//     dehydratedState: dehydrate(queryClient),
+//   };
+// }
 
 export default function GuideBooks() {
-  const {
-    params,
-    handleUpdateType,
-    handleUpdateTargetType,
-    handleUpdateLevel,
-    handleUpdateTime,
-  } = useGuideBooksParams();
-
-  const {
-    isOpen,
-    setIsOpen,
-    filter,
-    setFilter,
-    openDialog,
-    closeDialog,
-    updateFilter,
-    resetFilter,
-  } = useGuidBookFilterDialog(params);
-
-  const allGuideBooks: GuideBookType[] = [];
-
   const typeList: FilterOption[] = [
     {
       text: '전체',
@@ -69,6 +92,25 @@ export default function GuideBooks() {
     },
   ];
 
+  const {
+    params,
+    handleUpdateType,
+    handleUpdateTargetType,
+    handleUpdateLevel,
+    handleUpdateTime,
+  } = useGuideBooksParams();
+
+  const {
+    isOpen,
+    setIsOpen,
+    filter,
+    setFilter,
+    openDialog,
+    closeDialog,
+    updateFilter,
+    resetFilter,
+  } = useGuidBookFilterDialog(params);
+
   const handleApplyFilter = (filterState: FilterState) => {
     closeDialog();
     handleUpdateTargetType(filterState.targetType);
@@ -77,10 +119,29 @@ export default function GuideBooks() {
     resetFilter();
   };
 
-  console.log(filter);
+  const {
+    isLoading,
+    data: guideBooks,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGuideBooksQuery(params);
+
+  const allGuideBooks = useMemo(() => {
+    return guideBooks?.pages?.flatMap((page) => page.guideBooks) || [];
+  }, [guideBooks]);
+
+  console.log('guideBooks', guideBooks, 'allGuideBooks', allGuideBooks);
+
+  useInfiniteScroll({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  });
 
   return (
     <div>
+      {/* { <HydrationBoundary state={dehydratedState}></HydrationBoundary>} */}
       <img
         src="https://placehold.co/1920x490"
         alt="가이드북 배너"
@@ -96,6 +157,12 @@ export default function GuideBooks() {
         >
           <GuideBooksFilterControls openDialog={openDialog} list={typeList} />
           <GuideBooksContent list={typeList} datas={allGuideBooks} />
+
+          {isLoading && <LoadingSpinner />}
+
+          {isFetchingNextPage && (
+            <LoadingSpinner loadingComment="더 많은 가이드북을 Loading..." />
+          )}
         </Tabs>
       </div>
 
