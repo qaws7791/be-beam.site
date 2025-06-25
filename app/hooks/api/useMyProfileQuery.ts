@@ -11,9 +11,9 @@ export const MyProfileQueryOptions = queryOptions({
     }
 
     const profileResult = await getMyProfile();
-
     return profileResult;
   },
+  enabled: !!getAuthToken(),
   throwOnError: false,
 });
 

@@ -106,3 +106,10 @@ export interface MeetingDetailType {
   hostImage: string;
   hostDescription: string;
 }
+
+export interface GuideBookType {
+  id: number;
+  title: string;
+  image: string;
+  description: string;
+}
