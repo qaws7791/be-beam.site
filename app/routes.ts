@@ -29,6 +29,7 @@ export default [
         ]),
       ]),
       route('/editProfile', 'routes/editProfile.tsx'),
+      route('/info', 'routes/myInformation.tsx'),
       route('/notifications', 'routes/myNotifications.tsx'),
     ]),
   ]),

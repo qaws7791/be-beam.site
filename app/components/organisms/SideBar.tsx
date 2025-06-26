@@ -38,7 +38,7 @@ export default function SideBar({ user }: { user: UserType }) {
       onClick: () => setIsMeetingPage(false),
     },
     {
-      to: '/mypage/editProfile',
+      to: '/mypage/info',
       title: '🙆 개인정보 수정',
       onClick: () => setIsMeetingPage(false),
     },
