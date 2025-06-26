@@ -20,7 +20,7 @@ const myLikesData = [
   {
     to: '/myPage/likes/host',
     value: 'host',
-    title: '찜한 모임',
+    title: '호스트',
   },
 ];
 
@@ -34,7 +34,7 @@ export default function MyLikesLayout() {
       <div className="flex flex-col gap-2.5">
         <h1 className="text-h2 text-gray-950">찜리스트</h1>
         <p className="text-b2 text-gray-600">
-          참여 완료한 모임의 후기를 작성할 수 있어요.
+          내가 좋아하는 모임, 후기, 호스트를 모아보세요.
         </p>
       </div>
       <div className="mt-12 flex items-center gap-3">
