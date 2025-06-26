@@ -53,6 +53,34 @@ const guidBookHandlers = [
       },
     });
   }),
+
+  // 모임 상세페이지 GET 요청
+  http.get('/api/web/v1/guidbooks/:guidbookId', ({ params }) => {
+    const { guidbookId } = params;
+    const id = parseInt(guidbookId as string, 10);
+
+    const guideBookDetail = guidBooksMockData.guideBookDetail.find(
+      (m) => m.id === id,
+    );
+
+    if (!guideBookDetail) {
+      return HttpResponse.json(
+        {
+          isSuccess: false,
+          code: 4004,
+          message: `ID ${id}번 가이드북을 찾을 수 없습니다.`,
+        },
+        { status: 404 },
+      );
+    }
+
+    return HttpResponse.json({
+      isSuccess: true,
+      code: 1000,
+      message: '요청에 성공하였습니다.',
+      result: guideBookDetail,
+    });
+  }),
 ];
 
 export default guidBookHandlers;

@@ -35,7 +35,7 @@ export default function MeetingDetail() {
             <Slider
               images={meeting?.meetingImages}
               isCount={true}
-              slideWidth=""
+              slideWidth="w-full"
               slideHeight="h-[657px]"
               delay={5000}
             />
