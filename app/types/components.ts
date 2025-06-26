@@ -117,3 +117,25 @@ export interface GuideBookType {
   type: string;
   targetType: string;
 }
+
+export interface RecommendationsGuideBookType {
+  id: number;
+  title: string;
+  image: string;
+  description: string;
+}
+
+export interface GuideBookType {
+  id: number;
+  title: string;
+  guidbookType: string;
+  targetType: string;
+  hashtags: string[];
+  level: string;
+  time: string;
+  description: string;
+  benefits: string[];
+  images: string[];
+  file: string;
+  recommendations: RecommendationsGuideBookType[];
+}

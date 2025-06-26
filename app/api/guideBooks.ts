@@ -17,3 +17,12 @@ export const getGuideBookList = async (
   const data = res.data;
   return data.result;
 };
+
+export const getGuideBookDetail = async (id: number) => {
+  const res = await axios({
+    method: 'GET',
+    url: `/api/web/v1/guidbooks/${id}`,
+  });
+  const data = res.data;
+  return data.result;
+};
