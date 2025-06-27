@@ -264,3 +264,50 @@ export const getMyHostLikes = async ({
   const data = res.data;
   return data.result;
 };
+
+type MyInfoResult = {
+  nickname: string;
+  phoneNumber: string;
+  email: string;
+  birthday: string;
+  gender: '남성' | '여성';
+  terms: boolean;
+  userTerms: boolean;
+  marketingTerms: boolean;
+};
+
+export const getMyInfo = async (): Promise<MyInfoResult> => {
+  return {
+    nickname: '닉네임',
+    phoneNumber: '010-1234-5678',
+    email: 'email@email.com',
+    birthday: '2025-01-01',
+    gender: '여성',
+    terms: false,
+    userTerms: false,
+    marketingTerms: false,
+  };
+  const res =
+    await axiosInstance.get<APIResponse<MyInfoResult>>('users/my-info');
+  const data = res.data;
+  return data.result;
+};
+
+export const updateMyInfo = async (data: {
+  nickname: string;
+  phoneNumber: string;
+  email: string;
+  birthday: string;
+  gender: 'MAN' | 'WOMAN';
+  terms: boolean;
+  userTerms: boolean;
+  marketingTerms: boolean;
+}) => {
+  return;
+  const res = await axiosInstance.patch<APIResponse<string>>(
+    'users/my-info',
+    data,
+  );
+  const result = res.data;
+  return result;
+};
