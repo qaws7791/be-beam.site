@@ -264,3 +264,34 @@ export const getMyHostLikes = async ({
   const data = res.data;
   return data.result;
 };
+
+export type UpdateMyProfileParams = {
+  nickname: string;
+  introduction: string;
+  profileImage?: File;
+};
+
+export const updateMyProfile = async (params: UpdateMyProfileParams) => {
+  return {
+    nickname: params.nickname,
+    profileImage: 'https://placehold.co/300',
+    introduction: params.introduction,
+  };
+  // const formData = new FormData();
+  // formData.append(
+  //   'data',
+  //   JSON.stringify({
+  //     nickname: params.nickname,
+  //     introduction: params.introduction,
+  //   }),
+  // );
+  // if (params.profileImage) {
+  //   formData.append('profileImage', params.profileImage);
+  // }
+  // const res = await axiosInstanceV1.patch<APIResponse<MyProfileResult>>(
+  //   'users/my-profile',
+  //   formData,
+  // );
+  // const data = res.data;
+  // return data.result;
+};
