@@ -15,6 +15,7 @@ import Navbar from './components/organisms/Navbar';
 import { Toaster } from './components/atoms/toaster/Toaster';
 import Footer from './components/organisms/Footer';
 import { MyProfileQueryOptions } from './hooks/api/useMyProfileQuery';
+import ModalProvider from './components/provider/ModalProvider';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -73,6 +74,7 @@ export default function App() {
         <Navbar />
         <Outlet />
         <Toaster />
+        <ModalProvider />
 
         {path !== 'login' && <Footer />}
       </div>

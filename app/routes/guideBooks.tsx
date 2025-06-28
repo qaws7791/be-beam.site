@@ -3,6 +3,7 @@ import useGuideBooksQuery from '@/hooks/api/useGuideBooksQuery';
 import useInfiniteScroll from '@/hooks/ui/useInfiniteScroll';
 import useGuideBooksParams from '@/hooks/business/useGuideBooksParams';
 
+import type { FilterOption } from '@/types/components';
 import { Tabs } from '@/components/atoms/tabs/Tabs';
 import GuideBooksFilterDialog from '@/components/organisms/GuideBooksFilterDialog';
 import GuideBooksFilterControls from '@/components/organisms/TargetTypeTab';
@@ -18,11 +19,6 @@ import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 //   level: string;
 //   time: string;
 // }
-
-export interface FilterOption {
-  text: string;
-  value: string;
-}
 
 export function meta() {
   return [

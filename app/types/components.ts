@@ -27,6 +27,7 @@ export interface TextProps {
     | 'primary';
   variant: TypographyVariant;
   className?: string;
+  onClick?: () => void;
 }
 
 export type TypographyVariant =
@@ -123,6 +124,11 @@ export interface RecommendationsGuideBookType {
   title: string;
   image: string;
   description: string;
+}
+
+export interface FilterOption {
+  text: string;
+  value: string;
 }
 
 export interface GuideBookType {

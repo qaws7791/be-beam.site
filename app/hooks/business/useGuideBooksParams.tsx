@@ -30,16 +30,10 @@ export default function useGuideBooksParams(): useGuideBooksParamsType {
     const time = searchParams.get('time') || 'all';
 
     return {
-      type: type as
-        | 'all'
-        | 'communication'
-        | 'engagement'
-        | 'planning'
-        | 'operation'
-        | 'support',
-      targetType: targetType as 'all' | 'planner' | 'participant',
-      level: level as 'all' | 'before' | 'ongoing' | 'completed',
-      time: time as 'all' | 'under30min' | 'under1hour' | 'over1hour',
+      type: type as useGuideBooksParamsType['params']['type'],
+      targetType: targetType as useGuideBooksParamsType['params']['targetType'],
+      level: level as useGuideBooksParamsType['params']['level'],
+      time: time as useGuideBooksParamsType['params']['time'],
     };
   }, [searchParams]);
 

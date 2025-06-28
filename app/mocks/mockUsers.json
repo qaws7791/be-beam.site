@@ -1,0 +1,149 @@
+{
+  "users": [],
+  "participatedMeetings": [
+    {
+      "id": 1,
+      "title": "디저트 모임 1회차",
+      "recruitmentType": "소모임",
+      "image": "https://i.pinimg.com/736x/61/a6/fd/61a6fde30fcb979e89865f75d8795995.jpg",
+      "meetingStartTime": "2024-06-15T14:00:00",
+      "address": "부산 부산진구 전포대로 124 카페",
+      "status": "participating"
+    },
+    {
+      "id": 75,
+      "title": "디저트 모임 75회차",
+      "recruitmentType": "소모임",
+      "image": "https://i.pinimg.com/736x/fd/17/0d/fd170d7af723b08d2848b67f9ffc1b68.jpg",
+      "meetingStartTime": "2024-06-15T14:00:00",
+      "address": "부산 부산진구 전포대로 124 카페",
+      "status": "cancelled"
+    },
+    {
+      "id": 82,
+      "title": "디저트 모임 82회차",
+      "recruitmentType": "소모임",
+      "image": "https://i.pinimg.com/736x/3e/b1/33/3eb1331f4f65dd5e21c78846d632a9a6.jpg",
+      "meetingStartTime": "2024-07-01T14:00:00",
+      "address": "부산 부산진구 전포대로 124 카페",
+      "status": "participating"
+    },
+    {
+      "id": 29,
+      "title": "디저트 모임 29회차",
+      "recruitmentType": "소모임",
+      "image": "https://i.pinimg.com/736x/a4/8c/31/a48c31f9b6b444eb5166c5ad27a2bc3a.jpg",
+      "meetingStartTime": "2024-07-02T14:00:00",
+      "address": "부산 부산진구 전포대로 124 카페",
+      "status": "completed"
+    },
+    {
+      "id": 51,
+      "title": "디저트 모임 51회차",
+      "recruitmentType": "소모임",
+      "image": "https://i.pinimg.com/736x/b3/af/1b/b3af1bc680f1d3b2eb0b21181c31785e.jpg",
+      "meetingStartTime": "2024-07-25T14:00:00",
+      "address": "부산 부산진구 전포대로 124 카페",
+      "status": "completed"
+    },
+    {
+      "id": 59,
+      "title": "디저트 모임 59회차",
+      "recruitmentType": "소모임",
+      "image": "https://i.pinimg.com/736x/8e/87/20/8e8720bf9ea5721aa18024b59a0d263a.jpg",
+      "meetingStartTime": "2024-06-22T14:00:00",
+      "address": "부산 부산진구 전포대로 124 카페",
+      "status": "participating"
+    },
+    {
+      "id": 73,
+      "title": "디저트 모임 73회차",
+      "recruitmentType": "정기모임",
+      "image": "https://i.pinimg.com/736x/65/d1/0c/65d10c922a47b249bcb7a246902bbcae.jpg",
+      "meetingStartTime": "2024-07-12T14:00:00",
+      "address": "부산 부산진구 전포대로 124 카페",
+      "status": "participating"
+    },
+    {
+      "id": 45,
+      "title": "디저트 모임 45회차",
+      "recruitmentType": "정기모임",
+      "image": "https://i.pinimg.com/736x/3c/13/3e/3c133e7c873562521bc4cd8a63a7c81c.jpg",
+      "meetingStartTime": "2024-06-22T14:00:00",
+      "address": "부산 부산진구 전포대로 124 카페",
+      "status": "participating"
+    },
+    {
+      "id": 92,
+      "title": "디저트 모임 92회차",
+      "recruitmentType": "소모임",
+      "image": "https://i.pinimg.com/736x/5d/de/21/5dde216948004f1559471c2dee127405.jpg",
+      "meetingStartTime": "2024-06-17T14:00:00",
+      "address": "부산 부산진구 전포대로 124 카페",
+      "status": "completed"
+    },
+    {
+      "id": 85,
+      "title": "디저트 모임 85회차",
+      "recruitmentType": "소모임",
+      "image": "https://i.pinimg.com/736x/12/6e/cc/126eccebabe77cf6aa2dff3a82798477.jpg",
+      "meetingStartTime": "2024-06-14T14:00:00",
+      "address": "부산 부산진구 전포대로 124 카페",
+      "status": "completed"
+    },
+    {
+      "id": 13,
+      "title": "디저트 모임 13회차",
+      "recruitmentType": "정기모임",
+      "image": "https://i.pinimg.com/736x/14/12/33/141233f17826d4b56d6fa6513098e6c3.jpg",
+      "meetingStartTime": "2024-06-13T14:00:00",
+      "address": "부산 부산진구 전포대로 124 카페",
+      "status": "cancelled"
+    },
+    {
+      "id": 55,
+      "title": "디저트 모임 55회차",
+      "recruitmentType": "소모임",
+      "image": "https://i.pinimg.com/736x/3c/1f/77/3c1f7744e78cf9a016f8ef4c0df713d0.jpg",
+      "meetingStartTime": "2024-06-11T14:00:00",
+      "address": "부산 부산진구 전포대로 124 카페",
+      "status": "participating"
+    },
+    {
+      "id": 42,
+      "title": "디저트 모임 42회차",
+      "recruitmentType": "소모임",
+      "image": "https://i.pinimg.com/736x/a6/53/0c/a6530ca53b049c619cd695147afbccc8.jpg",
+      "meetingStartTime": "2024-07-11T14:00:00",
+      "address": "부산 부산진구 전포대로 124 카페",
+      "status": "participating"
+    },
+    {
+      "id": 39,
+      "title": "디저트 모임 39회차",
+      "recruitmentType": "정기모임",
+      "image": "https://i.pinimg.com/736x/8a/7f/a2/8a7fa2768f2aad3e2e1b2ae8bf19d617.jpg",
+      "meetingStartTime": "2024-08-01T14:00:00",
+      "address": "부산 부산진구 전포대로 124 카페",
+      "status": "participating"
+    },
+    {
+      "id": 24,
+      "title": "디저트 모임 24회차",
+      "recruitmentType": "소모임",
+      "image": "https://i.pinimg.com/736x/89/ca/86/89ca863e9dd17f4ed743ed32ec7410f3.jpg",
+      "meetingStartTime": "2024-07-02T14:00:00",
+      "address": "부산 부산진구 전포대로 124 카페",
+      "status": "participating"
+    },
+    {
+      "id": 7,
+      "title": "디저트 모임 7회차",
+      "recruitmentType": "정기모임",
+      "image": "https://i.pinimg.com/736x/77/74/bf/7774bfa7764f23bbc618b1c5d383d3bc.jpg",
+      "meetingStartTime": "2024-07-28T14:00:00",
+      "address": "부산 부산진구 전포대로 124 카페",
+      "status": "participating"
+    }
+  ]
+}
