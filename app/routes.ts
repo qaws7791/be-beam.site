@@ -12,6 +12,7 @@ export default [
   route('/meeting/:meetingId', 'routes/meetingDetail.tsx'),
   route('/reviews', 'routes/reviews.tsx'),
   route('/guideBooks', 'routes/guideBooks.tsx'),
+  route('/guideBook/:guideBookId', 'routes/guideBookDetail.tsx'),
   route('/login', 'routes/login.tsx'),
   layout('routes/myPage.tsx', [
     ...prefix('/myPage', [
@@ -24,8 +25,16 @@ export default [
           route('/reviewable', 'routes/reviewableReviews.tsx'),
         ]),
       ]),
-      route('/wishList', 'routes/wishList.tsx'),
+      layout('layouts/myLikes.tsx', [
+        ...prefix('/likes', [
+          route('/regular', 'routes/regularMeetingLikes.tsx'),
+          route('/small', 'routes/smallMeetingLikes.tsx'),
+          route('/review', 'routes/reviewLikes.tsx'),
+          route('/host', 'routes/hostLikes.tsx'),
+        ]),
+      ]),
       route('/editProfile', 'routes/editProfile.tsx'),
+      route('/info', 'routes/myInformation.tsx'),
       route('/notifications', 'routes/myNotifications.tsx'),
     ]),
   ]),

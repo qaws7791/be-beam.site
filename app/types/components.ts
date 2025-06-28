@@ -52,7 +52,7 @@ export interface LogoProps {
 
 export interface GridGroupProps {
   children: React.ReactNode;
-  columns: 1 | 2 | 3 | 4 | 5 | 6;
+  columns?: 1 | 2 | 3 | 4 | 5 | 6;
   gap?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 11 | 12;
   className?: string;
 }
@@ -67,4 +67,75 @@ export interface FiltersType {
   label: string;
   options: string[];
   values: string[];
+}
+
+interface MeetingScheduleType {
+  address: string;
+  addressDetail: string;
+  content: string;
+  meetingEndTime: string;
+  meetingStartTime: string;
+}
+
+export interface MeetingDetailType {
+  id: number;
+  name: string;
+  introduction: string;
+  topic: string;
+  hashtags: string[];
+  address: string;
+  recruitingState: string;
+  recruitmentType: string;
+  selectionType: string;
+  meetingMode: string;
+  recruitingStartTime: string;
+  recruitingEndTime: string;
+  minParticipants: number;
+  maxParticipants: number;
+  paymentAmount: number;
+  liked: boolean;
+  likesCount: number;
+  meetingImages: string[];
+  schedules: MeetingScheduleType[];
+  info: string;
+  participantCount: number;
+  reviewable: boolean;
+
+  hostId: number;
+  hostName: string;
+  hostImage: string;
+  hostDescription: string;
+}
+
+export interface GuideBookType {
+  id: number;
+  title: string;
+  image: string;
+  description: string;
+  level: string;
+  time: string;
+  type: string;
+  targetType: string;
+}
+
+export interface RecommendationsGuideBookType {
+  id: number;
+  title: string;
+  image: string;
+  description: string;
+}
+
+export interface GuideBookType {
+  id: number;
+  title: string;
+  guidbookType: string;
+  targetType: string;
+  hashtags: string[];
+  level: string;
+  time: string;
+  description: string;
+  benefits: string[];
+  images: string[];
+  file: string;
+  recommendations: RecommendationsGuideBookType[];
 }

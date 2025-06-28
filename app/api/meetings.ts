@@ -1,4 +1,6 @@
-import { axiosInstance } from '@/lib/axios';
+// import { axiosInstance } from '@/lib/axios';
+
+import axios from 'axios';
 
 export const getMeetingList = async (
   search: string = '',
@@ -12,9 +14,18 @@ export const getMeetingList = async (
   },
   pageParam: number = 0,
 ) => {
-  const res = await axiosInstance({
+  const res = await axios({
     method: 'get',
-    url: `/meetings?search=${search}&topic=${selectedTopic}&meeting-type=${selectedFilters['모임 유형']}&recruitment-type=${selectedFilters['모집 상태']}&mode=${selectedFilters['모임 방식']}&cost=${selectedFilters['참가비']}&sort=${selectedFilters['정렬']}&cursor=${pageParam}&size=12`,
+    url: `/api/web/v2/meetings?search=${search}&topic=${selectedTopic}&recruitment-type=${selectedFilters['모임 유형']}&recruitment-status=${selectedFilters['모집 상태']}&mode=${selectedFilters['모임 방식']}&cost=${selectedFilters['참가비']}&sort=${selectedFilters['정렬']}&cursor=${pageParam}&size=12`,
+  });
+  const data = res.data;
+  return data.result;
+};
+
+export const getMeetingDetail = async (id: number) => {
+  const res = await axios({
+    method: 'get',
+    url: `/api/web/v2/meetings/${id}`,
   });
   const data = res.data;
   return data.result;

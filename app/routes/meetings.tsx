@@ -53,21 +53,14 @@ export default function Meetings() {
     },
     {
       label: '모집 상태',
-      options: [
-        '전체',
-        '모집 예정',
-        '모집 중',
-        '모집 마감',
-        '모임 중',
-        '모임 완료',
-      ],
+      options: ['전체', '모집예정', '모집중', '모집종료', '모임중', '모임완료'],
       values: [
         'all',
         'upcoming',
         'recruiting',
         'closed',
-        'activiting',
-        'success',
+        'in_progress',
+        'completed',
       ],
     },
     {
@@ -83,7 +76,7 @@ export default function Meetings() {
     {
       label: '정렬',
       options: ['최신순', '좋아요순'],
-      values: ['recent', 'like'],
+      values: ['recent', 'likes'],
     },
   ];
 
@@ -92,6 +85,8 @@ export default function Meetings() {
     Record<string, string>
   >(() => getInitialFilters(filters));
   const [search, setSearch] = useState('');
+
+  console.log(selectedFilters);
 
   const {
     isLoading,

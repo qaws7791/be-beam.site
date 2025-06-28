@@ -33,12 +33,12 @@ export default function SideBar({ user }: { user: UserType }) {
       onClick: () => setIsMeetingPage(false),
     },
     {
-      to: '/mypage/wishList',
+      to: '/mypage/likes/regular',
       title: '💖 찜 리스트',
       onClick: () => setIsMeetingPage(false),
     },
     {
-      to: '/mypage/editProfile',
+      to: '/mypage/info',
       title: '🙆 개인정보 수정',
       onClick: () => setIsMeetingPage(false),
     },
