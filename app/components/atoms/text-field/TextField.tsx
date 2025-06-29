@@ -17,11 +17,13 @@ export const TextField = React.forwardRef<
   React.ComponentRef<'input'>,
   TextFieldProps
 >(({ className, label, description, error, rightSection, ...props }, ref) => {
+  const id = React.useId();
+
   return (
     <div className={cn('relative flex flex-col gap-2', className)}>
-      <Label>{label}</Label>
+      <Label htmlFor={id}>{label}</Label>
       <div className="relative">
-        <Input ref={ref} aria-invalid={!!error} {...props} />
+        <Input ref={ref} aria-invalid={!!error} id={id} {...props} />
         {rightSection && (
           <div className="absolute top-1/2 right-2 -translate-y-1/2">
             {rightSection}
