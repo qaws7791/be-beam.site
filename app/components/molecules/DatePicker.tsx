@@ -32,7 +32,9 @@ interface DatePickerProps {
 
 export default function DatePicker({ value, onChange }: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(new Date(value));
+  const [date, setDate] = React.useState<Date | undefined>(
+    new Date(value).toString() === 'Invalid Date' ? undefined : new Date(value),
+  );
   const [month, setMonth] = React.useState<Date | undefined>(date);
 
   return (
@@ -64,7 +66,7 @@ export default function DatePicker({ value, onChange }: DatePickerProps) {
             className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
           >
             <CalendarIcon className="size-6 text-gray-800" />
-            <span className="sr-only">Select date</span>
+            <span className="sr-only">날짜 선택</span>
           </button>
         </PopoverTrigger>
         <PopoverContent
