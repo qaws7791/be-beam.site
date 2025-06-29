@@ -1,3 +1,11 @@
+import { useNavigate } from 'react-router';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { useModalStore } from '@/stores/useModalStore';
+import useParticipatedMeetingParams from '@/hooks/business/useParticipatedMeetingParams';
+import usePagination from '@/hooks/ui/usePagination';
+
+import type { FilterOption } from '@/types/components';
 import { DropdownMenuItem } from '@/components/atoms/dropdown-menu/DropdownMenu';
 import {
   Pagination,
@@ -13,16 +21,10 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/components/atoms/tabs/Tabs';
+import Text from '@/components/atoms/text/Text';
 import GridGroup from '@/components/organisms/gridGroup/GridGroup';
 import MeetingCard from '@/components/organisms/MeetingCard';
 import MoreDropdownMenu from '@/components/organisms/MoreDropdownMenu';
-import useParticipatedMeetingParams from '@/hooks/business/useParticipatedMeetingParams';
-import usePagination from '@/hooks/ui/usePagination';
-import { useModalStore } from '@/stores/useModalStore';
-import type { FilterOption } from '@/types/components';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import { useNavigate } from 'react-router';
 
 interface participatedMeeting {
   address: string;
@@ -32,6 +34,7 @@ interface participatedMeeting {
   recruitmentType: string;
   status: string;
   title: string;
+  isCash: boolean;
 }
 
 export default function ParticipatedMeeting() {
@@ -82,6 +85,15 @@ export default function ParticipatedMeeting() {
 
   return (
     <div className="flex-1">
+      <div className="w-full">
+        <Text variant="H2_Semibold" className="mb-3">
+          참여 모임
+        </Text>
+        <Text variant="B2_Medium" color="gray-600" className="mb-16">
+          참여 모임을 중도 이탈할 수 있어요.
+        </Text>
+      </div>
+
       <Tabs
         defaultValue="participating"
         className="text-b1"
@@ -126,10 +138,12 @@ export default function ParticipatedMeeting() {
                           onSelect={() =>
                             open('CANCEL_MEETING_DIALOG', {
                               meetingId: meeting.id,
+                              isCash: meeting.isCash,
+                              type: 'participating',
                             })
                           }
                         >
-                          모임 취소하기
+                          모임 중도 이탈하기
                         </DropdownMenuItem>
                       </MoreDropdownMenu>
                     )}
@@ -138,7 +152,7 @@ export default function ParticipatedMeeting() {
               )}
             </GridGroup>
 
-            <Pagination>
+            <Pagination className="mt-20">
               <PaginationContent>
                 {pagination.hasPreviousPage && (
                   <PaginationPrevious

@@ -18,12 +18,20 @@ export default function MeetingCancelDialog() {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="text-left text-t2">
-            참여 중인 모임을 취소할까요?
+            {modalProps.type === 'participating'
+              ? '참여 중인 모임을 중도 이탈할까요?'
+              : '신청 중인 모임을 취소할까요?'}
           </AlertDialogTitle>
         </AlertDialogHeader>
         <AlertDialogFooter className="mt-5">
           <AlertDialogCancel
-            onClick={() => toast('모임 신청을 취소하지 않았습니다.')}
+            onClick={() =>
+              toast(
+                modalProps.type === 'participating'
+                  ? '모임 중도 이탈 신청을 취소하였습니다.'
+                  : '모임 취소 신청을 취소하였습니다.',
+              )
+            }
           >
             아니요
           </AlertDialogCancel>
@@ -33,6 +41,8 @@ export default function MeetingCancelDialog() {
                 event.preventDefault();
                 open('CANCEL_MEETING_MODAL', {
                   meetingId: modalProps.meetingId,
+                  isCash: modalProps.isCash,
+                  type: modalProps.type,
                 });
               }}
             >

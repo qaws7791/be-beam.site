@@ -9,6 +9,8 @@ import { useMutation } from '@tanstack/react-query';
 import { axiosInstanceV1 } from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { queryClient } from '@/root';
+import clsx from 'clsx';
+import { Input } from '../atoms/input/Input';
 
 export default function MeetingCancelModal() {
   const radioList = [
@@ -36,7 +38,8 @@ export default function MeetingCancelModal() {
 
   const { modalProps, close } = useModalStore();
   const [selectedOption, setSelectedOption] = useState('personalSchedule');
-  const [value, setValue] = useState('');
+  const [description, setDescription] = useState('');
+  const [account, setAccount] = useState('');
 
   const { mutate: cancelMeeting, isPending } = useMutation({
     mutationFn: (data: { reasonType: string; description: string }) => {
@@ -47,7 +50,11 @@ export default function MeetingCancelModal() {
       });
     },
     onSuccess: () => {
-      toast.success('모임 신청 취소를 신청하였습니다.');
+      toast.success(
+        modalProps.type === 'participating'
+          ? '모임 중도 이탈 신청을 신청하였습니다.'
+          : '모임 취소 신청을 신청하였습니다.',
+      );
       queryClient.invalidateQueries({ queryKey: ['participatedMeetings'] });
       close();
     },
@@ -62,8 +69,17 @@ export default function MeetingCancelModal() {
 
     cancelMeeting({
       reasonType: selectedOption,
-      description: value,
+      description: description,
     });
+  };
+
+  const handleClickCancel = () => {
+    close();
+    toast(
+      modalProps.type === 'participating'
+        ? '모임 중도 이탈 신청을 취소하였습니다.'
+        : '모임 취소 신청을 취소하였습니다.',
+    );
   };
 
   console.log(modalProps);
@@ -78,7 +94,7 @@ export default function MeetingCancelModal() {
             variant="tertiary"
             size="icon"
             className="border-none"
-            onClick={() => close()}
+            onClick={handleClickCancel}
           >
             <img
               className="h-6 w-6"
@@ -121,17 +137,19 @@ export default function MeetingCancelModal() {
             <Textarea
               placeholder="text"
               className="mt-3 h-[144px] w-[430px]"
-              value={value}
+              value={description}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                if (value.length <= 100) {
-                  setValue(e.target.value);
+                if (description.length <= 100) {
+                  setDescription(e.target.value);
                 }
               }}
             />
             <Text variant="B3_Regular" className="absolute right-5 bottom-3">
-              <span className="text-primary">{value.length}</span> /{' '}
+              <span className="text-primary">{description.length}</span> /
               <span
-                className={value.length === 100 ? 'text-primary' : 'text-black'}
+                className={
+                  description.length === 100 ? 'text-primary' : 'text-black'
+                }
               >
                 100
               </span>
@@ -139,13 +157,28 @@ export default function MeetingCancelModal() {
           </div>
         </div>
 
+        <div
+          className={clsx(
+            modalProps.isCash ? 'block' : 'hidden',
+            'mt-5 w-full',
+          )}
+        >
+          <Text variant="T3_Semibold">환불 받을 계좌번호를 작성해 주세요.</Text>
+          <Input
+            type="tel"
+            placeholder="환불 받을 계좌번호를 입력해주세요."
+            value={account}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setAccount(e.target.value)
+            }
+            className="mt-3"
+          />
+        </div>
+
         {/* 푸터 영역 */}
         <div className="mt-6 flex w-full items-center gap-4">
           <Button
-            onClick={() => {
-              close();
-              toast('모임 신청을 취소하지 않았습니다.');
-            }}
+            onClick={handleClickCancel}
             variant="tertiary"
             size="sm"
             className="border-gray-500 text-gray-600"

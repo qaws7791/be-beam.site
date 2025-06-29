@@ -52,7 +52,7 @@ export default function MeetingDetailCardTop({
           </Text>
         </TitleAndDescription>
 
-        <Badge variant="purple" text="모집 중" />
+        <Badge variant="purple" text={meeting?.recruitingState} />
       </div>
 
       <Badge

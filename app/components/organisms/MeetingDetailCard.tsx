@@ -20,7 +20,11 @@ export default function MeetingDetailCard({
           좋아요
           <img
             className="h-6 w-6"
-            src="/images/icons/like.svg"
+            src={
+              meeting?.liked
+                ? '/images/icons/fill_like.svg'
+                : '/images/icons/like.svg'
+            }
             alt="like_icon"
           />
         </Button>
