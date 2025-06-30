@@ -15,9 +15,9 @@ const buttonVariants = cva(
           'bg-white text-gray-600 border border-gray-600 disabled:bg-gray-300 disabled:text-gray-500',
       },
       size: {
-        md: 'h-13 px-4 py-2 min-w-50',
-        sm: 'h-12 gap-1.5 px-4 min-w-30',
-        lg: 'h-14.5 px-4 min-w-72.5',
+        md: 'h-13 px-4 py-2',
+        sm: 'h-12 gap-1.5 px-4',
+        lg: 'h-14.5 px-4',
         icon: 'size-9',
       },
     },

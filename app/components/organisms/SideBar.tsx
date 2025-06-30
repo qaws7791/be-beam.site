@@ -28,7 +28,7 @@ export default function SideBar({ user }: { user: UserType }) {
   ];
   const navData = [
     {
-      to: '/mypage/reviews',
+      to: '/mypage/reviews/written',
       title: '✍️ 나의 후기',
       onClick: () => setIsMeetingPage(false),
     },
