@@ -2,11 +2,17 @@ import { useNavigate } from 'react-router';
 import Logo from '../atoms/logo/Logo';
 import NavMenu from '../molecules/NavMenu';
 import SearchInput from '../molecules/SearchInput';
-import useMyProfileQuery from '@/hooks/api/useMyProfileQuery';
 
-export default function Navbar() {
+export default function Navbar({
+  user,
+}: {
+  user?: {
+    nickname: string;
+    profileImage: string;
+    introduction: string;
+  } | null;
+}) {
   const navigate = useNavigate();
-  const myProfile = useMyProfileQuery();
 
   return (
     <div className="h-25 w-full border-b-1 border-gray-300">
@@ -25,7 +31,7 @@ export default function Navbar() {
           />
 
           {/* 후에 코드 교체 및 공용 컴포넌트 제작 */}
-          {myProfile.data ? (
+          {user ? (
             <div className="flex items-center gap-x-4">
               <button className="cursor-pointer">
                 <img src="/images/icons/like.svg" alt="like_icon" />
@@ -36,7 +42,7 @@ export default function Navbar() {
               <button onClick={() => navigate('/myPage/participated')}>
                 <img
                   className="h-7 w-7 cursor-pointer rounded-full"
-                  src={myProfile.data?.profileImage}
+                  src={user?.profileImage}
                   alt="profileImg"
                 />
               </button>
