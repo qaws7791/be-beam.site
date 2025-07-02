@@ -128,11 +128,11 @@ export const guestOnly = (request: Request, redirectTo = '/') =>
 // 헬퍼 함수: 인증과 데이터 로딩을 함께 처리
 export const withAuth = async <T>(
   request: Request,
-  dataLoader?: (user: AuthResult['user']) => Promise<T> | T,
+  dataLoader?: ({ user, headers }: AuthResult) => Promise<T> | T,
   options: AuthOptions = {},
 ) => {
   const { user, headers } = await auth(request, options);
-  const responseData = await dataLoader?.(user);
+  const responseData = await dataLoader?.({ user, headers });
 
   return data({ user, data: responseData }, headers ? { headers } : undefined);
 };
@@ -140,7 +140,7 @@ export const withAuth = async <T>(
 // 타입 헬퍼 - 보호된 라우트용
 export const withRequiredAuth = async <T>(
   request: Request,
-  dataLoader?: (user: AuthResult['user']) => Promise<T> | T,
+  dataLoader?: ({ user, headers }: AuthResult) => Promise<T> | T,
   redirectTo?: string,
 ) => {
   return withAuth(request, dataLoader, { required: true, redirectTo });
@@ -149,7 +149,7 @@ export const withRequiredAuth = async <T>(
 // 타입 헬퍼 - 선택적 인증용
 export const withOptionalAuth = async <T>(
   request: Request,
-  dataLoader?: (user: AuthResult['user']) => Promise<T> | T,
+  dataLoader?: ({ user, headers }: AuthResult) => Promise<T> | T,
 ) => {
   return withAuth(request, dataLoader, { required: false });
 };
