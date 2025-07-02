@@ -1,4 +1,5 @@
 import {
+  data,
   isRouteErrorResponse,
   Links,
   Meta,
@@ -14,7 +15,7 @@ import type { Route } from './+types/root';
 import Navbar from './components/organisms/Navbar';
 import { Toaster } from './components/atoms/toaster/Toaster';
 import Footer from './components/organisms/Footer';
-import { withOptionalAuth } from './lib/auth.server';
+import { authenticateUser } from './lib/auth.server';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -59,7 +60,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
-  return withOptionalAuth(request);
+  const authResult = await authenticateUser(request);
+  return data({ user: authResult.user }, { headers: authResult.headers });
 }
 
 export default function App({ loaderData }: Route.ComponentProps) {
