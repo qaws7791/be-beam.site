@@ -1,3 +1,13 @@
+import { useNavigate } from 'react-router';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import useCreatedMeetingParams from '@/hooks/business/useCreatedMeetingParams';
+import usePagination from '@/hooks/ui/usePagination';
+import { queryClient } from '@/root';
+import { useModalStore } from '@/stores/useModalStore';
+import axios from 'axios';
+import { axiosInstance } from '@/lib/axios';
+import type { FilterOption } from '@/types/components';
+
 import { DropdownMenuItem } from '@/components/atoms/dropdown-menu/DropdownMenu';
 import {
   Pagination,
@@ -17,16 +27,7 @@ import Text from '@/components/atoms/text/Text';
 import GridGroup from '@/components/organisms/gridGroup/GridGroup';
 import MeetingCard from '@/components/organisms/MeetingCard';
 import MoreDropdownMenu from '@/components/organisms/MoreDropdownMenu';
-import useCreatedMeetingParams from '@/hooks/business/useCreatedMeetingParams';
-import usePagination from '@/hooks/ui/usePagination';
-import { axiosInstance } from '@/lib/axios';
-import { queryClient } from '@/root';
-import { useModalStore } from '@/stores/useModalStore';
-import type { FilterOption } from '@/types/components';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router';
 
 interface createdMeetingType {
   id: number;
@@ -71,8 +72,6 @@ export default function CreatedMeeting() {
     currentPage: params.page,
     totalPages: createdMeetings?.pageInfo?.totalPages || 1,
   });
-
-  console.log('createdMeetings', createdMeetings);
 
   const { mutate: deleteMeeting, isPending } = useMutation({
     mutationFn: (meetingId: number) => {
@@ -138,7 +137,7 @@ export default function CreatedMeeting() {
                   meetingStartTime={meeting.meetingStartTime}
                   address={meeting.address}
                   onClick={() =>
-                    navigate(`/mypage/created/${meeting.id}/intro`)
+                    navigate(`/myPage/created/${meeting.id}/intro`)
                   }
                   isLikeBtn={false}
                 >

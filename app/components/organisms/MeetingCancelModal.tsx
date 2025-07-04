@@ -83,7 +83,7 @@ export default function MeetingCancelModal() {
   };
 
   return (
-    <div className="fixed top-0 left-0 z-1 flex h-screen w-full items-center justify-center bg-[rgba(0,0,0,0.4)]">
+    <div className="fixed top-0 left-0 z-999 flex h-screen w-full items-center justify-center bg-[rgba(0,0,0,0.4)]">
       <div className="z-2 rounded-xl bg-white p-8">
         {/* 헤더 영역 */}
         <div className="flex items-center justify-between">

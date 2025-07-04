@@ -29,7 +29,7 @@ export default function MeetingDetailCard({
           />
         </Button>
 
-        <Button size="lg" className="gap-1 text-t3 text-white">
+        <Button size="lg" className="flex-1 gap-1 text-t3 text-white">
           신청하기
         </Button>
       </div>

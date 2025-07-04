@@ -7,11 +7,11 @@ export default function UserProfileCard({ user }: { user: UserType }) {
     <div className="box-border flex w-full flex-col items-center rounded-2xl border-1 border-gray-300 p-5">
       <img
         className="h-12 w-12 rounded-full"
-        src={user.profileImg}
+        src={user.profileImage}
         alt="profile_img"
       />
       <Text variant="T2_Semibold" className="mt-4">
-        {user.nickName}
+        {user.nickname}
       </Text>
 
       <Link

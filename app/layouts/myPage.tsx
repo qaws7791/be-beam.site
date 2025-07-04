@@ -2,18 +2,20 @@ import { Outlet } from 'react-router';
 
 import MyPageTemplate from '@/components/templates/MyPageTemplate';
 import SideBar from '@/components/organisms/SideBar';
+import useMyProfileQuery from '@/hooks/api/useMyProfileQuery';
 
 export default function MyPage() {
-  const user = {
-    nickName: '비빔 관리자',
-    profileImg:
-      'https://i.pinimg.com/736x/83/1a/0b/831a0b369f389fdd93d072203287043e.jpg',
-  };
+  const myProfile = useMyProfileQuery();
+  console.log(myProfile.data);
 
   return (
-    <MyPageTemplate>
-      <SideBar user={user} />
-      <Outlet />
-    </MyPageTemplate>
+    <>
+      {myProfile.data && (
+        <MyPageTemplate>
+          <SideBar user={myProfile.data} />
+          <Outlet />
+        </MyPageTemplate>
+      )}
+    </>
   );
 }
