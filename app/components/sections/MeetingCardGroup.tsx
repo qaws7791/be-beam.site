@@ -37,6 +37,7 @@ export default function MeetingCardGroup({
           image={meeting.image}
           address={meeting.address}
           meetingStartTime={meeting.meetingStartTime}
+          isLikeBtn={true}
           onClick={() => navigate(`/meeting/${meeting.id}`)}
           classNames="mb-12"
         />

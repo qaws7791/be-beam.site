@@ -3,6 +3,7 @@ import useGuideBooksQuery from '@/hooks/api/useGuideBooksQuery';
 import useInfiniteScroll from '@/hooks/ui/useInfiniteScroll';
 import useGuideBooksParams from '@/hooks/business/useGuideBooksParams';
 
+import type { FilterOption } from '@/types/components';
 import { Tabs } from '@/components/atoms/tabs/Tabs';
 import GuideBooksFilterDialog from '@/components/organisms/GuideBooksFilterDialog';
 import GuideBooksFilterControls from '@/components/organisms/TargetTypeTab';
@@ -18,11 +19,6 @@ import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 //   level: string;
 //   time: string;
 // }
-
-export interface FilterOption {
-  text: string;
-  value: string;
-}
 
 export function meta() {
   return [
@@ -143,7 +139,7 @@ export default function GuideBooks() {
       <img
         src="https://placehold.co/1920x490"
         alt="가이드북 배너"
-        className="h-[490px] w-full object-cover"
+        className="mt-25 h-[490px] w-full object-cover"
       />
 
       <div className="mx-auto w-full max-w-[1480px] py-16">

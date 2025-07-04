@@ -9,7 +9,7 @@ export default function Navbar() {
   const myProfile = useMyProfileQuery();
 
   return (
-    <div className="h-25 w-full border-b-1 border-gray-300">
+    <div className="fixed top-0 left-0 z-99 h-25 w-full border-b-1 border-gray-300 bg-white">
       <div className="mx-auto flex h-full max-w-[1480px] items-center justify-between gap-x-24 px-4">
         <div className="flex items-center gap-24">
           <Logo />

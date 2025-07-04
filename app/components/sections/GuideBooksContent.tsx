@@ -1,5 +1,4 @@
-import type { FilterOption } from '@/routes/guideBooks';
-import type { GuideBookType } from '@/types/components';
+import type { FilterOption, GuideBookType } from '@/types/components';
 
 import { TabsContent } from '../atoms/tabs/Tabs';
 import GridGroup from '../organisms/gridGroup/GridGroup';

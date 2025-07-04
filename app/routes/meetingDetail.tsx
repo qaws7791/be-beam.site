@@ -43,7 +43,7 @@ export default function MeetingDetail() {
             <MeetingDetailMeetingReviewsContainer meetingId={id} />
           </div>
 
-          <div className="sticky top-[100px] h-fit">
+          <div className="sticky top-[100px] h-fit flex-1">
             <MeetingDetailCard meeting={meeting} />
           </div>
         </div>
