@@ -6,6 +6,7 @@ import Text from '../atoms/text/Text';
 import MeetingCard from './MeetingCard';
 import GridGroup from './gridGroup/GridGroup';
 import useMeetingRecommendationQuery from '@/hooks/api/useMeetingRecommendationsQuery';
+import LoadingSpinner from '../molecules/LoadingSpinner';
 
 interface MeetingType {
   id: number;
@@ -45,10 +46,8 @@ export default function MeetingRecommendations({
   ];
 
   const [tab, setTab] = useState('all');
-  const { data: recommendationMeetings } = useMeetingRecommendationQuery(
-    type,
-    tab,
-  );
+  const { data: recommendationMeetings, isLoading } =
+    useMeetingRecommendationQuery(type, tab);
 
   const datas = {
     likes: recommendationMeetings?.recByLikesMeetings,
@@ -82,20 +81,26 @@ export default function MeetingRecommendations({
           {tabList?.map((tab, idx) => (
             <TabsContent key={idx} value={tab.value} className="mt-5 w-full">
               <GridGroup columns={4}>
-                {datas?.map((meeting: MeetingType) => (
-                  <MeetingCard
-                    key={meeting.id}
-                    name={meeting.name}
-                    image={meeting.image}
-                    meetingType={meeting.recruitmentType}
-                    recruitmentType={meeting.recruitmentStatus}
-                    meetingStartTime={meeting.meetingStartTime.slice(0, 10)}
-                    address={meeting.address}
-                    onClick={() => navigate(`/meeting/${meeting.id}`)}
-                    isLikeBtn={true}
-                    isLike={meeting.liked}
-                  />
-                ))}
+                {isLoading ? (
+                  <LoadingSpinner />
+                ) : (
+                  <>
+                    {datas?.map((meeting: MeetingType) => (
+                      <MeetingCard
+                        key={meeting.id}
+                        name={meeting.name}
+                        image={meeting.image}
+                        meetingType={meeting.recruitmentType}
+                        recruitmentType={meeting.recruitmentStatus}
+                        meetingStartTime={meeting.meetingStartTime.slice(0, 10)}
+                        address={meeting.address}
+                        onClick={() => navigate(`/meeting/${meeting.id}`)}
+                        isLikeBtn={true}
+                        isLike={meeting.liked}
+                      />
+                    ))}
+                  </>
+                )}
               </GridGroup>
             </TabsContent>
           ))}
