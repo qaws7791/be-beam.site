@@ -2,7 +2,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/atoms/tabs/Tabs';
 import Text from '@/components/atoms/text/Text';
 import type { FilterOption } from '@/types/components';
 import { TabsContent } from '@radix-ui/react-tabs';
-import useRequestMeetingParamsType from '@/hooks/business/useRequestMeetingParams';
+import useRequestMeetingParams from '@/hooks/business/useRequestMeetingParams';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import GridGroup from '@/components/organisms/gridGroup/GridGroup';
@@ -21,11 +21,22 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/atoms/pagination/Pagination';
+import toast from 'react-hot-toast';
+
+interface requestMeetingType {
+  id: number;
+  name: string;
+  recruitmentStatus: string;
+  address: string;
+  status: string;
+  image: string;
+  meetingStartTime: string;
+  recruitmentType: string;
+  isCash: boolean;
+  liked: boolean;
+}
 
 export default function RequestedMeeting() {
-  const navigate = useNavigate();
-  const { open } = useModalStore();
-
   const statusList: FilterOption[] = [
     {
       text: '신청중',
@@ -41,8 +52,10 @@ export default function RequestedMeeting() {
     },
   ];
 
+  const navigate = useNavigate();
+  const { open } = useModalStore();
   const { params, handleUpdateStatus, handleUpdatePage } =
-    useRequestMeetingParamsType();
+    useRequestMeetingParams();
 
   const { data: requestMeetings } = useQuery({
     queryKey: ['requestMeetings', params],
@@ -70,7 +83,7 @@ export default function RequestedMeeting() {
           신청 모임
         </Text>
         <Text variant="B2_Medium" color="gray-600" className="mb-16">
-          승인 모임을 확인하고 신청 중인 모임을 취소할 수 있어요.
+          내가 신청 중인 모임을 한눈에 확인 할 수 있어요.
         </Text>
       </div>
 
@@ -99,7 +112,7 @@ export default function RequestedMeeting() {
             className="mt-10 w-full"
           >
             <GridGroup columns={3} gap={5}>
-              {requestMeetings?.meetings?.map((meeting) => (
+              {requestMeetings?.meetings?.map((meeting: requestMeetingType) => (
                 <MeetingCard
                   key={meeting.id}
                   image={meeting.image}
@@ -115,10 +128,20 @@ export default function RequestedMeeting() {
                     <MoreDropdownMenu btnPosition="right-0 top-0 absolute">
                       <DropdownMenuItem
                         onSelect={() =>
-                          open('CANCEL_MEETING_DIALOG', {
-                            meetingId: meeting.id,
-                            isCash: meeting.isCash,
-                            type: 'pending',
+                          open('CONFIRM_DIALOG', {
+                            title: '신청 중인 모임을 취소할까요?',
+                            handleClickCancel: () =>
+                              toast('모임 취소 신청을 취소하였습니다.'),
+                            handleClickAction: (
+                              e: React.MouseEvent<HTMLButtonElement>,
+                            ) => {
+                              e.preventDefault();
+                              open('CANCEL_MEETING_MODAL', {
+                                meetingId: meeting.id,
+                                isCash: meeting.isCash,
+                                statusType: meeting?.status,
+                              });
+                            },
                           })
                         }
                       >

@@ -25,8 +25,9 @@ import Text from '@/components/atoms/text/Text';
 import GridGroup from '@/components/organisms/gridGroup/GridGroup';
 import MeetingCard from '@/components/organisms/MeetingCard';
 import MoreDropdownMenu from '@/components/organisms/MoreDropdownMenu';
+import toast from 'react-hot-toast';
 
-interface participatedMeeting {
+interface participatedMeetingType {
   address: string;
   id: number;
   image: string;
@@ -90,7 +91,7 @@ export default function ParticipatedMeeting() {
           참여 모임
         </Text>
         <Text variant="B2_Medium" color="gray-600" className="mb-16">
-          참여 모임을 중도 이탈할 수 있어요.
+          내가 참여 중인 모임을 한눈에 확인 할 수 있어요.
         </Text>
       </div>
 
@@ -120,7 +121,7 @@ export default function ParticipatedMeeting() {
           >
             <GridGroup columns={3} gap={5}>
               {participatedMeetings?.meetings?.map(
-                (meeting: participatedMeeting) => (
+                (meeting: participatedMeetingType) => (
                   <MeetingCard
                     key={meeting.id}
                     image={meeting.image}
@@ -136,10 +137,20 @@ export default function ParticipatedMeeting() {
                       <MoreDropdownMenu btnPosition="right-0 top-0 absolute">
                         <DropdownMenuItem
                           onSelect={() =>
-                            open('CANCEL_MEETING_DIALOG', {
-                              meetingId: meeting.id,
-                              isCash: meeting.isCash,
-                              type: 'participating',
+                            open('CONFIRM_DIALOG', {
+                              title: '참여 중인 모임을 중도 이탈할까요?',
+                              handleClickCancel: () =>
+                                toast('모임 중도 이탈 신청을 취소하였습니다.'),
+                              handleClickAction: (
+                                e: React.MouseEvent<HTMLButtonElement>,
+                              ) => {
+                                e.preventDefault();
+                                open('CANCEL_MEETING_MODAL', {
+                                  meetingId: meeting.id,
+                                  isCash: meeting.isCash,
+                                  statusType: meeting?.status,
+                                });
+                              },
                             })
                           }
                         >

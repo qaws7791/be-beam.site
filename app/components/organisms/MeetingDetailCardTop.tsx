@@ -12,6 +12,15 @@ export default function MeetingDetailCardTop({
 }: {
   meeting: MeetingDetailType;
 }) {
+  const meetingStatusComment =
+    meeting?.recruitingState === '모집예정' ||
+    meeting?.recruitingState === '모집중' ||
+    meeting?.recruitingState === '모집종료'
+      ? `📢 현재 ${meeting?.applicantCount}명이 모임 신청 중이에요 !`
+      : meeting?.recruitingState === '모임중'
+        ? `📢 현재 ${meeting?.participantCount}명이 모임 참여 중이에요 !`
+        : `📢 총 ${meeting?.participantCount}명이 모임에 참여했습니다 !`;
+
   return (
     <div className="w-full">
       <RecruitmentTypeAndTopic
@@ -56,7 +65,7 @@ export default function MeetingDetailCardTop({
       </div>
 
       <Badge
-        text={`📢 현재 ${meeting?.participantCount}명이 모임 신청중이에요 !`}
+        text={meetingStatusComment}
         variant="tertiary"
         className="mt-4 inline-block rounded-md bg-gray-200 p-2 text-b3 text-gray-600"
       />

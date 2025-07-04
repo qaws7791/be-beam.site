@@ -99,6 +99,7 @@ export interface MeetingDetailType {
   meetingImages: string[];
   schedules: MeetingScheduleType[];
   info: string;
+  applicantCount: number;
   participantCount: number;
   reviewable: boolean;
 
@@ -144,4 +145,56 @@ export interface GuideBookType {
   images: string[];
   file: string;
   recommendations: RecommendationsGuideBookType[];
+}
+
+export interface GetCreateMeetingDetailDataType {
+  selectionType: string;
+  meetingMode: string;
+  minParticipants: number;
+  maxParticipants: number;
+  recruitingStartTime: string;
+  recruitingEndTime: string;
+  schedules: {
+    content: string;
+    address: string;
+    addressDetail: string;
+    meetingDate: string;
+    meetingStartTime: string;
+    meetingEndTime: string;
+  }[];
+  paymentAmount: number;
+  info: string;
+}
+
+export interface CreatedMeetingDetailStateType {
+  intro: {
+    thumbnailImagePreview: string;
+    thumbnailImage: null | File;
+    name: string;
+    introduction: string;
+    topic: string;
+    hashtags: string[];
+    totalImages: string[];
+    addImages: File[] | [];
+    existingImages: string[];
+    hostDescription: string;
+  };
+  detail: {
+    selectionType: string;
+    mode: string;
+    minParticipants: number;
+    maxParticipants: number;
+    schedules: {
+      content: string | number;
+      address: string;
+      addressDetail: string | undefined;
+      meetingDate: string;
+      meetingStartTime: string;
+      meetingEndTime: string;
+    }[];
+    recruitingStartTime: string;
+    recruitingEndTime: string;
+    paymentAmount: number;
+    info: string;
+  };
 }

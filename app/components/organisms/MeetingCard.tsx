@@ -2,6 +2,7 @@ import { formatToMonthAndDayDate } from '@/utils/date';
 import Text from '../atoms/text/Text';
 
 import clsx from 'clsx';
+import Badge from '../atoms/badge/Badge';
 
 export interface MeetingCardProp {
   image: string;
@@ -36,13 +37,11 @@ export default function MeetingCard({
         alt="meeting_thumbnail"
       />
 
-      <Text
-        variant="C1_Semibold"
-        color="purple"
-        className="absolute top-5 left-5 rounded-lg bg-[#E9EAFF] px-3 py-2"
-      >
-        {recruitmentType}
-      </Text>
+      <Badge
+        variant="purple"
+        className="color-[#3940E4] absolute top-5 left-5 rounded-lg px-3 py-2 text-c1"
+        text={recruitmentType}
+      />
 
       <img
         className={clsx(

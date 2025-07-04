@@ -1,9 +1,9 @@
 import { useModalStore } from '@/stores/useModalStore';
-import MeetingCancelDialog from '../organisms/MeetingCancelDialog';
+import ConfirmDialog from '../organisms/ConfirmDialog';
 import MeetingCancelModal from '../organisms/MeetingCancelModal';
 
 const MODAL_COMPONENTS = {
-  CANCEL_MEETING_DIALOG: MeetingCancelDialog,
+  CONFIRM_DIALOG: ConfirmDialog,
   CANCEL_MEETING_MODAL: MeetingCancelModal,
 };
 

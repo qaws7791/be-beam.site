@@ -139,7 +139,7 @@ export default function GuideBooks() {
       <img
         src="https://placehold.co/1920x490"
         alt="가이드북 배너"
-        className="h-[490px] w-full object-cover"
+        className="mt-25 h-[490px] w-full object-cover"
       />
 
       <div className="mx-auto w-full max-w-[1480px] py-16">

@@ -1,5 +1,6 @@
 import { axiosInstance, axiosInstanceV1 } from '@/lib/axios';
 import type { APIResponse } from '@/types/api';
+import axios from 'axios';
 
 export type MyProfileResult = {
   nickname: string;
@@ -310,4 +311,13 @@ export const updateMyInfo = async (data: {
   );
   const result = res.data;
   return result;
+};
+
+export const getCreatedMeetingDetail = async (id: number) => {
+  const res = await axios({
+    method: 'GET',
+    url: `/api/web/v1/meetings/${id}/mypage`,
+  });
+  const data = res.data;
+  return data.result;
 };

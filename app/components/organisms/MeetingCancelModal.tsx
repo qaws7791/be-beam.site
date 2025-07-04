@@ -51,7 +51,7 @@ export default function MeetingCancelModal() {
     },
     onSuccess: () => {
       toast.success(
-        modalProps.type === 'participating'
+        modalProps.statusType === 'participating'
           ? '모임 중도 이탈 신청을 신청하였습니다.'
           : '모임 취소 신청을 신청하였습니다.',
       );
@@ -76,13 +76,11 @@ export default function MeetingCancelModal() {
   const handleClickCancel = () => {
     close();
     toast(
-      modalProps.type === 'participating'
+      modalProps.statusType === 'participating'
         ? '모임 중도 이탈 신청을 취소하였습니다.'
         : '모임 취소 신청을 취소하였습니다.',
     );
   };
-
-  console.log(modalProps);
 
   return (
     <div className="fixed top-0 left-0 z-1 flex h-screen w-full items-center justify-center bg-[rgba(0,0,0,0.4)]">
