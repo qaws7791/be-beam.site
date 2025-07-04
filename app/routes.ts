@@ -14,7 +14,7 @@ export default [
   route('/guideBooks', 'routes/guideBooks.tsx'),
   route('/guideBook/:guideBookId', 'routes/guideBookDetail.tsx'),
   route('/login', 'routes/login.tsx'),
-  layout('routes/myPage.tsx', [
+  layout('layouts/myPage.tsx', [
     ...prefix('/myPage', [
       route('/participated', 'routes/participatedMeeting.tsx'),
       route('/requested', 'routes/requestedMeeting.tsx'),
@@ -36,6 +36,13 @@ export default [
       route('/profile', 'routes/myProfile.tsx'),
       route('/info', 'routes/myInformation.tsx'),
       route('/notifications', 'routes/myNotifications.tsx'),
+    ]),
+  ]),
+  layout('layouts/createdMeetingDetail.tsx', [
+    ...prefix('/myPage/created/:meetingId', [
+      route('/intro', 'routes/createdMeetingDetailIntro.tsx'),
+      route('/detail', 'routes/createdMeetingDetailDetail.tsx'),
+      route('/manage', 'routes/createdMeetingDetailManage.tsx'),
     ]),
   ]),
 ] satisfies RouteConfig;

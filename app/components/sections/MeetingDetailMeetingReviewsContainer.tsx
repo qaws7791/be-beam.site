@@ -5,7 +5,6 @@ import useMeetingReviewsQuery from '@/hooks/api/useMeetingReviewsQuery';
 import useInfiniteScroll from '@/hooks/ui/useInfiniteScroll';
 
 import Text from '../atoms/text/Text';
-import MeetingDetailEditMeetingReview from '../organisms/MeetingDetailEditMeetingReview';
 import MeetingReviewCard from '../organisms/MeetingReviewCard';
 
 const MeetingDetailMeetingReviewsContainer = ({
@@ -42,9 +41,6 @@ const MeetingDetailMeetingReviewsContainer = ({
         모임 후기
         <span className="ml-1 text-gray-500">{meetingReviewList.length}</span>
       </Text>
-
-      {/* 모임 후기 작성란 */}
-      <MeetingDetailEditMeetingReview />
 
       <div className="box-border w-full">
         {meetingReviewList?.map((review) => (

@@ -8,10 +8,12 @@ export default function Text({
   color = 'black',
   className = '',
   children,
+  onClick,
 }: TextProps) {
   return (
     <Component
       className={clsx(variantStyles[variant], colorStyles[color], className)}
+      onClick={onClick}
     >
       {children}
     </Component>

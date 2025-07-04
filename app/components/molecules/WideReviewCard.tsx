@@ -92,7 +92,7 @@ export default function WideReviewCard({
       </div>
       <div className="mt-6">
         <Link
-          to={`/meetings/${review.meeting.id}`}
+          to={`/meeting/${review.meeting.id}`}
           className="flex items-center gap-1 text-t3 text-gray-600"
         >
           <p>`{review.meeting.name}` 모임 보러가기</p>
