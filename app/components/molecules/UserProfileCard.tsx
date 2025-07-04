@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import Text from '../atoms/text/Text';
 import type { UserType } from '@/types/commons';
 
@@ -13,9 +14,12 @@ export default function UserProfileCard({ user }: { user: UserType }) {
         {user.nickName}
       </Text>
 
-      <button className="mt-6 cursor-pointer rounded-lg border-1 border-gray-300 px-5 py-3 text-b3">
+      <Link
+        to={`/myPage/profile`}
+        className="mt-6 cursor-pointer rounded-lg border-1 border-gray-300 px-5 py-3 text-b3"
+      >
         프로필 보기
-      </button>
+      </Link>
     </div>
   );
 }
