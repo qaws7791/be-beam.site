@@ -11,10 +11,15 @@ export default function MeetingRecommendationSection() {
 
       <MeetingRecommendations
         title="좋아요 기반  추천 리스트"
+        type="likes"
         className="mb-20"
       />
-      <MeetingRecommendations title="랜덤 추천 리스트" className="mb-20" />
-      <MeetingRecommendations title="최신 등록 모임 리스트" />
+      <MeetingRecommendations
+        title="랜덤 추천 리스트"
+        type="random"
+        className="mb-20"
+      />
+      <MeetingRecommendations title="최신 등록 모임 리스트" type="recent" />
     </div>
   );
 }

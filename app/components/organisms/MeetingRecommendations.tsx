@@ -1,30 +1,121 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../atoms/tabs/Tabs';
 import Text from '../atoms/text/Text';
+import MeetingCard from './MeetingCard';
+import GridGroup from './gridGroup/GridGroup';
+
+interface MeetingType {
+  id: number;
+  name: string;
+  image: string;
+  recruitmentType: string;
+  recruitmentStatus: string;
+  meetingStartTime: string;
+  address: string;
+  liked?: boolean;
+}
 
 export default function MeetingRecommendations({
   title,
+  type,
   className,
 }: {
   title: string;
+  type: string;
   className?: string;
 }) {
+  const navigate = useNavigate();
+
+  const tabList = [
+    {
+      text: '전체',
+      value: 'all',
+    },
+    {
+      text: '정기모임',
+      value: 'regular',
+    },
+    {
+      text: '소모임',
+      value: 'small',
+    },
+  ];
+  const [tab, setTab] = useState('all');
+
+  const state = {
+    likes: type === 'likes' ? tab : 'all',
+    random: type === 'random' ? tab : 'all',
+    recent: type === 'recent' ? tab : 'all',
+  };
+
+  const { data: recommendationMeetings } = useQuery({
+    queryKey: ['home', state],
+    queryFn: async () => {
+      const res = await axios({
+        method: 'GET',
+        url: `/api/web/v1/home?likes=${state.likes}&random=${state.random}&recent=${state.recent}`,
+      });
+      const data = res.data;
+      return data.result;
+    },
+  });
+
+  const datas =
+    type === 'likes'
+      ? recommendationMeetings?.recByLikesMeetings
+      : type === 'random'
+        ? recommendationMeetings?.randomMeetings
+        : recommendationMeetings?.latestMeetings;
+
   return (
     <div className={`${className} w-full text-left`}>
       <Text variant="H2_Semibold">{title}</Text>
 
-      {/* 나중에 Tab으로 제작 */}
-      <div className="mt-6 mb-5 flex items-center gap-3">
-        <button className="rounded-full bg-gray-900 px-4 py-2 text-b1 text-white">
-          전체
-        </button>
-        <button className="rounded-full bg-gray-200 px-4 py-2 text-b1">
-          정기모임
-        </button>
-        <button className="rounded-full bg-gray-200 px-4 py-2 text-b1">
-          소모임
-        </button>
-      </div>
+      <div className="mt-6 mb-5 flex w-full items-center gap-3">
+        <Tabs
+          defaultValue="all"
+          className="w-full text-b1"
+          value={tab}
+          onValueChange={(value) => setTab(value)}
+        >
+          <TabsList className="h-auto gap-3 before:h-0">
+            {tabList.map((data, idx) => (
+              <TabsTrigger
+                key={idx}
+                className="cursor-pointer rounded-3xl bg-gray-200 px-5 py-3 text-b1 transition-all duration-700 after:content-none data-[state=active]:bg-gray-900 data-[state=active]:text-white"
+                value={data.value}
+              >
+                {data.text}
+              </TabsTrigger>
+            ))}
+          </TabsList>
 
-      {/* Tab 안에 미팅 카드 */}
+          {tabList?.map((tab, idx) => (
+            <TabsContent key={idx} value={tab.value} className="mt-5 w-full">
+              <GridGroup columns={4}>
+                {datas?.map((meeting: MeetingType) => (
+                  <MeetingCard
+                    key={meeting.id}
+                    name={meeting.name}
+                    image={meeting.image}
+                    meetingType={meeting.recruitmentType}
+                    recruitmentType={meeting.recruitmentStatus}
+                    meetingStartTime={meeting.meetingStartTime.slice(0, 10)}
+                    address={meeting.address}
+                    onClick={() => navigate(`/meeting/${meeting.id}`)}
+                    isLikeBtn={true}
+                    isLike={meeting.liked}
+                  />
+                ))}
+              </GridGroup>
+            </TabsContent>
+          ))}
+        </Tabs>
+      </div>
     </div>
   );
 }

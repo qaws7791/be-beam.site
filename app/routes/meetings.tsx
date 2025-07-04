@@ -10,6 +10,8 @@ import Banner from '@/components/atoms/Banner';
 import MeetingFilterControls from '@/components/organisms/MeetingFilterControls';
 import MeetingCardGroup from '@/components/sections/MeetingCardGroup';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
+import useMyProfileQuery from '@/hooks/api/useMyProfileQuery';
+import { Button } from '@/components/atoms/button/Button';
 
 export function meta() {
   return [
@@ -44,6 +46,9 @@ export function meta() {
 
 export default function Meetings() {
   // const { dehydratedState } = loaderData;
+
+  const myProfile = useMyProfileQuery();
+  console.log(myProfile.data);
 
   const filters = [
     {
@@ -86,8 +91,6 @@ export default function Meetings() {
   >(() => getInitialFilters(filters));
   const [search, setSearch] = useState('');
 
-  console.log(selectedFilters);
-
   const {
     isLoading,
     data: meetings,
@@ -107,6 +110,7 @@ export default function Meetings() {
     isFetchingNextPage,
   });
 
+  console.log(selectedFilters);
   console.log('allMeetings', allMeetings);
   console.log('datas', meetings);
 
@@ -135,6 +139,14 @@ export default function Meetings() {
       {isFetchingNextPage && (
         <LoadingSpinner loadingComment="더 많은 미팅을 Loading..." />
       )}
+
+      <Button
+        className="fixed bottom-10 left-[50%] ml-[-75px] rounded-full text-t3"
+        size="sm"
+      >
+        <img src="/images/icons/w_plus.svg" alt="plus_icon" />
+        모임 만들기
+      </Button>
     </CommonTemplate>
   );
 }
