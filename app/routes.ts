@@ -33,7 +33,7 @@ export default [
           route('/host', 'routes/hostLikes.tsx'),
         ]),
       ]),
-      route('/editProfile', 'routes/editProfile.tsx'),
+      route('/profile', 'routes/myProfile.tsx'),
       route('/info', 'routes/myInformation.tsx'),
       route('/notifications', 'routes/myNotifications.tsx'),
     ]),
