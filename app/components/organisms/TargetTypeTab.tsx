@@ -1,4 +1,4 @@
-import type { FilterOption } from '@/routes/guideBooks';
+import type { FilterOption } from '@/types/components';
 import { TabsList, TabsTrigger } from '../atoms/tabs/Tabs';
 import { Button } from '../atoms/button/Button';
 

@@ -28,7 +28,7 @@ export default function SideBar({ user }: { user: UserType }) {
   ];
   const navData = [
     {
-      to: '/mypage/reviews',
+      to: '/mypage/reviews/written',
       title: '✍️ 나의 후기',
       onClick: () => setIsMeetingPage(false),
     },
@@ -50,7 +50,7 @@ export default function SideBar({ user }: { user: UserType }) {
   ];
 
   return (
-    <aside className="w-[230px]">
+    <aside className="sticky top-[100px] w-[230px]">
       <UserProfileCard user={user} />
 
       <div className="mt-6">
