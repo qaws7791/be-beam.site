@@ -85,7 +85,10 @@ export default function Slider({
                 <img
                   src={data.bannerImg}
                   alt={`Slide ${index + 1}`}
-                  className={clsx('w-full object-cover', slideHeight)}
+                  className={clsx(
+                    'w-full cursor-pointer object-cover',
+                    slideHeight,
+                  )}
                   onClick={() => navigate(data.bannerUrl)}
                 />
               </SwiperSlide>

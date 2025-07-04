@@ -1,3 +1,5 @@
+// 자식 컴포넌트에 데이터 책임 위임 및 설정: 로직은 없지만 smart 컴포넌트로 분류
+
 import Text from '../atoms/text/Text';
 import MeetingRecommendations from '../organisms/MeetingRecommendations';
 

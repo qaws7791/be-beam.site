@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../atoms/tabs/Tabs';
 import Text from '../atoms/text/Text';
 import MeetingCard from './MeetingCard';
 import GridGroup from './gridGroup/GridGroup';
+import useMeetingRecommendationQuery from '@/hooks/api/useMeetingRecommendationsQuery';
 
 interface MeetingType {
   id: number;
@@ -44,32 +43,18 @@ export default function MeetingRecommendations({
       value: 'small',
     },
   ];
+
   const [tab, setTab] = useState('all');
+  const { data: recommendationMeetings } = useMeetingRecommendationQuery(
+    type,
+    tab,
+  );
 
-  const state = {
-    likes: type === 'likes' ? tab : 'all',
-    random: type === 'random' ? tab : 'all',
-    recent: type === 'recent' ? tab : 'all',
-  };
-
-  const { data: recommendationMeetings } = useQuery({
-    queryKey: ['home', state],
-    queryFn: async () => {
-      const res = await axios({
-        method: 'GET',
-        url: `/api/web/v1/home?likes=${state.likes}&random=${state.random}&recent=${state.recent}`,
-      });
-      const data = res.data;
-      return data.result;
-    },
-  });
-
-  const datas =
-    type === 'likes'
-      ? recommendationMeetings?.recByLikesMeetings
-      : type === 'random'
-        ? recommendationMeetings?.randomMeetings
-        : recommendationMeetings?.latestMeetings;
+  const datas = {
+    likes: recommendationMeetings?.recByLikesMeetings,
+    random: recommendationMeetings?.randomMeetings,
+    recent: recommendationMeetings?.latestMeetings,
+  }[type];
 
   return (
     <div className={`${className} w-full text-left`}>
