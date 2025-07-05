@@ -1,5 +1,7 @@
-import { axiosInstance, axiosInstanceV1 } from '@/lib/axios';
+import { API_V1_BASE_URL } from '@/constants/api';
+import { axiosInstance } from '@/lib/axios';
 import type { APIResponse } from '@/types/api';
+import type { AxiosRequestConfig } from 'axios';
 
 export type MyProfileResult = {
   nickname: string;
@@ -7,12 +9,23 @@ export type MyProfileResult = {
   introduction: string;
 };
 
-export const getMyProfile = () => {
-  return axiosInstanceV1
-    .get<APIResponse<MyProfileResult>>('users/my-profile')
-    .then((res) => {
+export const getMyProfile = async (axiosRequestConfig?: AxiosRequestConfig) => {
+  try {
+    const res = await axiosInstance.get<APIResponse<MyProfileResult>>(
+      'users/my-profile',
+      {
+        baseURL: API_V1_BASE_URL,
+        ...axiosRequestConfig,
+      },
+    );
+    if (res.status === 200) {
       return res.data.result;
-    });
+    }
+    return null;
+  } catch (error) {
+    console.error('getMyProfile error: ', error);
+    return null;
+  }
 };
 
 export type MyMeetingLikesResult = {

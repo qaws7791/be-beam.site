@@ -1,4 +1,5 @@
-import { axiosInstanceV1 } from '@/lib/axios';
+import { API_V1_BASE_URL } from '@/constants/api';
+import { axiosInstance } from '@/lib/axios';
 import type { APIResponse } from '@/types/api';
 
 export type NotificationsResult = {
@@ -54,8 +55,11 @@ export const getNotifications = async ({
     page: page.toString(),
     size: size.toString(),
   });
-  const res = await axiosInstanceV1.get<APIResponse<NotificationsResult>>(
+  const res = await axiosInstance.get<APIResponse<NotificationsResult>>(
     `/notifications?${searchParams}`,
+    {
+      baseURL: API_V1_BASE_URL,
+    },
   );
   const data = res.data;
   return data.result;

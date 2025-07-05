@@ -14,6 +14,7 @@ export default [
   route('/guideBooks', 'routes/guideBooks.tsx'),
   route('/guideBook/:guideBookId', 'routes/guideBookDetail.tsx'),
   route('/login', 'routes/login.tsx'),
+  route('/login/callback', 'routes/loginCallback.tsx'),
   layout('layouts/myPage.tsx', [
     ...prefix('/myPage', [
       route('/participated', 'routes/participatedMeeting.tsx'),
