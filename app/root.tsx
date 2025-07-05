@@ -62,6 +62,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export async function loader({ request }: Route.LoaderArgs) {
   const authResult = await authenticateUser(request);
+  console.log(authResult);
   return data({ user: authResult.user }, { headers: authResult.headers });
 }
 

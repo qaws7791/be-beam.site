@@ -1,5 +1,23 @@
+import useHomeBannerQuery from '@/hooks/api/useHomeBannerQuery';
+
+import Slider from './Slider';
+import LoadingSpinner from '../molecules/LoadingSpinner';
+
 export default function MainVisualSlider() {
+  const { data: banners, isLoading } = useHomeBannerQuery();
+
   return (
-    <div className="h-[400px] w-full max-w-[1480px] rounded-3xl bg-gray-200" />
+    <>
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <Slider
+          datas={banners?.banners}
+          isBtn={false}
+          slideWidth="max-w-[1480px]"
+          slideHeight="h-[400px]"
+        />
+      )}
+    </>
   );
 }

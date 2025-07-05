@@ -14,6 +14,7 @@ export interface MeetingCardProp {
   onClick: () => void;
   classNames?: string;
   isLikeBtn?: boolean;
+  isLike?: boolean;
   children?: React.ReactNode;
 }
 
@@ -27,6 +28,7 @@ export default function MeetingCard({
   onClick,
   classNames,
   isLikeBtn = false,
+  isLike,
   children,
 }: MeetingCardProp) {
   return (
@@ -48,7 +50,9 @@ export default function MeetingCard({
           'absolute top-5 right-5',
           isLikeBtn ? 'block' : 'hidden',
         )}
-        src="/images/icons/w_like.svg"
+        src={
+          isLike ? '/images/icons/fill_like.svg' : '/images/icons/w_like.svg'
+        }
         alt="like_icon"
       />
 

@@ -22,7 +22,7 @@ export function meta() {
 }
 
 export default function CreatedMeetingDetailDetail() {
-  const id = Number(useParams().meetingId);
+  const id = Number(useParams()?.meetingId);
   const { data: createdMeetingDetail } = useCreatedMeetingDetailQuery(id);
   const { params, handleUpdateType } = useCreatedMeetingDetailDetailParams();
 

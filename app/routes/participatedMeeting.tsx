@@ -26,6 +26,8 @@ import GridGroup from '@/components/organisms/gridGroup/GridGroup';
 import MeetingCard from '@/components/organisms/MeetingCard';
 import MoreDropdownMenu from '@/components/organisms/MoreDropdownMenu';
 import toast from 'react-hot-toast';
+import { withRequiredAuth } from '@/lib/auth.server';
+import type { Route } from './+types/participatedMeeting';
 
 interface participatedMeetingType {
   address: string;
@@ -38,7 +40,22 @@ interface participatedMeetingType {
   isCash: boolean;
 }
 
-export default function ParticipatedMeeting() {
+export async function loader({ request }: Route.LoaderArgs) {
+  return withRequiredAuth(
+    request,
+    async () => {
+      return {};
+    },
+    '/login',
+  );
+}
+
+export default function ParticipatedMeeting({
+  loaderData,
+}: Route.ComponentProps) {
+  const user = loaderData.user;
+  console.log(user);
+
   const navigate = useNavigate();
 
   const { params, handleUpdateStatus, handleUpdatePage } =

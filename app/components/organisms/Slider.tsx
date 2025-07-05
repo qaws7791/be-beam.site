@@ -9,6 +9,7 @@ import clsx from 'clsx';
 
 import { Button } from '../atoms/button/Button';
 import Text from '../atoms/text/Text';
+import { useNavigate } from 'react-router';
 
 export default function Slider({
   images,
@@ -16,21 +17,30 @@ export default function Slider({
   spaceBetween = 20,
   isLoop = true,
   delay = 3000,
+  isBtn = true,
   isPagination = false,
   isCount = false,
   slideWidth,
   slideHeight,
+  datas,
 }: {
-  images: string[];
+  images?: string[];
   slidesPreView?: number;
   spaceBetween?: number;
   isLoop?: boolean;
   delay?: number;
+  isBtn?: boolean;
   isPagination?: boolean;
   isCount?: boolean;
   slideWidth: string;
   slideHeight: string;
+  datas?: {
+    bannerImg: string;
+    bannerUrl: string;
+  }[];
 }) {
+  const navigate = useNavigate();
+
   const swiperRef = useRef<SwiperClass | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -60,15 +70,29 @@ export default function Slider({
           disableOnInteraction: false,
         }}
       >
-        {images?.map((src, index) => (
-          <SwiperSlide key={index}>
-            <img
-              src={src}
-              alt={`Slide ${index + 1}`}
-              className={clsx('h-[657px] w-full object-cover', slideHeight)}
-            />
-          </SwiperSlide>
-        ))}
+        {images
+          ? images?.map((src, index) => (
+              <SwiperSlide key={index}>
+                <img
+                  src={src}
+                  alt={`Slide ${index + 1}`}
+                  className={clsx('w-full object-cover', slideHeight)}
+                />
+              </SwiperSlide>
+            ))
+          : datas?.map((data, index) => (
+              <SwiperSlide key={index}>
+                <img
+                  src={data.bannerImg}
+                  alt={`Slide ${index + 1}`}
+                  className={clsx(
+                    'w-full cursor-pointer object-cover',
+                    slideHeight,
+                  )}
+                  onClick={() => navigate(data.bannerUrl)}
+                />
+              </SwiperSlide>
+            ))}
 
         {isCount && (
           <Text
@@ -82,7 +106,11 @@ export default function Slider({
           size="icon"
           className={clsx(
             'absolute top-1/2 left-5 z-10 h-10 w-10 -translate-y-1/2 rounded-full border-none bg-white shadow-md',
-            images?.length === 1 ? 'cursor-default bg-gray-300' : 'bg-white',
+            isBtn && images?.length === 1
+              ? 'cursor-default bg-gray-300'
+              : isBtn && images?.length !== 1
+                ? 'bg-white'
+                : 'hidden',
           )}
           onClick={() => swiperRef.current?.slidePrev()}
         >
@@ -94,7 +122,11 @@ export default function Slider({
           size="icon"
           className={clsx(
             'absolute top-1/2 right-5 z-10 h-10 w-10 -translate-y-1/2 rounded-full border-none shadow-md',
-            images?.length === 1 ? 'cursor-default bg-gray-300' : 'bg-white',
+            isBtn && images?.length === 1
+              ? 'cursor-default bg-gray-300'
+              : isBtn && images?.length !== 1
+                ? 'bg-white'
+                : 'hidden',
           )}
           onClick={() => swiperRef.current?.slideNext()}
         >

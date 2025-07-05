@@ -3,7 +3,6 @@ import MainVisualSlider from '@/components/organisms/MainVisualSlider';
 import AboutSection from '@/components/sections/AboutSection';
 import MeetingRecommendationSection from '@/components/sections/MeetingRecommendationSection';
 import ValueSection from '@/components/sections/ValueSection';
-
 export function meta() {
   return [
     { title: '홈 화면입니다.' },

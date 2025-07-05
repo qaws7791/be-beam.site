@@ -2,6 +2,7 @@ import { API_V1_BASE_URL } from '@/constants/api';
 import { axiosInstance } from '@/lib/axios';
 import type { APIResponse } from '@/types/api';
 import type { AxiosRequestConfig } from 'axios';
+import axios from 'axios';
 
 export type MyProfileResult = {
   nickname: string;
@@ -355,3 +356,12 @@ export const updateMyProfile = async (params: UpdateMyProfileParams) => {
   // const data = res.data;
   // return data.result;
 };
+
+export async function getCreatedMeetingDetail(id: number) {
+  const res = await axios({
+    method: 'GET',
+    url: `/api/web/v1/meetings/${id}/mypage`,
+  });
+  const data = res.data;
+  return data.result;
+}

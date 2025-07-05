@@ -1,5 +1,5 @@
+import type { FilterOption } from '@/types/components';
 import { Tabs, TabsList, TabsTrigger } from '../atoms/tabs/Tabs';
-import type { FilterOption } from '@/routes/guideBooks';
 
 interface GuideBooksFilterTabGroupProps {
   value: string;
