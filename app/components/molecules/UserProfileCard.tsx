@@ -6,7 +6,7 @@ export default function UserProfileCard({ user }: { user: UserType }) {
   return (
     <div className="box-border flex w-full flex-col items-center rounded-2xl border-1 border-gray-300 p-5">
       <img
-        className="h-12 w-12 rounded-full"
+        className="h-12 w-12 rounded-full object-cover"
         src={user.profileImage}
         alt="profile_img"
       />

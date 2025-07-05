@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Outlet, useNavigate, useParams } from 'react-router';
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router';
 import useCreatedMeetingDetailQuery from '@/hooks/api/useCreatedMeetingDetailQuery';
 
 import { Tabs, TabsList, TabsTrigger } from '@/components/atoms/tabs/Tabs';
@@ -8,6 +8,7 @@ import Text from '@/components/atoms/text/Text';
 
 export default function CreatedMeetingDetail() {
   const navigate = useNavigate();
+  const location = useLocation();
   const id = Number(useParams().meetingId);
   const pathSegments = location.pathname.split('/')[4];
 

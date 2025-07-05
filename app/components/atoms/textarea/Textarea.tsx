@@ -6,6 +6,8 @@ import { FormMessage } from '../form/FormMessage';
 
 interface TextareaProps extends React.ComponentProps<'textarea'> {
   label: string;
+  labelClassName?: string;
+  maxLengthClassName?: string;
   endContent?: React.ReactNode;
   description?: string;
   error?: string;
@@ -15,7 +17,9 @@ interface TextareaProps extends React.ComponentProps<'textarea'> {
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
     {
+      labelClassName,
       className,
+      maxLengthClassName,
       label,
       description,
       error,
@@ -42,7 +46,9 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     return (
       <div className="relative flex flex-col gap-2">
-        <Label htmlFor={id}>{label}</Label>
+        <Label htmlFor={id} className={labelClassName}>
+          {label}
+        </Label>
         <div className="group relative" aria-invalid={!!error}>
           <textarea
             data-slot="textarea"
@@ -61,7 +67,12 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           />
 
           {maxLength !== undefined && (
-            <div className={cn('absolute right-4 bottom-3 text-b3', className)}>
+            <div
+              className={cn(
+                'absolute right-4 bottom-3 text-b3',
+                maxLengthClassName,
+              )}
+            >
               <span className="text-primary group-aria-invalid:text-error">
                 {charCount}
               </span>

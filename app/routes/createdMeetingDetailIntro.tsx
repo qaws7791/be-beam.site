@@ -213,12 +213,6 @@ export default function CreatedMeetingDetailIntro() {
       </div>
 
       <div className="mb-4 box-border w-full rounded-lg border-1 border-gray-300 bg-gray-100 p-5">
-        <label
-          htmlFor="description"
-          className="mb-3 block text-t2 text-gray-900"
-        >
-          모집 소개
-        </label>
         <Textarea
           {...register('introduction', {
             required: '모임 설명은 필수입니다.',
@@ -232,7 +226,10 @@ export default function CreatedMeetingDetailIntro() {
             },
           })}
           id="description"
-          className="mt-1 box-border h-[124px] w-full border border-gray-300 bg-white p-3 shadow-none"
+          label="모집 소개"
+          labelClassName="block text-t2 text-gray-900"
+          maxLength={500}
+          className="mt-1 box-border h-[124px] border border-gray-300 bg-white shadow-none"
           onChange={(e) => updateField('introduction', e.target.value)}
           value={state.introduction}
         />
@@ -410,12 +407,6 @@ export default function CreatedMeetingDetailIntro() {
       </div>
 
       <div className="mb-4 box-border w-full rounded-lg border-1 border-gray-300 bg-gray-100 p-5">
-        <label
-          htmlFor="hostDescription"
-          className="mb-3 block text-t2 text-gray-900"
-        >
-          호스트 소개
-        </label>
         <Textarea
           {...register('hostDescription', {
             required: '호스트 소개는 필수입니다.',
@@ -429,6 +420,9 @@ export default function CreatedMeetingDetailIntro() {
             },
           })}
           id="description"
+          label="호스트 소개"
+          labelClassName="block text-t2 text-gray-900"
+          maxLength={500}
           className="mt-1 box-border h-[124px] w-full border border-gray-300 bg-white p-3 shadow-none"
           onChange={(e) => updateField('hostDescription', e.target.value)}
           value={state.hostDescription}

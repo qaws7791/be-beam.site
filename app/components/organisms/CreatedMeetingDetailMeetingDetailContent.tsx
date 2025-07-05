@@ -280,9 +280,6 @@ export default function CreatedMeetingDetailMeetingDetailContent({
       </div>
 
       <div className="mt-4 box-border w-full rounded-lg border-1 border-gray-300 bg-gray-100 p-5">
-        <label htmlFor="info" className="mb-3 block text-t2 text-gray-900">
-          공지사항
-        </label>
         <Textarea
           {...register('info', {
             required: '공지사항은 필수입니다.',
@@ -296,6 +293,8 @@ export default function CreatedMeetingDetailMeetingDetailContent({
             },
           })}
           id="info"
+          label="공지사항"
+          labelClassName="block text-t2 text-gray-900"
           className="mt-1 box-border h-[154px] flex-1 border-gray-300 bg-white p-4 shadow-none"
           onChange={(e) => updateField('info', e.target.value)}
           value={state.info}

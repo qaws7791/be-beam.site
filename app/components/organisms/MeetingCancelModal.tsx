@@ -6,11 +6,12 @@ import Text from '../atoms/text/Text';
 import { useModalStore } from '@/stores/useModalStore';
 import { Textarea } from '../atoms/textarea/Textarea';
 import { useMutation } from '@tanstack/react-query';
-import { axiosInstanceV1 } from '@/lib/axios';
+import { axiosInstance } from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { queryClient } from '@/root';
 import clsx from 'clsx';
 import { Input } from '../atoms/input/Input';
+import { API_V1_BASE_URL } from '@/constants/api';
 
 export default function MeetingCancelModal() {
   const radioList = [
@@ -43,7 +44,8 @@ export default function MeetingCancelModal() {
 
   const { mutate: cancelMeeting, isPending } = useMutation({
     mutationFn: (data: { reasonType: string; description: string }) => {
-      return axiosInstanceV1({
+      return axiosInstance({
+        baseURL: API_V1_BASE_URL,
         method: 'POST',
         url: `/meetings/${modalProps.meetingId}/cancel`,
         data,

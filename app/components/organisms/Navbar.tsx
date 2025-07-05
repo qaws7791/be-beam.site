@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router';
 import Logo from '../atoms/logo/Logo';
 import NavMenu from '../molecules/NavMenu';
 import SearchInput from '../molecules/SearchInput';
+import NavbarUserSection from '../molecules/NavbarUserSection';
 
 export default function Navbar({
   user,
@@ -29,24 +30,11 @@ export default function Navbar({
             onSearchChange={() => console.log('나중에 작성')}
             search=""
           />
-
-          {/* 후에 코드 교체 및 공용 컴포넌트 제작 */}
           {user ? (
-            <div className="flex items-center gap-x-4">
-              <button className="cursor-pointer">
-                <img src="/images/icons/like.svg" alt="like_icon" />
-              </button>
-              <button className="cursor-pointer">
-                <img src="/images/icons/bell.svg" alt="bell_icon" />
-              </button>
-              <button onClick={() => navigate('/myPage/participated')}>
-                <img
-                  className="h-7 w-7 cursor-pointer rounded-full"
-                  src={user?.profileImage}
-                  alt="profileImg"
-                />
-              </button>
-            </div>
+            <NavbarUserSection
+              profileImage={user?.profileImage}
+              onClick={() => navigate('/myPage/participated')}
+            />
           ) : (
             <button
               className="cursor-pointer rounded-lg bg-primary px-4 py-3 text-white"

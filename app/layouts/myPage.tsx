@@ -2,17 +2,16 @@ import { Outlet } from 'react-router';
 
 import MyPageTemplate from '@/components/templates/MyPageTemplate';
 import SideBar from '@/components/organisms/SideBar';
-import useMyProfileQuery from '@/hooks/api/useMyProfileQuery';
+import useUserSession from '@/hooks/business/useUserSession';
 
 export default function MyPage() {
-  const myProfile = useMyProfileQuery();
-  console.log(myProfile.data);
+  const { user } = useUserSession();
 
   return (
     <>
-      {myProfile.data && (
+      {user && (
         <MyPageTemplate>
-          <SideBar user={myProfile.data} />
+          <SideBar user={user} />
           <Outlet />
         </MyPageTemplate>
       )}
