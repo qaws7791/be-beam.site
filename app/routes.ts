@@ -21,6 +21,7 @@ export default [
       route('/requested', 'routes/requestedMeeting.tsx'),
       route('/created', 'routes/createdMeeting.tsx'),
       ...prefix('/reviews', [
+        index('routes/myReviews.tsx'),
         layout('layouts/myReview.tsx', [
           route('/written', 'routes/writtenReviews.tsx'),
           route('/reviewable', 'routes/reviewableReviews.tsx'),
@@ -28,6 +29,7 @@ export default [
       ]),
       layout('layouts/myLikes.tsx', [
         ...prefix('/likes', [
+          index('routes/myLikes.tsx'),
           route('/regular', 'routes/regularMeetingLikes.tsx'),
           route('/small', 'routes/smallMeetingLikes.tsx'),
           route('/review', 'routes/reviewLikes.tsx'),
