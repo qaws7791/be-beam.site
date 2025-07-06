@@ -1,7 +1,12 @@
 import { create } from 'zustand';
 
 // 앞으로 추가될 모든 모달의 타입을 여기에 정의.
-export type ModalType = 'CONFIRM_DIALOG' | 'CANCEL_MEETING_MODAL';
+export type ModalType =
+  | 'CONFIRM_DIALOG'
+  | 'CANCEL_MEETING_MODAL'
+  | 'EDIT_MEETING_REVIEW_MODAL'
+  | 'APPLY_MEETING_MODAL'
+  | 'DECLARE_MODAL';
 
 interface ModalProps {
   [key: string]: unknown;

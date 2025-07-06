@@ -1,5 +1,7 @@
 // import { axiosInstance } from '@/lib/axios';
 
+import { API_V1_BASE_URL } from '@/constants/api';
+import { axiosInstance } from '@/lib/axios';
 import axios from 'axios';
 
 export const getMeetingList = async (
@@ -29,4 +31,16 @@ export const getMeetingDetail = async (id: number) => {
   });
   const data = res.data;
   return data.result;
+};
+
+export const applyMeeting = async (
+  id: number,
+  data: { joinReason: string },
+) => {
+  return axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    method: 'POST',
+    url: `/meetings/${id}/join`,
+    data,
+  });
 };

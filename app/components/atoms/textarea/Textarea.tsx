@@ -5,7 +5,7 @@ import { Label } from '../label/Label';
 import { FormMessage } from '../form/FormMessage';
 
 interface TextareaProps extends React.ComponentProps<'textarea'> {
-  label: string;
+  label?: string;
   labelClassName?: string;
   maxLengthClassName?: string;
   endContent?: React.ReactNode;

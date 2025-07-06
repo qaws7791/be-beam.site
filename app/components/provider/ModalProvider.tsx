@@ -1,10 +1,16 @@
 import { useModalStore } from '@/stores/useModalStore';
 import ConfirmDialog from '../organisms/ConfirmDialog';
 import MeetingCancelModal from '../organisms/MeetingCancelModal';
+import MeetingReviewEditModal from '../organisms/MeetingReviewEditModal';
+import ApplyMeetingModal from '../organisms/ApplyMeetingModal';
+import DeclareModal from '../organisms/DeclareModal';
 
 const MODAL_COMPONENTS = {
   CONFIRM_DIALOG: ConfirmDialog,
   CANCEL_MEETING_MODAL: MeetingCancelModal,
+  EDIT_MEETING_REVIEW_MODAL: MeetingReviewEditModal,
+  APPLY_MEETING_MODAL: ApplyMeetingModal,
+  DECLARE_MODAL: DeclareModal,
 };
 
 export default function ModalProvider() {

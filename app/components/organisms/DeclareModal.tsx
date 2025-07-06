@@ -2,11 +2,11 @@ import { queryClient } from '@/root';
 import { useMutation } from '@tanstack/react-query';
 import { axiosInstance } from '@/lib/axios';
 import { API_V1_BASE_URL } from '@/constants/api';
+import { useModalStore } from '@/stores/useModalStore';
 import { Controller, useForm } from 'react-hook-form';
 import type { z } from 'zod';
-import { cancelMeetingReasonSchema } from '@/schemas/meeting';
+import { declareReasonSchema } from '@/schemas/meeting';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useModalStore } from '@/stores/useModalStore';
 
 import {
   Dialog,
@@ -16,52 +16,79 @@ import {
   DialogTitle,
 } from '../atoms/dialog/Dialog';
 import { Button } from '../atoms/button/Button';
-import { Label } from '../atoms/label/Label';
-import { RadioGroup, RadioGroupItem } from '../atoms/radio-group/RadioGroup';
-import Text from '../atoms/text/Text';
-import { Textarea } from '../atoms/textarea/Textarea';
 import toast from 'react-hot-toast';
+import Text from '../atoms/text/Text';
+import { RadioGroup, RadioGroupItem } from '../atoms/radio-group/RadioGroup';
+import { Label } from '../atoms/label/Label';
+import { Textarea } from '../atoms/textarea/Textarea';
 
-export default function MeetingCancelModal() {
+export default function DeclareModal() {
+  const { isOpen, modalProps, close } = useModalStore();
+
   const radioList = [
     {
-      id: 'personalSchedule',
-      value: 'personalSchedule',
-      label: '갑작스러운 개인 일정',
+      id: 'ADVERTISEMENT',
+      value: 'ADVERTISEMENT',
+      label: '불법 광고',
     },
     {
-      id: 'changeMind',
-      value: 'changeMind',
-      label: '단순 변심',
+      id: 'SEXUAL',
+      value: 'SEXUAL',
+      label: '음란성/선정성',
     },
     {
-      id: 'locationNonconformity',
-      value: 'locationNonconformity',
-      label: '장소가 너무 멀거나 불편함',
+      id: 'PERSONAL_ATTACKS',
+      value: 'PERSONAL_ATTACKS',
+      label: '욕설/인신공격',
     },
     {
-      id: 'etc',
-      value: 'etc',
+      id: 'COMMERCIAL',
+      value: 'COMMERCIAL',
+      label: '영리목적',
+    },
+    {
+      id: 'SPAM',
+      value: 'SPAM',
+      label: '도배성 글',
+    },
+    {
+      id: 'SPYWARE',
+      value: 'SPYWARE',
+      label: '악성 코드/스파이웨어',
+    },
+    {
+      id: 'PRIVACY_VIOLATION',
+      value: 'PRIVACY_VIOLATION',
+      label: '개인정보 노출/사생활 침해',
+    },
+    {
+      id: 'OTHER',
+      value: 'OTHER',
       label: '기타',
     },
   ];
 
-  const { isOpen, modalProps, close } = useModalStore();
-
-  const { mutate: cancelMeeting, isPending } = useMutation({
+  const { mutate: delareMutate, isPending } = useMutation({
     mutationFn: (data: { reasonType: string; description: string }) => {
       return axiosInstance({
         baseURL: API_V1_BASE_URL,
         method: 'POST',
-        url: `/meetings/${modalProps.meetingId}/cancel`, // 중도 이탈 API는 아직 나온바가 X
-        data,
+        url: '/complaints',
+        data: {
+          complaintId: modalProps.id,
+          complaintType:
+            modalProps.type === 'meeting'
+              ? 'MEETING'
+              : modalProps.type === 'review'
+                ? 'REVIEW'
+                : 'USER',
+          ...data,
+        },
       });
     },
     onSuccess: () => {
       toast.success(
-        modalProps.statusType === 'participating'
-          ? '모임 중도 이탈 신청을 신청하였습니다.'
-          : '모임 취소 신청을 신청하였습니다.',
+        `${modalProps.type === 'meeting' ? '해당 모임을' : modalProps.type === 'review' ? '해당 모임 후기를' : '해당 호스트를'} 신고하였습니다.`,
       );
       queryClient.invalidateQueries({ queryKey: ['meeting'] });
       close();
@@ -72,42 +99,43 @@ export default function MeetingCancelModal() {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof cancelMeetingReasonSchema>) => {
-    if (isPending) return;
-    cancelMeeting(data);
-
-    reset();
-    close();
-  };
-
   const { control, reset, handleSubmit, formState } = useForm<
-    z.infer<typeof cancelMeetingReasonSchema>
+    z.infer<typeof declareReasonSchema>
   >({
-    resolver: zodResolver(cancelMeetingReasonSchema),
+    resolver: zodResolver(declareReasonSchema),
     defaultValues: {
-      reasonType: 'personalSchedule',
+      reasonType: 'ADVERTISEMENT',
       description: '',
     },
   });
+
+  function onSubmit(data: z.infer<typeof declareReasonSchema>) {
+    if (isPending) return;
+    delareMutate(data);
+
+    reset();
+    close();
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={close}>
       <DialogContent className="max-w-[480px]">
         <DialogHeader>
           <DialogTitle className="text-t2">
-            {modalProps.statusType === 'participating'
-              ? '모임 중도 이탈 신청하기'
-              : '모임 신청 취소하기'}
+            {`${
+              modalProps.type === 'meeting'
+                ? '모임'
+                : modalProps.type === 'review'
+                  ? '모임 후기'
+                  : '호스트'
+            } 신고하기`}
           </DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mt-5 w-full">
             <Text variant="T3_Semibold" className="mb-4">
-              {modalProps.statusType === 'participating'
-                ? '중도 이탈 사유'
-                : '신청 취소 사유'}
-              를 선택해 주세요.
+              신고 사유를 선택해 주세요
             </Text>
 
             <Controller
@@ -146,10 +174,7 @@ export default function MeetingCancelModal() {
 
           <div className="mt-5 w-full">
             <Text variant="T3_Semibold">
-              {modalProps.statusType === 'participating'
-                ? '중도 이탈 사유'
-                : '취소 사유'}
-              를 자유롭게 작성해 주세요.
+              신고 사유를 자유롭게 작성해 주세요.
             </Text>
             <Controller
               name="description"
@@ -169,24 +194,19 @@ export default function MeetingCancelModal() {
             <Button
               type="button"
               onClick={() => {
-                reset();
                 close();
                 toast(
-                  modalProps.statusType === 'participating'
-                    ? '모임 중도 이탈 신청을 취소하였습니다.'
-                    : '모임 취소 신청을 취소하였습니다.',
+                  `${modalProps.type === 'meeting' ? '해당 모임' : modalProps.type === 'review' ? '해당 모임 후기' : '해당 호스트'} 신고를 취소하였습니다.`,
                 );
               }}
               variant="tertiary"
               size="sm"
-              className="border-gray-500 text-gray-600"
+              className="w-30 border-gray-500 text-gray-600"
             >
               취소
             </Button>
             <Button disabled={!formState.isValid} className="flex-1">
-              {modalProps.statusType === 'participating'
-                ? ' 중도 이탈 신청하기'
-                : '신청 취소하기'}
+              {`${modalProps.type === 'meeting' ? '모임' : modalProps.type === 'review' ? '모임 후기' : '호스트'} 신고하기`}
             </Button>
           </DialogFooter>
         </form>

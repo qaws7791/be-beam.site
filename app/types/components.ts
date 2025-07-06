@@ -25,7 +25,7 @@ export interface TextProps {
     | 'purple'
     | 'brown'
     | 'primary';
-  variant: TypographyVariant;
+  variant?: TypographyVariant;
   className?: string;
   onClick?: () => void;
 }
@@ -102,6 +102,18 @@ export interface MeetingDetailType {
   applicantCount: number;
   participantCount: number;
   reviewable: boolean;
+  userStatus:
+    | '신청전'
+    | '신청중'
+    | '신청취소중'
+    | '참여중'
+    | '중도이탈신청중'
+    | '모임완료'
+    | string;
+  applyMeetingState: boolean;
+  participateMeetingState: boolean;
+  cancelMeetingState: boolean;
+  leaveMeetingState: boolean;
 
   hostId: number;
   hostName: string;

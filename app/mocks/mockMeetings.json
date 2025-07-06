@@ -1713,7 +1713,12 @@
       "hostDescription": "운동 · 야외활동 주제로 활동하는 호스트입니다.",
       "likesCount": 26,
       "liked": false,
-      "reviewable": false
+      "reviewable": false,
+      "userStatus": "모임중",
+      "applyMeetingState": false,
+      "participateMeetingState": true,
+      "cancelMeetingState": false,
+      "leaveMeetingState": true
     },
     {
       "id": 9,
@@ -2350,7 +2355,7 @@
       "hostDescription": "언어 · 스터디 주제로 활동하는 호스트입니다.",
       "likesCount": 48,
       "liked": false,
-      "reviewable": false
+      "reviewable": true
     },
     {
       "id": 25,
@@ -3628,7 +3633,12 @@
       "hostDescription": "독서 · 글쓰기 주제로 활동하는 호스트입니다.",
       "likesCount": 96,
       "liked": false,
-      "reviewable": false
+      "reviewable": false,
+      "userStatus": "신청중",
+      "applyMeetingState": true,
+      "participateMeetingState": false,
+      "cancelMeetingState": true,
+      "leaveMeetingState": false
     },
     {
       "id": 57,
