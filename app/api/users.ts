@@ -8,6 +8,7 @@ export type MyProfileResult = {
   nickname: string;
   profileImage: string;
   introduction: string;
+  role: '일반 참가자' | '정기모임 호스트' | '소모임 호스트';
 };
 
 export const getMyProfile = async (axiosRequestConfig?: AxiosRequestConfig) => {
