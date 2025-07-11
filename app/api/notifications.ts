@@ -41,6 +41,24 @@ export const getNotifications = async ({
         message: '참여한 모임에 후기가 달렸어요!',
         timestamp: '2025-06-17T09:30:00',
       },
+      {
+        id: 103,
+        type: 'HOST',
+        message: '관심 등록한 독서 모임이 새로 열렸어요!',
+        timestamp: '2025-06-17T11:12:00',
+      },
+      {
+        id: 104,
+        type: 'MEETING',
+        message: '관심 등록한 독서 모임이 새로 열렸어요!',
+        timestamp: '2025-06-17T11:12:00',
+      },
+      {
+        id: 105,
+        type: 'REVIEW',
+        message: '참여한 모임에 후기가 달렸어요!',
+        timestamp: '2025-06-17T09:30:00',
+      },
     ],
     pageInfo: {
       page: 1,
