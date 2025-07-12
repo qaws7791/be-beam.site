@@ -10,10 +10,10 @@ import Banner from '@/components/atoms/Banner';
 import MeetingFilterControls from '@/components/organisms/MeetingFilterControls';
 import MeetingCardGroup from '@/components/sections/MeetingCardGroup';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
-import useMyProfileQuery from '@/hooks/api/useMyProfileQuery';
 import { Button } from '@/components/atoms/button/Button';
 import type { Route } from './+types/meetings';
 import { withOptionalAuth } from '@/lib/auth.server';
+import { useModalStore } from '@/stores/useModalStore';
 
 export function meta() {
   return [
@@ -57,8 +57,7 @@ export default function Meetings({ loaderData }: Route.ComponentProps) {
   const user = loaderData.user;
   console.log(user);
 
-  const myProfile = useMyProfileQuery();
-  console.log(myProfile.data);
+  const { open } = useModalStore();
 
   const filters = [
     {
@@ -123,6 +122,7 @@ export default function Meetings({ loaderData }: Route.ComponentProps) {
   console.log(selectedFilters);
   console.log('allMeetings', allMeetings);
   console.log('datas', meetings);
+  console.log('user', user);
 
   return (
     <CommonTemplate>
@@ -154,6 +154,7 @@ export default function Meetings({ loaderData }: Route.ComponentProps) {
         <Button
           className="fixed bottom-10 left-[50%] ml-[-75px] rounded-full text-t3"
           size="sm"
+          onClick={() => open('CREATE_MEETING_MODAL', { userRole: user.role })}
         >
           <img src="/images/icons/w_plus.svg" alt="plus_icon" />
           모임 만들기

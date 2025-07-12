@@ -6,7 +6,8 @@ export type ModalType =
   | 'CANCEL_MEETING_MODAL'
   | 'EDIT_MEETING_REVIEW_MODAL'
   | 'APPLY_MEETING_MODAL'
-  | 'DECLARE_MODAL';
+  | 'DECLARE_MODAL'
+  | 'CREATE_MEETING_MODAL';
 
 interface ModalProps {
   [key: string]: unknown;

@@ -71,7 +71,7 @@ export default function ApplyMeetingModal() {
 
               <div className="box-border flex w-full items-center gap-4 rounded-lg border-1 border-gray-300 px-5 py-6">
                 <img
-                  className="h-25 w-25 rounded-lg"
+                  className="h-25 w-25 rounded-lg object-cover"
                   src={meeting.meetingImages[0]}
                   alt="meeting_thumbnail"
                 />
