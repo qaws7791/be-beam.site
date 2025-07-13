@@ -1,7 +1,8 @@
 import { API_V1_BASE_URL } from '@/constants/api';
 import { axiosInstance } from '@/lib/axios';
+import type { APIResponse } from '@/types/api';
 
-interface ReportComplaintParams {
+interface ReportComplaintData {
   complaintId: number;
   complaintType: 'REVIEW' | 'USER' | 'MEETING';
   reasonType:
@@ -16,10 +17,14 @@ interface ReportComplaintParams {
   description: string;
 }
 
-export const reportComplaint = async (params: ReportComplaintParams) => {
+export const reportComplaint = async (data: ReportComplaintData) => {
   return;
-  const res = await axiosInstance.post('/complaints', params, {
-    baseURL: API_V1_BASE_URL,
-  });
+  const res = await axiosInstance.post<APIResponse<string>>(
+    '/complaints',
+    data,
+    {
+      baseURL: API_V1_BASE_URL,
+    },
+  );
   return res.data;
 };
