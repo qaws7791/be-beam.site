@@ -5,7 +5,7 @@ import type { CreateMeetingType } from '@/types/components';
 import clsx from 'clsx';
 import { Dialog, DialogContent } from '../atoms/dialog/Dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../atoms/tabs/Tabs';
-import CreateMeetingFirstContent from './createMeetingFirstContent';
+import CreateMeetingFirstContent from './CreateMeetingFirstContent';
 import CreateMeetingSecondContent from './CreateMeetingSecondContent';
 import CreateMeetingThirdContent from './CreateMeetingThirdContent';
 import CreateMeetingFourthContent from './CreateMeetingFourthContent';
