@@ -16,13 +16,13 @@ const myNotificationsQueryOptions = ({
   });
 
 export default function useMyNotificationsQuery({
-  type,
-  page,
-  size,
+  type = 'all',
+  page = 1,
+  size = 10,
 }: {
-  type: 'all' | 'meeting' | 'review' | 'host';
-  page: number;
-  size: number;
-}) {
+  type?: 'all' | 'meeting' | 'review' | 'host';
+  page?: number;
+  size?: number;
+} = {}) {
   return useQuery(myNotificationsQueryOptions({ type, page, size }));
 }
