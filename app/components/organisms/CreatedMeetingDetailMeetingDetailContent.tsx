@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import useCreatedMeetingDetailDetailReducer from '@/hooks/business/useCreatedMeetingDetailDetailReducer';
 import { Button } from '../atoms/button/Button';
-import clsx from 'clsx';
+import { cn } from '@/lib/tailwind';
 import { Input } from '../atoms/input/Input';
 import Text from '../atoms/text/Text';
 import { DateInput } from '../molecules/DateInput';
@@ -97,7 +97,7 @@ export default function CreatedMeetingDetailMeetingDetailContent({
               key={idx}
               type="button"
               variant="tertiary"
-              className={clsx(
+              className={cn(
                 'mr-2 h-9 min-w-auto rounded-lg border-1 transition-all duration-700 hover:border-primary hover:bg-primary-light hover:text-primary',
                 state.selectionType === selectionType
                   ? 'border-primary bg-primary-light text-primary'
@@ -132,7 +132,7 @@ export default function CreatedMeetingDetailMeetingDetailContent({
               key={idx}
               type="button"
               variant="tertiary"
-              className={clsx(
+              className={cn(
                 'mr-2 h-9 min-w-auto rounded-lg border-1 transition-all duration-700 hover:border-primary hover:bg-primary-light hover:text-primary',
                 state.mode === mode
                   ? 'border-primary bg-primary-light text-primary'

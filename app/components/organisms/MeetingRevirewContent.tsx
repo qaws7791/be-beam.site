@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '@/lib/tailwind';
 
 import type { MeetingReviewType } from './MeetingReviewCard';
 import Text from '../atoms/text/Text';
@@ -17,7 +17,7 @@ export default function MeetingReviewContent({
       </div>
 
       <div
-        className={clsx(
+        className={cn(
           review.images.length < 4 && review.images.length > 0 && 'flex gap-5',
           'mt-5 w-full',
         )}
@@ -40,7 +40,7 @@ export default function MeetingReviewContent({
         <Text
           variant="B3_Regular"
           color="gray-600"
-          className={clsx(review.images.length > 3 && 'mt-3', 'flex-1')}
+          className={cn(review.images.length > 3 && 'mt-3', 'flex-1')}
         >
           {review.text}
         </Text>

@@ -1,6 +1,6 @@
 import { colorStyles, variantStyles } from './Text.styles';
 import type { TextProps } from '../../../types/components';
-import clsx from 'clsx';
+import { cn } from '@/lib/tailwind';
 
 export default function Text({
   as: Component = 'p',
@@ -12,7 +12,7 @@ export default function Text({
 }: TextProps) {
   return (
     <Component
-      className={clsx(variantStyles[variant], colorStyles[color], className)}
+      className={cn(variantStyles[variant], colorStyles[color], className)}
       onClick={onClick}
     >
       {children}

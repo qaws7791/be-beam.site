@@ -9,7 +9,7 @@ import { useMutation } from '@tanstack/react-query';
 import { axiosInstance } from '@/lib/axios';
 import toast from 'react-hot-toast';
 import { queryClient } from '@/root';
-import clsx from 'clsx';
+import { cn } from '@/lib/tailwind';
 import { Input } from '../atoms/input/Input';
 import { API_V1_BASE_URL } from '@/constants/api';
 
@@ -158,10 +158,7 @@ export default function MeetingCancelModal() {
         </div>
 
         <div
-          className={clsx(
-            modalProps.isCash ? 'block' : 'hidden',
-            'mt-5 w-full',
-          )}
+          className={cn(modalProps.isCash ? 'block' : 'hidden', 'mt-5 w-full')}
         >
           <Text variant="T3_Semibold">환불 받을 계좌번호를 작성해 주세요.</Text>
           <Input

@@ -1,5 +1,5 @@
 import { Input } from '../atoms/input/Input';
-import clsx from 'clsx';
+import { cn } from '@/lib/tailwind';
 
 export interface SearchInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -16,7 +16,7 @@ export default function SearchInput({
   search,
 }: SearchInputProps) {
   return (
-    <div className={clsx('flex items-center justify-between', inputStyle)}>
+    <div className={cn('flex items-center justify-between', inputStyle)}>
       <Input
         placeholder={placeHolder}
         className="h-auto border-none bg-transparent py-0 shadow-none focus:border-none"

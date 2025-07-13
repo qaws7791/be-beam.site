@@ -1,7 +1,7 @@
 import { formatToMonthAndDayDate } from '@/utils/date';
 import Text from '../atoms/text/Text';
 
-import clsx from 'clsx';
+import { cn } from '@/lib/tailwind';
 import Badge from '../atoms/badge/Badge';
 
 export interface MeetingCardProp {
@@ -32,7 +32,7 @@ export default function MeetingCard({
   children,
 }: MeetingCardProp) {
   return (
-    <div className={clsx('relative w-full cursor-pointer', classNames)}>
+    <div className={cn('relative w-full cursor-pointer', classNames)}>
       <img
         className="h-[226px] w-full rounded-2xl object-cover"
         src={image}
@@ -46,10 +46,7 @@ export default function MeetingCard({
       />
 
       <img
-        className={clsx(
-          'absolute top-5 right-5',
-          isLikeBtn ? 'block' : 'hidden',
-        )}
+        className={cn('absolute top-5 right-5', isLikeBtn ? 'block' : 'hidden')}
         src={
           isLike ? '/images/icons/fill_like.svg' : '/images/icons/w_like.svg'
         }
