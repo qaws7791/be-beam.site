@@ -130,37 +130,6 @@ export default function CreateMeetingFourthContent({
     if (isPending) return;
     createMeeting(form);
 
-    setForm({
-      thumbnailImage: null,
-      thumbnailImagePreview: '',
-      name: '',
-      recruitmentType: undefined,
-      selectionType: null,
-      meetingMode: null,
-      topicId: null,
-      hashtags: [],
-      isGuideBookRefer: 'false',
-      guidbookReferenceId: null,
-      introduction: '',
-      images: [],
-      imagesPreview: [],
-      minParticipants: 0,
-      maxParticipants: 0,
-      hostDescription: '',
-      recruitingStartTime: null,
-      recruitingEndTime: null,
-      paymentAmount: 0,
-      info: '',
-      schedules: [
-        {
-          meetingDate: '',
-          meetingStartTime: '',
-          meetingEndTime: '',
-          address: '',
-          addressDetail: '',
-        },
-      ],
-    });
     close();
   };
 

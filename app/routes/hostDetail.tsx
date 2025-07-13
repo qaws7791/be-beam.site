@@ -1,11 +1,13 @@
+import { useNavigate, useParams } from 'react-router';
+import useHostQuery from '@/hooks/api/useHostQuery';
+import useHostFollowAndFollowCancelMutation from '@/hooks/api/useHostFollowAndFollowCancelMutation';
+
+import CommonTemplate from '@/components/templates/CommonTemplate';
 import Badge from '@/components/atoms/badge/Badge';
 import { Button } from '@/components/atoms/button/Button';
 import Text from '@/components/atoms/text/Text';
 import GridGroup from '@/components/organisms/gridGroup/GridGroup';
-import CommonTemplate from '@/components/templates/CommonTemplate';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
-import { useNavigate, useParams } from 'react-router';
+import { useModalStore } from '@/stores/useModalStore';
 
 interface meetingType {
   id: number;
@@ -25,19 +27,14 @@ export default function HostDetail() {
   const navigate = useNavigate();
 
   const id = Number(useParams()?.hostId);
-  console.log(id);
+  const { data: hostDetail } = useHostQuery(id);
 
-  const { data: hostDetail } = useQuery({
-    queryKey: ['hostDetail', id],
-    queryFn: async () => {
-      const res = await axios({
-        method: 'GET',
-        url: `/api/web/v2/host/${id}`,
-      });
-      const data = res.data;
-      return data.result;
-    },
-  });
+  const { mutate: followHost, isPending: isPending } =
+    useHostFollowAndFollowCancelMutation(
+      hostDetail?.followed ? 'DELETE' : 'POST',
+    );
+
+  const { open } = useModalStore();
 
   return (
     <CommonTemplate>
@@ -57,11 +54,37 @@ export default function HostDetail() {
           />
         </div>
 
-        <div>
-          <div className="flex items-center gap-6">
-            <Text variant="T2_Semibold">{hostDetail?.hostName}</Text>
-            <Button className="h-8 w-17 text-b1">팔로우</Button>
+        <div className="w-full">
+          <div className="flex w-full items-center justify-between">
+            <div className="flex items-center gap-6">
+              <Text variant="T2_Semibold">{hostDetail?.hostName}</Text>
+              <Button
+                onClick={() => {
+                  if (isPending) return;
+                  followHost();
+                }}
+                className="h-8 px-4 text-b1"
+              >
+                {hostDetail?.followed ? '팔로우 취소' : '팔로우'}
+              </Button>
+            </div>
+
+            <Button
+              variant="tertiary"
+              className="border-none text-t3"
+              onClick={() => {
+                open('DECLARE_MODAL', { type: 'host', id: id });
+              }}
+            >
+              호스트 신고하기
+              <img
+                src="/images/icons/next.svg"
+                alt="next_icon"
+                className="ml-1"
+              />
+            </Button>
           </div>
+
           <Text variant="B2_Medium" className="mt-2">
             {hostDetail?.hostInstruction}
           </Text>
@@ -70,13 +93,6 @@ export default function HostDetail() {
             {hostDetail?.followCount}
           </Text>
         </div>
-      </div>
-
-      <div className="mt-20 w-full">
-        <Text variant="T3_Semibold" className="mb-5">
-          호스트 소개
-        </Text>
-        <Text>{hostDetail?.hostDescription}</Text>
       </div>
 
       <div className="mt-20 w-full">

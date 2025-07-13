@@ -1,7 +1,3 @@
-import { queryClient } from '@/root';
-import { useMutation } from '@tanstack/react-query';
-import { axiosInstance } from '@/lib/axios';
-import { API_V1_BASE_URL } from '@/constants/api';
 import { useModalStore } from '@/stores/useModalStore';
 import { Controller, useForm } from 'react-hook-form';
 import type { z } from 'zod';
@@ -21,6 +17,7 @@ import Text from '../atoms/text/Text';
 import { RadioGroup, RadioGroupItem } from '../atoms/radio-group/RadioGroup';
 import { Label } from '../atoms/label/Label';
 import { Textarea } from '../atoms/textarea/Textarea';
+import useDeclareMeetingOrReviewOrHost from '@/hooks/api/useDeclareMeetingOrReviewOrHost';
 
 export default function DeclareModal() {
   const { isOpen, modalProps, close } = useModalStore();
@@ -68,36 +65,9 @@ export default function DeclareModal() {
     },
   ];
 
-  const { mutate: delareMutate, isPending } = useMutation({
-    mutationFn: (data: { reasonType: string; description: string }) => {
-      return axiosInstance({
-        baseURL: API_V1_BASE_URL,
-        method: 'POST',
-        url: '/complaints',
-        data: {
-          complaintId: modalProps.id,
-          complaintType:
-            modalProps.type === 'meeting'
-              ? 'MEETING'
-              : modalProps.type === 'review'
-                ? 'REVIEW'
-                : 'USER',
-          ...data,
-        },
-      });
-    },
-    onSuccess: () => {
-      toast.success(
-        `${modalProps.type === 'meeting' ? '해당 모임을' : modalProps.type === 'review' ? '해당 모임 후기를' : '해당 호스트를'} 신고하였습니다.`,
-      );
-      queryClient.invalidateQueries({ queryKey: ['meeting'] });
-      close();
-    },
-    onError: (err) => {
-      toast.error('오류가 발생하였습니다. 다시 시도해주세요.');
-      console.error('Meeting cancellation failed:', err);
-    },
-  });
+  const { mutate: delareMutate, isPending } = useDeclareMeetingOrReviewOrHost(
+    modalProps as { id: number; type: 'meeting' | 'review' | 'host' },
+  );
 
   const { control, reset, handleSubmit, formState } = useForm<
     z.infer<typeof declareReasonSchema>
@@ -133,61 +103,63 @@ export default function DeclareModal() {
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mt-5 w-full">
-            <Text variant="T3_Semibold" className="mb-4">
-              신고 사유를 선택해 주세요
-            </Text>
+          <div className="h-[400px] overflow-y-scroll">
+            <div className="mt-5 w-full">
+              <Text variant="T3_Semibold" className="mb-4">
+                신고 사유를 선택해 주세요
+              </Text>
 
-            <Controller
-              name="reasonType"
-              control={control}
-              render={({ field }) => (
-                <RadioGroup
-                  value={field.value}
-                  onValueChange={field.onChange}
-                  className="gap-4"
-                >
-                  {radioList.map((option) => (
-                    <div
-                      key={option.id}
-                      className="mb-1 flex items-center gap-3"
-                    >
-                      <RadioGroupItem
-                        id={option.id}
-                        value={option.value}
-                        className="cursor-pointer"
-                      />
-                      <div className="grid gap-1.5 leading-none">
-                        <Label
-                          htmlFor={option.id}
-                          className="cursor-pointer text-b1"
-                        >
-                          {option.label}
-                        </Label>
+              <Controller
+                name="reasonType"
+                control={control}
+                render={({ field }) => (
+                  <RadioGroup
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    className="gap-4"
+                  >
+                    {radioList.map((option) => (
+                      <div
+                        key={option.id}
+                        className="mb-1 flex items-center gap-3"
+                      >
+                        <RadioGroupItem
+                          id={option.id}
+                          value={option.value}
+                          className="cursor-pointer"
+                        />
+                        <div className="grid gap-1.5 leading-none">
+                          <Label
+                            htmlFor={option.id}
+                            className="cursor-pointer text-b3"
+                          >
+                            {option.label}
+                          </Label>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </RadioGroup>
-              )}
-            />
-          </div>
+                    ))}
+                  </RadioGroup>
+                )}
+              />
+            </div>
 
-          <div className="mt-5 w-full">
-            <Text variant="T3_Semibold">
-              신고 사유를 자유롭게 작성해 주세요.
-            </Text>
-            <Controller
-              name="description"
-              control={control}
-              render={({ field }) => (
-                <Textarea
-                  placeholder="text"
-                  className="mt-3 h-[144px] w-[430px]"
-                  {...field}
-                  maxLength={100}
-                />
-              )}
-            />
+            <div className="mt-5 w-full">
+              <Text variant="T3_Semibold">
+                신고 사유를 자유롭게 작성해 주세요.
+              </Text>
+              <Controller
+                name="description"
+                control={control}
+                render={({ field }) => (
+                  <Textarea
+                    placeholder="text"
+                    className="mt-3 h-[144px] w-[430px]"
+                    {...field}
+                    maxLength={100}
+                  />
+                )}
+              />
+            </div>
           </div>
 
           <DialogFooter className="mt-6 flex w-full items-center gap-4">

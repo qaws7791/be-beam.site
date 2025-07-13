@@ -1,5 +1,9 @@
-import { API_V1_BASE_URL } from '@/constants/api';
 import { axiosInstance } from '@/lib/axios';
+import { API_V1_BASE_URL } from '@/constants/api';
+import type {
+  DeclareDataType,
+  DeclareModalPropsType,
+} from '@/hooks/api/useDeclareMeetingOrReviewOrHost';
 
 interface ReportComplaintParams {
   complaintId: number;
@@ -22,4 +26,25 @@ export const reportComplaint = async (params: ReportComplaintParams) => {
     baseURL: API_V1_BASE_URL,
   });
   return res.data;
+};
+
+export const declareMeetingOrReviewOrHost = (
+  data: DeclareDataType,
+  modalProps: DeclareModalPropsType,
+) => {
+  return axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    method: 'POST',
+    url: '/complaints',
+    data: {
+      complaintId: modalProps.id,
+      complaintType:
+        modalProps.type === 'meeting'
+          ? 'MEETING'
+          : modalProps.type === 'review'
+            ? 'REVIEW'
+            : 'USER',
+      ...data,
+    },
+  });
 };
