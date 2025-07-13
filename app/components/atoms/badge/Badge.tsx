@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '@/lib/tailwind';
 
 interface BadgeProps {
   text: string;
@@ -20,11 +20,7 @@ const Badge = ({
 
   return (
     <div
-      className={clsx(
-        'box-border rounded-md',
-        variantStyles[variant],
-        className,
-      )}
+      className={cn('box-border rounded-md', variantStyles[variant], className)}
     >
       {text}
     </div>

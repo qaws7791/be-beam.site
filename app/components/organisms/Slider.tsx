@@ -5,7 +5,7 @@ import type { Swiper as SwiperClass } from 'swiper/types';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import clsx from 'clsx';
+import { cn } from '@/lib/tailwind';
 
 import { Button } from '../atoms/button/Button';
 import Text from '../atoms/text/Text';
@@ -46,7 +46,7 @@ export default function Slider({
 
   return (
     <div
-      className={clsx('relative w-full overflow-hidden rounded-xl', slideWidth)}
+      className={cn('relative w-full overflow-hidden rounded-xl', slideWidth)}
     >
       <Swiper
         onSwiper={(swiper) => {
@@ -76,7 +76,7 @@ export default function Slider({
                 <img
                   src={src}
                   alt={`Slide ${index + 1}`}
-                  className={clsx('w-full object-cover', slideHeight)}
+                  className={cn('w-full object-cover', slideHeight)}
                 />
               </SwiperSlide>
             ))
@@ -85,7 +85,7 @@ export default function Slider({
                 <img
                   src={data.bannerImg}
                   alt={`Slide ${index + 1}`}
-                  className={clsx(
+                  className={cn(
                     'w-full cursor-pointer object-cover',
                     slideHeight,
                   )}
@@ -104,7 +104,7 @@ export default function Slider({
         <Button
           variant="tertiary"
           size="icon"
-          className={clsx(
+          className={cn(
             'absolute top-1/2 left-5 z-10 h-10 w-10 -translate-y-1/2 rounded-full border-none bg-white shadow-md',
             isBtn && images?.length === 1
               ? 'cursor-default bg-gray-300'
@@ -120,7 +120,7 @@ export default function Slider({
         <Button
           variant="tertiary"
           size="icon"
-          className={clsx(
+          className={cn(
             'absolute top-1/2 right-5 z-10 h-10 w-10 -translate-y-1/2 rounded-full border-none shadow-md',
             isBtn && images?.length === 1
               ? 'cursor-default bg-gray-300'

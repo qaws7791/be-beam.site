@@ -53,7 +53,7 @@ export default function MeetingCancelModal() {
       return axiosInstance({
         baseURL: API_V1_BASE_URL,
         method: 'POST',
-        url: `/meetings/${modalProps.meetingId}/cancel`, // 중도 이탈 API는 아직 나온바가 X
+        url: `/meetings/${modalProps.meetingId}/cancel`,
         data,
       });
     },
