@@ -54,8 +54,8 @@ export default function MeetingDetail({ loaderData }: Route.ComponentProps) {
   const initialMeetingDetail = data?.meetingDetail;
   console.log(initialMeetingDetail, user);
 
-  const { data: meeting } = useMeetingQuery(id);
-  // const meetingDetail = clientMeetingDetail || initialMeetingDetail || {};
+  const { data: clientMeetingDetail } = useMeetingQuery(id);
+  const meeting = clientMeetingDetail || initialMeetingDetail || {};
 
   const { open } = useModalStore();
 

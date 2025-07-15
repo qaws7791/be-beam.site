@@ -2,7 +2,10 @@ import { useNavigate, useParams } from 'react-router';
 import useHostQuery from '@/hooks/api/useHostQuery';
 import useHostFollowAndFollowCancelMutation from '@/hooks/api/useHostFollowAndFollowCancelMutation';
 import { useModalStore } from '@/stores/useModalStore';
+import { getHostDetail } from '@/api/hosts';
+import { withOptionalAuth } from '@/lib/auth.server';
 
+import type { Route } from './+types/hostDetail';
 import CommonTemplate from '@/components/templates/CommonTemplate';
 import Badge from '@/components/atoms/badge/Badge';
 import { Button } from '@/components/atoms/button/Button';
@@ -23,18 +26,35 @@ export function meta() {
   ];
 }
 
-export default function HostDetail() {
-  const navigate = useNavigate();
+export async function loader({ request, params }: Route.LoaderArgs) {
+  return withOptionalAuth(request, async ({ user }) => {
+    const hostDetail = await getHostDetail(Number(params.hostId));
+    console.log(hostDetail);
 
+    return {
+      hostDetail: hostDetail,
+      user: user,
+    };
+  });
+}
+
+export default function HostDetail({ loaderData }: Route.ComponentProps) {
+  const navigate = useNavigate();
   const id = Number(useParams()?.hostId);
-  const { data: hostDetail } = useHostQuery(id);
+
+  const { data } = loaderData;
+  const user = data?.user;
+  const initialHostDetail = data?.hostDetail;
+
+  const { data: clientHostDetail } = useHostQuery(id);
+  const host = clientHostDetail || initialHostDetail || {};
 
   const { mutate: followHost, isPending: isPending } =
-    useHostFollowAndFollowCancelMutation(
-      hostDetail?.followed ? 'DELETE' : 'POST',
-    );
+    useHostFollowAndFollowCancelMutation(host?.followed ? 'DELETE' : 'POST');
 
   const { open } = useModalStore();
+
+  console.log(initialHostDetail, user);
 
   return (
     <CommonTemplate>
@@ -44,7 +64,7 @@ export default function HostDetail() {
         <div className="relative">
           <img
             className="h-22 w-22 rounded-full object-cover"
-            src={hostDetail?.hostImage}
+            src={host?.hostImage}
             alt="host_profile_image"
           />
           <img
@@ -57,7 +77,7 @@ export default function HostDetail() {
         <div className="w-full">
           <div className="flex w-full items-center justify-between">
             <div className="flex items-center gap-6">
-              <Text variant="T2_Semibold">{hostDetail?.hostName}</Text>
+              <Text variant="T2_Semibold">{host?.hostName}</Text>
               <Button
                 onClick={() => {
                   if (isPending) return;
@@ -65,7 +85,7 @@ export default function HostDetail() {
                 }}
                 className="h-8 px-4 text-b1"
               >
-                {hostDetail?.followed ? '팔로우 취소' : '팔로우'}
+                {host?.followed ? '팔로우 취소' : '팔로우'}
               </Button>
             </div>
 
@@ -86,11 +106,11 @@ export default function HostDetail() {
           </div>
 
           <Text variant="B2_Medium" className="mt-2">
-            {hostDetail?.hostInstruction}
+            {host?.hostInstruction}
           </Text>
           <Text variant="C1_Semibold" className="mt-2">
             <span className="mr-2 text-c2 text-gray-500">팔로워</span>
-            {hostDetail?.followCount}
+            {host?.followCount}
           </Text>
         </div>
       </div>
@@ -99,11 +119,11 @@ export default function HostDetail() {
         <Text variant="T3_Semibold">
           개설한 모임
           <span className="ml-2 text-gray-500">
-            {hostDetail?.openingMeetingCount}
+            {host?.openingMeetingCount}
           </span>
         </Text>
         <GridGroup columns={3} gap={4} className="mt-4">
-          {hostDetail?.openingMeetings?.map((meeting: meetingType) => (
+          {host?.openingMeetings?.map((meeting: meetingType) => (
             <div
               key={meeting.id}
               className="box-border flex w-full items-center gap-4 rounded-lg border-1 border-gray-300 p-6"

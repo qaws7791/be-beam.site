@@ -1,10 +1,11 @@
-import axios from 'axios';
+import { axiosInstance } from '@/lib/axios';
+import { API_V1_BASE_URL } from '@/constants/api';
 
 export const getHostDetail = async (id: number) => {
-  const res = await axios({
+  const res = await axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/hosts/${id}`,
     method: 'GET',
-    url: `/api/web/v2/host/${id}`,
   });
-  const data = res.data;
-  return data.result;
+  return res.data.result;
 };
