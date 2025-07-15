@@ -11,6 +11,8 @@ import Badge from '@/components/atoms/badge/Badge';
 import { Button } from '@/components/atoms/button/Button';
 import Text from '@/components/atoms/text/Text';
 import GridGroup from '@/components/organisms/gridGroup/GridGroup';
+import toast from 'react-hot-toast';
+import { cn } from '@/lib/tailwind';
 
 interface meetingType {
   id: number;
@@ -28,8 +30,16 @@ export function meta() {
 
 export async function loader({ request, params }: Route.LoaderArgs) {
   return withOptionalAuth(request, async ({ user }) => {
-    const hostDetail = await getHostDetail(Number(params.hostId));
-    console.log(hostDetail);
+    const cookiesHeaderFromBrowser = request.headers.get('Cookie');
+
+    const axiosRequestConfigHeaders: { Cookie?: string } = {};
+    if (cookiesHeaderFromBrowser) {
+      axiosRequestConfigHeaders.Cookie = cookiesHeaderFromBrowser;
+    }
+
+    const hostDetail = await getHostDetail(Number(params.hostId), {
+      headers: axiosRequestConfigHeaders,
+    });
 
     return {
       hostDetail: hostDetail,
@@ -50,11 +60,11 @@ export default function HostDetail({ loaderData }: Route.ComponentProps) {
   const host = clientHostDetail || initialHostDetail || {};
 
   const { mutate: followHost, isPending: isPending } =
-    useHostFollowAndFollowCancelMutation(host?.followed ? 'DELETE' : 'POST');
+    useHostFollowAndFollowCancelMutation(id, host, 'hostDetail');
 
   const { open } = useModalStore();
 
-  console.log(initialHostDetail, user);
+  console.log(host);
 
   return (
     <CommonTemplate>
@@ -80,10 +90,17 @@ export default function HostDetail({ loaderData }: Route.ComponentProps) {
               <Text variant="T2_Semibold">{host?.hostName}</Text>
               <Button
                 onClick={() => {
-                  if (isPending) return;
-                  followHost();
+                  if (user) {
+                    if (isPending) return;
+                    followHost();
+                  } else {
+                    toast('로그인 후 다시 시도해주세요.');
+                  }
                 }}
-                className="h-8 px-4 text-b1"
+                className={cn(
+                  host.hostName === user?.nickname && 'hidden',
+                  'h-8 px-4 text-b1',
+                )}
               >
                 {host?.followed ? '팔로우 취소' : '팔로우'}
               </Button>
@@ -91,9 +108,20 @@ export default function HostDetail({ loaderData }: Route.ComponentProps) {
 
             <Button
               variant="tertiary"
-              className="border-none text-t3"
+              className={cn(
+                host.hostName === user?.nickname && 'hidden',
+                'border-none text-t3',
+              )}
               onClick={() => {
-                open('DECLARE_MODAL', { type: 'host', id: id });
+                if (user) {
+                  open('DECLARE_MODAL', {
+                    type: 'host',
+                    id: id,
+                    refetchKey: 'hostDetail',
+                  });
+                } else {
+                  toast('로그인 후 다시 시도해주세요.');
+                }
               }}
             >
               호스트 신고하기
