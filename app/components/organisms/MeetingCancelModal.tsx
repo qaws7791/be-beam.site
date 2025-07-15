@@ -1,12 +1,10 @@
-import { queryClient } from '@/root';
-import { useMutation } from '@tanstack/react-query';
-import { axiosInstance } from '@/lib/axios';
-import { API_V1_BASE_URL } from '@/constants/api';
 import { Controller, useForm } from 'react-hook-form';
 import type { z } from 'zod';
 import { cancelMeetingReasonSchema } from '@/schemas/meeting';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useModalStore } from '@/stores/useModalStore';
+import useCancelMeetingMutation from '@/hooks/api/useCancelMeetingMutation';
+import useBreakawayMeetingMutation from '@/hooks/api/useBreakawayMeetingMutation';
 
 import {
   Dialog,
@@ -48,33 +46,20 @@ export default function MeetingCancelModal() {
 
   const { isOpen, modalProps, close } = useModalStore();
 
-  const { mutate: cancelMeeting, isPending } = useMutation({
-    mutationFn: (data: { reasonType: string; description: string }) => {
-      return axiosInstance({
-        baseURL: API_V1_BASE_URL,
-        method: 'POST',
-        url: `/meetings/${modalProps.meetingId}/cancel`,
-        data,
-      });
-    },
-    onSuccess: () => {
-      toast.success(
-        modalProps.statusType === 'participating'
-          ? '모임 중도 이탈 신청을 신청하였습니다.'
-          : '모임 취소 신청을 신청하였습니다.',
-      );
-      queryClient.invalidateQueries({ queryKey: ['meeting'] });
-      close();
-    },
-    onError: (err) => {
-      toast.error('오류가 발생하였습니다. 다시 시도해주세요.');
-      console.error('Meeting cancellation failed:', err);
-    },
-  });
+  const { mutate: cancelMeeting, isPending: isCancelMeetingPending } =
+    useCancelMeetingMutation(modalProps.meetingId as number, 'meeting');
+
+  const { mutate: breakawayMeeting, isPending: isBreakawayMeetingPending } =
+    useBreakawayMeetingMutation(modalProps.meetingId as number, 'meeting');
 
   const onSubmit = (data: z.infer<typeof cancelMeetingReasonSchema>) => {
-    if (isPending) return;
-    cancelMeeting(data);
+    if (modalProps.statusType === 'participating') {
+      if (isBreakawayMeetingPending) return;
+      breakawayMeeting();
+    } else {
+      if (isCancelMeetingPending) return;
+      cancelMeeting(data);
+    }
 
     reset();
     close();

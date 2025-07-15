@@ -1,13 +1,15 @@
-import { axiosInstanceV1 } from '@/lib/axios';
+import { API_V1_BASE_URL } from '@/constants/api';
+import { axiosInstance } from '@/lib/axios';
 
 // 아직 동작 X
 export async function handleDownload(file: string) {
   const encodedPdfUrl = encodeURIComponent(file);
 
   try {
-    const response = await axiosInstanceV1({
+    const response = await axiosInstance({
+      baseURL: API_V1_BASE_URL,
       method: 'GET',
-      url: `/api/web/v1/guidbooks/download?pdf=${encodedPdfUrl}`,
+      url: `guidbooks/download?pdf=${encodedPdfUrl}`,
       responseType: 'blob',
     });
 

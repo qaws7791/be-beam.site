@@ -1,13 +1,13 @@
 import { useNavigate, useParams } from 'react-router';
 import useHostQuery from '@/hooks/api/useHostQuery';
 import useHostFollowAndFollowCancelMutation from '@/hooks/api/useHostFollowAndFollowCancelMutation';
+import { useModalStore } from '@/stores/useModalStore';
 
 import CommonTemplate from '@/components/templates/CommonTemplate';
 import Badge from '@/components/atoms/badge/Badge';
 import { Button } from '@/components/atoms/button/Button';
 import Text from '@/components/atoms/text/Text';
 import GridGroup from '@/components/organisms/gridGroup/GridGroup';
-import { useModalStore } from '@/stores/useModalStore';
 
 interface meetingType {
   id: number;

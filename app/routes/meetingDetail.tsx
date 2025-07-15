@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 import useMeetingQuery from '@/hooks/api/useMeetingQuery';
 import { useModalStore } from '@/stores/useModalStore';
 
-import clsx from 'clsx';
+import { cn } from '@/lib/tailwind';
 import CommonTemplate from '@/components/templates/CommonTemplate';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 import Slider from '@/components/organisms/Slider';
@@ -12,6 +12,9 @@ import MeetingDetailContent from '@/components/sections/MeetingDetailContent';
 import MeetingDetailMeetingReviewsContainer from '@/components/sections/MeetingDetailMeetingReviewsContainer';
 import Text from '@/components/atoms/text/Text';
 import { Button } from '@/components/atoms/button/Button';
+import type { Route } from './+types/meetingDetail';
+import { withOptionalAuth } from '@/lib/auth.server';
+import { getMeetingDetail } from '@/api/meetings';
 
 export function meta() {
   return [
@@ -22,16 +25,39 @@ export function meta() {
 
 // api 들어오면 loader를 사용하여 서버에서 데이터 프리패치
 // 그때는 useSuspenseQuery와 함께 Suspense 사용 가능
-export async function loader() {
-  return { data: [] };
+export async function loader({ request, params }: Route.LoaderArgs) {
+  return withOptionalAuth(request, async ({ user }) => {
+    const cookiesHeaderFromBrowser = request.headers.get('Cookie');
+
+    const axiosRequestConfigHeaders: { Cookie?: string } = {};
+    if (cookiesHeaderFromBrowser) {
+      axiosRequestConfigHeaders.Cookie = cookiesHeaderFromBrowser;
+    }
+
+    const meetingDetail = await getMeetingDetail(Number(params.meetingId), {
+      headers: axiosRequestConfigHeaders,
+    });
+    console.log(meetingDetail);
+
+    return {
+      meetingDetail: meetingDetail,
+      user: user,
+    };
+  });
 }
 
-export default function MeetingDetail() {
-  // const { data } = loaderData;
+export default function MeetingDetail({ loaderData }: Route.ComponentProps) {
   const id = Number(useParams().meetingId);
+
+  const { data } = loaderData;
+  const user = data?.user;
+  const initialMeetingDetail = data?.meetingDetail;
+  console.log(initialMeetingDetail, user);
+
   const { data: meeting } = useMeetingQuery(id);
+  // const meetingDetail = clientMeetingDetail || initialMeetingDetail || {};
+
   const { open } = useModalStore();
-  console.log(meeting);
 
   return (
     <CommonTemplate>
@@ -52,7 +78,7 @@ export default function MeetingDetail() {
           <div className="sticky top-[100px] h-fit flex-1">
             <MeetingDetailCard meeting={meeting} />
             <div
-              className={clsx(
+              className={cn(
                 'mt-5 box-border flex w-full flex-col items-center rounded-xl border-1 border-gray-300 p-12',
                 meeting?.reviewable ? 'block' : 'hidden',
               )}

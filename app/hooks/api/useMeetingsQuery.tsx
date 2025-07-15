@@ -1,15 +1,11 @@
-import { getMeetingList } from '@/api/meetings';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { getMeetingList } from '@/api/meetings';
+import type { MeetingListFilters } from '@/schemas/meetingFilters';
 
-export default function useMeetingsQuery(
-  search: string,
-  selectedTopic: string,
-  selectedFilters: Record<string, string>,
-) {
+export default function useMeetingsQuery(meetingFilters: MeetingListFilters) {
   return useInfiniteQuery({
-    queryKey: ['meetings', search, selectedTopic, selectedFilters],
-    queryFn: ({ pageParam }) =>
-      getMeetingList(search, selectedTopic, selectedFilters, pageParam),
+    queryKey: ['meetings', meetingFilters],
+    queryFn: ({ pageParam }) => getMeetingList(meetingFilters, pageParam),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       return lastPage.pageInfo.hasNext
