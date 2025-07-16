@@ -14,8 +14,8 @@ const InfoItem = ({
   iconAlt,
   text,
   wrapStyle,
-  iconStyle = 'w-6 h-6',
-  textStyle = 'text-b3 text-gray-600',
+  iconStyle,
+  textStyle,
 }: InfoItemProps) => (
   <div className={cn('flex items-center', wrapStyle)}>
     <img className={iconStyle} src={icon} alt={iconAlt} />

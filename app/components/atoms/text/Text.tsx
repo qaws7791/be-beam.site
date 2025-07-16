@@ -4,7 +4,7 @@ import { cn } from '@/lib/tailwind';
 
 export default function Text({
   as: Component = 'p',
-  variant,
+  variant = 'T4_Regular',
   color = 'black',
   className = '',
   children,

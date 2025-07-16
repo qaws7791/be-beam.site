@@ -8,6 +8,7 @@ export type MyProfileResult = {
   nickname: string;
   profileImage: string;
   introduction: string;
+  role: string;
 };
 
 export const getMyProfile = async (axiosRequestConfig?: AxiosRequestConfig) => {

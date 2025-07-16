@@ -13,6 +13,7 @@ export default [
   route('/reviews', 'routes/reviews.tsx'),
   route('/guideBooks', 'routes/guideBooks.tsx'),
   route('/guideBook/:guideBookId', 'routes/guideBookDetail.tsx'),
+  route('/host/:hostId', 'routes/hostDetail.tsx'),
   route('/login', 'routes/login.tsx'),
   route('/login/callback', 'routes/loginCallback.tsx'),
   route('/search', 'routes/search.tsx'),
