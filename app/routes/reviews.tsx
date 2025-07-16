@@ -97,7 +97,7 @@ export default function Reviews() {
                 </RadioGroupItem>
 
                 <RadioGroupItem
-                  value="like"
+                  value="likes"
                   id="sort-like"
                   className="rounded-md px-3 py-2 text-b1 text-gray-500 data-[state=checked]:bg-white data-[state=checked]:text-black data-[state=checked]:shadow-[0_0_1.7px_0_rgba(0,0,0,0.08)]"
                 >
