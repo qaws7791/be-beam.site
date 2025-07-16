@@ -90,6 +90,9 @@ export default function WideReviewCard({
             <StarIcon key={i} className="size-6 text-gray-700" />
           ))}
         </div>
+        <div className="mt-5.5">
+          <p className="text-b3 text-gray-600">{review.text}</p>
+        </div>
         <div className="mt-5.5 flex">
           <div className="flex">
             <div className="flex gap-2">
@@ -98,14 +101,11 @@ export default function WideReviewCard({
                   key={image + review.reviewId + index}
                   src={image}
                   alt="review"
-                  className="size-37 rounded-lg"
+                  className="size-37 shrink-0 rounded-lg object-cover"
                 />
               ))}
             </div>
             {review.images.length > 0 && <div className="w-5.5" />}
-          </div>
-          <div>
-            <p className="text-b3 text-gray-600">{review.text}</p>
           </div>
         </div>
         <div className="mt-6">
