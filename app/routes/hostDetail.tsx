@@ -64,8 +64,6 @@ export default function HostDetail({ loaderData }: Route.ComponentProps) {
 
   const { open } = useModalStore();
 
-  console.log(host);
-
   return (
     <CommonTemplate>
       <Text variant="H2_Semibold">호스트 프로필</Text>
