@@ -1,6 +1,9 @@
 import { useMemo } from 'react';
-import { queryClient } from '@/root';
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
 import {
   MeetingListFilterSchema,
   type MeetingListFilters,
@@ -12,6 +15,7 @@ import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
 import useMeetingsQuery from '@/hooks/api/useMeetingsQuery';
 import useInfiniteScroll from '@/hooks/ui/useInfiniteScroll';
 import { useModalStore } from '@/stores/useModalStore';
+import { useRouteLoaderData } from 'react-router';
 
 import type { Route } from './+types/meetings';
 import type { Topic } from '@/types/entities';
@@ -21,8 +25,11 @@ import MeetingFilterControls from '@/components/organisms/MeetingFilterControls'
 import MeetingCardGroup from '@/components/sections/MeetingCardGroup';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 import { Button } from '@/components/atoms/button/Button';
+// import { queryClient } from '@/root';
 
 export async function loader({ request }: Route.LoaderArgs) {
+  const queryClient = new QueryClient();
+
   const authResult = await withOptionalAuth(request, async () => {
     const url = new URL(request.url);
     const urlSearchParams = new URLSearchParams(url.search);
@@ -37,7 +44,7 @@ export async function loader({ request }: Route.LoaderArgs) {
       axiosRequestConfigHeaders.Cookie = cookiesHeaderFromBrowser;
     }
 
-    queryClient.prefetchInfiniteQuery({
+    await queryClient.prefetchInfiniteQuery({
       queryKey: ['meetings', parsedFilters],
       queryFn: ({ pageParam }) =>
         getMeetingList(parsedFilters, pageParam, {
@@ -62,10 +69,13 @@ export async function loader({ request }: Route.LoaderArgs) {
   return { ...loaderDataForComponent, dehydratedState };
 }
 
-export default function Example({ loaderData }: Route.ComponentProps) {
+export default function Meetings({ loaderData }: Route.ComponentProps) {
   const { open } = useModalStore();
 
-  const { data, dehydratedState, user } = loaderData;
+  const rootLoaderData = useRouteLoaderData('root');
+  const user = rootLoaderData.user;
+
+  const { data, dehydratedState } = loaderData;
   const initialFilters = data?.filters;
   const topics = data?.topics;
 
@@ -82,6 +92,7 @@ export default function Example({ loaderData }: Route.ComponentProps) {
     hasNextPage,
     isFetchingNextPage,
   } = useMeetingsQuery(meetingFilters);
+  console.log(clientMeetings);
 
   useInfiniteScroll({
     fetchNextPage,
@@ -107,6 +118,8 @@ export default function Example({ loaderData }: Route.ComponentProps) {
     return [defaultAllOption];
   }, [topics]);
 
+  console.log(meetings);
+
   return (
     <HydrationBoundary state={dehydratedState}>
       <CommonTemplate>
@@ -118,10 +131,7 @@ export default function Example({ loaderData }: Route.ComponentProps) {
           setFilter={setFilter}
         />
 
-        <MeetingCardGroup
-          meetings={meetings}
-          isLikedBtn={user ? true : false}
-        />
+        <MeetingCardGroup meetings={meetings} isLikedBtn={user} />
         {(isLoading || isFetching || isFetchingNextPage) && <LoadingSpinner />}
 
         {user && (

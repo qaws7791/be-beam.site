@@ -35,7 +35,7 @@ export default function MeetingCardGroup({
           onLikeClick={() => {
             if (isPending) return;
             if (meeting) {
-              likeMeeting(meeting);
+              likeMeeting(meeting as { id: number; liked: boolean });
             }
           }}
           classNames="mb-12"

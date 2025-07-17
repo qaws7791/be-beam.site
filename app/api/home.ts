@@ -1,23 +1,20 @@
-import axios from 'axios';
+import { axiosInstance } from '@/lib/axios';
+import { API_V1_BASE_URL } from '@/constants/api';
 
-export const getHomeBanners = async () => {
-  const res = await axios({
+export const getBanner = async () => {
+  const res = await axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: '/home/banners',
     method: 'GET',
-    url: `/api/web/v2/home/banners`,
   });
-  const data = res.data;
-  return data.result;
+  return res.data.result;
 };
 
-export const getRecommendationMeetings = async (
-  apiEndpoints: Record<string, string>,
-  type: string,
-  tab: string,
-) => {
-  const res = await axios({
+export const getRecommendationMeeting = async (topic: string, type: string) => {
+  const res = await axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/home/${topic}-meetings?type=${type}`,
     method: 'GET',
-    url: `${apiEndpoints[type]}?type=${tab}`,
   });
-  const data = res.data;
-  return data.result;
+  return res.data.result;
 };

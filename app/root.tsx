@@ -9,6 +9,7 @@ import {
   useLocation,
 } from 'react-router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import './app.css';
 import type { Route } from './+types/root';
@@ -62,14 +63,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export async function loader({ request }: Route.LoaderArgs) {
   const authResult = await authenticateUser(request);
-  console.log(authResult);
-  return data({ user: authResult.user }, { headers: authResult.headers });
+  return data({ user: authResult.user, headers: authResult.headers });
 }
 
 export default function App({ loaderData }: Route.ComponentProps) {
   const path = useLocation().pathname.slice(1);
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
       <div className="bg-white whitespace-pre-wrap text-black">
         <Navbar user={loaderData.user} />
         <Outlet />
