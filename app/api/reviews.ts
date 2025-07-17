@@ -25,7 +25,8 @@ export type ReviewListResult = {
     meeting: {
       id: number;
       name: string;
-      link: string;
+      recruitmentType: '정기모임' | '소모임';
+      image: string;
     };
   }[];
   pageInfo: {
@@ -43,7 +44,6 @@ export const getReviewList = async ({
   cursor = 0,
   size = 20,
 }: getReviewListParams) => {
-   
   const searchParams = new URLSearchParams({
     sort,
     type,
