@@ -5,7 +5,7 @@ type useReviewsParamsType = {
   params: {
     sort: 'recent' | 'likes';
     type: 'image' | 'text';
-    rating: 'all' | 1 | 2 | 3 | 4 | 5;
+    rating: 'all' | '1' | '2' | '3' | '4' | '5';
     recruitmentType: 'all' | 'regular' | 'small';
   };
   handleUpdateRecruitmentType: (recruitmentType: string) => void;
@@ -21,15 +21,12 @@ export default function useReviewsParams(): useReviewsParamsType {
     const recruitmentType = searchParams.get('recruitmentType') || 'all';
     const sort = searchParams.get('sort') || 'recent';
     const type = searchParams.get('type') || 'text';
-    const rating =
-      searchParams.get('rating') === 'all'
-        ? 'all'
-        : Number(searchParams.get('rating'));
+    const rating = searchParams.get('rating') || 'all';
     return {
       recruitmentType: recruitmentType as 'all' | 'regular' | 'small',
       sort: sort as 'recent' | 'likes',
       type: type as 'image' | 'text',
-      rating: rating as 'all' | 1 | 2 | 3 | 4 | 5,
+      rating: rating as 'all' | '1' | '2' | '3' | '4' | '5',
     };
   }, [searchParams]);
 
