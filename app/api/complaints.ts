@@ -7,7 +7,7 @@ import type {
 
 interface ReportComplaintParams {
   complaintId: number;
-  complaintType: 'REVIEW' | 'USER' | 'MEETING';
+  targetType: 'REVIEW' | 'USER' | 'MEETING';
   reasonType:
     | 'ADVERTISEMENT'
     | 'SEXUAL'
@@ -21,7 +21,6 @@ interface ReportComplaintParams {
 }
 
 export const reportComplaint = async (params: ReportComplaintParams) => {
-  return;
   const res = await axiosInstance.post('/complaints', params, {
     baseURL: API_V1_BASE_URL,
   });

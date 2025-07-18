@@ -37,9 +37,9 @@ interface WrittenReviewCardProps {
     rating: number;
     images: string[];
     meeting: {
-      title: string;
+      name: string;
       id: number;
-      type: 'regular' | 'small';
+      recruitmentType: '정기모임' | '소모임';
       image: string;
     };
     likes: {
@@ -74,7 +74,7 @@ export default function WrittenReviewCard({ review }: WrittenReviewCardProps) {
   return (
     <div className="rounded-2xl border border-gray-300 px-7 pt-7 pb-6 shadow-[0_0_8px_0_rgba(0,0,0,0.04)]">
       <div>
-        <MeetingTypeTag type={review.meeting.type} />
+        <MeetingTypeTag type={review.meeting.recruitmentType} />
         <div className="mt-3 flex items-center gap-2 border-b border-gray-300 pb-3">
           <img
             src={review.meeting.image}
@@ -84,7 +84,7 @@ export default function WrittenReviewCard({ review }: WrittenReviewCardProps) {
             className="size-15 rounded-lg"
           />
           <p className="text-t3 text-gray-600">
-            {`${review.meeting.title} 모임`}
+            {`${review.meeting.name} 모임`}
           </p>
         </div>
       </div>
