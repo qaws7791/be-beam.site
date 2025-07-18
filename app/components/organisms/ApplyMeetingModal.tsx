@@ -98,8 +98,8 @@ export default function ApplyMeetingModal() {
                 <div className="box-border flex w-full items-center justify-between rounded-lg border-1 border-gray-300 px-5 py-6 text-gray-700">
                   <Text>무통장입금 안내</Text>
                   <div className="flex items-center gap-3">
-                    <Text>OO은행</Text>
-                    <Text>000-0000-0000-00</Text>
+                    <Text>토스뱅크</Text>
+                    <Text>1000-5552-9626 (비빔모임용_김성원)</Text>
                   </div>
                 </div>
               </div>

@@ -10,6 +10,12 @@ import useLikeMeetingMutation from '@/hooks/api/useLikeMeetingMutation';
 export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
   const { open } = useModalStore();
 
+  const {
+    userStatus,
+    recruitmentStatus,
+    // id: meetingId
+  } = meeting;
+
   const getMeetingButtonProps = (
     meeting: Meeting | undefined | null, // <-- meeting 타입을 optional로 변경
     open: (type: string, props: unknown) => void,
@@ -22,12 +28,6 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
         },
       };
     }
-
-    const {
-      userStatus,
-      recruitmentStatus,
-      // id: meetingId
-    } = meeting;
 
     if (recruitmentStatus === '모집예정') {
       return {
@@ -50,7 +50,7 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
           if (userStatus) {
             open('APPLY_MEETING_MODAL', { meeting });
           } else {
-            toast('로그인 후에 다시 신청해주세요.');
+            toast('로그인 후 다시 시도해주세요.');
           }
         },
         disable: false,
@@ -140,7 +140,7 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
         if (userStatus) {
           open('APPLY_MEETING_MODAL', { meeting });
         } else {
-          toast('로그인 후에 다시 신청해주세요.');
+          toast('로그인 후 다시 시도해주세요.');
         }
       },
       disable: false,
@@ -170,8 +170,12 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
             'gap-1 px-6 text-t3',
           )}
           onClick={() => {
-            if (isPending) return;
-            likeMeeting(meeting);
+            if (userStatus) {
+              if (isPending) return;
+              likeMeeting(meeting);
+            } else {
+              toast('로그인 후 다시 시도해주세요.');
+            }
           }}
         >
           좋아요

@@ -12,8 +12,6 @@ import { withOptionalAuth } from '@/lib/auth.server';
 import { getMeetingList } from '@/api/meetings';
 import { getTopics } from '@/api/topics';
 import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
-import useMeetingsQuery from '@/hooks/api/useMeetingsQuery';
-import useInfiniteScroll from '@/hooks/ui/useInfiniteScroll';
 import { useModalStore } from '@/stores/useModalStore';
 import { useRouteLoaderData } from 'react-router';
 
@@ -22,10 +20,8 @@ import type { Topic } from '@/types/entities';
 import CommonTemplate from '@/components/templates/CommonTemplate';
 import Banner from '@/components/atoms/Banner';
 import MeetingFilterControls from '@/components/organisms/MeetingFilterControls';
-import MeetingCardGroup from '@/components/sections/MeetingCardGroup';
-import LoadingSpinner from '@/components/molecules/LoadingSpinner';
+import MeetingWrap from '@/components/organisms/MeetingWrap';
 import { Button } from '@/components/atoms/button/Button';
-// import { queryClient } from '@/root';
 
 export async function loader({ request }: Route.LoaderArgs) {
   const queryClient = new QueryClient();
@@ -84,26 +80,6 @@ export default function Meetings({ loaderData }: Route.ComponentProps) {
     initialFilters,
   );
 
-  const {
-    data: clientMeetings,
-    isLoading,
-    isFetching,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useMeetingsQuery(meetingFilters);
-  console.log(clientMeetings);
-
-  useInfiniteScroll({
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  });
-
-  const meetings = useMemo(() => {
-    return clientMeetings?.pages?.flatMap((page) => page.meetings) || [];
-  }, [clientMeetings]);
-
   const allTopics = useMemo(() => {
     const defaultAllOption = { label: '전체', value: 'all' };
 
@@ -118,8 +94,6 @@ export default function Meetings({ loaderData }: Route.ComponentProps) {
     return [defaultAllOption];
   }, [topics]);
 
-  console.log(meetings);
-
   return (
     <HydrationBoundary state={dehydratedState}>
       <CommonTemplate>
@@ -131,8 +105,7 @@ export default function Meetings({ loaderData }: Route.ComponentProps) {
           setFilter={setFilter}
         />
 
-        <MeetingCardGroup meetings={meetings} isLikedBtn={user} />
-        {(isLoading || isFetching || isFetchingNextPage) && <LoadingSpinner />}
+        <MeetingWrap meetingFilters={meetingFilters} user={user} />
 
         {user && (
           <Button

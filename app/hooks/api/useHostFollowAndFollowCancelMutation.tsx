@@ -1,5 +1,4 @@
-import { queryClient } from '@/root';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { axiosInstance } from '@/lib/axios';
 import { API_V1_BASE_URL } from '@/constants/api';
 
@@ -11,6 +10,8 @@ export default function useHostFollowAndFollowCancelMutation(
   host: Host,
   refetchKey: string,
 ) {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: () => {
       return axiosInstance({
@@ -25,7 +26,7 @@ export default function useHostFollowAndFollowCancelMutation(
           ? '호스트 팔로우를 취소하였습니다.'
           : '호스트를 팔로우하였습니다.',
       );
-      queryClient.refetchQueries({ queryKey: [refetchKey] });
+      queryClient.invalidateQueries({ queryKey: [refetchKey] });
       close();
     },
     onError: (err) => {
