@@ -24,7 +24,8 @@ export interface Guidebook {
 export interface GuidebookRecommendation {
   id: number;
   title: string;
-  image: string;
+  thumbnailImage: string;
+  description: string;
 }
 
 export interface Topic {
@@ -44,8 +45,7 @@ export interface Meeting {
   id: number;
   recruitmentStatus: MeetingRecruitmentStatus;
   recruitmentType: MeetingRecruitmentType;
-  guidebookReferenceId: number | null;
-  guidebookReferenceTitle: string | null;
+  guidebook: GuidebookRecommendation;
   selectionType: string;
   name: string;
   topic: string;
@@ -135,7 +135,7 @@ export interface Review {
 
 export interface Banner {
   bannerId: number;
-  bannerImg: string;
+  bannerImage: string;
   bannerUrl: string;
 }
 

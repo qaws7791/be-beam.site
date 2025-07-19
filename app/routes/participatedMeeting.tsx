@@ -4,7 +4,9 @@ import axios from 'axios';
 import { useModalStore } from '@/stores/useModalStore';
 import useParticipatedMeetingParams from '@/hooks/business/useParticipatedMeetingParams';
 import usePagination from '@/hooks/ui/usePagination';
+import { requireAuth } from '@/lib/auth.server';
 
+import type { Route } from './+types/participatedMeeting';
 import type { FilterOption } from '@/types/components';
 import { DropdownMenuItem } from '@/components/atoms/dropdown-menu/DropdownMenu';
 import {
@@ -26,8 +28,6 @@ import GridGroup from '@/components/organisms/gridGroup/GridGroup';
 import MeetingCard from '@/components/organisms/MeetingCard';
 import MoreDropdownMenu from '@/components/organisms/MoreDropdownMenu';
 import toast from 'react-hot-toast';
-import { withRequiredAuth } from '@/lib/auth.server';
-import type { Route } from './+types/participatedMeeting';
 
 interface participatedMeetingType {
   address: string;
@@ -41,21 +41,10 @@ interface participatedMeetingType {
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
-  return withRequiredAuth(
-    request,
-    async () => {
-      return {};
-    },
-    '/login',
-  );
+  return await requireAuth(request, '/login');
 }
 
-export default function ParticipatedMeeting({
-  loaderData,
-}: Route.ComponentProps) {
-  const user = loaderData.user;
-  console.log(user);
-
+export default function ParticipatedMeeting() {
   const navigate = useNavigate();
 
   const { params, handleUpdateStatus, handleUpdatePage } =

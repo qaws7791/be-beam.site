@@ -70,57 +70,6 @@ export interface FiltersType {
   values: string[];
 }
 
-interface MeetingScheduleType {
-  address: string;
-  addressDetail: string;
-  content: string;
-  meetingEndTime: string;
-  meetingStartTime: string;
-}
-
-export interface MeetingDetailType {
-  id: number;
-  name: string;
-  introduction: string;
-  topic: string;
-  hashtags: string[];
-  address: string;
-  recruitingState: string;
-  recruitmentType: string;
-  selectionType: string;
-  meetingMode: string;
-  recruitingStartTime: string;
-  recruitingEndTime: string;
-  minParticipants: number;
-  maxParticipants: number;
-  paymentAmount: number;
-  liked: boolean;
-  likesCount: number;
-  meetingImages: string[];
-  schedules: MeetingScheduleType[];
-  info: string;
-  applicantCount: number;
-  participantCount: number;
-  reviewable: boolean;
-  userStatus:
-    | '신청전'
-    | '신청중'
-    | '신청취소중'
-    | '참여중'
-    | '중도이탈신청중'
-    | '모임완료'
-    | string;
-  applyMeetingState: boolean;
-  participateMeetingState: boolean;
-  cancelMeetingState: boolean;
-  leaveMeetingState: boolean;
-
-  hostId: number;
-  hostName: string;
-  hostImage: string;
-  hostDescription: string;
-}
-
 export interface GuideBookType {
   id: number;
   title: string;
@@ -184,7 +133,7 @@ export interface CreatedMeetingDetailStateType {
     thumbnailImage: null | File;
     name: string;
     introduction: string;
-    topic: string;
+    topic: number | null;
     hashtags: string[];
     totalImages: string[];
     addImages: File[] | [];
@@ -239,4 +188,14 @@ export interface CreateMeetingType {
     address: string;
     addressDetail: string;
   }[];
+}
+
+export interface EditCreateMeetingIntroType {
+  thumbnailImage?: File;
+  name: string;
+  topicId: number | null;
+  hashtags: { value: string }[];
+  introduction: string;
+  images: [] | { value: File }[] | null;
+  hostDescription: string;
 }

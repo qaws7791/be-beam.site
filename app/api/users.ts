@@ -1,6 +1,7 @@
 import { API_V1_BASE_URL } from '@/constants/api';
 import { axiosInstance } from '@/lib/axios';
 import type { APIResponse } from '@/types/api';
+import type { EditCreateMeetingIntroType } from '@/types/components';
 import type { AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 
@@ -365,4 +366,67 @@ export async function getCreatedMeetingDetail(id: number) {
   });
   const data = res.data;
   return data.result;
+}
+
+export async function getMyCreatedMeetingIntro(id: number) {
+  const res = await axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${id}/mypage/introduction`,
+    method: 'GET',
+  });
+  return res.data.result;
+}
+
+export async function getMyCreatedMeetingDetail(id: number) {
+  const res = await axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${id}/mypage/detail`,
+    method: 'GET',
+  });
+  return res.data.result;
+}
+
+export async function EditMyCreatedMeetingDetail(
+  id: number,
+  form: EditCreateMeetingIntroType,
+  existingImages: string[],
+) {
+  const formData = new FormData();
+
+  if (form.thumbnailImage) {
+    formData.append('thumbnailImage', form.thumbnailImage);
+  }
+
+  if (form.images) {
+    form.images.forEach((file) => {
+      formData.append('files', file.value);
+    });
+  }
+
+  formData.append(
+    'data',
+    new Blob(
+      [
+        JSON.stringify({
+          name: form.name,
+          introduction: form.introduction,
+          topicId: form.topicId,
+          hashtags: form.hashtags.map((hashtag) => hashtag.value),
+          existingImages: existingImages,
+          hostDescription: form.hostDescription,
+        }),
+      ],
+      { type: 'application/json' },
+    ),
+  );
+
+  return axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    method: 'PATCH',
+    url: `/meetings/${id}/mypage/introduction`,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    data: formData,
+  });
 }

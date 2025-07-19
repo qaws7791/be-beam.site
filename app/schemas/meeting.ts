@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
+//모임 등록
 export const createMeetingFirstSchema = z.object({
   name: z.string().min(2),
   introduction: z.string().min(10).max(1000),
@@ -104,6 +105,55 @@ export const createMeetingSecondSchema = z
       path: ['recruitingEndTime'],
     },
   );
+
+// 모임 수정
+export const editCreatedMeetingFirstSchema = z.object({
+  name: z.string().min(2),
+  introduction: z.string().min(10).max(1000),
+  topicId: z.number().min(1).nullable(),
+  hashtags: z
+    .array(
+      z.object({
+        value: z
+          .string()
+          .trim()
+          .min(1, '해시태그는 비어 있을 수 없습니다.')
+          .max(20, '해시태그는 최대 20자까지 가능합니다.'),
+      }),
+    )
+    .min(1, '해시태그는 최소 1개 이상 등록해야 합니다.'),
+  thumbnailImage: z
+    .instanceof(File, { message: '썸네일 이미지를 업로드해주세요.' })
+    .refine((file) => file.size > 0, '파일이 비어있습니다.')
+    .refine(
+      (file) => file.type.startsWith('image/'),
+      '이미지 파일만 업로드 가능합니다.',
+    )
+    .refine(
+      (file) => file.size <= MAX_FILE_SIZE,
+      `파일 크기는 ${MAX_FILE_SIZE / (1024 * 1024)}MB 이하이어야 합니다.`,
+    )
+    .optional(),
+  images: z
+    .array(
+      z.object({
+        value: z
+          .instanceof(File, { message: '유효한 이미지를 업로드해주세요.' })
+          .refine((file) => file.size > 0, '파일이 비어있습니다.')
+          .refine(
+            (file) => file.type.startsWith('image/'),
+            '이미지 파일만 업로드 가능합니다.',
+          )
+          .refine(
+            (file) => file.size <= MAX_FILE_SIZE,
+            `파일 크기는 ${MAX_FILE_SIZE / (1024 * 1024)}MB 이하이어야 합니다.`,
+          ),
+      }),
+    )
+    .max(10, '이미지는 최대 10장까지 등록할 수 있습니다.')
+    .nullable(),
+  hostDescription: z.string().min(10).max(500),
+});
 
 export const meetingScheduleSchema = z
   .object({

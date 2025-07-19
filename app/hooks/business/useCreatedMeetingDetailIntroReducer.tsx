@@ -20,7 +20,7 @@ interface SetInitialDataAction {
     introduction: string;
     totalImages: string[];
     existingImages: string[];
-    topic: string;
+    topic: number;
     hashtags: string[];
     hostDescription: string;
   };
@@ -41,7 +41,7 @@ interface UpdateFieldAction {
 
 interface AddTopicAction {
   type: typeof ACTION_TYPES.ADD_TOPIC;
-  payload: { topic: string };
+  payload: { topic: number };
 }
 
 interface AddHashtagAction {
@@ -80,7 +80,7 @@ export default function useCreatedMeetingDetailIntroReducer() {
     thumbnailImage: null,
     name: '',
     introduction: '',
-    topic: '',
+    topic: null,
     hashtags: [],
     totalImages: [],
     addImages: [],
@@ -105,7 +105,7 @@ export default function useCreatedMeetingDetailIntroReducer() {
           totalImages: payload.totalImages || [],
           addImages: [],
           existingImages: payload.existingImages || [],
-          topic: payload.topic || '',
+          topic: payload.topic || null,
           hashtags: payload.hashtags || [],
           hostDescription: payload.hostDescription || '',
         };
@@ -129,7 +129,7 @@ export default function useCreatedMeetingDetailIntroReducer() {
         const payload = action.payload as AddTopicAction['payload'];
         return {
           ...state,
-          topic: state.topic === payload.topic ? '' : payload.topic,
+          topic: state.topic === payload.topic ? null : payload.topic,
         };
       }
       case ACTION_TYPES.ADD_HASHTAG: {
@@ -189,7 +189,7 @@ export default function useCreatedMeetingDetailIntroReducer() {
       introduction: string,
       totalImages: string[],
       existingImages: string[],
-      topic: string,
+      topic: number,
       hashtags: string[],
       hostDescription: string,
     ) => {
@@ -225,7 +225,7 @@ export default function useCreatedMeetingDetailIntroReducer() {
       payload: { field, value },
     });
 
-  const updateTopic = (topic: string) =>
+  const updateTopic = (topic: number) =>
     dispatch({
       type: ACTION_TYPES.ADD_TOPIC,
       payload: { topic },

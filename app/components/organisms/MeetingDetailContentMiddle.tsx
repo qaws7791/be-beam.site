@@ -1,17 +1,21 @@
-import { cn } from '@/lib/tailwind';
+import { useNavigate } from 'react-router';
 import { extractTime, formatToMonthAndDayDate } from '@/utils/date';
 
-import type { MeetingDetailType } from '@/types/components';
+import { cn } from '@/lib/tailwind';
+import type { Meeting } from '@/types/entities';
 import Text from '../atoms/text/Text';
 import TitleAndDes from '../molecules/TitleAndDes';
 import InfoItem from '../molecules/InfoItem';
 import MeetingDetailContentSmallTitleAndDes from '../molecules/MeetingDetailContentSmallTitleAndDes';
+import GuideBookRecommendationCard from '../molecules/GuideBookRecommendationCard';
 
 export default function MeetingDetailContentMiddle({
   meeting,
 }: {
-  meeting: MeetingDetailType;
+  meeting: Meeting;
 }) {
+  const navigate = useNavigate();
+
   const isSeveralEpi = meeting?.schedules?.length > 1;
 
   return (
@@ -77,6 +81,16 @@ export default function MeetingDetailContentMiddle({
         <MeetingDetailContentSmallTitleAndDes
           title="공지 사항"
           text={meeting?.info}
+        />
+      </TitleAndDes>
+
+      <TitleAndDes
+        title="참고한 가이드북"
+        wrapStyle={cn(!meeting?.guidebook?.id && 'hidden', 'mb-14')}
+      >
+        <GuideBookRecommendationCard
+          data={meeting?.guidebook}
+          onClick={() => navigate(`/guideBook/${meeting?.guidebook.id}`)}
         />
       </TitleAndDes>
     </div>

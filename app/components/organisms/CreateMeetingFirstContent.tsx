@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { CreateMeetingType } from '@/types/components';
 
-import clsx from 'clsx';
+import { cn } from '@/lib/tailwind';
 import Text from '../atoms/text/Text';
 import { Button } from '../atoms/button/Button';
 import { Label } from '../atoms/label/Label';
@@ -100,7 +100,7 @@ export default function CreateMeetingFirstContent({
                   (tab2.value === 'small' &&
                     (userRole as string) === '일반 참가자')
                 }
-                className={clsx(
+                className={cn(
                   'h-auto rounded-md border-1 border-gray-300 px-4 py-[10px] text-b1 data-[state=active]:border-primary data-[state=active]:bg-primary-light data-[state=active]:text-primary data-[state=active]:after:h-0',
                 )}
               >
