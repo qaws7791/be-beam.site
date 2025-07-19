@@ -143,8 +143,6 @@ export const getMyMeetingLikes = async ({
 };
 
 export type MyReviewLikesResult = {
-  nickname: string;
-  profileImage: string;
   reviews: {
     reviewId: number;
     profileImg: string;
@@ -162,6 +160,13 @@ export type MyReviewLikesResult = {
       link: string;
     };
   }[];
+  pageInfo: {
+    page: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
+    hasNext: boolean;
+  };
 };
 
 export const getMyReviewLikes = async ({
@@ -171,56 +176,8 @@ export const getMyReviewLikes = async ({
   page: number;
   size: number;
 }) => {
-  return {
-    nickname: '홍길동',
-    profileImage: 'https://placehold.co/300',
-    reviews: [
-      {
-        reviewId: 48,
-        profileImg: 'https://placehold.co/300',
-        nickname: '허남준 최고',
-        rating: 5,
-        text: '그래 내가 글 썼다...',
-        images: [
-          'https://placehold.co/300',
-          'https://placehold.co/300',
-          'https://placehold.co/300',
-        ],
-        createdAt: '2024-10-28T08:08:05.160458',
-        likesCount: 0,
-        liked: false,
-        myReview: false,
-        meeting: {
-          id: 13,
-          name: '소셜다이닝 : 이상식탁',
-          link: 'https://www.be-beam.site/meeting/detail/49',
-        },
-      },
-      {
-        reviewId: 46,
-        profileImg: 'https://placehold.co/300',
-        nickname: '허남준 최고',
-        rating: 5,
-        text: '모임이 너무 최고였습니다!:)',
-        images: [
-          'https://placehold.co/300',
-          'https://placehold.co/300',
-          'https://placehold.co/300',
-        ],
-        createdAt: '2024-10-28T01:52:46.861053',
-        likesCount: 1,
-        liked: false,
-        myReview: false,
-        meeting: {
-          id: 15,
-          name: '사진출사모임 : 나를 기록하는 사진관 (정기모임) (모집마감)',
-          link: 'https://www.be-beam.site/meeting/detail/49',
-        },
-      },
-    ],
-  };
   const searchParams = new URLSearchParams({
-    cursor: page.toString(),
+    page: page.toString(),
     size: size.toString(),
   });
   const res = await axiosInstance.get<APIResponse<MyReviewLikesResult>>(

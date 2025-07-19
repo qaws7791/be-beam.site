@@ -22,6 +22,8 @@ interface ReviewLikeCardProps {
   myReview: boolean;
 }
 
+const MAX_IMAGES_DISPLAY = 3;
+
 const formatDate = (dateString: string): string => {
   return new Date(dateString)
     .toLocaleDateString('ko-KR', {
@@ -45,6 +47,8 @@ export default function ReviewLikeCard({
   liked,
   likesCount,
 }: ReviewLikeCardProps) {
+  const hasMoreImages = images.length > MAX_IMAGES_DISPLAY;
+
   return (
     <div className="rounded-2xl border border-gray-300 px-7 pt-8 pb-6">
       {/* 카드 헤더 */}
@@ -82,14 +86,24 @@ export default function ReviewLikeCard({
       {/* 이미지 그리드 */}
       {images.length > 0 && (
         <div className="mt-6 grid grid-cols-3 gap-1.5">
-          {images.map((image, index) => (
-            <img
-              key={`${reviewId}-img-${index}`}
-              src={image}
-              alt={`리뷰 이미지 ${index + 1}`}
-              className="aspect-square rounded-lg object-cover"
-            />
-          ))}
+          {images.slice(0, MAX_IMAGES_DISPLAY).map((image, index) => {
+            const isLastImage = index === MAX_IMAGES_DISPLAY - 1;
+            const shouldShowOverlay = hasMoreImages && isLastImage;
+            return (
+              <div className="relative" key={`${reviewId}-img-${index}`}>
+                <img
+                  src={image}
+                  alt={`리뷰 이미지 ${index + 1}`}
+                  className="aspect-square rounded-lg object-cover"
+                />
+                {shouldShowOverlay && (
+                  <div className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-lg bg-black/50">
+                    <span className="text-b1 text-white">더보기</span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 
