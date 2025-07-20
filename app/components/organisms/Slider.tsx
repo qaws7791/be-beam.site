@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router';
 import { useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
@@ -5,11 +6,11 @@ import type { Swiper as SwiperClass } from 'swiper/types';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { cn } from '@/lib/tailwind';
 
-import { Button } from '../atoms/button/Button';
+import type { Banner } from '@/types/entities';
+import { cn } from '@/lib/tailwind';
 import Text from '../atoms/text/Text';
-import { useNavigate } from 'react-router';
+import { Button } from '../atoms/button/Button';
 
 export default function Slider({
   images,
@@ -34,10 +35,7 @@ export default function Slider({
   isCount?: boolean;
   slideWidth: string;
   slideHeight: string;
-  datas?: {
-    bannerImg: string;
-    bannerUrl: string;
-  }[];
+  datas?: Banner[];
 }) {
   const navigate = useNavigate();
 
@@ -83,7 +81,7 @@ export default function Slider({
           : datas?.map((data, index) => (
               <SwiperSlide key={index}>
                 <img
-                  src={data.bannerImg}
+                  src={data.bannerImage}
                   alt={`Slide ${index + 1}`}
                   className={cn(
                     'w-full cursor-pointer object-cover',

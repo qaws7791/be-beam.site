@@ -1,7 +1,5 @@
-// import { axiosInstance } from '@/lib/axios';
-
-import { API_V1_BASE_URL } from '@/constants/api';
 import { axiosInstance } from '@/lib/axios';
+import { API_V1_BASE_URL, API_V2_BASE_URL } from '@/constants/api';
 import type { APIResponse, CursorPaginationResult } from '@/types/api';
 import type {
   ImageType,
@@ -11,14 +9,15 @@ import type {
   Participant,
   Topic,
 } from '@/types/entities';
-import axios from 'axios';
+import type { MeetingListFilters } from '@/schemas/meetingFilters';
+import { type AxiosRequestConfig } from 'axios';
 
 export type MeetingListResult = {
   pageInfo: CursorPaginationResult;
   meetings: {
     id: Meeting['id'];
     name: Meeting['name'];
-    recruitmentStatus: Meeting['recruitingState'];
+    recruitmentStatus: Meeting['recruitmentStatus'];
     recruitmentType: Meeting['recruitmentType'];
     meetingStartTime: MeetingSchedule['meetingStartTime'];
     address: MeetingSchedule['address'];
@@ -29,28 +28,32 @@ export type MeetingListResult = {
 };
 
 export const getMeetingList = async (
-  search: string = '',
-  selectedTopic: string = 'all',
-  selectedFilters: Record<string, string> = {
-    '모임 방식': 'all',
-    '모임 유형': 'all',
-    '모집 상태': 'all',
-    정렬: 'recent',
-    참가비: 'all',
-  },
+  filters: MeetingListFilters,
   pageParam: number = 0,
+  axiosRequestConfig?: AxiosRequestConfig,
 ) => {
-  const res = await axios<APIResponse<MeetingListResult>>({
-    method: 'GET',
-    url: `/api/web/v2/meetings?search=${search}&topic=${selectedTopic}&recruitment-type=${selectedFilters['모임 유형']}&recruitment-status=${selectedFilters['모집 상태']}&mode=${selectedFilters['모임 방식']}&cost=${selectedFilters['참가비']}&sort=${selectedFilters['정렬']}&cursor=${pageParam}&size=12`,
+  const searchParams = new URLSearchParams();
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== '') {
+      searchParams.append(key, String(value));
+    }
   });
-  const data = res.data;
-  return data.result;
+  const url = `/meetings?${searchParams.toString()}&cursor=${pageParam}&size=12`;
+  console.log(url);
+
+  const res = await axiosInstance({
+    baseURL: API_V2_BASE_URL,
+    url: url,
+    method: 'GET',
+    ...axiosRequestConfig,
+  });
+
+  return res.data.result;
 };
 
 export type MeetingDetailResult = {
   id: Meeting['id'];
-  recruitingState: Meeting['recruitingState'];
+  recruitingState: Meeting['recruitmentStatus'];
   recruitmentType: Meeting['recruitmentType'];
   guidebookReferenceId: Meeting['guidebookReferenceId'];
   guidebookReferenceTitle: Meeting['guidebookReferenceTitle'];
@@ -81,13 +84,61 @@ export type MeetingDetailResult = {
   userStatus: Meeting['userStatus'];
 };
 
-export const getMeetingDetail = async (id: number) => {
-  const res = await axios<APIResponse<MeetingDetailResult>>({
+export const getMeetingDetail = async (
+  id: number,
+  axiosRequestConfig?: AxiosRequestConfig,
+) => {
+  const res = await axiosInstance({
+    baseURL: API_V2_BASE_URL,
+    url: `/meetings/${id}`,
     method: 'GET',
-    url: `/api/web/v2/meetings/${id}`,
+    ...axiosRequestConfig,
   });
-  const data = res.data;
-  return data.result;
+  return res.data.result;
+};
+
+export const applyMeeting = async (
+  id: number,
+  data: { joinReason: string },
+) => {
+  return axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    method: 'POST',
+    url: `/meetings/${id}/join`,
+    data,
+  });
+};
+
+export const likeMeeting = async (meeting: { id: number; liked: boolean }) => {
+  return axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    method: meeting.liked ? 'DELETE' : 'POST',
+    url: `/meetings/${meeting.id}/like`,
+  });
+};
+
+export const cancelMeeting = (
+  data: {
+    reasonType: string;
+    description: string;
+  },
+  id: number,
+) => {
+  return axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    method: 'POST',
+    url: `/meetings/${id}/cancel`,
+    data,
+  });
+};
+
+export const breakawayMeeting = (id: number) => {
+  return axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    method: 'POST',
+    // 아무 정보도 없어서 임시로 설정한 api 주소
+    url: `/meetings/${id}/breakaway`,
+  });
 };
 
 export type TopicListResult = {
@@ -113,7 +164,7 @@ export type MeetingIntroductionForHostResult = {
   hashtags: Meeting['hashtags'];
   meetingThumbnail: ImageType;
   meetingImages: Meeting['meetingImages'];
-  meetingStatus: Meeting['recruitingState'];
+  meetingStatus: Meeting['recruitmentStatus'];
 };
 
 export const getMeetingIntroductionForHost = async (id: number) => {
@@ -237,28 +288,6 @@ export const getMeetingHostDetailForHost = async (id: number) => {
   return data.result;
 };
 
-export type LikeMeetingResult = string;
-
-export const likeMeeting = async (id: number) => {
-  const res = await axiosInstance<APIResponse<LikeMeetingResult>>({
-    method: 'POST',
-    url: `/meetings/${id}/like`,
-    baseURL: API_V1_BASE_URL,
-  });
-  const data = res.data;
-  return data.result;
-};
-
-export const unlikeMeeting = async (id: number) => {
-  const res = await axiosInstance<APIResponse<LikeMeetingResult>>({
-    method: 'DELETE',
-    url: `/meetings/${id}/like`,
-    baseURL: API_V1_BASE_URL,
-  });
-  const data = res.data;
-  return data.result;
-};
-
 export type JoinMeetingData = {
   reasonForJoining: string;
 };
@@ -278,14 +307,4 @@ export const joinMeeting = async (id: number, data: JoinMeetingData) => {
 export type CancelMeetingData = {
   reasonType: string; // TODO: 이거 어떻게 되는지 확인해야함
   description: string;
-};
-
-export const cancelMeeting = async (id: number, data: CancelMeetingData) => {
-  const res = await axiosInstance<APIResponse<JoinMeetingResult>>({
-    method: 'DELETE',
-    url: `/meetings/${id}/cancel`,
-    baseURL: API_V1_BASE_URL,
-    data,
-  });
-  return res.data.result;
 };

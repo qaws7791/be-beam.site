@@ -1,13 +1,19 @@
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
 import { Suspense } from 'react';
 import { useParams } from 'react-router';
-import useMeetingQuery from '@/hooks/api/useMeetingQuery';
+import { withOptionalAuth } from '@/lib/auth.server';
+import { getMeetingDetail } from '@/api/meetings';
+import { getMeetingReviews } from '@/api/meetingReviews';
 
+import type { Route } from './+types/meetingDetail';
+import type { meetingReviewFilterType } from '@/components/sections/MeetingDetailMeetingReviewsContainer';
 import CommonTemplate from '@/components/templates/CommonTemplate';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
-import Slider from '@/components/organisms/Slider';
-import MeetingDetailCard from '@/components/organisms/MeetingDetailCard';
-import MeetingDetailContent from '@/components/sections/MeetingDetailContent';
-import MeetingDetailMeetingReviewsContainer from '@/components/sections/MeetingDetailMeetingReviewsContainer';
+import MeetingDetailWrap from '@/components/organisms/MeetingDetailWrap';
 
 export function meta() {
   return [
@@ -16,38 +22,60 @@ export function meta() {
   ];
 }
 
-// api 들어오면 loader를 사용하여 서버에서 데이터 프리패치
-// 그때는 useSuspenseQuery와 함께 Suspense 사용 가능
-export async function loader() {
-  return { data: [] };
+export async function loader({ request, params }: Route.LoaderArgs) {
+  const queryClient = new QueryClient();
+
+  return await withOptionalAuth(request, async () => {
+    const cookiesHeaderFromBrowser = request.headers.get('Cookie');
+
+    const axiosRequestConfigHeaders: { Cookie?: string } = {};
+    if (cookiesHeaderFromBrowser) {
+      axiosRequestConfigHeaders.Cookie = cookiesHeaderFromBrowser;
+    }
+
+    const filter: meetingReviewFilterType = {
+      type: 'text',
+      rating: 'all',
+      sort: 'recent',
+    };
+
+    await Promise.all([
+      queryClient.prefetchQuery({
+        queryKey: ['meeting', Number(params.meetingId)],
+        queryFn: () =>
+          getMeetingDetail(Number(params.meetingId), {
+            headers: axiosRequestConfigHeaders,
+          }),
+      }),
+      queryClient.prefetchInfiniteQuery({
+        queryKey: ['meetingReviews', Number(params.meetingId), filter],
+        queryFn: ({ pageParam }) =>
+          getMeetingReviews(Number(params.meetingId), filter, pageParam, {
+            headers: axiosRequestConfigHeaders,
+          }),
+        initialPageParam: 0,
+      }),
+    ]);
+
+    const dehydratedState = dehydrate(queryClient);
+
+    return { dehydratedState };
+  });
 }
 
-export default function MeetingDetail() {
-  // const { data } = loaderData;
+export default function MeetingDetail({ loaderData }: Route.ComponentProps) {
   const id = Number(useParams().meetingId);
-  const { data: meeting } = useMeetingQuery(id);
+
+  const { data } = loaderData;
+  const dehydratedState = data?.dehydratedState;
 
   return (
-    <CommonTemplate>
-      <Suspense fallback={<LoadingSpinner />}>
-        <div className="flex items-start gap-8">
-          <div className="w-full max-w-[970px]">
-            <Slider
-              images={meeting?.meetingImages}
-              isCount={true}
-              slideWidth="w-full"
-              slideHeight="h-[657px]"
-              delay={5000}
-            />
-            <MeetingDetailContent meeting={meeting} />
-            <MeetingDetailMeetingReviewsContainer meetingId={id} />
-          </div>
-
-          <div className="sticky top-[100px] h-fit flex-1">
-            <MeetingDetailCard meeting={meeting} />
-          </div>
-        </div>
-      </Suspense>
-    </CommonTemplate>
+    <HydrationBoundary state={dehydratedState}>
+      <CommonTemplate>
+        <Suspense fallback={<LoadingSpinner />}>
+          <MeetingDetailWrap id={id} />
+        </Suspense>
+      </CommonTemplate>
+    </HydrationBoundary>
   );
 }

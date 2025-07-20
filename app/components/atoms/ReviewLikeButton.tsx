@@ -3,6 +3,7 @@ import HeartFillIcon from './icons/HeartFillIcon';
 import HeartIcon from './icons/HeartIcon';
 import useLikeReviewMutation from '@/hooks/api/useLikeReviewMutation';
 import useUnlikeReviewMutation from '@/hooks/api/useUnlikeReviewMutation';
+import useUserSession from '@/hooks/business/useUserSession';
 
 export default function ReviewLikeButton({
   reviewId,
@@ -13,10 +14,14 @@ export default function ReviewLikeButton({
   liked: boolean;
   likesCount: number;
 }) {
+  const { user } = useUserSession();
   const likeMutation = useLikeReviewMutation();
   const unlikeMutation = useUnlikeReviewMutation();
 
   const handleLike = () => {
+    if (!user) {
+      return alert('로그인 후 이용해주세요.');
+    }
     if (liked) {
       unlikeMutation.mutate({ reviewId });
     } else {

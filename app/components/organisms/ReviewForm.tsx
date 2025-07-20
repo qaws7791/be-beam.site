@@ -49,8 +49,8 @@ export function ReviewForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
       <div>
-        <Tag variant={meeting.type === 'regular' ? 'blue' : 'primary'}>
-          {meeting.type === 'regular' ? '정기모임' : '소모임'}
+        <Tag variant={meeting?.type === 'regular' ? 'blue' : 'primary'}>
+          {meeting?.type === 'regular' ? '정기모임' : '소모임'}
         </Tag>
         <div className="mt-3 flex items-center gap-2 border-b border-gray-300 pb-3">
           <img

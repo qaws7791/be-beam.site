@@ -4,12 +4,15 @@ import RecruitmentTypeAndTopic from '../molecules/RecruitmentTypeAndTopic';
 import { DropdownMenuItem } from '../atoms/dropdown-menu/DropdownMenu';
 import MoreDropdownMenu from './MoreDropdownMenu';
 import Badge from '../atoms/badge/Badge';
+import { useModalStore } from '@/stores/useModalStore';
 
 export default function MeetingDetailContentTop({
   meeting,
 }: {
   meeting: MeetingDetailType;
 }) {
+  const { open } = useModalStore();
+
   return (
     <div className="w-full border-b-1 border-gray-400 pb-8">
       <RecruitmentTypeAndTopic
@@ -25,7 +28,11 @@ export default function MeetingDetailContentTop({
         <MoreDropdownMenu>
           <DropdownMenuItem
             onSelect={() => {
-              /* 신고 기능 구현 */
+              open('DECLARE_MODAL', {
+                type: 'meeting',
+                id: meeting.id,
+                refetchKey: 'meeting',
+              });
             }}
           >
             신고하기

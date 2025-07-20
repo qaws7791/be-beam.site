@@ -1,4 +1,6 @@
+import { API_V1_BASE_URL } from '@/constants/api';
 import type { useGuideBooksParamsType } from '@/hooks/business/useGuideBooksParams';
+import { axiosInstance } from '@/lib/axios';
 import type { APIResponse } from '@/types/api';
 import type { Guidebook } from '@/types/entities';
 import axios from 'axios';
@@ -50,9 +52,10 @@ export type GuideBookDetailResult = {
 }[];
 
 export const getGuideBookDetail = async (id: number) => {
-  const res = await axios<APIResponse<GuideBookDetailResult>>({
+  const res = await axiosInstance<APIResponse<GuideBookDetailResult>>({
+    baseURL: API_V1_BASE_URL,
     method: 'GET',
-    url: `/api/web/v1/guidbooks/${id}`,
+    url: `/guidebooks/${id}`,
   });
   const data = res.data;
   return data.result;

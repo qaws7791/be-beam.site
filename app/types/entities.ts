@@ -46,7 +46,7 @@ export interface MeetingSchedule {
 
 export interface Meeting {
   id: number;
-  recruitingState: MeetingRecruitmentStatus;
+  recruitmentStatus: MeetingRecruitmentStatus;
   recruitmentType: MeetingRecruitmentType;
   guidebookReferenceId: number | null;
   guidebookReferenceTitle: string | null;
@@ -113,13 +113,14 @@ export interface UserProfile {
 }
 
 export interface MeetingSummary {
-  id: number;
-  title: string;
+  id?: number;
+  name: string;
   recruitmentType: string;
+  recruitmentStatus: string;
   image: ImageType;
   meetingStartTime: string;
   address: string;
-  status: string;
+  liked?: boolean;
 }
 
 export interface Review {

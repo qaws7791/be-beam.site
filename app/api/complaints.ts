@@ -1,10 +1,14 @@
-import { API_V1_BASE_URL } from '@/constants/api';
 import { axiosInstance } from '@/lib/axios';
+import { API_V1_BASE_URL } from '@/constants/api';
+import type {
+  DeclareDataType,
+  DeclareModalPropsType,
+} from '@/hooks/api/useDeclareMeetingOrReviewOrHost';
 import type { APIResponse } from '@/types/api';
 
 interface ReportComplaintData {
   complaintId: number;
-  complaintType: 'REVIEW' | 'USER' | 'MEETING';
+  targetType: 'REVIEW' | 'USER' | 'MEETING';
   reasonType:
     | 'ADVERTISEMENT'
     | 'SEXUAL'
@@ -18,7 +22,6 @@ interface ReportComplaintData {
 }
 
 export const reportComplaint = async (data: ReportComplaintData) => {
-  return;
   const res = await axiosInstance.post<APIResponse<string>>(
     '/complaints',
     data,
@@ -27,4 +30,25 @@ export const reportComplaint = async (data: ReportComplaintData) => {
     },
   );
   return res.data;
+};
+
+export const declareMeetingOrReviewOrHost = (
+  data: DeclareDataType,
+  modalProps: DeclareModalPropsType,
+) => {
+  return axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    method: 'POST',
+    url: '/complaints',
+    data: {
+      complaintId: modalProps.id,
+      targetType:
+        modalProps.type === 'meeting'
+          ? 'MEETING'
+          : modalProps.type === 'review'
+            ? 'REVIEW'
+            : 'USER',
+      ...data,
+    },
+  });
 };

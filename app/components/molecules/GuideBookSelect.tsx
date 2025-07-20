@@ -1,0 +1,145 @@
+import useGuideBooksQuery from '@/hooks/api/useGuideBooksQuery';
+import type { useGuideBooksParamsType } from '@/hooks/business/useGuideBooksParams';
+import type { GuideBookType } from '@/types/components';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '../atoms/select/Select';
+import LoadingSpinner from './LoadingSpinner';
+import clsx from 'clsx';
+
+interface GuideBookSelectProps {
+  value?: number | null;
+  onValueChange?: (value: number | undefined | null) => void;
+  placeholder?: string;
+}
+
+export default function GuideBookSelect({
+  value,
+  onValueChange,
+  placeholder = '가이드북을 선택해주세요',
+}: GuideBookSelectProps) {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
+
+  const params: useGuideBooksParamsType['params'] = {
+    type: 'all',
+    targetType: 'all',
+    level: 'all',
+    time: 'all',
+  };
+  const {
+    data: guideBooks,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    // isLoading,
+  } = useGuideBooksQuery(params);
+
+  console.log(value);
+
+  const allGuideBooks: GuideBookType[] = useMemo(() => {
+    return guideBooks?.pages.flatMap((page) => page.guideBooks) || [];
+  }, [guideBooks]);
+
+  console.log(allGuideBooks);
+
+  const handleScroll = useCallback(() => {
+    const scrollElement = scrollContainerRef.current;
+    if (!scrollElement || !hasNextPage || isFetchingNextPage) {
+      return;
+    }
+
+    const SCROLL_THRESHOLD = 100;
+    const { scrollTop, scrollHeight, clientHeight } = scrollElement;
+
+    if (scrollHeight - scrollTop - clientHeight < SCROLL_THRESHOLD) {
+      fetchNextPage();
+    }
+
+    console.log('Scroll Values:', {
+      scrollTop,
+      clientHeight,
+      scrollHeight,
+      remaining: scrollHeight - scrollTop - clientHeight,
+      threshold: SCROLL_THRESHOLD,
+      canFetch: scrollHeight - scrollTop - clientHeight < SCROLL_THRESHOLD,
+    });
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
+
+  useEffect(() => {
+    if (isSelectOpen) {
+      const currentScrollElement = scrollContainerRef.current;
+      if (currentScrollElement) {
+        console.log('--- Attaching scroll listener ---');
+        currentScrollElement.addEventListener('scroll', handleScroll);
+        handleScroll();
+      } else {
+        console.log(
+          'Scroll element not found when trying to attach listener after opening.',
+        );
+      }
+    }
+
+    return () => {
+      const currentScrollElement = scrollContainerRef.current;
+      if (currentScrollElement) {
+        currentScrollElement.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [isSelectOpen, handleScroll]);
+
+  const onSelectChange = (newValueString: string) => {
+    const newId: number | undefined = newValueString
+      ? Number(newValueString)
+      : undefined;
+
+    if (onValueChange) {
+      onValueChange(newId);
+    }
+  };
+
+  return (
+    <Select
+      value={value === undefined || value === null ? undefined : String(value)}
+      onOpenChange={setIsSelectOpen}
+      onValueChange={onSelectChange}
+    >
+      <SelectTrigger
+        className={clsx(
+          'mt-5 h-auto w-full rounded-lg border-gray-500 bg-white py-3',
+          !value && 'text-t4 text-gray-500',
+        )}
+      >
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+      <SelectContent ref={scrollContainerRef} className="bg-white">
+        <SelectGroup>
+          <SelectLabel>가이드북 목록</SelectLabel>
+          {allGuideBooks.map((item) => (
+            <SelectItem key={String(item.id)} value={String(item.id)}>
+              <div className="flex w-full items-center gap-2">
+                <img
+                  src={item.image}
+                  alt="thumbnail_image"
+                  className="h-10 w-10 rounded-lg"
+                />
+                {item.title}
+              </div>
+            </SelectItem>
+          ))}
+
+          {isFetchingNextPage && (
+            <LoadingSpinner loadingComment="더 많은 가이드북을 Loading..." />
+          )}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  );
+}

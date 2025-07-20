@@ -12,6 +12,7 @@ export interface AuthResult {
     nickname: string;
     profileImage: string;
     introduction: string;
+    role: string;
   } | null;
   headers?: Headers;
 }

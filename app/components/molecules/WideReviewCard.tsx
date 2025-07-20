@@ -19,6 +19,19 @@ import {
 } from '../atoms/dialog/Dialog';
 import useReportComplaintMutation from '@/hooks/api/useReportComplaintMutation';
 import ReportForm from '../organisms/ReportForm';
+import { ReviewUpdateForm } from '../organisms/ReviewUpdateForm';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '../atoms/alert-dialog/AlertDialog';
+import useUpdateReviewMutation from '@/hooks/api/useUpdateReviewMutation';
+import useDeleteReviewMutation from '@/hooks/api/useDeleteReviewMutation';
 
 interface WideReviewCardProps {
   reviewId: number;
@@ -34,17 +47,31 @@ interface WideReviewCardProps {
   meeting: {
     id: number;
     name: string;
-    link: string;
+    recruitmentType: '정기모임' | '소모임';
+    image: string;
   };
 }
+
+const MAX_IMAGES_DISPLAY = 4;
 
 export default function WideReviewCard({
   review,
 }: {
   review: WideReviewCardProps;
 }) {
+  const updateReviewMutation = useUpdateReviewMutation();
+  const deleteReviewMutation = useDeleteReviewMutation();
   const reportComplaintMutation = useReportComplaintMutation();
-  const [isReviewReportModalOpen, setIsReviewReportModalOpen] = useState(false);
+  const [modalState, setModalState] = useState<
+    'update' | 'delete' | 'report' | null
+  >(null);
+
+  const [isImagesExpanded, setIsImagesExpanded] = useState(false);
+  const hasMoreImages = review.images.length > MAX_IMAGES_DISPLAY;
+
+  const displayImages = isImagesExpanded
+    ? review.images
+    : review.images.slice(0, MAX_IMAGES_DISPLAY);
 
   return (
     <>
@@ -71,13 +98,15 @@ export default function WideReviewCard({
               <DropdownMenuContent>
                 {review.myReview ? (
                   <>
-                    <DropdownMenuItem>수정하기</DropdownMenuItem>
-                    <DropdownMenuItem>삭제하기</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => setModalState('update')}>
+                      수정하기
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => setModalState('delete')}>
+                      삭제하기
+                    </DropdownMenuItem>
                   </>
                 ) : (
-                  <DropdownMenuItem
-                    onSelect={() => setIsReviewReportModalOpen(true)}
-                  >
+                  <DropdownMenuItem onSelect={() => setModalState('report')}>
                     신고하기
                   </DropdownMenuItem>
                 )}
@@ -90,24 +119,60 @@ export default function WideReviewCard({
             <StarIcon key={i} className="size-6 text-gray-700" />
           ))}
         </div>
-        <div className="mt-5.5 flex">
-          <div className="flex">
-            <div className="flex gap-2">
-              {review.images.map((image, index) => (
-                <img
-                  key={image + review.reviewId + index}
-                  src={image}
-                  alt="review"
-                  className="size-37 rounded-lg"
-                />
-              ))}
-            </div>
-            {review.images.length > 0 && <div className="w-5.5" />}
-          </div>
-          <div>
-            <p className="text-b3 text-gray-600">{review.text}</p>
-          </div>
+        <div className="mt-5.5">
+          <p className="text-b3 text-gray-600">{review.text}</p>
         </div>
+
+        {review.images.length > 0 && (
+          <div className="mt-5.5">
+            <div className="flex max-w-[840px] flex-wrap gap-2">
+              {displayImages.map((image, index) => {
+                const isLastImage = index === MAX_IMAGES_DISPLAY - 1;
+                const shouldShowOverlay =
+                  !isImagesExpanded && hasMoreImages && isLastImage;
+
+                return (
+                  <div
+                    key={image + review.reviewId + index}
+                    className="relative"
+                  >
+                    <img
+                      src={image}
+                      alt="review"
+                      className={`size-37 shrink-0 rounded-lg object-cover ${
+                        shouldShowOverlay ? 'cursor-pointer' : ''
+                      }`}
+                      onClick={
+                        shouldShowOverlay
+                          ? () => setIsImagesExpanded(true)
+                          : undefined
+                      }
+                    />
+                    {shouldShowOverlay && (
+                      <div
+                        className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-lg bg-black/50"
+                        onClick={() => setIsImagesExpanded(true)}
+                      >
+                        <span className="text-b1 text-white">사진 더 보기</span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* 접기 버튼 (확장된 상태일 때만 표시) */}
+            {isImagesExpanded && hasMoreImages && (
+              <button
+                className="mt-2 text-sm text-gray-500 hover:text-gray-700"
+                onClick={() => setIsImagesExpanded(false)}
+              >
+                접기
+              </button>
+            )}
+          </div>
+        )}
+
         <div className="mt-6">
           <Link
             to={`/meeting/${review.meeting.id}`}
@@ -126,8 +191,76 @@ export default function WideReviewCard({
         </div>
       </div>
       <Dialog
-        open={isReviewReportModalOpen}
-        onOpenChange={setIsReviewReportModalOpen}
+        open={modalState === 'update'}
+        onOpenChange={() => setModalState(null)}
+      >
+        <DialogContent className="max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>후기 작성</DialogTitle>
+            <DialogDescription className="sr-only">
+              후기 작성하기
+            </DialogDescription>
+          </DialogHeader>
+          <ReviewUpdateForm
+            meeting={review.meeting}
+            onReviewSubmit={(review) => {
+              updateReviewMutation.mutate(
+                {
+                  reviewId: review.id,
+                  rating: review.rating,
+                  content: review.content,
+                  existingImages: review.existingImages,
+                  newImages: review.newImages,
+                },
+                {
+                  onSuccess: () => {
+                    setModalState(null);
+                  },
+                },
+              );
+            }}
+            defaultValues={{
+              rating: review.rating,
+              content: review.text,
+              existingImages: review.images,
+              id: review.reviewId,
+            }}
+          />
+        </DialogContent>
+      </Dialog>
+      <AlertDialog
+        open={modalState === 'delete'}
+        onOpenChange={() => setModalState(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>후기를 삭제할까요?</AlertDialogTitle>
+            <AlertDialogDescription className="sr-only">
+              후기를 삭제하시겠습니까?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>취소</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() =>
+                deleteReviewMutation.mutate(
+                  { reviewId: review.reviewId },
+                  {
+                    onSuccess: () => {
+                      setModalState(null);
+                    },
+                  },
+                )
+              }
+            >
+              확인
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <Dialog
+        open={modalState === 'report'}
+        onOpenChange={() => setModalState(null)}
       >
         <DialogContent className="max-w-[480px]">
           <DialogHeader>
@@ -140,14 +273,14 @@ export default function WideReviewCard({
             onSubmit={(data) => {
               reportComplaintMutation.mutate(
                 {
-                  complaintType: 'REVIEW',
+                  targetType: 'REVIEW',
                   complaintId: review.reviewId,
                   reasonType: data.reason,
                   description: data.message,
                 },
                 {
                   onSuccess: () => {
-                    setIsReviewReportModalOpen(false);
+                    setModalState(null);
                   },
                 },
               );

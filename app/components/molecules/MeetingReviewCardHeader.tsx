@@ -1,10 +1,10 @@
+import type { Review } from '@/types/entities';
 import { DropdownMenuItem } from '../atoms/dropdown-menu/DropdownMenu';
-import type { MeetingReviewType } from '../organisms/MeetingReviewCard';
 import MoreDropdownMenu from '../organisms/MoreDropdownMenu';
 import MeetingReviewEditorProfile from './MeetingReviewEditorProfile';
 
 interface MeetingReviewCardHeaderProps {
-  review: MeetingReviewType;
+  review: Review;
   edit: {
     isActive: boolean;
     id: number | null;

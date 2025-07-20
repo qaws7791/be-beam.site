@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router';
 import type { RecommendationsGuideBookType } from '@/types/components';
 import Text from '../atoms/text/Text';
-import GuideBookRecommendationCard from '../molecules/uideBookRecommendationCard';
+import GuideBookRecommendationCard from '../molecules/GuideBookRecommendationCard';
 
 export default function GuideBookRecommendation({
   recommendationData,

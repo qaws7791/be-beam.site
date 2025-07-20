@@ -25,7 +25,7 @@ export interface TextProps {
     | 'purple'
     | 'brown'
     | 'primary';
-  variant: TypographyVariant;
+  variant?: TypographyVariant;
   className?: string;
   onClick?: () => void;
 }
@@ -102,6 +102,18 @@ export interface MeetingDetailType {
   applicantCount: number;
   participantCount: number;
   reviewable: boolean;
+  userStatus:
+    | '신청전'
+    | '신청중'
+    | '신청취소중'
+    | '참여중'
+    | '중도이탈신청중'
+    | '모임완료'
+    | string;
+  applyMeetingState: boolean;
+  participateMeetingState: boolean;
+  cancelMeetingState: boolean;
+  leaveMeetingState: boolean;
 
   hostId: number;
   hostName: string;
@@ -197,4 +209,34 @@ export interface CreatedMeetingDetailStateType {
     paymentAmount: number;
     info: string;
   };
+}
+
+export interface CreateMeetingType {
+  thumbnailImage: File | null;
+  thumbnailImagePreview: string | '';
+  name: string;
+  recruitmentType: '정기모임' | '소모임' | undefined;
+  selectionType: '선발형' | '선착순' | null;
+  meetingMode: '온라인' | '오프라인' | '혼합' | null;
+  topicId: number | null;
+  hashtags: string[];
+  isGuideBookRefer: 'false' | 'true';
+  guidbookReferenceId: null | number | undefined;
+  introduction: string;
+  images: [] | File[];
+  imagesPreview: [] | string[];
+  minParticipants: number;
+  maxParticipants: number;
+  hostDescription: string;
+  recruitingStartTime: Date | null;
+  recruitingEndTime: Date | null;
+  paymentAmount: number;
+  info: string;
+  schedules: {
+    meetingDate: string;
+    meetingStartTime: string;
+    meetingEndTime: string;
+    address: string;
+    addressDetail: string;
+  }[];
 }
