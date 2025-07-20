@@ -231,8 +231,6 @@ export const getMyReviewLikes = async ({
 };
 
 export type MyHostLikesResult = {
-  nickname: string;
-  profileImage: string;
   hosts: {
     id: number;
     nickname: string;
@@ -240,6 +238,13 @@ export type MyHostLikesResult = {
     introduction: string;
     liked: boolean;
   }[];
+  pageInfo: {
+    page: number;
+    size: number;
+    totalPages: number;
+    totalElements: number;
+    hasNext: boolean;
+  };
 };
 
 export const getMyHostLikes = async ({
@@ -249,32 +254,12 @@ export const getMyHostLikes = async ({
   page: number;
   size: number;
 }) => {
-  return {
-    nickname: '홍길동',
-    profileImage: 'https://placehold.co/300',
-    hosts: [
-      {
-        id: 1,
-        nickname: '홍길동동',
-        profileImage: 'https://placehold.co/600x400',
-        introduction: '홍길동입니다. 사진작가로 활동하고 있어요.',
-        liked: true,
-      },
-      {
-        id: 2,
-        nickname: '홍길동동',
-        profileImage: 'https://placehold.co/600x400',
-        introduction: '홍길동입니다. 사진작가로 활동하고 있어요.',
-        liked: true,
-      },
-    ],
-  };
   const searchParams = new URLSearchParams({
-    cursor: page.toString(),
+    page: page.toString(),
     size: size.toString(),
   });
   const res = await axiosInstance.get<APIResponse<MyHostLikesResult>>(
-    `users/likes/host?${searchParams.toString()}`,
+    `users/likes/hosts?${searchParams.toString()}`,
   );
   const data = res.data;
   return data.result;
