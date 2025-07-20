@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '@/lib/tailwind';
 import { extractTime, formatToMonthAndDayDate } from '@/utils/date';
 
 import type { MeetingDetailType } from '@/types/components';
@@ -26,14 +26,14 @@ export default function MeetingDetailContentMiddle({
         {meeting?.schedules?.map((schedule, idx) => (
           <div
             key={idx}
-            className={clsx(
+            className={cn(
               isSeveralEpi && idx !== meeting?.schedules?.length - 1 && 'mb-6',
             )}
           >
             <Text
               variant="B2_Medium"
               color="gray-600"
-              className={clsx(!isSeveralEpi ? 'hidden' : 'block', 'mt-4')}
+              className={cn(!isSeveralEpi ? 'hidden' : 'block', 'mt-4')}
             >
               {idx + 1}회차 모임
             </Text>

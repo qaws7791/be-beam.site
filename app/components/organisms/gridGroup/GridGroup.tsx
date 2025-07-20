@@ -1,6 +1,6 @@
 import { columnStyles, gapStyles } from './GridGroup.styles';
 import type { GridGroupProps } from '@/types/components';
-import clsx from 'clsx';
+import { cn } from '@/lib/tailwind';
 
 export default function GridGroup({
   children,
@@ -10,7 +10,7 @@ export default function GridGroup({
 }: GridGroupProps) {
   return (
     <div
-      className={clsx(
+      className={cn(
         'mx-auto grid w-full',
         columnStyles[columns],
         gapStyles[gap],

@@ -1,11 +1,11 @@
 // smart 패턴 컴포넌트. 기능 중심
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useMeetingReviewsQuery from '@/hooks/api/useMeetingReviewsQuery';
-import useInfiniteScroll from '@/hooks/ui/useInfiniteScroll';
 
 import Text from '../atoms/text/Text';
 import MeetingReviewCard from '../organisms/MeetingReviewCard';
+import { Button } from '../atoms/button/Button';
 
 const MeetingDetailMeetingReviewsContainer = ({
   meetingId,
@@ -29,11 +29,32 @@ const MeetingDetailMeetingReviewsContainer = ({
     return meetingReviews?.pages?.flatMap((page) => page.reviews) || [];
   }, [meetingReviews]);
 
-  useInfiniteScroll({
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  });
+  const [btnIsVisible, setBtnIsVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY =
+        window.scrollY || document.documentElement.scrollTop;
+      const documentHeight = document.documentElement.scrollHeight;
+      const viewportHeight =
+        window.innerHeight || document.documentElement.clientHeight;
+
+      const isScrolledBeyond1200 = currentScrollY > 1200;
+      const isNearBottom500 =
+        currentScrollY + viewportHeight >= documentHeight - 200;
+
+      if (isScrolledBeyond1200 && !isNearBottom500) {
+        setBtnIsVisible(true);
+      } else {
+        setBtnIsVisible(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
     <div className="w-full pt-12">
@@ -50,6 +71,18 @@ const MeetingDetailMeetingReviewsContainer = ({
             meetingReviewList={meetingReviewList}
           />
         ))}
+        <Button
+          variant="tertiary"
+          size="sm"
+          className={`${btnIsVisible && hasNextPage ? 'block' : 'hidden'} fixed bottom-5 left-[25%] z-50 w-75 border-gray-500 text-gray-600`}
+          onClick={() => {
+            if (hasNextPage && !isFetchingNextPage) {
+              fetchNextPage();
+            }
+          }}
+        >
+          후기 더 보기
+        </Button>
       </div>
     </div>
   );

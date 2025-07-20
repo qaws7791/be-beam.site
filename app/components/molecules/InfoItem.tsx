@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '@/lib/tailwind';
 
 interface InfoItemProps {
   icon: string;
@@ -14,10 +14,10 @@ const InfoItem = ({
   iconAlt,
   text,
   wrapStyle,
-  iconStyle = 'w-6 h-6',
-  textStyle = 'text-b3 text-gray-600',
+  iconStyle,
+  textStyle,
 }: InfoItemProps) => (
-  <div className={clsx('flex items-center', wrapStyle)}>
+  <div className={cn('flex items-center', wrapStyle)}>
     <img className={iconStyle} src={icon} alt={iconAlt} />
     <p className={textStyle}>{text}</p>
   </div>

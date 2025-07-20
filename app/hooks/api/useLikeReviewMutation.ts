@@ -19,7 +19,6 @@ export default function useLikeReviewMutation() {
       >({
         queryKey: ['reviews'],
       });
-      console.log(previousData);
       queryClient.setQueriesData<InfiniteData<ReviewListResult> | undefined>(
         {
           queryKey: ['reviews'],
