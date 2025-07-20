@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 export interface DeclareModalPropsType {
   id: number;
   type: 'meeting' | 'review' | 'host';
+  refetchKey: string;
 }
 
 export interface DeclareDataType {
@@ -23,7 +24,7 @@ export default function useDeclareMeetingOrReviewOrHost(
       toast.success(
         `${modalProps.type === 'meeting' ? '해당 모임을' : modalProps.type === 'review' ? '해당 모임 후기를' : '해당 호스트를'} 신고하였습니다.`,
       );
-      queryClient.invalidateQueries({ queryKey: ['meeting'] });
+      queryClient.refetchQueries({ queryKey: [modalProps.refetchKey] });
       close();
     },
     onError: (err) => {

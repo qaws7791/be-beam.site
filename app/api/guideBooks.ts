@@ -1,4 +1,6 @@
+import { API_V1_BASE_URL } from '@/constants/api';
 import type { useGuideBooksParamsType } from '@/hooks/business/useGuideBooksParams';
+import { axiosInstance } from '@/lib/axios';
 import axios from 'axios';
 
 export const getGuideBookList = async (
@@ -19,9 +21,10 @@ export const getGuideBookList = async (
 };
 
 export const getGuideBookDetail = async (id: number) => {
-  const res = await axios({
+  const res = await axiosInstance({
+    baseURL: API_V1_BASE_URL,
     method: 'GET',
-    url: `/api/web/v1/guidbooks/${id}`,
+    url: `/guidebooks/${id}`,
   });
   const data = res.data;
   return data.result;

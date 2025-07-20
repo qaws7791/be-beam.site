@@ -37,7 +37,7 @@ export const declareMeetingOrReviewOrHost = (
     url: '/complaints',
     data: {
       complaintId: modalProps.id,
-      complaintType:
+      targetType:
         modalProps.type === 'meeting'
           ? 'MEETING'
           : modalProps.type === 'review'

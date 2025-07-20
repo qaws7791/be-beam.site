@@ -1,8 +1,8 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { getHostDetail } from '@/api/hosts';
-import { useQuery } from '@tanstack/react-query';
 
 export default function useHostQuery(id: number) {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['hostDetail', id],
     queryFn: () => getHostDetail(id),
   });

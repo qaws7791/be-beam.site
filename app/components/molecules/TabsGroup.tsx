@@ -1,15 +1,15 @@
 import { Tabs, TabsList, TabsTrigger } from '@/components/atoms/tabs/Tabs';
-
-interface Category {
-  label: string;
-  value: string;
-}
+import { cn } from '@/lib/tailwind';
 
 interface TabsGroupProps {
-  categories: Category[];
+  categories: {
+    label: string;
+    value: string;
+  }[];
   selectedCategory: string;
   onCategoryChange: (value: string) => void;
   children?: React.ReactNode;
+  classNames?: string;
 }
 
 export default function TabsGroup({
@@ -17,10 +17,11 @@ export default function TabsGroup({
   selectedCategory,
   onCategoryChange,
   children,
+  classNames,
 }: TabsGroupProps) {
   return (
     <Tabs value={selectedCategory} onValueChange={onCategoryChange}>
-      <div className="relative w-full">
+      <div className={cn('relative w-full', classNames)}>
         <TabsList>
           {categories.map((category) => (
             <TabsTrigger
