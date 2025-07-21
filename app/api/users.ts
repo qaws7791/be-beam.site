@@ -366,3 +366,86 @@ export async function getCreatedMeetingDetail(id: number) {
   const data = res.data;
   return data.result;
 }
+
+export type GetWrittenReviewsParams = {
+  type: 'all' | 'regular' | 'small';
+  page: number;
+  size: number;
+};
+
+export type GetWrittenReviewsResult = {
+  reviews: {
+    meetingId: number;
+    meetingName: string;
+    recruitmentType: '정기모임' | '소모임';
+    thumbnailImage: string;
+    reviewId: number;
+    rating: number;
+    content: string;
+    images: string[];
+    createdAt: string;
+  }[];
+  pageInfo: {
+    page: number;
+    size: number;
+    totalPages: number;
+    totalElements: number;
+    hasNext: boolean;
+  };
+};
+
+export async function getWrittenReviews(params: GetWrittenReviewsParams) {
+  const searchParams = new URLSearchParams({
+    written: 'false',
+    type: params.type,
+    page: params.page.toString(),
+    size: params.size.toString(),
+  });
+  const res = await axiosInstance.get<APIResponse<GetWrittenReviewsResult>>(
+    `users/reviews?${searchParams.toString()}`,
+    {
+      baseURL: API_V1_BASE_URL,
+    },
+  );
+  const data = res.data;
+  return data.result;
+}
+
+export type GetReviewableReviewsParams = {
+  type: 'all' | 'regular' | 'small';
+  page: number;
+  size: number;
+};
+
+export type GetReviewableReviewsResult = {
+  reviews: {
+    meetingId: number;
+    meetingName: string;
+    recruitmentType: '정기모임' | '소모임';
+    thumbnailImage: string;
+  }[];
+  pageInfo: {
+    page: number;
+    size: number;
+    totalPages: number;
+    totalElements: number;
+    hasNext: boolean;
+  };
+};
+
+export async function getReviewableReviews(params: GetReviewableReviewsParams) {
+  const searchParams = new URLSearchParams({
+    written: 'true',
+    type: params.type,
+    page: params.page.toString(),
+    size: params.size.toString(),
+  });
+  const res = await axiosInstance.get<APIResponse<GetReviewableReviewsResult>>(
+    `users/reviews?${searchParams.toString()}`,
+    {
+      baseURL: API_V1_BASE_URL,
+    },
+  );
+  const data = res.data;
+  return data.result;
+}
