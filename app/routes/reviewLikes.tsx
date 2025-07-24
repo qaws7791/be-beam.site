@@ -1,5 +1,10 @@
 import ReviewLikeCard from '@/components/molecules/ReviewLikeCard';
 import useMyReviewLikesQuery from '@/hooks/api/useMyReviewLikesQuery';
+import { metaTemplates } from '@/config/meta-templates';
+
+export function meta() {
+  return metaTemplates.reviewLikes();
+}
 
 export default function ReviewLikes() {
   const { data: reviewLikes } = useMyReviewLikesQuery({

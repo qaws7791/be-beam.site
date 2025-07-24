@@ -9,6 +9,11 @@ import {
 import WrittenReviewCard from '@/components/organisms/WrittenReviewCard';
 import usePagination from '@/hooks/ui/usePagination';
 import { useSearchParams } from 'react-router';
+import { metaTemplates } from '@/config/meta-templates';
+
+export function meta() {
+  return metaTemplates.writtenReviews();
+}
 
 const MOCK_REVIEW_LIST: {
   id: number;

@@ -14,7 +14,7 @@ import { getTopics } from '@/api/topics';
 import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
 import { useModalStore } from '@/stores/useModalStore';
 import { useRouteLoaderData } from 'react-router';
-
+import { metaTemplates } from '@/config/meta-templates';
 import type { Route } from './+types/meetings';
 import type { Topic } from '@/types/entities';
 import CommonTemplate from '@/components/templates/CommonTemplate';
@@ -22,6 +22,10 @@ import Banner from '@/components/atoms/Banner';
 import MeetingFilterControls from '@/components/organisms/MeetingFilterControls';
 import MeetingWrap from '@/components/organisms/MeetingWrap';
 import { Button } from '@/components/atoms/button/Button';
+
+export function meta() {
+  return metaTemplates.meetings();
+}
 
 export async function loader({ request }: Route.LoaderArgs) {
   const queryClient = new QueryClient();

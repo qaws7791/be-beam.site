@@ -10,6 +10,11 @@ import {
 import useMyHostLikesQuery from '@/hooks/api/useMyHostLikesQuery';
 import usePagination from '@/hooks/ui/usePagination';
 import { useSearchParams } from 'react-router';
+import { metaTemplates } from '@/config/meta-templates';
+
+export function meta() {
+  return metaTemplates.myFollowing();
+}
 
 export default function MyFollowing() {
   const [searchParams] = useSearchParams();

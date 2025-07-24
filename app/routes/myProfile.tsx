@@ -10,6 +10,11 @@ import type { profileFormSchema } from '@/hooks/business/useProfileForm';
 import useProfileForm from '@/hooks/business/useProfileForm';
 import useUpdateProfileMutation from '@/hooks/api/useUpdateProfileMutation';
 import { FormMessage } from '@/components/atoms/form/FormMessage';
+import { metaTemplates } from '@/config/meta-templates';
+
+export function meta() {
+  return metaTemplates.myProfile();
+}
 
 export default function MyProfile() {
   const myProfile = useMyProfileQuery();

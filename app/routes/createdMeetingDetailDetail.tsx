@@ -1,7 +1,7 @@
 import { useParams } from 'react-router';
 import useCreatedMeetingDetailQuery from '@/hooks/api/useCreatedMeetingDetailQuery';
 import useCreatedMeetingDetailDetailParams from '@/hooks/business/useCreatedMeetingDetailDetailParams';
-
+import { metaTemplates } from '@/config/meta-templates';
 import {
   Tabs,
   TabsContent,
@@ -12,13 +12,7 @@ import CreatedMeetingDetailMeetingDetailContent from '@/components/organisms/Cre
 import CreatedScheduleDetailMeetingDetailContent from '@/components/organisms/CreatedScheduleDetailMeetingDetailContent';
 
 export function meta() {
-  return [
-    { title: '내가 개설한 모임 상세 정보 페이지 입니다.' },
-    {
-      name: 'description',
-      content: '내가 개설한 모임의 상세 정보를 확인하세요.',
-    },
-  ];
+  return metaTemplates.createdMeetingDetailDetail();
 }
 
 export default function CreatedMeetingDetailDetail() {

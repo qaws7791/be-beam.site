@@ -4,6 +4,11 @@ import axios from 'axios';
 import useRequestMeetingParams from '@/hooks/business/useRequestMeetingParams';
 import { useModalStore } from '@/stores/useModalStore';
 import usePagination from '@/hooks/ui/usePagination';
+import { metaTemplates } from '@/config/meta-templates';
+
+export function meta() {
+  return metaTemplates.requestedMeeting();
+}
 
 import type { FilterOption } from '@/types/components';
 import { Tabs, TabsList, TabsTrigger } from '@/components/atoms/tabs/Tabs';

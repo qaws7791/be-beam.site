@@ -7,7 +7,7 @@ import { useModalStore } from '@/stores/useModalStore';
 import axios from 'axios';
 import { axiosInstance } from '@/lib/axios';
 import type { FilterOption } from '@/types/components';
-
+import { metaTemplates } from '@/config/meta-templates';
 import { DropdownMenuItem } from '@/components/atoms/dropdown-menu/DropdownMenu';
 import {
   Pagination,
@@ -37,6 +37,10 @@ interface createdMeetingType {
   address: string;
   meetingStartTime: string;
   image: string;
+}
+
+export function meta() {
+  return metaTemplates.createdMeeting();
 }
 
 export default function CreatedMeeting() {

@@ -1,5 +1,10 @@
 import MeetingLikeCard from '@/components/molecules/MeetingLikeCard';
 import useMyMeetingLikesQuery from '@/hooks/api/useMyMeetingLikesQuery';
+import { metaTemplates } from '@/config/meta-templates';
+
+export function meta() {
+  return metaTemplates.regularMeetingLikes();
+}
 
 export default function RegularMeetingLikes() {
   const meetingLikes = useMyMeetingLikesQuery({

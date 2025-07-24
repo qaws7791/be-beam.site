@@ -9,6 +9,11 @@ import {
 import ReviewableMeetingCard from '@/components/organisms/ReviewableMeetingCard';
 import usePagination from '@/hooks/ui/usePagination';
 import { useSearchParams } from 'react-router';
+import { metaTemplates } from '@/config/meta-templates';
+
+export function meta() {
+  return metaTemplates.reviewableReviews();
+}
 
 const MOCK_REVIEWABLE_MEETING: {
   id: number;
