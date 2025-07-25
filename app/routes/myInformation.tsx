@@ -35,7 +35,7 @@ export default function MyInformation() {
 
   const onSubmit = (data: z.infer<typeof myInfoSchema>) => {
     const mutationData = {
-      nickname: data.nickname,
+      name: data.name,
       phoneNumber: data.phoneNumber.replace(
         /(\d{3})(\d{4})(\d{4})/,
         '$1-$2-$3',
@@ -70,11 +70,11 @@ export default function MyInformation() {
           onSubmit={form.handleSubmit(onSubmit)}
         >
           <div className="flex w-full flex-col gap-2">
-            <Label htmlFor="nickname">닉네임</Label>
-            <Input {...form.register('nickname')} />
-            {form.formState.errors.nickname && (
+            <Label htmlFor="name">닉네임</Label>
+            <Input {...form.register('name')} />
+            {form.formState.errors.name && (
               <FormMessage variant="error">
-                {form.formState.errors.nickname.message}
+                {form.formState.errors.name.message}
               </FormMessage>
             )}
           </div>
