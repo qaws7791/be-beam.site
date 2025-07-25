@@ -4,10 +4,10 @@ import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
-  useSuspenseQuery,
+  useQueries,
   type DehydratedState,
 } from '@tanstack/react-query';
-import useEditCreatedMeetingMutation from '@/hooks/api/useEditCreatedMeetingMutation';
+import useEditMeetingIntroMutation from '@/hooks/api/useEditMeetingIntroMutation';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
@@ -44,31 +44,42 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: ['createdMeetingIntro', id],
-    queryFn: () => getMyCreatedMeetingIntro(id),
-  });
-
-  const topics = await getTopics();
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: ['createdMeetingIntro', id],
+      queryFn: () => getMyCreatedMeetingIntro(id),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: ['topics'],
+      queryFn: () => getTopics(),
+    }),
+  ]);
 
   const dehydratedState = dehydrate(queryClient);
 
-  return { dehydratedState, topics };
+  return { dehydratedState };
 }
 
 export default function CreatedMeetingDetailIntro({
   loaderData,
 }: Route.ComponentProps) {
-  const { dehydratedState, topics } = loaderData as {
+  const { dehydratedState } = loaderData as {
     dehydratedState: DehydratedState;
-    topics: Topic[];
   };
 
   const id = Number(useParams().meetingId);
 
-  const { data: intro } = useSuspenseQuery({
-    queryKey: ['createdMeetingIntro', id],
-    queryFn: () => getMyCreatedMeetingIntro(id),
+  const [{ data: intro }, { data: topics }] = useQueries({
+    queries: [
+      {
+        queryKey: ['createdMeetingIntro', id],
+        queryFn: () => getMyCreatedMeetingIntro(id),
+      },
+      {
+        queryKey: ['topics'],
+        queryFn: () => getTopics(),
+      },
+    ],
   });
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -79,8 +90,10 @@ export default function CreatedMeetingDetailIntro({
   const [images, setImages] = useState<string[]>([]);
   const [existingImages, setExistingImages] = useState([]);
 
-  const { mutate: editCreateMeeting, isPending } =
-    useEditCreatedMeetingMutation(id, existingImages);
+  const { mutate: editCreateMeeting, isPending } = useEditMeetingIntroMutation(
+    id,
+    existingImages,
+  );
 
   const { control, handleSubmit, formState, reset } = useForm<
     z.infer<typeof editCreatedMeetingFirstSchema>

@@ -199,3 +199,13 @@ export interface EditCreateMeetingIntroType {
   images: [] | { value: File }[] | null;
   hostDescription: string;
 }
+
+export interface EditMeetingDetailType {
+  selectionType: '선발형' | '선착순';
+  meetingMode: '온라인' | '오프라인' | '혼합';
+  minParticipants: string | number;
+  maxParticipants: string | number;
+  paymentAmount: string | number;
+  recruitingEndTime: string;
+  info: string;
+}

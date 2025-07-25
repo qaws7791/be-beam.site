@@ -1,7 +1,10 @@
 import { API_V1_BASE_URL } from '@/constants/api';
 import { axiosInstance } from '@/lib/axios';
 import type { APIResponse } from '@/types/api';
-import type { EditCreateMeetingIntroType } from '@/types/components';
+import type {
+  EditCreateMeetingIntroType,
+  EditMeetingDetailType,
+} from '@/types/components';
 import type { AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 
@@ -386,7 +389,16 @@ export async function getMyCreatedMeetingDetail(id: number) {
   return res.data.result;
 }
 
-export async function EditMyCreatedMeetingDetail(
+export async function getMyCreatedMeetingSchedules(id: number) {
+  const res = await axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${id}/mypage/schedules`,
+    method: 'GET',
+  });
+  return res.data.result;
+}
+
+export async function EditMeetingIntro(
   id: number,
   form: EditCreateMeetingIntroType,
   existingImages: string[],
@@ -428,5 +440,23 @@ export async function EditMyCreatedMeetingDetail(
       'Content-Type': 'multipart/form-data',
     },
     data: formData,
+  });
+}
+
+export async function EditMeetingDetail(
+  id: number,
+  form: EditMeetingDetailType,
+) {
+  axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${id}/mypage/detail`,
+    method: 'PATCH',
+    data: {
+      ...form,
+      minParticipants: Number(form.minParticipants),
+      maxParticipants: Number(form.maxParticipants),
+      recruitingEndTime: form.recruitingEndTime + 'T00:00:00',
+      paymentAmount: Number(form.paymentAmount),
+    },
   });
 }

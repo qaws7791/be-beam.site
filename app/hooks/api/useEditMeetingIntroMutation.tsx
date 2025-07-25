@@ -2,9 +2,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import type { EditCreateMeetingIntroType } from '@/types/components';
 import toast from 'react-hot-toast';
-import { EditMyCreatedMeetingDetail } from '@/api/users';
+import { EditMeetingIntro } from '@/api/users';
 
-export default function useEditCreatedMeetingMutation(
+export default function useEditMeetingIntroMutation(
   id: number,
   existingImages: string[],
 ) {
@@ -12,7 +12,7 @@ export default function useEditCreatedMeetingMutation(
 
   return useMutation({
     mutationFn: (form: EditCreateMeetingIntroType) =>
-      EditMyCreatedMeetingDetail(id, form, existingImages),
+      EditMeetingIntro(id, form, existingImages),
     onSuccess: () => {
       toast.success('모임 수정을 완료하였습니다.');
       queryClient.invalidateQueries({ queryKey: ['createdMeetingIntro'] });
