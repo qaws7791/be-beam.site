@@ -1,8 +1,8 @@
 import { getMeetingDetail } from '@/api/meetings';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 export default function useMeetingQuery(id: number) {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['meeting', id],
     queryFn: () => getMeetingDetail(id),
   });

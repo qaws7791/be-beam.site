@@ -4,12 +4,15 @@ import { applyMeeting } from '@/api/meetings';
 
 import toast from 'react-hot-toast';
 
-export default function useApplyMeetingMutation(id: number) {
+export default function useApplyMeetingMutation(
+  id: number,
+  refetchKey: string,
+) {
   return useMutation({
     mutationFn: (data: { joinReason: string }) => applyMeeting(id, data),
     onSuccess: () => {
       toast.success('모임 참여 신청을 하였습니다.');
-      queryClient.invalidateQueries({ queryKey: ['meeting'] });
+      queryClient.refetchQueries({ queryKey: [refetchKey] });
       close();
     },
     onError: (err) => {

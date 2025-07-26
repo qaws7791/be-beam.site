@@ -28,7 +28,11 @@ export default function MeetingDetailContentTop({
         <MoreDropdownMenu>
           <DropdownMenuItem
             onSelect={() => {
-              open('DECLARE_MODAL', { type: 'meeting', id: meeting.id });
+              open('DECLARE_MODAL', {
+                type: 'meeting',
+                id: meeting.id,
+                refetchKey: 'meeting',
+              });
             }}
           >
             신고하기

@@ -1,25 +1,27 @@
+import { formatNumberWithComma } from '@/utils/cash';
+
+import type { Meeting } from '@/types/entities';
 import Badge from '../atoms/badge/Badge';
 import Text from '../atoms/text/Text';
 import RecruitmentTypeAndTopic from '../molecules/RecruitmentTypeAndTopic';
-import { formatNumberWithComma } from '@/utils/cash';
-
-import type { MeetingDetailType } from '@/types/components';
 import MeetingCardInfoItemWrap from './MeetingCardInfoItemWrap';
 import TitleAndDescription from '../molecules/TitleAndDes';
+import { Tag } from '../atoms/tag/Tag';
 
 export default function MeetingDetailCardTop({
   meeting,
 }: {
-  meeting: MeetingDetailType;
+  meeting: Meeting;
 }) {
   const meetingStatusComment =
-    meeting?.recruitingState === '모집예정' ||
-    meeting?.recruitingState === '모집중' ||
-    meeting?.recruitingState === '모집종료'
-      ? `📢 현재 ${meeting?.applicantCount}명이 모임 신청 중이에요 !`
-      : meeting?.recruitingState === '모임중'
-        ? `📢 현재 ${meeting?.participantCount}명이 모임 참여 중이에요 !`
-        : `📢 총 ${meeting?.participantCount}명이 모임에 참여했습니다 !`;
+    meeting?.recruitmentStatus === '모집예정'
+      ? '현재 모임 모집 예정입니다 !'
+      : meeting?.recruitmentStatus === '모집중' ||
+          meeting?.recruitmentStatus === '모집종료'
+        ? `📢 현재 0명이 모임 신청 중이에요 !`
+        : meeting?.recruitmentStatus === '모임중'
+          ? `📢 현재 ${meeting?.participantCount}명이 모임 참여 중이에요 !`
+          : `📢 총 ${meeting?.participantCount}명이 모임에 참여했습니다 !`;
 
   return (
     <div className="w-full">
@@ -61,7 +63,21 @@ export default function MeetingDetailCardTop({
           </Text>
         </TitleAndDescription>
 
-        <Badge variant="purple" text={meeting?.recruitingState} />
+        <Tag
+          variant={
+            meeting?.recruitmentStatus === '모집예정'
+              ? 'primary'
+              : meeting?.recruitmentStatus === '모집중'
+                ? 'blue'
+                : meeting?.recruitmentStatus === '모집종료'
+                  ? 'tertiary'
+                  : meeting?.recruitmentStatus === '모임중'
+                    ? 'pink'
+                    : 'brown'
+          }
+        >
+          {meeting?.recruitmentStatus}
+        </Tag>
       </div>
 
       <Badge

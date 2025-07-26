@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useRouteLoaderData } from 'react-router';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../atoms/tabs/Tabs';
 import Text from '../atoms/text/Text';
@@ -11,7 +11,7 @@ import LoadingSpinner from '../molecules/LoadingSpinner';
 interface MeetingType {
   id: number;
   name: string;
-  image: string;
+  thumbnailImage: string;
   recruitmentType: string;
   recruitmentStatus: string;
   meetingStartTime: string;
@@ -30,6 +30,12 @@ export default function MeetingRecommendations({
 }) {
   const navigate = useNavigate();
 
+  const rootLoaderData = useRouteLoaderData('root');
+  const user = rootLoaderData.user;
+
+  const [tab, setTab] = useState('all');
+  const { data: datas, isLoading } = useMeetingRecommendationQuery(type, tab);
+
   const tabList = [
     {
       text: '전체',
@@ -44,16 +50,6 @@ export default function MeetingRecommendations({
       value: 'small',
     },
   ];
-
-  const [tab, setTab] = useState('all');
-  const { data: recommendationMeetings, isLoading } =
-    useMeetingRecommendationQuery(type, tab);
-
-  const datas = {
-    likes: recommendationMeetings?.recByLikesMeetings,
-    random: recommendationMeetings?.randomMeetings,
-    recent: recommendationMeetings?.latestMeetings,
-  }[type];
 
   return (
     <div className={`${className} w-full text-left`}>
@@ -89,14 +85,28 @@ export default function MeetingRecommendations({
                       <MeetingCard
                         key={meeting.id}
                         name={meeting.name}
-                        image={meeting.image}
-                        meetingType={meeting.recruitmentType}
-                        recruitmentType={meeting.recruitmentStatus}
+                        image={meeting.thumbnailImage}
+                        recruitmentStatus={
+                          meeting.recruitmentStatus === 'UPCOMING'
+                            ? '모집예정'
+                            : meeting.recruitmentStatus === 'RECRUITING'
+                              ? '모집중'
+                              : meeting.recruitmentStatus === 'CLOSED'
+                                ? '모집종료'
+                                : meeting.recruitmentStatus === 'INPROGRESS'
+                                  ? '모임중'
+                                  : '모임완료'
+                        }
+                        recruitmentType={
+                          meeting.recruitmentType === 'SMALL'
+                            ? '소모임'
+                            : '정기모임'
+                        }
                         meetingStartTime={meeting.meetingStartTime.slice(0, 10)}
                         address={meeting.address}
                         onClick={() => navigate(`/meeting/${meeting.id}`)}
-                        isLikeBtn={true}
-                        isLike={meeting.liked}
+                        isLikeBtn={user}
+                        liked={meeting.liked}
                       />
                     ))}
                   </>

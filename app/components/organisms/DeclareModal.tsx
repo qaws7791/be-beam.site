@@ -65,8 +65,12 @@ export default function DeclareModal() {
     },
   ];
 
-  const { mutate: delareMutate, isPending } = useDeclareMeetingOrReviewOrHost(
-    modalProps as { id: number; type: 'meeting' | 'review' | 'host' },
+  const { mutate: declareMutate, isPending } = useDeclareMeetingOrReviewOrHost(
+    modalProps as {
+      id: number;
+      type: 'meeting' | 'review' | 'host';
+      refetchKey: string;
+    },
   );
 
   const { control, reset, handleSubmit, formState } = useForm<
@@ -81,7 +85,7 @@ export default function DeclareModal() {
 
   function onSubmit(data: z.infer<typeof declareReasonSchema>) {
     if (isPending) return;
-    delareMutate(data);
+    declareMutate(data);
 
     reset();
     close();

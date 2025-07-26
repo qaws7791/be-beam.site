@@ -9,3 +9,9 @@ export function reissueToken(axiosRequestConfig?: AxiosRequestConfig) {
     ...axiosRequestConfig,
   });
 }
+
+export function logout() {
+  return axiosInstance.post<APIResponse<void>>('logout', undefined, {
+    baseURL: API_V1_BASE_URL,
+  });
+}

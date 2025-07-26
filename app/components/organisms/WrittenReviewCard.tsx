@@ -63,10 +63,12 @@ export default function WrittenReviewCard({ review }: WrittenReviewCardProps) {
   }) => {
     updateReviewMutation.mutate({
       reviewId: review.id,
-      rating: review.rating,
-      content: review.content,
-      existingImages: review.existingImages,
-      newImages: review.newImages,
+      data: {
+        rating: review.rating,
+        content: review.content,
+        existingImages: review.existingImages,
+        newImages: review.newImages,
+      },
     });
     setIsOpen(false);
   };

@@ -1,60 +1,73 @@
-import type { FiltersType } from '@/types/components';
+import type { MeetingListFilters } from '@/schemas/meetingFilters';
 import DropdownMenuGroup from '../molecules/DropdownMenuGroup';
 import SearchInput from '../molecules/SearchInput';
 import TabsGroup from '../molecules/TabsGroup';
 
 interface MeetingFilterControlsProps {
-  filters: FiltersType[];
-  selectedTopic: string;
-  setSelectedTopic: (topic: string) => void;
-  selectedFilters: Record<string, string>;
-  setSelectedFilters: (
-    updater: (prev: Record<string, string>) => Record<string, string>,
-  ) => void;
-  search: string;
-  setSearch: (search: string) => void;
+  topics: { label: string; value: string }[];
+  meetingFilters: MeetingListFilters;
+  setFilter: (newFilter: Partial<MeetingListFilters>) => void;
 }
 
 export default function MeetingFilterControls({
-  filters,
-  selectedTopic,
-  setSelectedTopic,
-  selectedFilters,
-  setSelectedFilters,
-  search,
-  setSearch,
+  topics,
+  meetingFilters,
+  setFilter,
 }: MeetingFilterControlsProps) {
-  const topics = [
-    { label: '전체', value: 'all' },
-    { label: '소셜 다이닝', value: '소셜 다이닝' },
-    { label: '독서 · 글쓰기', value: '독서 · 글쓰기' },
-    { label: '사진', value: '사진' },
-    { label: '운동 · 야외활동', value: '운동 · 야외활동' },
-    { label: '문화탐방', value: '문화탐방' },
-    { label: '환경 · 제로웨이스트', value: '환경 · 제로웨이스트' },
-    { label: '언어 · 스터디', value: '언어 · 스터디' },
-    { label: '기타', value: '기타' },
+  const filters = [
+    {
+      label: 'recruitment-type',
+      options: ['전체', '정기모임', '소모임'],
+      values: ['all', 'regular', 'small'],
+    },
+    {
+      label: 'recruitment-status',
+      options: ['전체', '모집예정', '모집중', '모집종료', '모임중', '모임완료'],
+      values: [
+        'all',
+        'upcoming',
+        'recruiting',
+        'closed',
+        'in_progress',
+        'completed',
+      ],
+    },
+    {
+      label: 'mode',
+      options: ['전체', '오프라인', '온라인', '혼합'],
+      values: ['all', 'offline', 'online', 'mix'],
+    },
+    {
+      label: 'cost',
+      options: ['전체', '무료', '유료'],
+      values: ['all', 'free', 'cash'],
+    },
+    {
+      label: 'sort',
+      options: ['최신순', '좋아요순'],
+      values: ['recent', 'likes'],
+    },
   ];
 
   return (
     <div className="mt-12">
       <TabsGroup
         categories={topics}
-        selectedCategory={selectedTopic}
-        onCategoryChange={setSelectedTopic}
+        selectedCategory={meetingFilters.topic}
+        onCategoryChange={(value) => setFilter({ topic: value })}
       />
 
       <div className="mt-8 flex w-full items-center justify-between">
         <DropdownMenuGroup
           datas={filters}
-          selectedFilters={selectedFilters}
-          onDropdownChange={setSelectedFilters}
+          selectedFilters={meetingFilters}
+          onDropdownChange={setFilter}
         />
         <SearchInput
           placeHolder="입력해주세요"
           inputStyle="w-full max-w-[400px] px-4 py-3 border-1 border-gray-300 rounded-full"
-          onSearchChange={setSearch}
-          search={search}
+          onSearchChange={setFilter}
+          search={meetingFilters.search}
         />
       </div>
     </div>
