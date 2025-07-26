@@ -4,8 +4,9 @@ import type {
   DeclareDataType,
   DeclareModalPropsType,
 } from '@/hooks/api/useDeclareMeetingOrReviewOrHost';
+import type { APIResponse } from '@/types/api';
 
-interface ReportComplaintParams {
+interface ReportComplaintData {
   complaintId: number;
   targetType: 'REVIEW' | 'USER' | 'MEETING';
   reasonType:
@@ -20,10 +21,14 @@ interface ReportComplaintParams {
   description: string;
 }
 
-export const reportComplaint = async (params: ReportComplaintParams) => {
-  const res = await axiosInstance.post('/complaints', params, {
-    baseURL: API_V1_BASE_URL,
-  });
+export const reportComplaint = async (data: ReportComplaintData) => {
+  const res = await axiosInstance.post<APIResponse<string>>(
+    '/complaints',
+    data,
+    {
+      baseURL: API_V1_BASE_URL,
+    },
+  );
   return res.data;
 };
 

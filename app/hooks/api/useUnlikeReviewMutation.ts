@@ -5,11 +5,14 @@ import {
   type InfiniteData,
 } from '@tanstack/react-query';
 
+interface UnlikeReviewParams {
+  reviewId: number;
+}
+
 export default function useUnlikeReviewMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ reviewId }: { reviewId: number }) =>
-      unlikeReview({ reviewId }),
+    mutationFn: ({ reviewId }: UnlikeReviewParams) => unlikeReview(reviewId),
     onMutate: async ({ reviewId }) => {
       await queryClient.cancelQueries({
         queryKey: ['reviews'],

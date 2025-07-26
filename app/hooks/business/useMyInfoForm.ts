@@ -3,7 +3,7 @@ import { useForm, type UseFormProps } from 'react-hook-form';
 import { z } from 'zod';
 
 export const myInfoSchema = z.object({
-  nickname: z.string(),
+  name: z.string(),
   phoneNumber: z
     .string()
     .min(11, '휴대전화번호는 11자리입니다.')
