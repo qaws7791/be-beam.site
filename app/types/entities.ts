@@ -6,12 +6,16 @@ export type MeetingRecruitmentStatus =
   | '모임중'
   | '모임완료';
 
+export type ImageType = string;
+
+export type LinkType = string;
+
 export interface Guidebook {
   id: number;
   guidebookType: string;
   title: string;
   description: string;
-  images: string[];
+  image: ImageType[];
   hashtags: string[];
   level: string;
   targetType: string;
@@ -60,7 +64,7 @@ export interface Meeting {
   introduction: string;
   schedules: MeetingSchedule[];
   hashtags: string[];
-  meetingImages: string[];
+  meetingImages: ImageType[];
   info: string;
   hostId: number;
   hostName: string;
@@ -164,7 +168,7 @@ export interface UserProfile {
   nickname: string;
   introduction: string;
   profileImage: string;
-  role: string;
+  role: '일반 참가자' | '정기모임 호스트' | '소모임 호스트' | '관리자';
 }
 
 export interface MeetingSummary {
@@ -172,7 +176,7 @@ export interface MeetingSummary {
   name: string;
   recruitmentType: string;
   recruitmentStatus: string;
-  image: string;
+  image: ImageType;
   meetingStartTime: string;
   address: string;
   liked?: boolean;
@@ -184,7 +188,7 @@ export interface Review {
   nickname: string;
   rating: number;
   text: string;
-  images: string[];
+  images: ImageType[];
   createdAt: string;
   likesCount: number;
   /** 로그인한 사용자 정보 */
@@ -207,4 +211,27 @@ export interface Notification {
   timestamp: string;
   redirectUrl: string;
   isRead: boolean;
+}
+
+export interface Participant {
+  id: number;
+  name: string;
+  image: ImageType;
+  authority: string; // "관리자" | "참가자" TODO: 이거 어떻게 되는지 확인해야함
+  status: string; // "참여중" | "요청중" TODO: 이거 어떻게 되는지 확인해야함
+}
+
+export interface MeetingAttendanceParticipant {
+  id: number;
+  name: string;
+  image: ImageType;
+  isChecked: boolean;
+}
+
+export interface MeetingAttendance {
+  scheduleId: number;
+  round: number; // 회차 번호
+  checkedCount: number; // 총 출석자 수
+  totalCount: number; // 총 참여자 수
+  scheduleParticipants: MeetingAttendanceParticipant[]; // 참여자 출석 목록
 }
