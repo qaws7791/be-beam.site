@@ -78,6 +78,7 @@ export interface Meeting {
 }
 
 export interface Host {
+  id: number;
   hostName: string;
   hostImage: string;
   hostInstruction: string;
