@@ -1,4 +1,4 @@
-import EditMeetingSchedule from '@/api/users';
+import { EditMeetingSchedule } from '@/api/users';
 import type { EditMeetingSchedule as EditMeetingScheduleType } from '@/types/entities';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 

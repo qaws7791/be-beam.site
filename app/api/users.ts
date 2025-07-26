@@ -462,7 +462,7 @@ export async function EditMeetingDetail(
   });
 }
 
-export default function EditMeetingSchedule(
+export async function EditMeetingSchedule(
   id: number,
   form: { schedules: EditMeetingSchedule[] },
 ) {
@@ -471,5 +471,64 @@ export default function EditMeetingSchedule(
     url: `/meetings/${id}/mypage/schedules`,
     method: 'PATCH',
     data: form,
+  });
+}
+
+export async function getMyCreatedMeetingApplicants(id: number) {
+  const res = await axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${id}/mypage/applicants`,
+    method: 'GET',
+  });
+  return res.data.result;
+}
+
+export async function getMyCreatedMeetingParticipants(id: number) {
+  const res = await axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${id}/mypage/participants`,
+    method: 'GET',
+  });
+  return res.data.result;
+}
+
+export function acceptOrRejectApplication(
+  id: number,
+  form: { userId: number; type: string },
+) {
+  return axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${id}/users/${form.userId}`,
+    method: 'PATCH',
+    data: {
+      status: form.type,
+    },
+  });
+}
+
+export async function getMyCreatedMeetingAttendance(id: number) {
+  const res = await axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${id}/mypage/attendance`,
+    method: 'GET',
+  });
+  return res.data.result;
+}
+
+export function checkAttendance(
+  meetingId: number,
+  data: {
+    scheduleId: number;
+    userId: number;
+    status: string;
+  },
+) {
+  return axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${meetingId}/schedules/${data.scheduleId}/users/${data.userId}`,
+    method: 'PATCH',
+    data: {
+      status: data.status,
+    },
   });
 }

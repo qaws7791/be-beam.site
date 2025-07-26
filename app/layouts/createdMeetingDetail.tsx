@@ -115,7 +115,7 @@ export default function CreatedMeetingDetail({
                     </TabsTrigger>
                   ))}
                 </TabsList>
-                <div className="absolute bottom-0 left-0 h-px w-[550px] bg-gray-300" />
+                <div className="absolute bottom-0 left-0 h-px w-full bg-gray-300" />
               </div>
             </Tabs>
 

@@ -2,7 +2,7 @@ export type MeetingRecruitmentType = '정기모임' | '소모임';
 export type MeetingRecruitmentStatus =
   | '모집예정'
   | '모집중'
-  | '모집종료'
+  | '모집마감'
   | '모임중'
   | '모임완료';
 
@@ -71,6 +71,56 @@ export interface Meeting {
   liked: boolean;
   reviewable: boolean;
   userStatus: string;
+}
+
+export interface MeetingApplicants {
+  applicantCount: number;
+  applicants: Applicants[];
+}
+
+export interface Applicants {
+  id: number;
+  nickname: string;
+  name: string;
+  image: string;
+  phoneNumber: string;
+  joinReason: string;
+  userStatus: string;
+}
+
+export interface MeetingParticipants {
+  participantCount: number;
+  participants: Participants[];
+}
+
+export interface Participants {
+  id: number;
+  authority: string;
+  name: string;
+  nickname: string;
+  phoneNumber: string;
+  image: string;
+  userStatus: string;
+}
+
+export interface MeetingAttendance {
+  attendanceStatus: MeetingAttendanceSchedule[];
+}
+
+export interface MeetingAttendanceSchedule {
+  scheduleId: number;
+  round: number;
+  checkedCount: number;
+  totalCount: number;
+  scheduleParticipants: AttendanceScheduleParticipants[];
+}
+
+export interface AttendanceScheduleParticipants {
+  id: number;
+  nickname: string;
+  name: string;
+  image: string;
+  isChecked: '참석' | '불참' | '지각';
 }
 
 export interface EditMeetingSchedule {
