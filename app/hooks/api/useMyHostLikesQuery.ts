@@ -1,5 +1,5 @@
 import { getMyHostLikes } from '@/api/users';
-import { queryOptions, useQuery } from '@tanstack/react-query';
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 
 const myHostLikesQueryOptions = ({
   page,
@@ -21,5 +21,5 @@ export default function useMyHostLikesQuery({
   page: number;
   size: number;
 }) {
-  return useQuery(myHostLikesQueryOptions({ page, size }));
+  return useSuspenseQuery(myHostLikesQueryOptions({ page, size }));
 }
