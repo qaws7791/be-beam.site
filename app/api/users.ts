@@ -288,28 +288,34 @@ export type UpdateMyProfileResult = {
 };
 
 export const updateMyProfile = async (params: UpdateMyProfileParams) => {
-  return {
-    nickname: params.nickname,
-    profileImage: 'https://placehold.co/300',
-    introduction: params.introduction,
-  };
-  // const formData = new FormData();
-  // formData.append(
-  //   'data',
-  //   JSON.stringify({
-  //     nickname: params.nickname,
-  //     introduction: params.introduction,
-  //   }),
-  // );
-  // if (params.profileImage) {
-  //   formData.append('profileImage', params.profileImage);
-  // }
-  // const res = await axiosInstanceV1.patch<APIResponse<UpdateMyProfileResult>>(
-  //   'users/my-profile',
-  //   formData,
-  // );
-  // const data = res.data;
-  // return data.result;
+  // return {
+  //   nickname: params.nickname,
+  //   profileImage: 'https://placehold.co/300',
+  //   introduction: params.introduction,
+  // };
+  const formData = new FormData();
+  formData.append(
+    'data',
+    JSON.stringify({
+      nickname: params.nickname,
+      introduction: params.introduction,
+    }),
+  );
+  if (params.profileImage) {
+    formData.append('profileImage', params.profileImage);
+  }
+  const res = await axiosInstance.patch<APIResponse<MyProfileResult>>(
+    'users/my-profile',
+    formData,
+    {
+      baseURL: API_V1_BASE_URL,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    },
+  );
+  const data = res.data;
+  return data.result;
 };
 
 export async function getCreatedMeetingDetail(id: number) {
