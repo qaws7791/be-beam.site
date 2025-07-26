@@ -1,5 +1,4 @@
 import { useParams } from 'react-router';
-import useCreatedMeetingDetailQuery from '@/hooks/api/useCreatedMeetingDetailQuery';
 import useCreatedMeetingDetailDetailParams from '@/hooks/business/useCreatedMeetingDetailDetailParams';
 
 import {
@@ -9,7 +8,7 @@ import {
   TabsTrigger,
 } from '@/components/atoms/tabs/Tabs';
 import CreatedMeetingDetailContent from '@/components/organisms/CreatedMeetingDetailContent';
-import CreatedScheduleDetailMeetingDetailContent from '@/components/organisms/CreatedScheduleDetailMeetingDetailContent';
+import CreatedMeetingScheduleContent from '@/components/organisms/CreatedMeetingScheduleContent';
 import { requireAuth } from '@/lib/auth.server';
 import type { Route } from './+types/createdMeetingDetailDetail';
 import {
@@ -20,7 +19,7 @@ import {
 } from '@tanstack/react-query';
 import {
   getMyCreatedMeetingDetail,
-  getMyCreatedMeetingSchedules,
+  getMyCreatedMeetingSchedule,
 } from '@/api/users';
 import { Suspense } from 'react';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
@@ -51,7 +50,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
     }),
     queryClient.prefetchQuery({
       queryKey: ['createdMeetingSchedules', id],
-      queryFn: () => getMyCreatedMeetingSchedules(id),
+      queryFn: () => getMyCreatedMeetingSchedule(id),
     }),
   ]);
 
@@ -68,7 +67,6 @@ export default function CreatedMeetingDetailDetail({
   };
 
   const id = Number(useParams()?.meetingId);
-  const { data: createdMeetingDetail } = useCreatedMeetingDetailQuery(id);
   const { params, handleUpdateType } = useCreatedMeetingDetailDetailParams();
 
   const typeList = [
@@ -103,9 +101,7 @@ export default function CreatedMeetingDetailDetail({
                 {tab.value === 'meeting' ? (
                   <CreatedMeetingDetailContent meetingId={id} />
                 ) : (
-                  <CreatedScheduleDetailMeetingDetailContent
-                    createdMeetingDetail={createdMeetingDetail}
-                  />
+                  <CreatedMeetingScheduleContent meetingId={id} />
                 )}
               </TabsContent>
             ))}

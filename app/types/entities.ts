@@ -73,6 +73,15 @@ export interface Meeting {
   userStatus: string;
 }
 
+export interface EditMeetingSchedule {
+  id: null | number;
+  meetingDate: string;
+  meetingStartTime: string;
+  meetingEndTime: string;
+  address: string;
+  addressDetail: string;
+}
+
 export interface Host {
   hostName: string;
   hostImage: string;

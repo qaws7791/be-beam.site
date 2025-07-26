@@ -84,15 +84,14 @@ export default function MeetingDetailContentMiddle({
         />
       </TitleAndDes>
 
-      <TitleAndDes
-        title="참고한 가이드북"
-        wrapStyle={cn(!meeting?.guidebook?.id && 'hidden', 'mb-14')}
-      >
-        <GuideBookRecommendationCard
-          data={meeting?.guidebook}
-          onClick={() => navigate(`/guideBook/${meeting?.guidebook.id}`)}
-        />
-      </TitleAndDes>
+      {meeting?.guidebook && (
+        <TitleAndDes title="참고한 가이드북" wrapStyle="mb-14">
+          <GuideBookRecommendationCard
+            data={meeting?.guidebook}
+            onClick={() => navigate(`/guideBook/${meeting?.guidebook.id}`)}
+          />
+        </TitleAndDes>
+      )}
     </div>
   );
 }

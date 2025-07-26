@@ -5,6 +5,7 @@ import type {
   EditCreateMeetingIntroType,
   EditMeetingDetailType,
 } from '@/types/components';
+import type { EditMeetingSchedule } from '@/types/entities';
 import type { AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 
@@ -389,7 +390,7 @@ export async function getMyCreatedMeetingDetail(id: number) {
   return res.data.result;
 }
 
-export async function getMyCreatedMeetingSchedules(id: number) {
+export async function getMyCreatedMeetingSchedule(id: number) {
   const res = await axiosInstance({
     baseURL: API_V1_BASE_URL,
     url: `/meetings/${id}/mypage/schedules`,
@@ -458,5 +459,17 @@ export async function EditMeetingDetail(
       recruitingEndTime: form.recruitingEndTime + 'T00:00:00',
       paymentAmount: Number(form.paymentAmount),
     },
+  });
+}
+
+export default function EditMeetingSchedule(
+  id: number,
+  form: { schedules: EditMeetingSchedule[] },
+) {
+  return axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${id}/mypage/schedules`,
+    method: 'PATCH',
+    data: form,
   });
 }

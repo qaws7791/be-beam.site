@@ -58,7 +58,6 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     ]);
 
     const dehydratedState = dehydrate(queryClient);
-
     return { dehydratedState };
   });
 }

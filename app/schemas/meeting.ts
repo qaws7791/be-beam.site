@@ -237,6 +237,40 @@ export const editCreatedMeetingSecondSchema = z
     },
   );
 
+export const editMeetingScheduleSchema = z
+  .object({
+    id: z.number().nullable(),
+    meetingDate: z.string().min(1, '날짜를 선택해주세요.'),
+    meetingStartTime: z.string().min(1, '시작 시간을 선택해주세요.'),
+    meetingEndTime: z.string().min(1, '종료 시간을 선택해주세요.'),
+    address: z.string().min(1, '모집 장소를 검색해주세요.'),
+    addressDetail: z.string().min(1, '상세 주소를 입력해주세요.'),
+  })
+  .refine(
+    (data) => {
+      if (data.meetingDate && data.meetingStartTime && data.meetingEndTime) {
+        const startDateTime = new Date(
+          `${data.meetingDate}T${data.meetingStartTime}`,
+        );
+        const endDateTime = new Date(
+          `${data.meetingDate}T${data.meetingEndTime}`,
+        );
+        return endDateTime > startDateTime;
+      }
+      return true;
+    },
+    {
+      message: '종료 시간은 시작 시간보다 늦어야 합니다.',
+      path: ['meetingEndTime'],
+    },
+  );
+
+export const editCreatedMeetingThirdSchema = z.object({
+  schedules: z
+    .array(editMeetingScheduleSchema)
+    .min(1, '최소 1개의 일정을 등록해야 합니다.'),
+});
+
 export const declareReasonSchema = z.object({
   reasonType: z.enum(
     [

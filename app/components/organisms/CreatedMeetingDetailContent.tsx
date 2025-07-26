@@ -270,7 +270,7 @@ export default function CreatedMeetingDetailContent({
           type="submit"
           disabled={!formState.isValid}
         >
-          수정 중
+          수정 완료
         </Button>
       </div>
     </form>
