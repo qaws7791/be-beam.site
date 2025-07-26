@@ -1,5 +1,4 @@
-import { queryClient } from '@/root';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { declareMeetingOrReviewOrHost } from '@/api/complaints';
 import toast from 'react-hot-toast';
 
@@ -17,6 +16,7 @@ export interface DeclareDataType {
 export default function useDeclareMeetingOrReviewOrHost(
   modalProps: DeclareModalPropsType,
 ) {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: DeclareDataType) =>
       declareMeetingOrReviewOrHost(data, modalProps),

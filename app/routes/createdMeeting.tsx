@@ -1,8 +1,7 @@
 import { useNavigate } from 'react-router';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import useCreatedMeetingParams from '@/hooks/business/useCreatedMeetingParams';
 import usePagination from '@/hooks/ui/usePagination';
-import { queryClient } from '@/root';
 import { useModalStore } from '@/stores/useModalStore';
 import axios from 'axios';
 import { axiosInstance } from '@/lib/axios';
@@ -40,6 +39,7 @@ interface createdMeetingType {
 }
 
 export default function CreatedMeeting() {
+  const queryClient = useQueryClient();
   const statusList: FilterOption[] = [
     {
       text: '정기모임',
