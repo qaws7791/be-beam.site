@@ -33,10 +33,12 @@ export default function ReviewableMeetingCard({
     images: File[];
   }) => {
     createReviewMutation.mutate({
-      rating: review.rating,
-      text: review.content,
-      images: review.images,
       meetingId: meeting.id,
+      data: {
+        rating: review.rating,
+        text: review.content,
+        images: review.images,
+      },
     });
     setIsOpen(false);
   };

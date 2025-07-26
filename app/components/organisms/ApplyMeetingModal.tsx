@@ -1,9 +1,9 @@
 import { useModalStore } from '@/stores/useModalStore';
+import useApplyMeetingMutation from '@/hooks/api/useApplyMeetingMutation';
 import { Controller, useForm } from 'react-hook-form';
 import type { z } from 'zod';
 import { applyMeetingSchema } from '@/schemas/meeting';
 import { zodResolver } from '@hookform/resolvers/zod';
-import useApplyMeetingMutation from '@/hooks/api/useApplyMeetingMutation';
 
 import type { MeetingDetailType } from '@/types/components';
 import {
@@ -17,7 +17,6 @@ import Text from '../atoms/text/Text';
 import InfoItem from '../molecules/InfoItem';
 import { Button } from '../atoms/button/Button';
 import { Textarea } from '../atoms/textarea/Textarea';
-import clsx from 'clsx';
 import toast from 'react-hot-toast';
 
 export default function ApplyMeetingModal() {
@@ -33,6 +32,11 @@ export default function ApplyMeetingModal() {
     },
   });
 
+  const { mutate: applyMeeting, isPending } = useApplyMeetingMutation(
+    meeting.id,
+    'meeting',
+  );
+
   const onSubmit = (data: z.infer<typeof applyMeetingSchema>) => {
     if (isPending) return;
     applyMeeting(data);
@@ -41,21 +45,12 @@ export default function ApplyMeetingModal() {
     close();
   };
 
-  const { mutate: applyMeeting, isPending } = useApplyMeetingMutation(
-    meeting.id,
-  );
-
   const isRegPaymentAmount =
     meeting.recruitmentType === '정기모임' && meeting.paymentAmount !== 0;
 
   return (
     <Dialog open={isOpen} onOpenChange={close}>
-      <DialogContent
-        className={clsx(
-          isRegPaymentAmount ? 'h-[700px]' : 'h-auto',
-          'z-99 max-w-[820px] overflow-y-scroll',
-        )}
-      >
+      <DialogContent className="z-99 max-w-[820px]">
         <DialogHeader>
           <DialogTitle className="text-h2">
             {meeting.recruitmentType} 신청하기
@@ -63,7 +58,7 @@ export default function ApplyMeetingModal() {
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="w-full">
+          <div className="h-[400px] w-full overflow-y-scroll">
             <div className="mb-8 w-full">
               <Text variant="T2_Semibold" className="mb-3">
                 모임 정보
@@ -103,8 +98,8 @@ export default function ApplyMeetingModal() {
                 <div className="box-border flex w-full items-center justify-between rounded-lg border-1 border-gray-300 px-5 py-6 text-gray-700">
                   <Text>무통장입금 안내</Text>
                   <div className="flex items-center gap-3">
-                    <Text>부산은행</Text>
-                    <Text>000-1234-5678-91</Text>
+                    <Text>토스뱅크</Text>
+                    <Text>1000-5552-9626 (비빔모임용_김성원)</Text>
                   </div>
                 </div>
               </div>

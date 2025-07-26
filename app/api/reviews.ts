@@ -1,32 +1,33 @@
 import { API_V1_BASE_URL } from '@/constants/api';
 import { axiosInstance } from '@/lib/axios';
+import type { ImageType, Meeting, Review } from '@/types/entities';
 
 export type getReviewListParams = {
   sort: 'recent' | 'likes';
   type: 'image' | 'text';
   rating: 'all' | '1' | '2' | '3' | '4' | '5';
   recruitmentType: 'all' | 'regular' | 'small';
-  cursor?: number;
-  size?: number;
+  cursor: number;
+  size: number;
 };
 
 export type ReviewListResult = {
   reviews: {
-    reviewId: number;
-    profileImg: string;
-    nickname: string;
-    rating: number;
-    text: string;
-    images: string[];
-    createdAt: string;
-    likesCount: number;
-    liked: boolean;
-    myReview: boolean;
+    reviewId: Review['reviewId'];
+    profileImg: Review['profileImg'];
+    nickname: Review['nickname'];
+    rating: Review['rating'];
+    text: Review['text'];
+    images: Review['images'];
+    createdAt: Review['createdAt'];
+    likesCount: Review['likesCount'];
+    liked: Review['liked'];
+    myReview: Review['myReview'];
     meeting: {
-      id: number;
-      name: string;
-      recruitmentType: '정기모임' | '소모임';
-      image: string;
+      id: Meeting['id'];
+      name: Meeting['name'];
+      recruitmentType: Meeting['recruitmentType'];
+      image: ImageType;
     };
   }[];
   pageInfo: {
@@ -64,63 +65,66 @@ export const getReviewList = async ({
 };
 
 export const likeReview = async ({ reviewId }: { reviewId: number }) => {
-  // return {
-  //   reviewId,
-  // };
   await axiosInstance.post<void>(`/reviews/${reviewId}/like`, undefined, {
     baseURL: API_V1_BASE_URL,
   });
 };
 
 export const unlikeReview = async ({ reviewId }: { reviewId: number }) => {
-  // return {
-  //   reviewId,
-  // };
   await axiosInstance.delete<void>(`/reviews/${reviewId}/like`, {
     baseURL: API_V1_BASE_URL,
   });
 };
-export const createReview = async (review: {
+
+export type CreateReviewData = {
   rating: number;
   text: string;
   images: File[];
-  meetingId: number;
-}) => {
-  console.log('createReview', review);
+};
+
+export const createReview = async (
+  meetingId: number,
+  data: CreateReviewData,
+) => {
+  console.log('createReview', meetingId, data);
   return;
   // const formData = new FormData();
-  // review.images.forEach((image) => {
+  // data.images.forEach((image) => {
   //   formData.append('files', image);
   // });
   // const jsonData = JSON.stringify({
-  //   rating: review.rating,
-  //   text: review.text,
+  //   rating: data.rating,
+  //   text: data.text,
   // });
   // formData.append('data', jsonData);
-  // await axiosInstance.post(`/meetings/${review.meetingId}/reviews`, formData);
+  // await axiosInstance.post(`/meetings/${meetingId}/reviews`, formData);
   // return;
 };
 
-export const updateReview = async (review: {
-  reviewId: number;
+export type UpdateReviewData = {
   rating: number;
   content: string;
   existingImages: string[];
   newImages: File[];
-}) => {
-  console.log('updateReview', review);
+};
+
+export const updateReview = async (
+  reviewId: number,
+  data: UpdateReviewData,
+) => {
+  console.log('updateReview', reviewId, data);
   return;
   // const formData = new FormData();
-  // review.newImages.forEach((image) => {
+  // data.newImages.forEach((image) => {
   //   formData.append('files', image);
   // });
   // const jsonData = JSON.stringify({
-  //   rating: review.rating,
-  //   text: review.content,
-  //   existingImages: review.existingImages,
+  //   rating: data.rating,
+  //   text: data.content,
+  //   existingImages: data.existingImages,
   // });
   // formData.append('data', jsonData);
-  // await axiosInstance.patch(`/reviews/${review.reviewId}`, formData);
+  // await axiosInstance.patch(`/reviews/${reviewId}`, formData);
   // return;
 };
 

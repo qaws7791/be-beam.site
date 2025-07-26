@@ -1,13 +1,22 @@
 import { API_V1_BASE_URL } from '@/constants/api';
 import { axiosInstance } from '@/lib/axios';
 import type { APIResponse } from '@/types/api';
+import type { Notification } from '@/types/entities';
+
+export type NotificationParams = {
+  type: 'all' | 'meeting' | 'review' | 'host';
+  page: number;
+  size: number;
+};
 
 export type NotificationsResult = {
   alarms: {
-    id: number;
-    type: 'MEETING' | 'REVIEW' | 'HOST';
-    message: string;
-    timestamp: string;
+    id: Notification['id'];
+    type: Notification['type'];
+    message: Notification['message'];
+    redirectUrl: Notification['redirectUrl'];
+    timestamp: Notification['timestamp'];
+    isRead: Notification['isRead'];
   }[];
   pageInfo: {
     page: number;
@@ -22,11 +31,7 @@ export const getNotifications = async ({
   type = 'all',
   page,
   size,
-}: {
-  type?: 'all' | 'meeting' | 'review' | 'host';
-  page: number;
-  size: number;
-}): Promise<NotificationsResult> => {
+}: NotificationParams): Promise<NotificationsResult> => {
   return {
     alarms: [
       {
@@ -34,30 +39,40 @@ export const getNotifications = async ({
         type: 'MEETING',
         message: '관심 등록한 독서 모임이 새로 열렸어요!',
         timestamp: '2025-06-17T11:12:00',
+        redirectUrl: '/',
+        isRead: false,
       },
       {
         id: 102,
         type: 'REVIEW',
         message: '참여한 모임에 후기가 달렸어요!',
         timestamp: '2025-06-17T09:30:00',
+        redirectUrl: '/',
+        isRead: false,
       },
       {
         id: 103,
         type: 'HOST',
         message: '관심 등록한 독서 모임이 새로 열렸어요!',
         timestamp: '2025-06-17T11:12:00',
+        redirectUrl: '/',
+        isRead: false,
       },
       {
         id: 104,
         type: 'MEETING',
         message: '관심 등록한 독서 모임이 새로 열렸어요!',
         timestamp: '2025-06-17T11:12:00',
+        redirectUrl: '/',
+        isRead: false,
       },
       {
         id: 105,
         type: 'REVIEW',
         message: '참여한 모임에 후기가 달렸어요!',
         timestamp: '2025-06-17T09:30:00',
+        redirectUrl: '/',
+        isRead: false,
       },
     ],
     pageInfo: {
@@ -81,4 +96,10 @@ export const getNotifications = async ({
   );
   const data = res.data;
   return data.result;
+};
+
+export const deleteNotification = async (notificationId: number) => {
+  await axiosInstance.delete<void>(`/notifications/${notificationId}`, {
+    baseURL: API_V1_BASE_URL,
+  });
 };

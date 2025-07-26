@@ -1,165 +1,125 @@
-// 페이지 && Smart 컴포넌트: 기능 중심
+import { useMemo } from 'react';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
+import {
+  MeetingListFilterSchema,
+  type MeetingListFilters,
+} from '@/schemas/meetingFilters';
+import { withOptionalAuth } from '@/lib/auth.server';
+import { getMeetingList } from '@/api/meetings';
+import { getTopics } from '@/api/topics';
+import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
+import { useModalStore } from '@/stores/useModalStore';
+import { useRouteLoaderData } from 'react-router';
 
-import { useMemo, useState } from 'react';
-import useMeetingsQuery from '@/hooks/api/useMeetingsQuery';
-import useInfiniteScroll from '@/hooks/ui/useInfiniteScroll';
-import { getInitialFilters } from '@/utils/filter';
-
+import type { Route } from './+types/meetings';
+import type { Topic } from '@/types/entities';
 import CommonTemplate from '@/components/templates/CommonTemplate';
 import Banner from '@/components/atoms/Banner';
 import MeetingFilterControls from '@/components/organisms/MeetingFilterControls';
-import MeetingCardGroup from '@/components/sections/MeetingCardGroup';
-import LoadingSpinner from '@/components/molecules/LoadingSpinner';
+import MeetingWrap from '@/components/organisms/MeetingWrap';
 import { Button } from '@/components/atoms/button/Button';
-import type { Route } from './+types/meetings';
-import { withOptionalAuth } from '@/lib/auth.server';
-import { useModalStore } from '@/stores/useModalStore';
-
-export function meta() {
-  return [
-    { title: '모임 페이지' },
-    { name: 'description', content: '모임을 생성하거나 모임에 참여하세요!' },
-  ];
-}
-
-// export async function loader() {
-// 서버에서 미리 데이터를 가져와서 해당 쿼리 캐시에 저장
-// 실제 api를 사용하게 되면 HydrationBoundary와 함께 사용
-// await queryClient.prefetchQuery({
-//   queryKey: [
-//     'meetings',
-//     '',
-//     'all',
-//     {
-//       '모임 유형': 'all',
-//       '모집 상태': 'all',
-//       '모임 방식': 'all',
-//       참가비: 'all',
-//       정렬: 'recent',
-//     },
-//   ],
-//   queryFn: () => getMeetingList(),
-// });
-
-// return {
-//   dehydratedState: dehydrate(queryClient),
-// };
-// }
 
 export async function loader({ request }: Route.LoaderArgs) {
-  return withOptionalAuth(request, async () => {
-    return {};
+  const queryClient = new QueryClient();
+
+  const authResult = await withOptionalAuth(request, async () => {
+    const url = new URL(request.url);
+    const urlSearchParams = new URLSearchParams(url.search);
+    const rawFilters = Object.fromEntries(urlSearchParams.entries());
+    const parsedFilters: MeetingListFilters = MeetingListFilterSchema.parse({
+      ...rawFilters,
+    });
+
+    const cookiesHeaderFromBrowser = request.headers.get('Cookie');
+    const axiosRequestConfigHeaders: { Cookie?: string } = {};
+    if (cookiesHeaderFromBrowser) {
+      axiosRequestConfigHeaders.Cookie = cookiesHeaderFromBrowser;
+    }
+
+    await queryClient.prefetchInfiniteQuery({
+      queryKey: ['meetings', parsedFilters],
+      queryFn: ({ pageParam }) =>
+        getMeetingList(parsedFilters, pageParam, {
+          headers: axiosRequestConfigHeaders,
+        }),
+      initialPageParam: 0,
+    });
+
+    const topics = await getTopics({
+      headers: axiosRequestConfigHeaders,
+    });
+
+    return {
+      filters: parsedFilters,
+      topics,
+    };
   });
+
+  const loaderDataForComponent = authResult.data;
+  const dehydratedState = dehydrate(queryClient);
+
+  return { ...loaderDataForComponent, dehydratedState };
 }
 
 export default function Meetings({ loaderData }: Route.ComponentProps) {
-  // const { dehydratedState } = loaderData;
-  const user = loaderData.user;
-  console.log(user);
-
   const { open } = useModalStore();
 
-  const filters = [
-    {
-      label: '모임 유형',
-      options: ['전체', '정기모임', '소모임'],
-      values: ['all', 'reg', 'small'],
-    },
-    {
-      label: '모집 상태',
-      options: ['전체', '모집예정', '모집중', '모집종료', '모임중', '모임완료'],
-      values: [
-        'all',
-        'upcoming',
-        'recruiting',
-        'closed',
-        'in_progress',
-        'completed',
-      ],
-    },
-    {
-      label: '모임 방식',
-      options: ['전체', '오프라인', '온라인', '혼합'],
-      values: ['all', 'offline', 'online', 'mix'],
-    },
-    {
-      label: '참가비',
-      options: ['전체', '무료', '유료'],
-      values: ['all', 'free', 'cash'],
-    },
-    {
-      label: '정렬',
-      options: ['최신순', '좋아요순'],
-      values: ['recent', 'likes'],
-    },
-  ];
+  const rootLoaderData = useRouteLoaderData('root');
+  const user = rootLoaderData.user;
 
-  const [selectedTopic, setSelectedTopic] = useState('all');
-  const [selectedFilters, setSelectedFilters] = useState<
-    Record<string, string>
-  >(() => getInitialFilters(filters));
-  const [search, setSearch] = useState('');
+  const { data, dehydratedState } = loaderData;
+  const initialFilters = data?.filters;
+  const topics = data?.topics;
 
-  const {
-    isLoading,
-    data: meetings,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useMeetingsQuery(search, selectedTopic, selectedFilters);
+  const { filters: meetingFilters, setFilter } = useUrlFilters(
+    MeetingListFilterSchema,
+    initialFilters,
+  );
 
-  const allMeetings = useMemo(() => {
-    return meetings?.pages?.flatMap((page) => page.meetings) || [];
-  }, [meetings]);
+  const allTopics = useMemo(() => {
+    const defaultAllOption = { label: '전체', value: 'all' };
 
-  // 스크롤 감지 기능은 별도의 관심사. 커스텀 훅으로 분리
-  useInfiniteScroll({
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  });
+    if (topics && topics.length > 0) {
+      const apiTopics = topics.map((item: Topic) => ({
+        label: item.topic,
+        value: String(item.topic),
+      }));
+      return [defaultAllOption, ...apiTopics];
+    }
 
-  console.log(selectedFilters);
-  console.log('allMeetings', allMeetings);
-  console.log('datas', meetings);
-  console.log('user', user);
+    return [defaultAllOption];
+  }, [topics]);
 
   return (
-    <CommonTemplate>
-      {/* { <HydrationBoundary state={dehydratedState}></HydrationBoundary>} */}
-      <Banner
-        imageUrl="https://i.pinimg.com/736x/20/92/e7/2092e79552015eb068a6870f76fbaf88.jpg"
-        height="h-[260px]"
-      />
+    <HydrationBoundary state={dehydratedState}>
+      <CommonTemplate>
+        <Banner imageUrl="/images/meeting_banner.png" height="h-[260px]" />
 
-      <MeetingFilterControls
-        filters={filters}
-        selectedTopic={selectedTopic}
-        setSelectedTopic={setSelectedTopic}
-        selectedFilters={selectedFilters}
-        setSelectedFilters={setSelectedFilters}
-        search={search}
-        setSearch={setSearch}
-      />
+        <MeetingFilterControls
+          topics={allTopics}
+          meetingFilters={meetingFilters}
+          setFilter={setFilter}
+        />
 
-      <MeetingCardGroup meetings={allMeetings} />
+        <MeetingWrap meetingFilters={meetingFilters} user={user} />
 
-      {isLoading && <LoadingSpinner />}
-
-      {isFetchingNextPage && (
-        <LoadingSpinner loadingComment="더 많은 미팅을 Loading..." />
-      )}
-
-      {user && (
-        <Button
-          className="fixed bottom-10 left-[50%] ml-[-75px] rounded-full text-t3"
-          size="sm"
-          onClick={() => open('CREATE_MEETING_MODAL', { userRole: user.role })}
-        >
-          <img src="/images/icons/w_plus.svg" alt="plus_icon" />
-          모임 만들기
-        </Button>
-      )}
-    </CommonTemplate>
+        {user && (
+          <Button
+            className="fixed bottom-10 left-[50%] ml-[-75px] rounded-full text-t3"
+            size="sm"
+            onClick={() =>
+              open('CREATE_MEETING_MODAL', { userRole: user.role })
+            }
+          >
+            <img src="/images/icons/w_plus.svg" alt="plus_icon" />
+            모임 만들기
+          </Button>
+        )}
+      </CommonTemplate>
+    </HydrationBoundary>
   );
 }

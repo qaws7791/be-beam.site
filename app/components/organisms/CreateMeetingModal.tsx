@@ -9,6 +9,7 @@ import CreateMeetingFirstContent from './CreateMeetingFirstContent';
 import CreateMeetingSecondContent from './CreateMeetingSecondContent';
 import CreateMeetingThirdContent from './CreateMeetingThirdContent';
 import CreateMeetingFourthContent from './CreateMeetingFourthContent';
+import { cn } from '@/lib/tailwind';
 
 export default function CreateMeetingModal() {
   const { isOpen, close } = useModalStore();
@@ -80,7 +81,7 @@ export default function CreateMeetingModal() {
                 <div key={tab1.value} className="flex flex-col items-center">
                   <TabsTrigger
                     value={String(tab1.value)}
-                    className={clsx(
+                    className={cn(
                       "= relative z-2 mx-3 h-9 w-9 cursor-pointer rounded-full bg-gray-300 text-white after:absolute after:top-1/2 after:left-[calc(100%+4px)] after:h-[2px] after:w-[80px] after:-translate-y-1/2 after:border-t-[2px] after:content-[''] last:after:hidden data-[state=active]:bg-primary data-[state=active]:after:bg-transparent",
                       tab > tab1.value && 'bg-primary',
                       tab1.value >= tab && tab1.value < tabList.length - 1
