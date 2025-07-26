@@ -81,7 +81,8 @@ export const TimeInput: React.FC<TimeInputProps> = ({
     }
 
     if (parsed && isValid(parsed)) {
-      onChange(format(parsed, "'T'HH:mm:ss"));
+      // T를 필요로 하면 "'T'HH:mm:ss"
+      onChange(format(parsed, 'HH:mm:ss'));
       setSelectedTimeDate(parsed);
     } else if (rawTime === '') {
       onChange('');

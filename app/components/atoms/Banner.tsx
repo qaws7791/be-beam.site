@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '@/lib/tailwind';
 
 interface MeetingBannerProps {
   imageUrl: string;
@@ -8,8 +8,8 @@ interface MeetingBannerProps {
 export default function Banner({ imageUrl, height }: MeetingBannerProps) {
   return (
     <div
-      className={clsx(
-        `${height} relative w-full overflow-hidden rounded-2xl bg-cover bg-bottom bg-no-repeat`,
+      className={cn(
+        `${height} w-full overflow-hidden rounded-2xl bg-cover bg-center bg-no-repeat`,
       )}
       style={{ backgroundImage: `url(${imageUrl})` }}
     />

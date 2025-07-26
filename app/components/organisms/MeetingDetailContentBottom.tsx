@@ -9,12 +9,14 @@ interface MeetingDetailContentBottomProps {
   hostImg: string;
   hostName: string;
   hostDes: string;
+  onClick: () => void;
 }
 
 export default function MeetingDetailContentBottom({
   hostImg,
   hostName,
   hostDes,
+  onClick,
 }: MeetingDetailContentBottomProps) {
   const profileRef = useRef<HTMLDivElement>(null);
   const [profileHeight, setProfileHeight] = useState(0);
@@ -27,7 +29,10 @@ export default function MeetingDetailContentBottom({
 
   return (
     <TitleAndDes title="호스트 정보" wrapStyle="w-full">
-      <div className="box-border flex w-full items-stretch gap-14 rounded-xl bg-gray-100 px-10 py-7">
+      <div
+        onClick={onClick}
+        className="box-border flex w-full items-stretch gap-14 rounded-xl bg-gray-100 px-10 py-7"
+      >
         <MeetingDetailContentHostProfile
           profileRef={profileRef}
           hostImg={hostImg}

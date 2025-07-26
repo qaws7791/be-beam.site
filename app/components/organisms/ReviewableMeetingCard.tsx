@@ -33,10 +33,12 @@ export default function ReviewableMeetingCard({
     images: File[];
   }) => {
     createReviewMutation.mutate({
-      rating: review.rating,
-      text: review.content,
-      images: review.images,
       meetingId: meeting.id,
+      data: {
+        rating: review.rating,
+        text: review.content,
+        images: review.images,
+      },
     });
     setIsOpen(false);
   };
@@ -77,7 +79,7 @@ export default function ReviewableMeetingCard({
               ✍️후기 작성하기
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-[600px]">
+          <DialogContent className="z-99 max-w-[600px]">
             <DialogHeader>
               <DialogTitle>후기 작성</DialogTitle>
               <DialogDescription className="sr-only">

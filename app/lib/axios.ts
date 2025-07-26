@@ -1,4 +1,5 @@
 import { reissueToken } from '@/api/auth';
+import { API_V2_BASE_URL } from '@/constants/api';
 import axios, {
   AxiosError,
   type AxiosResponse,
@@ -53,6 +54,7 @@ export const axiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  baseURL: API_V2_BASE_URL,
   withCredentials: true,
 });
 

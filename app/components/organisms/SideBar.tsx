@@ -34,7 +34,12 @@ export default function SideBar({ user }: { user: UserType }) {
     },
     {
       to: '/mypage/likes',
-      title: '💖 찜 리스트',
+      title: '💖 좋아요 리스트',
+      onClick: () => setIsMeetingPage(false),
+    },
+    {
+      to: '/mypage/following',
+      title: '⭐ 팔로잉 리스트',
       onClick: () => setIsMeetingPage(false),
     },
     {

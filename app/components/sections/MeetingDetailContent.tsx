@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router';
+
 import type { MeetingDetailType } from '@/types/components';
 import MeetingDetailContentTop from '../organisms/MeetingDetailContentTop';
 import MeetingDetailContentMiddle from '../organisms/MeetingDetailContentMiddle';
@@ -8,6 +10,8 @@ export default function MeetingDetailContent({
 }: {
   meeting: MeetingDetailType;
 }) {
+  const navigate = useNavigate();
+
   return (
     <div className="w-full py-8">
       <MeetingDetailContentTop meeting={meeting} />
@@ -16,6 +20,7 @@ export default function MeetingDetailContent({
         hostImg={meeting?.hostImage}
         hostName={meeting?.hostName}
         hostDes={meeting?.hostDescription}
+        onClick={() => navigate(`/host/${meeting?.hostId}`)}
       />
     </div>
   );

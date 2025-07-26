@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router';
 import { useRef, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
@@ -5,11 +6,11 @@ import type { Swiper as SwiperClass } from 'swiper/types';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import clsx from 'clsx';
 
-import { Button } from '../atoms/button/Button';
+import type { Banner } from '@/types/entities';
+import { cn } from '@/lib/tailwind';
 import Text from '../atoms/text/Text';
-import { useNavigate } from 'react-router';
+import { Button } from '../atoms/button/Button';
 
 export default function Slider({
   images,
@@ -34,10 +35,7 @@ export default function Slider({
   isCount?: boolean;
   slideWidth: string;
   slideHeight: string;
-  datas?: {
-    bannerImg: string;
-    bannerUrl: string;
-  }[];
+  datas?: Banner[];
 }) {
   const navigate = useNavigate();
 
@@ -46,7 +44,7 @@ export default function Slider({
 
   return (
     <div
-      className={clsx('relative w-full overflow-hidden rounded-xl', slideWidth)}
+      className={cn('relative w-full overflow-hidden rounded-xl', slideWidth)}
     >
       <Swiper
         onSwiper={(swiper) => {
@@ -76,16 +74,16 @@ export default function Slider({
                 <img
                   src={src}
                   alt={`Slide ${index + 1}`}
-                  className={clsx('w-full object-cover', slideHeight)}
+                  className={cn('w-full object-cover', slideHeight)}
                 />
               </SwiperSlide>
             ))
           : datas?.map((data, index) => (
               <SwiperSlide key={index}>
                 <img
-                  src={data.bannerImg}
+                  src={data.bannerImage}
                   alt={`Slide ${index + 1}`}
-                  className={clsx(
+                  className={cn(
                     'w-full cursor-pointer object-cover',
                     slideHeight,
                   )}
@@ -104,7 +102,7 @@ export default function Slider({
         <Button
           variant="tertiary"
           size="icon"
-          className={clsx(
+          className={cn(
             'absolute top-1/2 left-5 z-10 h-10 w-10 -translate-y-1/2 rounded-full border-none bg-white shadow-md',
             isBtn && images?.length === 1
               ? 'cursor-default bg-gray-300'
@@ -120,7 +118,7 @@ export default function Slider({
         <Button
           variant="tertiary"
           size="icon"
-          className={clsx(
+          className={cn(
             'absolute top-1/2 right-5 z-10 h-10 w-10 -translate-y-1/2 rounded-full border-none shadow-md',
             isBtn && images?.length === 1
               ? 'cursor-default bg-gray-300'

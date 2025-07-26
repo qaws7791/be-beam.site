@@ -1,12 +1,12 @@
 import { formatToMonthAndDayDate } from '@/utils/date';
 
-import type { MeetingDetailType } from '@/types/components';
+import type { Meeting } from '@/types/entities';
 import InfoItem from '../molecules/InfoItem';
 
 export default function MeetingCardInfoItemWrap({
   meeting,
 }: {
-  meeting: MeetingDetailType;
+  meeting: Meeting;
 }) {
   return (
     <div className="mt-4 box-border w-full rounded-xl bg-gray-100 px-6 py-5">

@@ -12,7 +12,7 @@ export default function MeetingDetailContentHostProfile({
   hostName,
 }: MeetingDetailContentHostProfileProps) {
   return (
-    <div ref={profileRef} className="flex flex-col items-center">
+    <div ref={profileRef} className="flex cursor-pointer flex-col items-center">
       <img
         className="h-16 w-16 rounded-full object-cover"
         src={hostImg}

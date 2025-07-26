@@ -1,16 +1,15 @@
 import { getMeetingReviews } from '@/api/meetingReviews';
+import type { meetingReviewFilterType } from '@/components/sections/MeetingDetailMeetingReviewsContainer';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 export default function useMeetingReviewsQuery(
   meetingId: number,
-  sort: string,
-  type: string,
-  rating: string | number,
+  meetingReviewFilters: meetingReviewFilterType,
 ) {
   return useInfiniteQuery({
-    queryKey: ['meetingReviews', meetingId, sort, type, rating],
+    queryKey: ['meetingReviews', meetingId, meetingReviewFilters],
     queryFn: ({ pageParam }) =>
-      getMeetingReviews(meetingId, sort, type, rating, pageParam),
+      getMeetingReviews(meetingId, meetingReviewFilters, pageParam),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       return lastPage.pageInfo.hasNext

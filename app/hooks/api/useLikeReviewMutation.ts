@@ -5,11 +5,14 @@ import {
   type InfiniteData,
 } from '@tanstack/react-query';
 
+interface LikeReviewParams {
+  reviewId: number;
+}
+
 export default function useLikeReviewMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ reviewId }: { reviewId: number }) =>
-      likeReview({ reviewId }),
+    mutationFn: ({ reviewId }: LikeReviewParams) => likeReview(reviewId),
     onMutate: async ({ reviewId }) => {
       await queryClient.cancelQueries({
         queryKey: ['reviews'],
@@ -19,7 +22,6 @@ export default function useLikeReviewMutation() {
       >({
         queryKey: ['reviews'],
       });
-      console.log(previousData);
       queryClient.setQueriesData<InfiniteData<ReviewListResult> | undefined>(
         {
           queryKey: ['reviews'],

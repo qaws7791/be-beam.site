@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import useCreatedMeetingDetailQuery from '@/hooks/api/useCreatedMeetingDetailQuery';
 import useCreatedMeetingDetailIntroReducer from '@/hooks/business/useCreatedMeetingDetailIntroReducer';
 
-import clsx from 'clsx';
+import { cn } from '@/lib/tailwind';
 import { Button } from '@/components/atoms/button/Button';
 import { Input } from '@/components/atoms/input/Input';
 import Text from '@/components/atoms/text/Text';
@@ -253,7 +253,7 @@ export default function CreatedMeetingDetailIntro() {
               key={idx}
               type="button"
               variant="tertiary"
-              className={clsx(
+              className={cn(
                 'mr-2 h-9 min-w-auto rounded-lg border-1 transition-all duration-700 hover:border-primary hover:bg-primary-light hover:text-primary',
                 state.topic === topic
                   ? 'border-primary bg-primary-light text-primary'
@@ -290,7 +290,7 @@ export default function CreatedMeetingDetailIntro() {
           ))}
 
           <div
-            className={clsx(
+            className={cn(
               state.hashtags.length >= 10 ? 'hidden' : 'block',
               'flex items-center bg-primary-light pr-2',
             )}
@@ -314,7 +314,7 @@ export default function CreatedMeetingDetailIntro() {
             />
             <button
               onClick={() => setHashtag('')}
-              className={clsx(
+              className={cn(
                 hashtag.length > 0 ? 'block' : 'hidden',
                 'cursor-pointer',
               )}
@@ -345,7 +345,7 @@ export default function CreatedMeetingDetailIntro() {
         </label>
 
         <div
-          className={clsx(
+          className={cn(
             state.totalImages.length > 0 && 'flex',
             'w-full items-center gap-2',
           )}
@@ -369,7 +369,7 @@ export default function CreatedMeetingDetailIntro() {
           </div>
 
           <label
-            className={clsx(
+            className={cn(
               state.totalImages.length >= 10 && 'hidden',
               'flex h-32 w-32 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-500',
             )}

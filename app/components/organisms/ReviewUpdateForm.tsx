@@ -8,13 +8,11 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { updateReviewSchema } from '@/schemas/reviews';
 
-type MeetingType = 'regular' | 'small' | 'event';
-
 type ReviewUpdateFormProps = {
   meeting: {
     id: string | number;
-    type: MeetingType;
-    title: string;
+    recruitmentType: '정기모임' | '소모임';
+    name: string;
     image: string;
   };
   onReviewSubmit: (review: {
@@ -63,8 +61,10 @@ export function ReviewUpdateForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
       <div>
-        <Tag variant={meeting.type === 'regular' ? 'blue' : 'primary'}>
-          {meeting.type === 'regular' ? '정기모임' : '소모임'}
+        <Tag
+          variant={meeting.recruitmentType === '정기모임' ? 'blue' : 'primary'}
+        >
+          {meeting.recruitmentType}
         </Tag>
         <div className="mt-3 flex items-center gap-2 border-b border-gray-300 pb-3">
           <img
@@ -74,7 +74,7 @@ export function ReviewUpdateForm({
             height={60}
             className="size-15 rounded-lg"
           />
-          <p className="text-t3 text-gray-600">`{meeting.title}` 모임</p>
+          <p className="text-t3 text-gray-600">`{meeting.name}` 모임</p>
         </div>
       </div>
       <div className="border-b border-gray-300 pb-6">
