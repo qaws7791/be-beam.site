@@ -8,7 +8,6 @@ export default function useApplyMeetingMutation(
   refetchKey: string,
 ) {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: (data: { joinReason: string }) => applyMeeting(id, data),
     onSuccess: () => {
