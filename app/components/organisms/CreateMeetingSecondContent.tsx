@@ -3,9 +3,6 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
 import { createMeetingFirstSchema } from '@/schemas/meeting';
-import { useQuery } from '@tanstack/react-query';
-import { axiosInstance } from '@/lib/axios';
-import { API_V1_BASE_URL } from '@/constants/api';
 import type { CreateMeetingType } from '@/types/components';
 
 import clsx from 'clsx';
@@ -14,6 +11,7 @@ import { Input } from '../atoms/input/Input';
 import { Textarea } from '../atoms/textarea/Textarea';
 import { Button } from '../atoms/button/Button';
 import Badge from '../atoms/badge/Badge';
+import useTopicsQuery from '@/hooks/api/useTopicsQuery';
 
 interface CreateMeetingSecondContentProps {
   tab: number;
@@ -66,18 +64,7 @@ export default function CreateMeetingSecondContent({
     { id: 4, name: '🎨️예술·사진' },
   ];
 
-  const { data: topics } = useQuery({
-    queryKey: ['topics'],
-    queryFn: async () => {
-      const res = await axiosInstance({
-        baseURL: API_V1_BASE_URL,
-        method: 'GET',
-        url: '/meetings/topics',
-      });
-      const data = res.data;
-      return data.result;
-    },
-  });
+  const { data: topics } = useTopicsQuery();
   console.log(topics);
 
   const [currentHashtagInput, setCurrentHashtagInput] = useState('');

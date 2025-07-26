@@ -15,6 +15,8 @@ export default function Navbar({
 }) {
   const navigate = useNavigate();
 
+  console.log(user);
+
   return (
     <div className="fixed top-0 left-0 z-22 h-25 w-full border-b-1 border-gray-300 bg-white">
       <div className="mx-auto flex h-full max-w-[1480px] items-center justify-between gap-x-24 px-4">
@@ -31,10 +33,7 @@ export default function Navbar({
             search=""
           />
           {user ? (
-            <NavbarUserSection
-              profileImage={user?.profileImage}
-              onClick={() => navigate('/myPage/participated')}
-            />
+            <NavbarUserSection profileImage={user?.profileImage} />
           ) : (
             <button
               className="cursor-pointer rounded-lg bg-primary px-4 py-3 text-white"

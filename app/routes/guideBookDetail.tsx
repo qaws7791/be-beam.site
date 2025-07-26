@@ -24,6 +24,7 @@ export default function GuideBookDetail() {
   const { data: guideBook } = useGuideBookQuery(id);
 
   console.log(guideBook);
+  console.log('ffkfkfk');
 
   return (
     <CommonTemplate>

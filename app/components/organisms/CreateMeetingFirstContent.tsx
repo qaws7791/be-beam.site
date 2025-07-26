@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { CreateMeetingType } from '@/types/components';
 
 import clsx from 'clsx';
@@ -27,8 +27,7 @@ export default function CreateMeetingFirstContent({
   const [meetingTypeTab, setMeetingTypeTab] = useState(() => {
     if (form.recruitmentType) {
       return form.recruitmentType === '소모임' ? 'small' : 'regular';
-    }
-    {
+    } else {
       if ((userRole as string) === '정기모임 호스트') {
         return 'regular';
       } else if ((userRole as string) === '소모임 호스트') {
@@ -66,6 +65,20 @@ export default function CreateMeetingFirstContent({
     },
   ];
 
+  useEffect(() => {
+    console.log(meetingTypeTab);
+    if (meetingTypeTab) {
+      setForm({
+        ...form,
+        recruitmentType: meetingTypeTab === 'small' ? '소모임' : '정기모임',
+        isGuideBookRefer:
+          meetingTypeTab === 'regular' ? 'false' : form.isGuideBookRefer,
+        guidbookReferenceId:
+          meetingTypeTab === 'regular' ? null : form.guidbookReferenceId,
+      });
+    }
+  }, [meetingTypeTab, setForm]);
+
   return (
     <div className="w-full">
       <div className="h-[300px] w-full overflow-y-scroll">
@@ -74,17 +87,7 @@ export default function CreateMeetingFirstContent({
         </Text>
         <Tabs
           value={meetingTypeTab}
-          onValueChange={(value) => {
-            setMeetingTypeTab(value);
-            setForm({
-              ...form,
-              recruitmentType: value === 'small' ? '소모임' : '정기모임',
-              isGuideBookRefer:
-                value === 'regular' ? 'false' : form.isGuideBookRefer,
-              guidbookReferenceId:
-                value === 'regular' ? null : form.guidbookReferenceId,
-            });
-          }}
+          onValueChange={(value) => setMeetingTypeTab(value)}
         >
           <TabsList className="h-auto gap-2 before:h-0">
             {meetingTypeTabList.map((tab2) => (
