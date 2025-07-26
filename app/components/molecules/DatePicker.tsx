@@ -15,7 +15,15 @@ function formatDate(date: Date | undefined) {
     return '';
   }
 
-  return date?.toISOString().slice(0, 10).replace(/-/g, '.') || '';
+  // YYYY.MM.DD
+  return new Date(date)
+    .toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    })
+    .replaceAll(' ', '')
+    .replace(/(\d{4})\.(\d{2})\.(\d{2}).*/, '$1.$2.$3');
 }
 
 function isValidDate(date: Date | undefined) {
@@ -82,6 +90,7 @@ export default function DatePicker({ value, onChange }: DatePickerProps) {
             month={month}
             onMonthChange={setMonth}
             onSelect={(date) => {
+              console.log('DATE', date);
               if (!date) {
                 return;
               }

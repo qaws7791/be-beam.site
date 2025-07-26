@@ -247,16 +247,6 @@ export type MyInfoResult = {
 };
 
 export const getMyInfo = async (): Promise<MyInfoResult> => {
-  return {
-    name: '닉네임',
-    phoneNumber: '010-1234-5678',
-    email: 'email@email.com',
-    birthday: '2025-01-01',
-    gender: '여성',
-    terms: false,
-    userTerms: false,
-    marketingTerms: false,
-  };
   const res =
     await axiosInstance.get<APIResponse<MyInfoResult>>('users/my-info');
   const data = res.data;
@@ -268,7 +258,7 @@ export type UpdateMyInfoParams = {
   phoneNumber: string;
   email: string;
   birthday: string;
-  gender: 'MAN' | 'WOMAN';
+  gender: '남성' | '여성';
   terms: boolean;
   userTerms: boolean;
   marketingTerms: boolean;
@@ -277,7 +267,6 @@ export type UpdateMyInfoParams = {
 export type UpdateMyInfoResult = string;
 
 export const updateMyInfo = async (params: UpdateMyInfoParams) => {
-  return;
   const res = await axiosInstance.patch<APIResponse<UpdateMyInfoResult>>(
     'users/my-info',
     params,

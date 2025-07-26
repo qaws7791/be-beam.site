@@ -16,7 +16,7 @@ export const myInfoSchema = z.object({
       /^[0-9]{4}.[0-9]{2}.[0-9]{2}$/,
       '올바른 생년월일을 입력해주세요.(YYYY.MM.DD)',
     ),
-  gender: z.string().refine((value) => ['MAN', 'WOMAN'].includes(value)),
+  gender: z.string().refine((value) => ['남성', '여성'].includes(value)),
   terms: z.boolean(),
   userTerms: z.boolean(),
   marketingTerms: z.boolean(),
