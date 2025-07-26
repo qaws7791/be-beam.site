@@ -1,5 +1,5 @@
 import { getMyReviewLikes } from '@/api/users';
-import { queryOptions, useQuery } from '@tanstack/react-query';
+import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 
 const myReviewLikesQueryOptions = ({
   page,
@@ -21,5 +21,5 @@ export default function useMyReviewLikesQuery({
   page: number;
   size: number;
 }) {
-  return useQuery(myReviewLikesQueryOptions({ page, size }));
+  return useSuspenseQuery(myReviewLikesQueryOptions({ page, size }));
 }
