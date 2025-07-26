@@ -28,11 +28,6 @@ import useDeleteReviewMutation from '@/hooks/api/useDeleteReviewMutation';
 interface WrittenReviewCardProps {
   review: {
     id: number;
-    user: {
-      name: string;
-      profileImage: string;
-      id: number;
-    };
     content: string;
     rating: number;
     images: string[];
@@ -42,13 +37,11 @@ interface WrittenReviewCardProps {
       recruitmentType: '정기모임' | '소모임';
       image: string;
     };
-    likes: {
-      count: number;
-      isLiked: boolean;
-    };
     createdAt: string;
   };
 }
+
+const MAX_IMAGES_DISPLAY = 3;
 
 export default function WrittenReviewCard({ review }: WrittenReviewCardProps) {
   const updateReviewMutation = useUpdateReviewMutation();
@@ -73,6 +66,8 @@ export default function WrittenReviewCard({ review }: WrittenReviewCardProps) {
     setIsOpen(false);
   };
 
+  const hasMoreImages = review.images.length > MAX_IMAGES_DISPLAY;
+
   return (
     <div className="rounded-2xl border border-gray-300 px-7 pt-7 pb-6 shadow-[0_0_8px_0_rgba(0,0,0,0.04)]">
       <div>
@@ -83,7 +78,7 @@ export default function WrittenReviewCard({ review }: WrittenReviewCardProps) {
             alt=""
             width={60}
             height={60}
-            className="size-15 rounded-lg"
+            className="aspect-square size-15 rounded-lg object-cover"
           />
           <p className="text-t3 text-gray-600">
             {`${review.meeting.name} 모임`}
@@ -99,9 +94,24 @@ export default function WrittenReviewCard({ review }: WrittenReviewCardProps) {
         <p className="text-b1 text-gray-600">{review.content}</p>
       </div>
       <div className="mt-6 grid grid-cols-3 gap-2">
-        {review.images.map((image, index) => (
-          <img key={index} src={image} alt="" className="rounded-lg" />
-        ))}
+        {review.images.slice(0, MAX_IMAGES_DISPLAY).map((image, index) => {
+          const isLastImage = index === MAX_IMAGES_DISPLAY - 1;
+          const shouldShowOverlay = hasMoreImages && isLastImage;
+          return (
+            <div className="relative" key={`${review.id}-img-${index}`}>
+              <img
+                src={image}
+                alt={`리뷰 이미지 ${index + 1}`}
+                className="aspect-square rounded-lg object-cover"
+              />
+              {shouldShowOverlay && (
+                <div className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-lg bg-black/50">
+                  <span className="text-b1 text-white">더보기</span>
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
       <div className="mt-5 flex items-center gap-2.5">
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
