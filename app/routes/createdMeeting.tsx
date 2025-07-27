@@ -131,8 +131,8 @@ export default function CreatedMeeting() {
                 <MeetingCard
                   key={meeting.id}
                   image={meeting.image}
-                  meetingType={meeting.recruitmentType}
-                  recruitmentType={meeting.status}
+                  recruitmentType={meeting.recruitmentType}
+                  recruitmentStatus={meeting.status}
                   name={meeting.title}
                   meetingStartTime={meeting.meetingStartTime}
                   address={meeting.address}

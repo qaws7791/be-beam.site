@@ -11,6 +11,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+import { withOptionalAuth } from '@/lib/auth.server';
 
 export function meta() {
   return [
@@ -22,27 +23,47 @@ export function meta() {
   ];
 }
 
-export async function loader() {
+export async function loader({ request }: Route.LoaderArgs) {
   const banner = await getBanner();
 
   const queryClient = new QueryClient();
-  await Promise.all([
-    // 좋아요 기반 추천 리스트
-    queryClient.prefetchQuery({
-      queryKey: ['recommendationMeetings', 'likes', 'all'],
-      queryFn: () => getRecommendationMeeting('likes', 'all'),
-    }),
-    // 랜덤 추천 리스트
-    queryClient.prefetchQuery({
-      queryKey: ['recommendationMeetings', 'random', 'all'],
-      queryFn: () => getRecommendationMeeting('random', 'all'),
-    }),
-    // 최신 등록 모임 리스트
-    queryClient.prefetchQuery({
-      queryKey: ['recommendationMeetings', 'recent', 'all'],
-      queryFn: () => getRecommendationMeeting('recent', 'all'),
-    }),
-  ]);
+
+  await withOptionalAuth(request, async () => {
+    const cookiesHeaderFromBrowser = request.headers.get('Cookie');
+    const axiosRequestConfigHeaders: { Cookie?: string } = {};
+    if (cookiesHeaderFromBrowser) {
+      axiosRequestConfigHeaders.Cookie = cookiesHeaderFromBrowser;
+    }
+
+    await Promise.all([
+      // 좋아요 기반 추천 리스트
+      queryClient.prefetchQuery({
+        queryKey: ['recommendationMeetings', 'likes', 'all'],
+        queryFn: () =>
+          getRecommendationMeeting('likes', 'all', {
+            headers: axiosRequestConfigHeaders,
+          }),
+      }),
+      // 랜덤 추천 리스트
+      queryClient.prefetchQuery({
+        queryKey: ['recommendationMeetings', 'random', 'all'],
+        queryFn: () =>
+          getRecommendationMeeting('random', 'all', {
+            headers: axiosRequestConfigHeaders,
+          }),
+      }),
+      // 최신 등록 모임 리스트
+      queryClient.prefetchQuery({
+        queryKey: ['recommendationMeetings', 'recent', 'all'],
+        queryFn: () =>
+          getRecommendationMeeting('recent', 'all', {
+            headers: axiosRequestConfigHeaders,
+          }),
+      }),
+    ]);
+
+    return;
+  });
 
   const dehydratedState = dehydrate(queryClient);
 
