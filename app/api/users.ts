@@ -3,6 +3,7 @@ import { axiosInstance } from '@/lib/axios';
 import type { APIResponse } from '@/types/api';
 import type {
   Host,
+  ImageType,
   LinkType,
   Meeting,
   MeetingSchedule,
@@ -330,15 +331,15 @@ export type GetWrittenReviewsParams = {
 
 export type GetWrittenReviewsResult = {
   reviews: {
-    meetingId: number;
-    meetingName: string;
-    recruitmentType: '정기모임' | '소모임';
-    thumbnailImage: string;
-    reviewId: number;
-    rating: number;
-    content: string;
-    images: string[];
-    createdAt: string;
+    meetingId: Meeting['id'];
+    meetingName: Meeting['name'];
+    recruitmentType: Meeting['recruitmentType'];
+    thumbnailImage: ImageType;
+    reviewId: Review['reviewId'];
+    rating: Review['rating'];
+    content: Review['text'];
+    images: Review['images'];
+    createdAt: Review['createdAt'];
   }[];
   pageInfo: {
     page: number;
