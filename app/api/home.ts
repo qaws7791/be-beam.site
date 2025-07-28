@@ -33,7 +33,7 @@ export type LikesMeetingsResult = {
   name: Meeting['name'];
   recruitmentStatus: Meeting['recruitmentStatus'];
   recruitmentType: Meeting['recruitmentType'];
-  meetingDateTime: MeetingSchedule['meetingStartTime'];
+  meetingStartTime: MeetingSchedule['meetingStartTime'];
   thumbnailImage: ImageType;
   liked: Meeting['liked'];
   address: Meeting['address'];
@@ -58,7 +58,7 @@ export type RandomMeetingsResult = {
   name: Meeting['name'];
   recruitmentStatus: Meeting['recruitmentStatus'];
   recruitmentType: Meeting['recruitmentType'];
-  meetingDateTime: MeetingSchedule['meetingStartTime'];
+  meetingStartTime: MeetingSchedule['meetingStartTime'];
   thumbnailImage: ImageType;
   liked: Meeting['liked'];
   address: Meeting['address'];
@@ -83,7 +83,7 @@ export type RecentMeetingsResult = {
   name: Meeting['name'];
   recruitmentStatus: Meeting['recruitmentStatus'];
   recruitmentType: Meeting['recruitmentType'];
-  meetingDateTime: MeetingSchedule['meetingStartTime'];
+  meetingStartTime: MeetingSchedule['meetingStartTime'];
   thumbnailImage: ImageType;
   liked: Meeting['liked'];
   address: Meeting['address'];
