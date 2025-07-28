@@ -4,7 +4,6 @@ import { cancelMeetingReasonSchema } from '@/schemas/meeting';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useModalStore } from '@/stores/useModalStore';
 import useCancelMeetingMutation from '@/hooks/api/useCancelMeetingMutation';
-import useBreakawayMeetingMutation from '@/hooks/api/useBreakawayMeetingMutation';
 
 import {
   Dialog,
@@ -46,26 +45,15 @@ export default function MeetingCancelModal() {
 
   const { isOpen, modalProps, close } = useModalStore();
 
-  const { mutate: cancelMeeting, isPending: isCancelMeetingPending } =
-    useCancelMeetingMutation(
-      modalProps.meetingId as number,
-      modalProps.refetchKey as string,
-    );
-
-  const { mutate: breakawayMeeting, isPending: isBreakawayMeetingPending } =
-    useBreakawayMeetingMutation(
-      modalProps.meetingId as number,
-      modalProps.refetchKey as string,
-    );
+  const { mutate: cancelMeeting, isPending } = useCancelMeetingMutation(
+    modalProps.meetingId as number,
+    modalProps.refetchKey as string,
+    modalProps.statusType as 'participating' | 'applied',
+  );
 
   const onSubmit = (data: z.infer<typeof cancelMeetingReasonSchema>) => {
-    if (modalProps.statusType === 'participating') {
-      if (isBreakawayMeetingPending) return;
-      breakawayMeeting();
-    } else {
-      if (isCancelMeetingPending) return;
-      cancelMeeting(data);
-    }
+    if (isPending) return;
+    cancelMeeting(data);
 
     reset();
     close();

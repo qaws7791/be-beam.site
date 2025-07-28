@@ -123,21 +123,13 @@ export const cancelMeeting = (
     cancelReason: string;
   },
   id: number,
+  statusType: 'participating' | 'applied',
 ) => {
   return axiosInstance({
     baseURL: API_V1_BASE_URL,
     method: 'DELETE',
-    url: `/meetings/${id}/cancellations/apply-cancel`,
+    url: `/meetings/${id}/cancellations/${statusType === 'participating' ? 'midway' : 'apply'}-cancel`,
     data,
-  });
-};
-
-export const breakawayMeeting = (id: number) => {
-  return axiosInstance({
-    baseURL: API_V1_BASE_URL,
-    method: 'POST',
-    // 아무 정보도 없어서 임시로 설정한 api 주소
-    url: `/meetings/${id}/breakaway`,
   });
 };
 
