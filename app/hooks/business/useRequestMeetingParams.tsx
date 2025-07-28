@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router';
 
 export interface useRequestMeetingParamsType {
   params: {
-    status: 'pending' | 'approved' | 'rejected';
+    status: 'applied' | 'confirmed' | 'rejected';
     page: number;
   };
   handleUpdateStatus: (status: string) => void;
@@ -16,7 +16,7 @@ export default function useRequestMeetingParams(): useRequestMeetingParamsType {
   const params = useMemo(() => {
     return {
       status: (searchParams.get('status') ||
-        'pending') as useRequestMeetingParamsType['params']['status'],
+        'applied') as useRequestMeetingParamsType['params']['status'],
       page: (searchParams.get('page') ||
         1) as useRequestMeetingParamsType['params']['page'],
     };

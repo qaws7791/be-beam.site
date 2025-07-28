@@ -67,6 +67,7 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
         onClickHandler: () =>
           open('CANCEL_MEETING_MODAL', {
             statusType: 'applying', // participating
+            refetchKey: 'meeting',
           }),
         disable: false,
       };

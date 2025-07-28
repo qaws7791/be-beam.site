@@ -119,15 +119,15 @@ export const likeMeeting = async (meeting: { id: number; liked: boolean }) => {
 
 export const cancelMeeting = (
   data: {
-    reasonType: string;
-    description: string;
+    cancellationReasonType: '개인일정' | '단순변심' | '위치' | '기타';
+    cancelReason: string;
   },
   id: number,
 ) => {
   return axiosInstance({
     baseURL: API_V1_BASE_URL,
-    method: 'POST',
-    url: `/meetings/${id}/cancel`,
+    method: 'DELETE',
+    url: `/meetings/${id}/cancellations/apply-cancel`,
     data,
   });
 };
@@ -138,6 +138,14 @@ export const breakawayMeeting = (id: number) => {
     method: 'POST',
     // 아무 정보도 없어서 임시로 설정한 api 주소
     url: `/meetings/${id}/breakaway`,
+  });
+};
+
+export const DeleteMeeting = (id: number) => {
+  return axiosInstance({
+    method: 'DELETE',
+    baseURL: API_V2_BASE_URL,
+    url: `/meetings/${id}`,
   });
 };
 

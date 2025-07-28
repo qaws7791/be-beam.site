@@ -24,22 +24,22 @@ export default function MeetingCancelModal() {
   const radioList = [
     {
       id: 'personalSchedule',
-      value: 'personalSchedule',
+      value: '개인일정',
       label: '갑작스러운 개인 일정',
     },
     {
       id: 'changeMind',
-      value: 'changeMind',
+      value: '단순변심',
       label: '단순 변심',
     },
     {
       id: 'locationNonconformity',
-      value: 'locationNonconformity',
+      value: '위치',
       label: '장소가 너무 멀거나 불편함',
     },
     {
       id: 'etc',
-      value: 'etc',
+      value: '기타',
       label: '기타',
     },
   ];
@@ -47,10 +47,16 @@ export default function MeetingCancelModal() {
   const { isOpen, modalProps, close } = useModalStore();
 
   const { mutate: cancelMeeting, isPending: isCancelMeetingPending } =
-    useCancelMeetingMutation(modalProps.meetingId as number, 'meeting');
+    useCancelMeetingMutation(
+      modalProps.meetingId as number,
+      modalProps.refetchKey as string,
+    );
 
   const { mutate: breakawayMeeting, isPending: isBreakawayMeetingPending } =
-    useBreakawayMeetingMutation(modalProps.meetingId as number, 'meeting');
+    useBreakawayMeetingMutation(
+      modalProps.meetingId as number,
+      modalProps.refetchKey as string,
+    );
 
   const onSubmit = (data: z.infer<typeof cancelMeetingReasonSchema>) => {
     if (modalProps.statusType === 'participating') {
@@ -70,8 +76,8 @@ export default function MeetingCancelModal() {
   >({
     resolver: zodResolver(cancelMeetingReasonSchema),
     defaultValues: {
-      reasonType: 'personalSchedule',
-      description: '',
+      cancellationReasonType: '개인일정',
+      cancelReason: '',
     },
   });
 
@@ -96,7 +102,7 @@ export default function MeetingCancelModal() {
             </Text>
 
             <Controller
-              name="reasonType"
+              name="cancellationReasonType"
               control={control}
               render={({ field }) => (
                 <RadioGroup
@@ -137,7 +143,7 @@ export default function MeetingCancelModal() {
               를 자유롭게 작성해 주세요.
             </Text>
             <Controller
-              name="description"
+              name="cancelReason"
               control={control}
               render={({ field }) => (
                 <Textarea

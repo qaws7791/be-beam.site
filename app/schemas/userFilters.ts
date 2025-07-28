@@ -32,3 +32,23 @@ export const MyParticipatedMeetingFilterSchema = z.object({
 export type MyParticipatedMeetingFilters = z.infer<
   typeof MyParticipatedMeetingFilterSchema
 >;
+
+// 나의 모임 - 신청한 모임
+export const MyApplicatedMeetingFilterSchema = z.object({
+  status: z.enum(['requested', 'confirmed', 'rejected']).default('requested'),
+  page: z.coerce.number().default(1),
+});
+
+export type MyApplicatedMeetingFilters = z.infer<
+  typeof MyApplicatedMeetingFilterSchema
+>;
+
+// 나의 모임 - 개설한 모임
+export const MyCreatedMeetingFilterSchema = z.object({
+  type: z.enum(['regular', 'small']).default('regular'),
+  page: z.coerce.number().default(1),
+});
+
+export type MyCreatedMeetingFilters = z.infer<
+  typeof MyCreatedMeetingFilterSchema
+>;

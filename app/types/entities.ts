@@ -183,6 +183,17 @@ export interface MeetingSummary {
   liked?: boolean;
 }
 
+export interface MyPageMeetingSummary {
+  id: number;
+  name: string;
+  recruitmentType: string;
+  recruitmentStatus: string;
+  thumbnailImage: string;
+  meetingStartTime: string;
+  address: string;
+  userStatus: string;
+}
+
 export interface Review {
   reviewId: number;
   profileImg: string;

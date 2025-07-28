@@ -12,7 +12,7 @@ export default function useBreakawayMeetingMutation(
     mutationFn: () => breakawayMeeting(id),
     onSuccess: () => {
       toast.success('모임 중도 이탈을 신청하였습니다.');
-      queryClient.refetchQueries({ queryKey: [refetchKey] });
+      queryClient.invalidateQueries({ queryKey: [refetchKey] });
       close();
     },
     onError: (err) => {

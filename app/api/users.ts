@@ -1,11 +1,11 @@
-import { API_V1_BASE_URL } from '@/constants/api';
+import { API_V1_BASE_URL, API_V2_BASE_URL } from '@/constants/api';
 import { axiosInstance } from '@/lib/axios';
 import type { APIResponse } from '@/types/api';
 import type {
   EditCreateMeetingIntroType,
   EditMeetingDetailType,
 } from '@/types/components';
-import type { EditMeetingSchedule } from '@/types/entities';
+import type { EditMeetingSchedule, MeetingSummary } from '@/types/entities';
 import type {
   Host,
   LinkType,
@@ -413,21 +413,29 @@ export async function getReviewableReviews(params: GetReviewableReviewsParams) {
 export type ParticipationMeetingListParams = {
   status: 'participating' | 'completed' | 'cancelled';
   page: number;
-  size: number;
+  // size: number;
 };
 
-export type ParticipationMeetingListResult = {
-  nickname: UserProfile['nickname'];
-  profileImage: UserProfile['profileImage'];
-  meetings: {
-    id: Meeting['id'];
-    title: Meeting['name'];
-    recruitmentType: Meeting['recruitmentType'];
-    image: Meeting['meetingImages'];
-    meetingStartTime: MeetingSchedule['meetingStartTime'];
-    address: Meeting['address'];
-    status: Meeting['userStatus'];
-  }[];
+export type MyPageMeetingResult = {
+  id: Meeting['id'];
+  name: Meeting['name'];
+  recruitmentType: Meeting['recruitmentType'];
+  recruitmentStatus: Meeting['recruitmentStatus'];
+  thumbnailImage: MeetingSummary['image'];
+  meetingStartTime: MeetingSchedule['meetingStartTime'];
+  address: Meeting['address'];
+  status: Meeting['userStatus'];
+};
+
+export type MyPageMeetingListResult = {
+  meetings: MyPageMeetingResult[];
+  pageInfo: {
+    page: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
+    hasNext: boolean;
+  };
 };
 
 export const getParticipationMeetingList = async (
@@ -435,12 +443,13 @@ export const getParticipationMeetingList = async (
 ) => {
   const searchParams = new URLSearchParams({
     page: params.page.toString(),
-    size: params.size.toString(),
+    // size: params.size.toString(),
     status: params.status,
   });
-  const res = await axiosInstance<APIResponse<ParticipationMeetingListResult>>({
+  const res = await axiosInstance<APIResponse<MyPageMeetingListResult>>({
     method: 'GET',
-    url: `/users/participation-meetings?${searchParams.toString()}`,
+    baseURL: API_V2_BASE_URL,
+    url: `/users/meetings/participation?${searchParams.toString()}&size=9`,
   });
   const data = res.data;
   return data.result;
@@ -448,22 +457,8 @@ export const getParticipationMeetingList = async (
 
 export type OpeningMeetingListParams = {
   page: number;
-  size: number;
+  // size: number;
   type: 'regular' | 'small';
-};
-
-export type OpeningMeetingListResult = {
-  nickname: UserProfile['nickname'];
-  profileImage: UserProfile['profileImage'];
-  meetings: {
-    id: Meeting['id'];
-    title: Meeting['name'];
-    recruitmentType: Meeting['recruitmentType'];
-    image: Meeting['meetingImages'];
-    meetingStartTime: MeetingSchedule['meetingStartTime'];
-    address: Meeting['address'];
-    status: Meeting['userStatus'];
-  }[];
 };
 
 export const getOpeningMeetingList = async (
@@ -471,12 +466,13 @@ export const getOpeningMeetingList = async (
 ) => {
   const searchParams = new URLSearchParams({
     page: params.page.toString(),
-    size: params.size.toString(),
+    // size: params.size.toString(),
     type: params.type,
   });
-  const res = await axiosInstance<APIResponse<OpeningMeetingListResult>>({
+  const res = await axiosInstance<APIResponse<MyPageMeetingListResult>>({
     method: 'GET',
-    url: `/users/opening-meetings?${searchParams.toString()}`,
+    baseURL: API_V2_BASE_URL,
+    url: `/users/meetings/created?${searchParams.toString()}&size=9`,
   });
   const data = res.data;
   return data.result;

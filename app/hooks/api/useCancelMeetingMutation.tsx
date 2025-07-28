@@ -9,11 +9,13 @@ export default function useCancelMeetingMutation(
 ) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: { reasonType: string; description: string }) =>
-      cancelMeeting(data, id),
+    mutationFn: (data: {
+      cancellationReasonType: '개인일정' | '단순변심' | '위치' | '기타';
+      cancelReason: string;
+    }) => cancelMeeting(data, id),
     onSuccess: () => {
       toast.success('모임 취소 신청을 신청하였습니다.');
-      queryClient.refetchQueries({ queryKey: [refetchKey] });
+      queryClient.invalidateQueries({ queryKey: [refetchKey] });
       close();
     },
     onError: (err) => {
