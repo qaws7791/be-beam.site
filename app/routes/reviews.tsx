@@ -35,7 +35,10 @@ export default function Reviews() {
 
   const { ref, inView } = useInView();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useReviewsQuery(params);
+    useReviewsQuery({
+      ...params,
+      size: 20,
+    });
 
   const allReviews = data?.pages.flatMap((page) => page.reviews);
 

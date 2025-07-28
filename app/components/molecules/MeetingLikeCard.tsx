@@ -1,3 +1,4 @@
+import type { ImageType, Meeting, MeetingSchedule } from '@/types/entities';
 import ClockIcon from '../atoms/icons/ClockIcon';
 import HeartFillIcon from '../atoms/icons/HeartFillIcon';
 import LocationIcon from '../atoms/icons/LocationIcon';
@@ -6,12 +7,12 @@ import { Tag } from '../atoms/tag/Tag';
 
 interface MeetingLikeCardProps {
   meeting: {
-    title: string;
-    image: string;
-    address: string;
-    meetingStartTime: string;
-    status: string;
-    recruitmentType: string;
+    name: Meeting['name'];
+    thumbnailImage: ImageType;
+    address: Meeting['address'];
+    meetingStartTime: MeetingSchedule['meetingStartTime'];
+    status: Meeting['recruitmentStatus'];
+    type: Meeting['recruitmentType'];
   };
 }
 
@@ -43,9 +44,9 @@ export default function MeetingLikeCard({ meeting }: MeetingLikeCardProps) {
       {/* 카드 상단 이미지 영역 */}
       <div className="relative">
         <img
-          src={meeting.image}
-          alt={meeting.title}
-          className="rounded-3xl object-cover"
+          src={meeting.thumbnailImage}
+          alt={meeting.name}
+          className="h-[226px] w-full rounded-3xl object-cover"
         />
         <Tag
           className="absolute top-5 left-4.5"
@@ -62,10 +63,8 @@ export default function MeetingLikeCard({ meeting }: MeetingLikeCardProps) {
       <div>
         <div className="flex items-start justify-between">
           <div>
-            <span className="text-b2 text-primary">
-              {meeting.recruitmentType}
-            </span>
-            <p className="mt-1 text-t2">{meeting.title}</p>
+            <span className="text-b2 text-primary">{meeting.type}</span>
+            <p className="mt-1 text-t2">{meeting.name}</p>
           </div>
           <button>
             <ThreeDotHorizontalIcon className="size-6" />

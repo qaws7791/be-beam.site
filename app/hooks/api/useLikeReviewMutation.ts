@@ -12,7 +12,7 @@ interface LikeReviewParams {
 export default function useLikeReviewMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ reviewId }: LikeReviewParams) => likeReview(reviewId),
+    mutationFn: ({ reviewId }: LikeReviewParams) => likeReview({ reviewId }),
     onMutate: async ({ reviewId }) => {
       await queryClient.cancelQueries({
         queryKey: ['reviews'],

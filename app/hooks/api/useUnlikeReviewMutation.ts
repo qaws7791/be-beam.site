@@ -12,7 +12,8 @@ interface UnlikeReviewParams {
 export default function useUnlikeReviewMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ reviewId }: UnlikeReviewParams) => unlikeReview(reviewId),
+    mutationFn: ({ reviewId }: UnlikeReviewParams) =>
+      unlikeReview({ reviewId }),
     onMutate: async ({ reviewId }) => {
       await queryClient.cancelQueries({
         queryKey: ['reviews'],
