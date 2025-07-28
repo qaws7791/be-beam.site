@@ -1,5 +1,4 @@
-import { getBanner, getRecommendationMeeting } from '@/api/home';
-
+import { getBanner } from '@/api/home';
 import type { Route } from './+types/home';
 import HomeTemplate from '@/components/templates/HomeTemplate';
 import MainVisualSlider from '@/components/organisms/MainVisualSlider';
@@ -11,6 +10,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+import { meetingRecommendationQueryOptions } from '@/hooks/api/useMeetingRecommendationsQuery';
 
 export function meta() {
   return [
@@ -28,20 +28,17 @@ export async function loader() {
   const queryClient = new QueryClient();
   await Promise.all([
     // 좋아요 기반 추천 리스트
-    queryClient.prefetchQuery({
-      queryKey: ['recommendationMeetings', 'likes', 'all'],
-      queryFn: () => getRecommendationMeeting('likes', 'all'),
-    }),
+    queryClient.prefetchQuery(
+      meetingRecommendationQueryOptions({ tab: 'all', type: 'likes' }),
+    ),
     // 랜덤 추천 리스트
-    queryClient.prefetchQuery({
-      queryKey: ['recommendationMeetings', 'random', 'all'],
-      queryFn: () => getRecommendationMeeting('random', 'all'),
-    }),
+    queryClient.prefetchQuery(
+      meetingRecommendationQueryOptions({ tab: 'all', type: 'random' }),
+    ),
     // 최신 등록 모임 리스트
-    queryClient.prefetchQuery({
-      queryKey: ['recommendationMeetings', 'recent', 'all'],
-      queryFn: () => getRecommendationMeeting('recent', 'all'),
-    }),
+    queryClient.prefetchQuery(
+      meetingRecommendationQueryOptions({ tab: 'all', type: 'recent' }),
+    ),
   ]);
 
   const dehydratedState = dehydrate(queryClient);

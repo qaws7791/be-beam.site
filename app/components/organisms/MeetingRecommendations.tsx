@@ -8,24 +8,13 @@ import GridGroup from './gridGroup/GridGroup';
 import useMeetingRecommendationQuery from '@/hooks/api/useMeetingRecommendationsQuery';
 import LoadingSpinner from '../molecules/LoadingSpinner';
 
-interface MeetingType {
-  id: number;
-  name: string;
-  thumbnailImage: string;
-  recruitmentType: string;
-  recruitmentStatus: string;
-  meetingStartTime: string;
-  address: string;
-  liked?: boolean;
-}
-
 export default function MeetingRecommendations({
   title,
   type,
   className,
 }: {
   title: string;
-  type: string;
+  type: 'likes' | 'random' | 'recent';
   className?: string;
 }) {
   const navigate = useNavigate();
@@ -33,8 +22,8 @@ export default function MeetingRecommendations({
   const rootLoaderData = useRouteLoaderData('root');
   const user = rootLoaderData.user;
 
-  const [tab, setTab] = useState('all');
-  const { data: datas, isLoading } = useMeetingRecommendationQuery(type, tab);
+  const [tab, setTab] = useState<'all' | 'regular' | 'small'>('all');
+  const { data: datas, isLoading } = useMeetingRecommendationQuery(tab, type);
 
   const tabList = [
     {
@@ -60,7 +49,9 @@ export default function MeetingRecommendations({
           defaultValue="all"
           className="w-full text-b1"
           value={tab}
-          onValueChange={(value) => setTab(value)}
+          onValueChange={(value) =>
+            setTab(value as 'all' | 'regular' | 'small')
+          }
         >
           <TabsList className="h-auto gap-3 before:h-0">
             {tabList.map((data, idx) => (
@@ -81,28 +72,14 @@ export default function MeetingRecommendations({
                   <LoadingSpinner />
                 ) : (
                   <>
-                    {datas?.map((meeting: MeetingType) => (
+                    {datas?.map((meeting) => (
                       <MeetingCard
                         key={meeting.id}
                         name={meeting.name}
                         image={meeting.thumbnailImage}
-                        recruitmentStatus={
-                          meeting.recruitmentStatus === 'UPCOMING'
-                            ? '모집예정'
-                            : meeting.recruitmentStatus === 'RECRUITING'
-                              ? '모집중'
-                              : meeting.recruitmentStatus === 'CLOSED'
-                                ? '모집종료'
-                                : meeting.recruitmentStatus === 'INPROGRESS'
-                                  ? '모임중'
-                                  : '모임완료'
-                        }
-                        recruitmentType={
-                          meeting.recruitmentType === 'SMALL'
-                            ? '소모임'
-                            : '정기모임'
-                        }
-                        meetingStartTime={meeting.meetingStartTime.slice(0, 10)}
+                        recruitmentStatus={meeting.recruitmentStatus}
+                        recruitmentType={meeting.recruitmentType}
+                        meetingStartTime={meeting.meetingStartTime}
                         address={meeting.address}
                         onClick={() => navigate(`/meeting/${meeting.id}`)}
                         isLikeBtn={user}
