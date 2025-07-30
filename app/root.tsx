@@ -7,9 +7,6 @@ import {
   ScrollRestoration,
   useLocation,
 } from 'react-router';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-
 import './app.css';
 import type { Route } from './+types/root';
 import Navbar from './components/organisms/Navbar';
@@ -18,18 +15,9 @@ import Footer from './components/organisms/Footer';
 import ModalProvider from './components/provider/ModalProvider';
 import { userContext } from './context';
 import { globalStorageMiddleware, sessionMiddleware } from './middlewares/auth';
+import TanstackQueryProvider from './providers/TanstackQueryProvider';
 
 export const unstable_middleware = [sessionMiddleware, globalStorageMiddleware];
-
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      throwOnError: true,
-      retry: 3,
-      staleTime: 5 * 60 * 1000,
-    },
-  },
-});
 
 if (import.meta.env.DEV && typeof window !== 'undefined') {
   import('./mocks/browser').then(({ worker }) => worker.start());
@@ -71,8 +59,7 @@ export async function loader({ context }: Route.LoaderArgs) {
 export default function App() {
   const path = useLocation().pathname.slice(1);
   return (
-    <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
+    <TanstackQueryProvider>
       <div className="bg-white whitespace-pre-wrap text-black">
         <Navbar />
         <Outlet />
@@ -81,7 +68,7 @@ export default function App() {
 
         {path !== 'login' && <Footer />}
       </div>
-    </QueryClientProvider>
+    </TanstackQueryProvider>
   );
 }
 

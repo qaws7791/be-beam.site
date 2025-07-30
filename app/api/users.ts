@@ -1,14 +1,23 @@
 import { API_V1_BASE_URL } from '@/constants/api';
 import { axiosInstance } from '@/lib/axios';
 import type { APIResponse } from '@/types/api';
+import type {
+  Host,
+  LinkType,
+  Meeting,
+  MeetingSchedule,
+  Review,
+  UserInformation,
+  UserProfile,
+} from '@/types/entities';
 import type { AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 
 export type MyProfileResult = {
-  nickname: string;
-  profileImage: string;
-  introduction: string;
-  role: string;
+  nickname: UserProfile['nickname'];
+  profileImage: UserProfile['profileImage'];
+  introduction: UserProfile['introduction'];
+  role: UserProfile['role'];
 };
 
 export const getMyProfile = async (axiosRequestConfig?: AxiosRequestConfig) => {
@@ -30,18 +39,24 @@ export const getMyProfile = async (axiosRequestConfig?: AxiosRequestConfig) => {
   }
 };
 
+export type MyMeetingLikesParams = {
+  page: number;
+  size: number;
+  type: 'regular' | 'small';
+};
+
 export type MyMeetingLikesResult = {
-  nickname: string;
-  profileImage: string;
+  nickname: UserProfile['nickname'];
+  profileImage: UserProfile['profileImage'];
   meetings: {
-    id: number;
-    title: string;
-    recruitmentType: string;
-    image: string;
-    meetingStartTime: string;
-    address: string;
-    status: string;
-    liked: boolean;
+    id: Meeting['id'];
+    title: Meeting['name'];
+    recruitmentType: Meeting['recruitmentType'];
+    image: Meeting['meetingImages'];
+    meetingStartTime: MeetingSchedule['meetingStartTime'];
+    address: Meeting['address'];
+    status: Meeting['userStatus'];
+    liked: Meeting['liked'];
   }[];
 };
 
@@ -49,11 +64,7 @@ export const getMyMeetingLikes = async ({
   page,
   size,
   type,
-}: {
-  page: number;
-  size: number;
-  type: 'regular' | 'small';
-}) => {
+}: MyMeetingLikesParams) => {
   return {
     nickname: '홍길동',
     profileImage: 'https://placehold.co/300',
@@ -142,85 +153,41 @@ export const getMyMeetingLikes = async ({
   return data.result;
 };
 
-export type MyReviewLikesResult = {
-  nickname: string;
-  profileImage: string;
-  reviews: {
-    reviewId: number;
-    profileImg: string;
-    nickname: string;
-    rating: number;
-    text: string;
-    createdAt: string;
-    images: string[];
-    likesCount: number;
-    liked: boolean;
-    myReview: boolean;
-    meeting: {
-      id: number;
-      name: string;
-      link: string;
-    };
-  }[];
-};
-
-export const getMyReviewLikes = async ({
-  page,
-  size,
-}: {
+export type MyReviewLikesParams = {
   page: number;
   size: number;
-}) => {
-  return {
-    nickname: '홍길동',
-    profileImage: 'https://placehold.co/300',
-    reviews: [
-      {
-        reviewId: 48,
-        profileImg: 'https://placehold.co/300',
-        nickname: '허남준 최고',
-        rating: 5,
-        text: '그래 내가 글 썼다...',
-        images: [
-          'https://placehold.co/300',
-          'https://placehold.co/300',
-          'https://placehold.co/300',
-        ],
-        createdAt: '2024-10-28T08:08:05.160458',
-        likesCount: 0,
-        liked: false,
-        myReview: false,
-        meeting: {
-          id: 13,
-          name: '소셜다이닝 : 이상식탁',
-          link: 'https://www.be-beam.site/meeting/detail/49',
-        },
-      },
-      {
-        reviewId: 46,
-        profileImg: 'https://placehold.co/300',
-        nickname: '허남준 최고',
-        rating: 5,
-        text: '모임이 너무 최고였습니다!:)',
-        images: [
-          'https://placehold.co/300',
-          'https://placehold.co/300',
-          'https://placehold.co/300',
-        ],
-        createdAt: '2024-10-28T01:52:46.861053',
-        likesCount: 1,
-        liked: false,
-        myReview: false,
-        meeting: {
-          id: 15,
-          name: '사진출사모임 : 나를 기록하는 사진관 (정기모임) (모집마감)',
-          link: 'https://www.be-beam.site/meeting/detail/49',
-        },
-      },
-    ],
+};
+
+export type MyReviewLikesResult = {
+  reviews: {
+    reviewId: Review['reviewId'];
+    profileImg: Review['profileImg'];
+    nickname: UserProfile;
+    rating: Review['rating'];
+    text: Review['text'];
+    createdAt: Review['createdAt'];
+    images: Review['images'];
+    likesCount: Review['likesCount'];
+    liked: Review['liked'];
+    myReview: Review['myReview'];
+    meeting: {
+      id: Meeting['id'];
+      name: Meeting['name'];
+      link: LinkType;
+    };
+  }[];
+  pageInfo: {
+    page: number;
+    size: number;
+    totalElements: number;
+    totalPages: number;
+    hasNext: boolean;
   };
+};
+
+export const getMyReviewLikes = async ({ page, size }: MyReviewLikesParams) => {
   const searchParams = new URLSearchParams({
-    cursor: page.toString(),
+    page: page.toString(),
     size: size.toString(),
   });
   const res = await axiosInstance.get<APIResponse<MyReviewLikesResult>>(
@@ -230,58 +197,59 @@ export const getMyReviewLikes = async ({
   return data.result;
 };
 
-export type MyHostLikesResult = {
-  nickname: string;
-  profileImage: string;
-  hosts: {
-    id: number;
-    nickname: string;
-    profileImage: string;
-    introduction: string;
-    liked: boolean;
-  }[];
-};
-
-export const getMyHostLikes = async ({
-  page,
-  size,
-}: {
+export type MyHostLikesParams = {
   page: number;
   size: number;
-}) => {
-  return {
-    nickname: '홍길동',
-    profileImage: 'https://placehold.co/300',
-    hosts: [
-      {
-        id: 1,
-        nickname: '홍길동동',
-        profileImage: 'https://placehold.co/600x400',
-        introduction: '홍길동입니다. 사진작가로 활동하고 있어요.',
-        liked: true,
-      },
-      {
-        id: 2,
-        nickname: '홍길동동',
-        profileImage: 'https://placehold.co/600x400',
-        introduction: '홍길동입니다. 사진작가로 활동하고 있어요.',
-        liked: true,
-      },
-    ],
+};
+
+export type MyHostLikesResult = {
+  hosts: {
+    nickname: Host['hostName'];
+    profileImage: Host['hostImage'];
+    introduction: Host['hostInstruction'];
+    liked: Host['followed'];
+  }[];
+  pageInfo: {
+    page: number;
+    size: number;
+    totalPages: number;
+    totalElements: number;
+    hasNext: boolean;
   };
+};
+
+export const getMyHostLikes = async ({ page, size }: MyHostLikesParams) => {
   const searchParams = new URLSearchParams({
-    cursor: page.toString(),
+    page: page.toString(),
     size: size.toString(),
   });
   const res = await axiosInstance.get<APIResponse<MyHostLikesResult>>(
-    `users/likes/host?${searchParams.toString()}`,
+    `users/likes/hosts?${searchParams.toString()}`,
   );
   const data = res.data;
   return data.result;
 };
 
-type MyInfoResult = {
-  nickname: string;
+export type MyInfoResult = {
+  name: UserInformation['name'];
+  phoneNumber: UserInformation['phoneNumber'];
+  email: UserInformation['email'];
+  birthday: UserInformation['birthday'];
+  gender: UserInformation['gender'];
+  terms: UserInformation['terms'];
+  userTerms: UserInformation['userTerms'];
+  marketingTerms: UserInformation['marketingTerms'];
+};
+
+export const getMyInfo = async (): Promise<MyInfoResult> => {
+  const res =
+    await axiosInstance.get<APIResponse<MyInfoResult>>('users/my-info');
+  const data = res.data;
+  return data.result;
+};
+
+export type UpdateMyInfoParams = {
+  name: string;
   phoneNumber: string;
   email: string;
   birthday: string;
@@ -291,37 +259,12 @@ type MyInfoResult = {
   marketingTerms: boolean;
 };
 
-export const getMyInfo = async (): Promise<MyInfoResult> => {
-  return {
-    nickname: '닉네임',
-    phoneNumber: '010-1234-5678',
-    email: 'email@email.com',
-    birthday: '2025-01-01',
-    gender: '여성',
-    terms: false,
-    userTerms: false,
-    marketingTerms: false,
-  };
-  const res =
-    await axiosInstance.get<APIResponse<MyInfoResult>>('users/my-info');
-  const data = res.data;
-  return data.result;
-};
+export type UpdateMyInfoResult = string;
 
-export const updateMyInfo = async (data: {
-  nickname: string;
-  phoneNumber: string;
-  email: string;
-  birthday: string;
-  gender: 'MAN' | 'WOMAN';
-  terms: boolean;
-  userTerms: boolean;
-  marketingTerms: boolean;
-}) => {
-  return;
-  const res = await axiosInstance.patch<APIResponse<string>>(
+export const updateMyInfo = async (params: UpdateMyInfoParams) => {
+  const res = await axiosInstance.patch<APIResponse<UpdateMyInfoResult>>(
     'users/my-info',
-    data,
+    params,
   );
   const result = res.data;
   return result;
@@ -333,29 +276,41 @@ export type UpdateMyProfileParams = {
   profileImage?: File;
 };
 
+export type UpdateMyProfileResult = {
+  nickname: UserProfile['nickname'];
+  introduction: UserProfile['introduction'];
+  profileImage: UserProfile['profileImage'];
+};
+
 export const updateMyProfile = async (params: UpdateMyProfileParams) => {
-  return {
-    nickname: params.nickname,
-    profileImage: 'https://placehold.co/300',
-    introduction: params.introduction,
-  };
-  // const formData = new FormData();
-  // formData.append(
-  //   'data',
-  //   JSON.stringify({
-  //     nickname: params.nickname,
-  //     introduction: params.introduction,
-  //   }),
-  // );
-  // if (params.profileImage) {
-  //   formData.append('profileImage', params.profileImage);
-  // }
-  // const res = await axiosInstanceV1.patch<APIResponse<MyProfileResult>>(
-  //   'users/my-profile',
-  //   formData,
-  // );
-  // const data = res.data;
-  // return data.result;
+  // return {
+  //   nickname: params.nickname,
+  //   profileImage: 'https://placehold.co/300',
+  //   introduction: params.introduction,
+  // };
+  const formData = new FormData();
+  formData.append(
+    'data',
+    JSON.stringify({
+      nickname: params.nickname,
+      introduction: params.introduction,
+    }),
+  );
+  if (params.profileImage) {
+    formData.append('profileImage', params.profileImage);
+  }
+  const res = await axiosInstance.patch<APIResponse<MyProfileResult>>(
+    'users/my-profile',
+    formData,
+    {
+      baseURL: API_V1_BASE_URL,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    },
+  );
+  const data = res.data;
+  return data.result;
 };
 
 export async function getCreatedMeetingDetail(id: number) {
@@ -366,3 +321,164 @@ export async function getCreatedMeetingDetail(id: number) {
   const data = res.data;
   return data.result;
 }
+
+export type GetWrittenReviewsParams = {
+  type: 'all' | 'regular' | 'small';
+  page: number;
+  size: number;
+};
+
+export type GetWrittenReviewsResult = {
+  reviews: {
+    meetingId: number;
+    meetingName: string;
+    recruitmentType: '정기모임' | '소모임';
+    thumbnailImage: string;
+    reviewId: number;
+    rating: number;
+    content: string;
+    images: string[];
+    createdAt: string;
+  }[];
+  pageInfo: {
+    page: number;
+    size: number;
+    totalPages: number;
+    totalElements: number;
+    hasNext: boolean;
+  };
+};
+
+export async function getWrittenReviews(params: GetWrittenReviewsParams) {
+  const searchParams = new URLSearchParams({
+    written: 'false',
+    type: params.type,
+    page: params.page.toString(),
+    size: params.size.toString(),
+  });
+  const res = await axiosInstance.get<APIResponse<GetWrittenReviewsResult>>(
+    `users/reviews?${searchParams.toString()}`,
+    {
+      baseURL: API_V1_BASE_URL,
+    },
+  );
+  const data = res.data;
+  return data.result;
+}
+
+export type GetReviewableReviewsParams = {
+  type: 'all' | 'regular' | 'small';
+  page: number;
+  size: number;
+};
+
+export type GetReviewableReviewsResult = {
+  reviews: {
+    meetingId: number;
+    meetingName: string;
+    recruitmentType: '정기모임' | '소모임';
+    thumbnailImage: string;
+  }[];
+  pageInfo: {
+    page: number;
+    size: number;
+    totalPages: number;
+    totalElements: number;
+    hasNext: boolean;
+  };
+};
+
+export async function getReviewableReviews(params: GetReviewableReviewsParams) {
+  const searchParams = new URLSearchParams({
+    written: 'true',
+    type: params.type,
+    page: params.page.toString(),
+    size: params.size.toString(),
+  });
+  const res = await axiosInstance.get<APIResponse<GetReviewableReviewsResult>>(
+    `users/reviews?${searchParams.toString()}`,
+    {
+      baseURL: API_V1_BASE_URL,
+    },
+  );
+  const data = res.data;
+  return data.result;
+}
+
+export type ParticipationMeetingListParams = {
+  status: 'participating' | 'completed' | 'cancelled';
+  page: number;
+  size: number;
+};
+
+export type ParticipationMeetingListResult = {
+  nickname: UserProfile['nickname'];
+  profileImage: UserProfile['profileImage'];
+  meetings: {
+    id: Meeting['id'];
+    title: Meeting['name'];
+    recruitmentType: Meeting['recruitmentType'];
+    image: Meeting['meetingImages'];
+    meetingStartTime: MeetingSchedule['meetingStartTime'];
+    address: Meeting['address'];
+    status: Meeting['userStatus'];
+  }[];
+};
+
+export const getParticipationMeetingList = async (
+  params: ParticipationMeetingListParams,
+) => {
+  const searchParams = new URLSearchParams({
+    page: params.page.toString(),
+    size: params.size.toString(),
+    status: params.status,
+  });
+  const res = await axiosInstance<APIResponse<ParticipationMeetingListResult>>({
+    method: 'GET',
+    url: `/users/participation-meetings?${searchParams.toString()}`,
+  });
+  const data = res.data;
+  return data.result;
+};
+
+export type OpeningMeetingListParams = {
+  page: number;
+  size: number;
+  type: 'regular' | 'small';
+};
+
+export type OpeningMeetingListResult = {
+  nickname: UserProfile['nickname'];
+  profileImage: UserProfile['profileImage'];
+  meetings: {
+    id: Meeting['id'];
+    title: Meeting['name'];
+    recruitmentType: Meeting['recruitmentType'];
+    image: Meeting['meetingImages'];
+    meetingStartTime: MeetingSchedule['meetingStartTime'];
+    address: Meeting['address'];
+    status: Meeting['userStatus'];
+  }[];
+};
+
+export const getOpeningMeetingList = async (
+  params: OpeningMeetingListParams,
+) => {
+  const searchParams = new URLSearchParams({
+    page: params.page.toString(),
+    size: params.size.toString(),
+    type: params.type,
+  });
+  const res = await axiosInstance<APIResponse<OpeningMeetingListResult>>({
+    method: 'GET',
+    url: `/users/opening-meetings?${searchParams.toString()}`,
+  });
+  const data = res.data;
+  return data.result;
+};
+
+export const withdrawUser = async () => {
+  await axiosInstance.delete<void>('/users/', {
+    baseURL: API_V1_BASE_URL,
+  });
+};

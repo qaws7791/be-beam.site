@@ -4,3 +4,9 @@ export interface APIResponse<T> {
   isSuccess: boolean;
   result: T;
 }
+
+export interface CursorPaginationResult {
+  nextCursor: number;
+  size: number;
+  hasNext: boolean;
+}
