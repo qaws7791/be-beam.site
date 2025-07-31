@@ -424,7 +424,7 @@ export type MyPageMeetingResult = {
   thumbnailImage: MeetingSummary['image'];
   meetingStartTime: MeetingSchedule['meetingStartTime'];
   address: Meeting['address'];
-  status: Meeting['userStatus'];
+  userStatus: Meeting['userStatus'];
 };
 
 export type MyPageMeetingListResult = {
@@ -455,10 +455,33 @@ export const getParticipationMeetingList = async (
   return data.result;
 };
 
-export type OpeningMeetingListParams = {
+export type ApplicationMeetingListParams = {
+  status: 'applied' | 'confirmed' | 'rejected';
   page: number;
   // size: number;
+};
+
+export const getApplicationMeetingList = async (
+  params: ApplicationMeetingListParams,
+) => {
+  const searchParams = new URLSearchParams({
+    page: params.page.toString(),
+    // size: params.size.toString(),
+    status: params.status,
+  });
+  const res = await axiosInstance<APIResponse<MyPageMeetingListResult>>({
+    method: 'GET',
+    baseURL: API_V2_BASE_URL,
+    url: `/users/meetings/application?${searchParams.toString()}&size=9`,
+  });
+  const data = res.data;
+  return data.result;
+};
+
+export type OpeningMeetingListParams = {
+  page: number;
   type: 'regular' | 'small';
+  // size: number;
 };
 
 export const getOpeningMeetingList = async (

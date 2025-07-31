@@ -11,12 +11,14 @@ export interface MeetingCardProp extends MeetingSummary {
   isLikeBtn?: boolean;
   onLikeClick?: () => void;
   children?: React.ReactNode;
+  userStatus?: string;
 }
 
 export default function MeetingCard({
   image,
   recruitmentType,
   recruitmentStatus,
+  userStatus,
   name,
   meetingStartTime,
   address,
@@ -37,19 +39,28 @@ export default function MeetingCard({
 
       <Tag
         variant={
-          recruitmentStatus === '모집예정'
+          recruitmentStatus === '모집예정' ||
+          userStatus === '참여중' ||
+          userStatus === '신청중'
             ? 'primary'
-            : recruitmentStatus === '모집중'
+            : recruitmentStatus === '모집중' ||
+                userStatus === '참여완료' ||
+                userStatus === '확정'
               ? 'blue'
-              : recruitmentStatus === '모집종료'
+              : recruitmentStatus === '모집종료' ||
+                  userStatus === '중도이탈신청중' ||
+                  userStatus === '신청취소중'
                 ? 'tertiary'
-                : recruitmentStatus === '모임중'
+                : recruitmentStatus === '모임중' ||
+                    userStatus === '거절' ||
+                    userStatus === '중도이탈완료' ||
+                    userStatus === '신청취소완료'
                   ? 'pink'
                   : 'brown'
         }
         className="absolute top-5 left-5"
       >
-        {recruitmentStatus}
+        {recruitmentStatus ?? userStatus}
       </Tag>
 
       <img

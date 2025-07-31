@@ -35,7 +35,7 @@ export type MyParticipatedMeetingFilters = z.infer<
 
 // 나의 모임 - 신청한 모임
 export const MyApplicatedMeetingFilterSchema = z.object({
-  status: z.enum(['requested', 'confirmed', 'rejected']).default('requested'),
+  status: z.enum(['applied', 'confirmed', 'rejected']).default('applied'),
   page: z.coerce.number().default(1),
 });
 

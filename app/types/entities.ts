@@ -176,7 +176,7 @@ export interface MeetingSummary {
   id?: number;
   name: string;
   recruitmentType: string;
-  recruitmentStatus: string;
+  recruitmentStatus?: string;
   image: ImageType;
   meetingStartTime: string;
   address: string;
