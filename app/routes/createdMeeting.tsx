@@ -10,7 +10,7 @@ import {
 } from '@/schemas/userFilters';
 import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
 import { requireAuth } from '@/lib/auth.server';
-import { getOpeningMeetingList } from '@/api/users';
+import { getOpeningMeetingList } from '@/api/mypage';
 
 import type { Route } from './+types/createdMeeting';
 import type { FilterOption } from '@/types/components';

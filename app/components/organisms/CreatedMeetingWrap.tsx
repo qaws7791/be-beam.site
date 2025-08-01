@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import useDeleteMeetingMutation from '@/hooks/api/useDeleteMeetingMutation';
 import { useModalStore } from '@/stores/useModalStore';
 import usePagination from '@/hooks/ui/usePagination';
-import { getOpeningMeetingList, type MyPageMeetingResult } from '@/api/users';
+import { getOpeningMeetingList, type MyPageMeetingResult } from '@/api/mypage';
 
 import type { MyCreatedMeetingFilters } from '@/schemas/userFilters';
 import GridGroup from './gridGroup/GridGroup';

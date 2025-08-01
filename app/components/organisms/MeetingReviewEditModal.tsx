@@ -31,9 +31,11 @@ export default function MeetingReviewEditModal() {
     images: File[];
   }) => {
     createReviewMutation.mutate({
-      rating: review.rating,
-      text: review.content,
-      images: review.images,
+      data: {
+        rating: review.rating,
+        text: review.content,
+        images: review.images,
+      },
       meetingId: (modalProps.meeting as Meeting).id,
     });
     close();

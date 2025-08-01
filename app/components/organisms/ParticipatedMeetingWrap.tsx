@@ -6,7 +6,7 @@ import usePagination from '@/hooks/ui/usePagination';
 import {
   getParticipationMeetingList,
   type MyPageMeetingResult,
-} from '@/api/users';
+} from '@/api/mypage';
 
 import type { MyParticipatedMeetingFilters } from '@/schemas/userFilters';
 import GridGroup from './gridGroup/GridGroup';

@@ -70,17 +70,6 @@ export interface FiltersType {
   values: string[];
 }
 
-export interface GuideBookType {
-  id: number;
-  title: string;
-  image: string;
-  description: string;
-  level: string;
-  time: string;
-  type: string;
-  targetType: string;
-}
-
 export interface RecommendationsGuideBookType {
   id: number;
   title: string;

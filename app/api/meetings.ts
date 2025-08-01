@@ -2,6 +2,7 @@ import { axiosInstance } from '@/lib/axios';
 import { API_V1_BASE_URL, API_V2_BASE_URL } from '@/constants/api';
 import type { APIResponse, CursorPaginationResult } from '@/types/api';
 import type {
+  GuidebookRecommendation,
   ImageType,
   Meeting,
   MeetingAttendance,
@@ -55,8 +56,7 @@ export type MeetingDetailResult = {
   id: Meeting['id'];
   recruitingState: Meeting['recruitmentStatus'];
   recruitmentType: Meeting['recruitmentType'];
-  guidebookReferenceId: Meeting['guidebookReferenceId'];
-  guidebookReferenceTitle: Meeting['guidebookReferenceTitle'];
+  guidebook: GuidebookRecommendation;
   selectionType: Meeting['selectionType'];
   name: Meeting['name'];
   topic: Meeting['topic'];

@@ -1,5 +1,5 @@
+import type { FilterOption } from '@/types/components';
 import type { FilterState } from '@/hooks/ui/useGuideBookFilterDialog';
-import type { FilterOption } from '@/routes/guideBooks';
 import { Button } from '../atoms/button/Button';
 import {
   Dialog,

@@ -1,6 +1,4 @@
 import useGuideBooksQuery from '@/hooks/api/useGuideBooksQuery';
-import type { useGuideBooksParamsType } from '@/hooks/business/useGuideBooksParams';
-import type { GuideBookType } from '@/types/components';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Select,
@@ -12,7 +10,8 @@ import {
   SelectValue,
 } from '../atoms/select/Select';
 import LoadingSpinner from './LoadingSpinner';
-import clsx from 'clsx';
+import { cn } from '@/lib/tailwind';
+import type { GuidebookSummary } from '@/types/entities';
 
 interface GuideBookSelectProps {
   value?: number | null;
@@ -28,9 +27,26 @@ export default function GuideBookSelect({
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
 
-  const params: useGuideBooksParamsType['params'] = {
+  interface guideBooksParams {
+    // search: '';
+    type:
+      | 'all'
+      | 'communication'
+      | 'engagement'
+      | 'planning'
+      | 'operation'
+      | 'support';
+    targetType: 'all' | 'planner' | 'participant';
+    // mode: 'all' | 'online' | 'offline' | 'mix';
+    level: 'all' | 'before' | 'ongoing' | 'completed';
+    time: 'all' | 'under30min' | 'under1hour' | 'over1hour';
+  }
+
+  const params: guideBooksParams = {
+    // search: '',
     type: 'all',
     targetType: 'all',
+    // mode: 'all',
     level: 'all',
     time: 'all',
   };
@@ -42,10 +58,8 @@ export default function GuideBookSelect({
     // isLoading,
   } = useGuideBooksQuery(params);
 
-  console.log(value);
-
-  const allGuideBooks: GuideBookType[] = useMemo(() => {
-    return guideBooks?.pages.flatMap((page) => page.guideBooks) || [];
+  const allGuideBooks: GuidebookSummary[] = useMemo(() => {
+    return guideBooks?.pages.flatMap((page) => page.guidebooks) || [];
   }, [guideBooks]);
 
   console.log(allGuideBooks);
@@ -112,7 +126,7 @@ export default function GuideBookSelect({
       onValueChange={onSelectChange}
     >
       <SelectTrigger
-        className={clsx(
+        className={cn(
           'mt-5 h-auto w-full rounded-lg border-gray-500 bg-white py-3',
           !value && 'text-t4 text-gray-500',
         )}
@@ -126,9 +140,9 @@ export default function GuideBookSelect({
             <SelectItem key={String(item.id)} value={String(item.id)}>
               <div className="flex w-full items-center gap-2">
                 <img
-                  src={item.image}
+                  src={item.thumbnailImage}
                   alt="thumbnail_image"
-                  className="h-10 w-10 rounded-lg"
+                  className="h-10 w-10 rounded-lg object-cover"
                 />
                 {item.title}
               </div>

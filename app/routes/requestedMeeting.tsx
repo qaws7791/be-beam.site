@@ -15,7 +15,7 @@ import {
   MyApplicatedMeetingFilterSchema,
   type MyApplicatedMeetingFilters,
 } from '@/schemas/userFilters';
-import { getApplicationMeetingList } from '@/api/users';
+import { getApplicationMeetingList } from '@/api/mypage';
 import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
 import RequestedMeetingWrap from '@/components/organisms/RequestedMeetingWrap';
 

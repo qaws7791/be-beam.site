@@ -66,6 +66,7 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
         text: '신청 취소하기',
         onClickHandler: () =>
           open('CANCEL_MEETING_MODAL', {
+            meetingId: meeting.id,
             statusType: 'applying', // participating
             refetchKey: 'meeting',
           }),
@@ -87,6 +88,7 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
           open('CANCEL_MEETING_MODAL', {
             meetingId: meeting.id,
             statusType: 'participating', // applying
+            refetchKey: 'meeting',
           }),
         disable: false,
       };

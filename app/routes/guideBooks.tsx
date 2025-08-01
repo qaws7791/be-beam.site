@@ -124,7 +124,7 @@ export default function GuideBooks() {
   } = useGuideBooksQuery(params);
 
   const allGuideBooks = useMemo(() => {
-    return guideBooks?.pages?.flatMap((page) => page.guideBooks) || [];
+    return guideBooks?.pages?.flatMap((page) => page.guidebooks) || [];
   }, [guideBooks]);
 
   useInfiniteScroll({
@@ -132,6 +132,8 @@ export default function GuideBooks() {
     hasNextPage,
     isFetchingNextPage,
   });
+
+  console.log(guideBooks, allGuideBooks);
 
   return (
     <div>

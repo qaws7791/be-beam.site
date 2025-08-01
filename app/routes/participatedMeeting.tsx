@@ -10,7 +10,7 @@ import {
 } from '@/schemas/userFilters';
 import { requireAuth } from '@/lib/auth.server';
 import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
-import { getParticipationMeetingList } from '@/api/users';
+import { getParticipationMeetingList } from '@/api/mypage';
 import ParticipatedMeetingWrap from '@/components/organisms/ParticipatedMeetingWrap';
 
 import type { Route } from './+types/participatedMeeting';

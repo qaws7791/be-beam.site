@@ -12,6 +12,7 @@ import { Input } from '../atoms/input/Input';
 import { Textarea } from '../atoms/textarea/Textarea';
 import { Button } from '../atoms/button/Button';
 import Badge from '../atoms/badge/Badge';
+import type { Topic } from '@/types/entities';
 
 interface CreateMeetingSecondContentProps {
   tab: number;
@@ -57,15 +58,7 @@ export default function CreateMeetingSecondContent({
     name: 'images',
   });
 
-  const topicList = [
-    { id: 1, name: '✍️글쓰기' },
-    { id: 2, name: '🥂소셜다이닝' },
-    { id: 3, name: '🏃‍♂️운동·야외활동' },
-    { id: 4, name: '🎨️예술·사진' },
-  ];
-
   const { data: topics } = useTopicsQuery();
-  console.log(topics);
 
   const [currentHashtagInput, setCurrentHashtagInput] = useState('');
   const [thumbnailImagePreview, setThumbnailImagePreview] = useState(
@@ -212,7 +205,7 @@ export default function CreateMeetingSecondContent({
             control={control}
             render={({ field }) => (
               <>
-                {topicList.map((topic) => (
+                {topics?.map((topic: Topic) => (
                   <Button
                     type="button"
                     key={topic.id}
@@ -230,7 +223,7 @@ export default function CreateMeetingSecondContent({
                       setForm({ ...form, topicId: topic.id });
                     }}
                   >
-                    {topic.name}
+                    {topic.topic}
                   </Button>
                 ))}
               </>

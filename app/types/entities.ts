@@ -10,6 +10,13 @@ export type ImageType = string;
 
 export type LinkType = string;
 
+export interface GuidebookSummary {
+  id: number;
+  title: string;
+  thumbnailImage: ImageType;
+  description: string;
+}
+
 export interface Guidebook {
   id: number;
   guidebookType: string;
@@ -137,9 +144,8 @@ export interface EditMeetingSchedule {
 }
 
 export interface Host {
-  id: number;
   hostName: string;
-  hostImage: string;
+  hostImage: ImageType;
   hostInstruction: string;
   followCount: number;
   openingMeetingCount: number;
