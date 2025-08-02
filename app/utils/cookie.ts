@@ -37,13 +37,7 @@ export function mergeCookies(
 }
 
 // 문자열로된 쿠키를 키-값으로 파싱하고, 순서대로 합칩니다. 같은 키가 있을 경우 뒤에 있는 값으로 덮어쓰입니다. Set을 사용합니다.
-export function mergeCookieHeaders(
-  cookieHeaders: string[] | undefined,
-): string | undefined {
-  if (!cookieHeaders || cookieHeaders.length === 0) {
-    return undefined;
-  }
-
+export function mergeCookieHeaders(cookieHeaders: string[]): string {
   const cookieMap = new Map<string, string>();
 
   cookieHeaders.forEach((cookieString) => {
