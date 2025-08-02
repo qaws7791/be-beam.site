@@ -136,7 +136,7 @@ export const cancelMeeting = (
 export const DeleteMeeting = (id: number) => {
   return axiosInstance({
     method: 'DELETE',
-    baseURL: API_V2_BASE_URL,
+    baseURL: API_V1_BASE_URL,
     url: `/meetings/${id}`,
   });
 };
