@@ -8,7 +8,6 @@ import {
   MeetingListFilterSchema,
   type MeetingListFilters,
 } from '@/schemas/meetingFilters';
-import { withOptionalAuth } from '@/lib/auth.server';
 import { getMeetingList } from '@/api/meetings';
 import { getTopics } from '@/api/topics';
 import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
@@ -26,43 +25,23 @@ import { Button } from '@/components/atoms/button/Button';
 export async function loader({ request }: Route.LoaderArgs) {
   const queryClient = new QueryClient();
 
-  const authResult = await withOptionalAuth(request, async () => {
-    const url = new URL(request.url);
-    const urlSearchParams = new URLSearchParams(url.search);
-    const rawFilters = Object.fromEntries(urlSearchParams.entries());
-    const parsedFilters: MeetingListFilters = MeetingListFilterSchema.parse({
-      ...rawFilters,
-    });
-
-    const cookiesHeaderFromBrowser = request.headers.get('Cookie');
-    const axiosRequestConfigHeaders: { Cookie?: string } = {};
-    if (cookiesHeaderFromBrowser) {
-      axiosRequestConfigHeaders.Cookie = cookiesHeaderFromBrowser;
-    }
-
-    await queryClient.prefetchInfiniteQuery({
-      queryKey: ['meetings', parsedFilters],
-      queryFn: ({ pageParam }) =>
-        getMeetingList(parsedFilters, pageParam, {
-          headers: axiosRequestConfigHeaders,
-        }),
-      initialPageParam: 0,
-    });
-
-    const topics = await getTopics({
-      headers: axiosRequestConfigHeaders,
-    });
-
-    return {
-      filters: parsedFilters,
-      topics,
-    };
+  const url = new URL(request.url);
+  const urlSearchParams = new URLSearchParams(url.search);
+  const rawFilters = Object.fromEntries(urlSearchParams.entries());
+  const parsedFilters: MeetingListFilters = MeetingListFilterSchema.parse({
+    ...rawFilters,
   });
 
-  const loaderDataForComponent = authResult.data;
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: ['meetings', parsedFilters],
+    queryFn: ({ pageParam }) => getMeetingList(parsedFilters, pageParam),
+    initialPageParam: 0,
+  });
+
+  const topics = await getTopics();
   const dehydratedState = dehydrate(queryClient);
 
-  return { ...loaderDataForComponent, dehydratedState };
+  return { dehydratedState, topics, filters: parsedFilters };
 }
 
 export default function Meetings({ loaderData }: Route.ComponentProps) {
@@ -71,13 +50,11 @@ export default function Meetings({ loaderData }: Route.ComponentProps) {
   const rootLoaderData = useRouteLoaderData('root');
   const user = rootLoaderData.user;
 
-  const { data, dehydratedState } = loaderData;
-  const initialFilters = data?.filters;
-  const topics = data?.topics;
+  const { dehydratedState, topics, filters } = loaderData;
 
   const { filters: meetingFilters, setFilter } = useUrlFilters(
     MeetingListFilterSchema,
-    initialFilters,
+    filters,
   );
 
   const allTopics = useMemo(() => {
