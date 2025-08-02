@@ -6,11 +6,11 @@ import { Tag } from '../atoms/tag/Tag';
 
 interface MeetingLikeCardProps {
   meeting: {
-    title: string;
-    image: string;
+    name: string;
+    thumbnailImage: string;
     address: string;
     meetingStartTime: string;
-    status: string;
+    recruitmentStatus: string;
     recruitmentType: string;
   };
 }
@@ -43,15 +43,15 @@ export default function MeetingLikeCard({ meeting }: MeetingLikeCardProps) {
       {/* 카드 상단 이미지 영역 */}
       <div className="relative">
         <img
-          src={meeting.image}
-          alt={meeting.title}
-          className="rounded-3xl object-cover"
+          src={meeting.thumbnailImage}
+          alt={meeting.name}
+          className="max-h-[226px] w-full rounded-3xl object-cover"
         />
         <Tag
           className="absolute top-5 left-4.5"
-          variant={getStatusVariant(meeting.status)}
+          variant={getStatusVariant(meeting.recruitmentStatus)}
         >
-          {meeting.status}
+          {meeting.recruitmentStatus}
         </Tag>
         <button className="absolute top-5 right-5">
           <HeartFillIcon className="size-8 text-error" />
@@ -65,7 +65,7 @@ export default function MeetingLikeCard({ meeting }: MeetingLikeCardProps) {
             <span className="text-b2 text-primary">
               {meeting.recruitmentType}
             </span>
-            <p className="mt-1 text-t2">{meeting.title}</p>
+            <p className="mt-1 text-t2">{meeting.name}</p>
           </div>
           <button>
             <ThreeDotHorizontalIcon className="size-6" />
@@ -74,11 +74,13 @@ export default function MeetingLikeCard({ meeting }: MeetingLikeCardProps) {
 
         <div className="mt-3 flex flex-col gap-1">
           <div className="flex items-center gap-2">
-            <LocationIcon className="size-6 text-gray-500" />
-            <p className="text-b3 text-gray-600">{meeting.address}</p>
+            <LocationIcon className="size-6 shrink-0 text-gray-500" />
+            <p className="line-clamp-1 text-b3 text-gray-600">
+              {meeting.address}
+            </p>
           </div>
           <div className="flex items-center gap-2">
-            <ClockIcon className="size-6 text-gray-500" />
+            <ClockIcon className="size-6 shrink-0 text-gray-500" />
             <p className="text-b3 text-gray-600">
               첫 모임&nbsp;{formatMeetingDate(meeting.meetingStartTime)}
             </p>
