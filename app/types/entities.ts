@@ -22,7 +22,7 @@ export interface Guidebook {
   guidebookType: string;
   title: string;
   description: string;
-  image: ImageType[];
+  images: ImageType[];
   hashtags: string[];
   level: string;
   targetType: string;
@@ -212,6 +212,12 @@ export interface Review {
   /** 로그인한 사용자 정보 */
   liked: boolean;
   myReview: boolean;
+  meeting: {
+    id: number;
+    name: string;
+    recruitmentType: string;
+    image: string;
+  };
 }
 
 export interface Banner {

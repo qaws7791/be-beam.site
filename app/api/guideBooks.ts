@@ -38,7 +38,7 @@ export type GuideBookDetailResult = {
   guidebookType: Guidebook['guidebookType'];
   title: Guidebook['title'];
   description: Guidebook['description'];
-  image: Guidebook['image'];
+  images: Guidebook['images'];
   hashtags: Guidebook['hashtags'];
   level: Guidebook['level'];
   targetType: Guidebook['targetType'];
@@ -46,7 +46,7 @@ export type GuideBookDetailResult = {
   benefits: Guidebook['benefits'];
   file: Guidebook['file'];
   recommendations: Guidebook['recommendations'];
-}[];
+};
 
 export const getGuideBookDetail = async (id: number) => {
   const res = await axiosInstance<APIResponse<GuideBookDetailResult>>({

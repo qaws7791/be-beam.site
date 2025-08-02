@@ -1,15 +1,16 @@
-import type { FilterOption, GuideBookType } from '@/types/components';
+import type { FilterOption } from '@/types/components';
 
 import { TabsContent } from '../atoms/tabs/Tabs';
 import GridGroup from '../organisms/gridGroup/GridGroup';
 import GuideBookCard from '../organisms/GuideBookCard';
+import type { GuidebookSummary } from '@/types/entities';
 
 export default function GuideBooksContent({
   list,
   datas,
 }: {
   list: FilterOption[];
-  datas: GuideBookType[];
+  datas: GuidebookSummary[];
 }) {
   return (
     <>
