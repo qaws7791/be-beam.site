@@ -1,3 +1,4 @@
+import type { GetReviewableReviewsResult } from '@/api/users';
 import {
   Pagination,
   PaginationContent,
@@ -6,8 +7,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/atoms/pagination/Pagination';
+import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 import ReviewableMeetingCard from '@/components/organisms/ReviewableMeetingCard';
-import usePagination from '@/hooks/ui/usePagination';
+import useReviewableReviewsQuery from '@/hooks/api/useReviewableReviewsQuery';
+import { Suspense, useCallback } from 'react';
 import { useSearchParams } from 'react-router';
 import { metaTemplates } from '@/config/meta-templates';
 
@@ -15,71 +18,157 @@ export function meta() {
   return metaTemplates.reviewableReviews();
 }
 
-const MOCK_REVIEWABLE_MEETING: {
-  id: number;
-  title: string;
-  type: 'regular' | 'small';
-  image: string;
-}[] = [
-  {
-    id: 1,
-    title: 'Fun meeting',
-    type: 'regular',
-    image: 'https://picsum.photos/200/200',
-  },
-  {
-    id: 2,
-    title: 'Not satisfied meeting',
-    type: 'small',
-    image: 'https://picsum.photos/200/201',
-  },
-];
-
 export default function ReviewableReviews() {
-  const [searchParams] = useSearchParams();
-  const page = Number(searchParams.get('page')) || 1;
-  const pagination = usePagination({
-    currentPage: page,
-    totalPages: 6,
-    maxVisiblePages: 5,
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <ReviewableReviewsContent />
+    </Suspense>
+  );
+}
+
+function ReviewableReviewsContent() {
+  const { currentPage, pageSize, maxVisiblePages, handlePageChange } =
+    useReviewableReviewPage();
+
+  const { data: reviewableReviews } = useReviewableReviewsQuery({
+    type: 'all',
+    page: currentPage,
+    size: pageSize,
   });
+
   return (
     <div className="mt-8 flex flex-col gap-20">
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {MOCK_REVIEWABLE_MEETING.map((meeting) => (
-          <div key={meeting.id}>
-            <ReviewableMeetingCard meeting={meeting} />
-          </div>
-        ))}
-      </div>
+      <ReviewableMeetingGrid reviews={reviewableReviews?.reviews || []} />
+      <ReviewPagination
+        currentPage={currentPage}
+        totalPages={reviewableReviews?.pageInfo.totalPages || 1}
+        maxVisiblePages={maxVisiblePages}
+        onPageChange={handlePageChange}
+      />
+    </div>
+  );
+}
+
+function ReviewableMeetingGrid({
+  reviews,
+}: {
+  reviews: GetReviewableReviewsResult['reviews'];
+}) {
+  return (
+    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {reviews.map((review) => (
+        <div key={review.meetingId}>
+          <ReviewableMeetingCard
+            meeting={{
+              id: review.meetingId,
+              title: review.meetingName,
+              type: review.recruitmentType,
+              image: review.thumbnailImage,
+            }}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function useReviewableReviewPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = Number(searchParams.get('page')) || 1;
+
+  const handlePageChange = useCallback(
+    (page: number) => {
+      setSearchParams((prev) => {
+        const newParams = new URLSearchParams(prev);
+        newParams.set('page', page.toString());
+        return newParams;
+      });
+    },
+    [setSearchParams],
+  );
+
+  return {
+    currentPage,
+    pageSize: 9,
+    maxVisiblePages: 5,
+    handlePageChange,
+  };
+}
+
+interface ReviewPaginationProps {
+  currentPage: number;
+  totalPages: number;
+  maxVisiblePages?: number;
+  onPageChange?: (page: number) => void;
+}
+
+function ReviewPagination({
+  currentPage,
+  totalPages,
+  maxVisiblePages = 5,
+  onPageChange,
+}: ReviewPaginationProps) {
+  const createPageSearch = (page: number) => {
+    const newSearchParams = new URLSearchParams();
+    newSearchParams.set('page', page.toString());
+    return newSearchParams.toString();
+  };
+
+  const generatePageNumbers = () => {
+    const pages: number[] = [];
+    const startPage = Math.max(
+      1,
+      currentPage - Math.floor(maxVisiblePages / 2),
+    );
+    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
+
+  const pages = generatePageNumbers();
+  const hasPreviousPage = currentPage > 1;
+  const hasNextPage = currentPage < totalPages;
+
+  if (totalPages <= 1) {
+    return null;
+  }
+
+  return (
+    <div className="mt-20">
       <Pagination>
         <PaginationContent>
-          <PaginationItem>
+          {hasPreviousPage && (
             <PaginationPrevious
               to={{
-                search: `?page=${Math.max(pagination.currentPage - 5, 1)}`,
+                search: createPageSearch(currentPage - 1),
               }}
+              onClick={() => onPageChange?.(currentPage - 1)}
             />
-          </PaginationItem>
-          {pagination.pages.map((page) => (
+          )}
+          {pages.map((page) => (
             <PaginationItem key={page}>
               <PaginationLink
-                isActive={pagination.currentPage === page}
+                isActive={page === currentPage}
                 to={{
-                  search: '?page=' + page,
+                  search: createPageSearch(page),
                 }}
+                onClick={() => onPageChange?.(page)}
               >
                 {page}
               </PaginationLink>
             </PaginationItem>
           ))}
-          <PaginationItem>
+          {hasNextPage && (
             <PaginationNext
               to={{
-                search: `?page=${Math.min(pagination.currentPage + 5, pagination.totalPages)}`,
+                search: createPageSearch(currentPage + 1),
               }}
+              onClick={() => onPageChange?.(currentPage + 1)}
             />
-          </PaginationItem>
+          )}
         </PaginationContent>
       </Pagination>
     </div>

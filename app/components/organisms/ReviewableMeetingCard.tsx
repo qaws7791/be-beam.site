@@ -17,7 +17,7 @@ interface ReviewableMeetingCardProps {
   meeting: {
     id: number;
     title: string;
-    type: 'regular' | 'small';
+    type: '정기모임' | '소모임';
     image: string;
   };
 }
@@ -33,10 +33,12 @@ export default function ReviewableMeetingCard({
     images: File[];
   }) => {
     createReviewMutation.mutate({
-      rating: review.rating,
-      text: review.content,
-      images: review.images,
       meetingId: meeting.id,
+      data: {
+        rating: review.rating,
+        text: review.content,
+        images: review.images,
+      },
     });
     setIsOpen(false);
   };
@@ -51,7 +53,7 @@ export default function ReviewableMeetingCard({
             alt=""
             width={60}
             height={60}
-            className="size-15 rounded-lg border border-gray-200"
+            className="aspect-square size-15 rounded-lg border border-gray-200 object-cover"
           />
           <div className="flex flex-col">
             <p className="text-t3 text-gray-600">`{meeting.title}` 모임</p>

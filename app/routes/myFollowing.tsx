@@ -7,8 +7,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/atoms/pagination/Pagination';
+import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 import useMyHostLikesQuery from '@/hooks/api/useMyHostLikesQuery';
-import usePagination from '@/hooks/ui/usePagination';
+import type { Host } from '@/types/entities';
+import { Suspense, useCallback } from 'react';
 import { useSearchParams } from 'react-router';
 import { metaTemplates } from '@/config/meta-templates';
 
@@ -16,18 +18,7 @@ export function meta() {
   return metaTemplates.myFollowing();
 }
 
-export default function MyFollowing() {
-  const [searchParams] = useSearchParams();
-  const currentPage = Number(searchParams.get('page')) || 1;
-  const hostLikes = useMyHostLikesQuery({
-    page: currentPage,
-    size: 9,
-  });
-  const totalPages = 9;
-  const pagination = usePagination({
-    currentPage,
-    totalPages,
-  });
+export default function MyFollowingPage() {
   return (
     <div className="flex-1">
       <div className="flex flex-col gap-2.5">
@@ -36,58 +27,186 @@ export default function MyFollowing() {
           내가 팔로잉하는 호스트를 모아보세요.
         </p>
       </div>
-      <div className="mt-8 grid flex-1 grid-cols-3 gap-x-5 gap-y-8">
-        {hostLikes.data?.hosts.map((host) => (
-          <div key={host.id} className="flex flex-col gap-3">
-            <div className="relative">
-              <img
-                src={host.profileImage}
-                alt={host.nickname}
-                className="w-full rounded-3xl object-cover"
-              />
-              <button className="absolute top-5 right-5">
-                <HeartFillIcon className="size-8 text-error" />
-              </button>
-            </div>
-            <div className="flex flex-col gap-3">
-              <p className="text-t2">{host.nickname}</p>
-              <p className="text-b3 text-gray-600">{host.introduction}</p>
-            </div>
-          </div>
-        ))}
+      <Suspense fallback={<LoadingSpinner />}>
+        <MyFollowing />
+      </Suspense>
+    </div>
+  );
+}
+
+function MyFollowing() {
+  const { currentPage, pageSize, maxVisiblePages, handlePageChange } =
+    useFollowingPage();
+  const hostLikes = useMyHostLikesQuery({
+    page: currentPage,
+    size: pageSize,
+  });
+
+  return (
+    <>
+      <FollowingGrid hosts={hostLikes.data?.hosts || []} />
+      <FollowingPagination
+        currentPage={currentPage}
+        totalPages={hostLikes.data?.pageInfo.totalPages || 1}
+        maxVisiblePages={maxVisiblePages}
+        onPageChange={handlePageChange}
+      />
+    </>
+  );
+}
+
+function useFollowingPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = Number(searchParams.get('page')) || 1;
+
+  const handlePageChange = useCallback(
+    (page: number) => {
+      setSearchParams((prev) => {
+        const newParams = new URLSearchParams(prev);
+        newParams.set('page', page.toString());
+        return newParams;
+      });
+    },
+    [setSearchParams],
+  );
+
+  return {
+    currentPage,
+    pageSize: 9,
+    maxVisiblePages: 5,
+    handlePageChange,
+  };
+}
+
+function FollowingGrid({
+  hosts,
+}: {
+  hosts: {
+    id: Host['id'];
+    nickname: Host['hostName'];
+    profileImage: Host['hostImage'];
+    introduction: Host['hostInstruction'];
+    liked: Host['followed'];
+  }[];
+}) {
+  return (
+    <div className="mt-8 grid flex-1 grid-cols-3 gap-x-5 gap-y-8">
+      {hosts.map((host) => (
+        <FollowingCard key={host.id} host={host} />
+      ))}
+    </div>
+  );
+}
+
+function FollowingCard({
+  host,
+}: {
+  host: {
+    id: Host['id'];
+    nickname: Host['hostName'];
+    profileImage: Host['hostImage'];
+    introduction: Host['hostInstruction'];
+    liked: Host['followed'];
+  };
+}) {
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="relative">
+        <img
+          src={host.profileImage}
+          alt={host.nickname}
+          className="aspect-[17/10] w-full rounded-3xl object-cover"
+        />
+        <button className="absolute top-5 right-5">
+          <HeartFillIcon className="size-8 text-error" />
+        </button>
       </div>
-      <div className="mt-20">
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                to={{
-                  search: `?page=${Math.max(pagination.currentPage - 5, 1)}`,
-                }}
-              />
-            </PaginationItem>
-            {pagination.pages.map((page) => (
-              <PaginationItem key={page}>
-                <PaginationLink
-                  isActive={pagination.currentPage === page}
-                  to={{
-                    search: '?page=' + page,
-                  }}
-                >
-                  {page}
-                </PaginationLink>
-              </PaginationItem>
-            ))}
-            <PaginationItem>
-              <PaginationNext
-                to={{
-                  search: `?page=${Math.min(pagination.currentPage + 5, pagination.totalPages)}`,
-                }}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+      <div className="flex flex-col gap-3">
+        <p className="line-clamp-1 text-t2">{host.nickname}</p>
+        <p className="line-clamp-1 text-b3 text-gray-600">
+          {host.introduction}
+        </p>
       </div>
+    </div>
+  );
+}
+
+interface FollowingPaginationProps {
+  currentPage: number;
+  totalPages: number;
+  maxVisiblePages?: number;
+  onPageChange?: (page: number) => void;
+}
+
+export function FollowingPagination({
+  currentPage,
+  totalPages,
+  maxVisiblePages = 5,
+  onPageChange,
+}: FollowingPaginationProps) {
+  const createPageSearch = (page: number) => {
+    const newSearchParams = new URLSearchParams();
+    newSearchParams.set('page', page.toString());
+    return newSearchParams.toString();
+  };
+
+  const generatePageNumbers = () => {
+    const pages: number[] = [];
+    const startPage = Math.max(
+      1,
+      currentPage - Math.floor(maxVisiblePages / 2),
+    );
+    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
+
+  const pages = generatePageNumbers();
+  const hasPreviousPage = currentPage > 1;
+  const hasNextPage = currentPage < totalPages;
+
+  if (totalPages <= 1) {
+    return null;
+  }
+
+  return (
+    <div className="mt-20">
+      <Pagination>
+        <PaginationContent>
+          {hasPreviousPage && (
+            <PaginationPrevious
+              to={{
+                search: createPageSearch(currentPage - 1),
+              }}
+              onClick={() => onPageChange?.(currentPage - 1)}
+            />
+          )}
+          {pages.map((page) => (
+            <PaginationItem key={page}>
+              <PaginationLink
+                isActive={page === currentPage}
+                to={{
+                  search: createPageSearch(page),
+                }}
+                onClick={() => onPageChange?.(page)}
+              >
+                {page}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+          {hasNextPage && (
+            <PaginationNext
+              to={{
+                search: createPageSearch(currentPage + 1),
+              }}
+              onClick={() => onPageChange?.(currentPage + 1)}
+            />
+          )}
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 }

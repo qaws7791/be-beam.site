@@ -1,5 +1,4 @@
 import { Button } from '@/components/atoms/button/Button';
-import { Tag } from '@/components/atoms/tag/Tag';
 import { Textarea } from '@/components/atoms/textarea/Textarea';
 import RatingInput from '@/components/molecules/RatingInput';
 import { ImageInput } from '@/components/molecules/ImageInput';
@@ -7,8 +6,9 @@ import { z } from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createReviewSchema } from '@/schemas/reviews';
+import MeetingTypeTag from '../atoms/MeetingTypeTag';
 
-type MeetingType = 'regular' | 'small' | 'event';
+type MeetingType = '정기모임' | '소모임';
 
 type ReviewFormProps = {
   meeting: {
@@ -49,16 +49,14 @@ export function ReviewForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
       <div>
-        <Tag variant={meeting?.type === 'regular' ? 'blue' : 'primary'}>
-          {meeting?.type === 'regular' ? '정기모임' : '소모임'}
-        </Tag>
+        <MeetingTypeTag type={meeting.type} />
         <div className="mt-3 flex items-center gap-2 border-b border-gray-300 pb-3">
           <img
             src={meeting.image}
             alt=""
             width={60}
             height={60}
-            className="size-15 rounded-lg"
+            className="aspect-square size-15 rounded-lg object-cover"
           />
           <p className="text-t3 text-gray-600">`{meeting.title}` 모임</p>
         </div>

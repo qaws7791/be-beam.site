@@ -1,5 +1,4 @@
-import { queryClient } from '@/root';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { breakawayMeeting } from '@/api/meetings';
 
 import toast from 'react-hot-toast';
@@ -8,6 +7,7 @@ export default function useBreakawayMeetingMutation(
   id: number,
   refetchKey: string,
 ) {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: () => breakawayMeeting(id),
     onSuccess: () => {

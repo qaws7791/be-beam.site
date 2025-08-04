@@ -28,12 +28,12 @@ export default function SideBar({ user }: { user: UserType }) {
   ];
   const navData = [
     {
-      to: '/mypage/reviews/written',
+      to: '/mypage/reviews',
       title: '✍️ 나의 후기',
       onClick: () => setIsMeetingPage(false),
     },
     {
-      to: '/mypage/likes/regular',
+      to: '/mypage/likes',
       title: '💖 좋아요 리스트',
       onClick: () => setIsMeetingPage(false),
     },

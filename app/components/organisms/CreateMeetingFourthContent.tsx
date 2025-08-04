@@ -16,8 +16,7 @@ import {
 import { DateInput } from '../molecules/DateInput';
 import { TimeInput } from '../molecules/TimeInput';
 import { AddressInput } from '../molecules/AddressInput';
-import { useMutation } from '@tanstack/react-query';
-import { queryClient } from '@/root';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { axiosInstance } from '@/lib/axios';
 import { API_V1_BASE_URL } from '@/constants/api';
@@ -36,6 +35,7 @@ export default function CreateMeetingFourthContent({
   form,
   setForm,
 }: CreateMeetingFourthContentProps) {
+  const queryClient = useQueryClient();
   const { close } = useModalStore();
   const { control, handleSubmit, formState } = useForm<
     z.infer<typeof createMeetingFourthSchema>

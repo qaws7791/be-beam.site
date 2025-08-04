@@ -1,3 +1,4 @@
+import type { GetWrittenReviewsResult } from '@/api/users';
 import {
   Pagination,
   PaginationContent,
@@ -6,8 +7,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/atoms/pagination/Pagination';
+import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 import WrittenReviewCard from '@/components/organisms/WrittenReviewCard';
-import usePagination from '@/hooks/ui/usePagination';
+import useWrittenReviewsQuery from '@/hooks/api/useWrittenReviewsQuery';
+import { Suspense, useCallback } from 'react';
 import { useSearchParams } from 'react-router';
 import { metaTemplates } from '@/config/meta-templates';
 
@@ -15,154 +18,164 @@ export function meta() {
   return metaTemplates.writtenReviews();
 }
 
-const MOCK_REVIEW_LIST: {
-  id: number;
-  user: {
-    name: string;
-    profileImage: string;
-    id: number;
-  };
-  content: string;
-  rating: number;
-  images: string[];
-  meeting: {
-    title: string;
-    id: number;
-    type: 'regular' | 'small';
-    image: string;
-  };
-  likes: {
-    count: number;
-    isLiked: boolean;
-  };
-  createdAt: string;
-}[] = [
-  {
-    id: 2,
-    user: {
-      name: 'John Doe',
-      profileImage: 'https://picsum.photos/200/300',
-      id: 2,
-    },
-    content: 'This meeting was so much fun! I highly recommend it.',
-    rating: 5,
-    images: [
-      'https://picsum.photos/200/200',
-      'https://picsum.photos/200/201',
-      'https://picsum.photos/200/202',
-    ],
-    meeting: {
-      title: 'Fun meeting',
-      id: 2,
-      type: 'regular',
-      image: 'https://picsum.photos/200/200',
-    },
-    likes: {
-      count: 2,
-      isLiked: false,
-    },
-    createdAt: '2023-02-15T10:00:00.000Z',
-  },
-  {
-    id: 3,
-    user: {
-      name: 'Jane Doe',
-      profileImage: 'https://picsum.photos/200/301',
-      id: 3,
-    },
-    content: 'I was not satisfied with this meeting.',
-    rating: 2,
-    images: [
-      'https://picsum.photos/200/200',
-      'https://picsum.photos/200/201',
-      'https://picsum.photos/200/202',
-    ],
-    meeting: {
-      title: 'Not satisfied meeting',
-      id: 3,
-      type: 'small',
-      image: 'https://picsum.photos/200/201',
-    },
-    likes: {
-      count: 1,
-      isLiked: false,
-    },
-    createdAt: '2023-02-14T10:00:00.000Z',
-  },
-  {
-    id: 4,
-    user: {
-      name: 'Bob Doe',
-      profileImage: 'https://picsum.photos/200/302',
-      id: 4,
-    },
-    content:
-      'This meeting was so so. I didn t enjoy it. I will not recommend it. I will not recommend it. ',
-    rating: 3,
-    images: [
-      'https://picsum.photos/200/200',
-      'https://picsum.photos/200/201',
-      'https://picsum.photos/200/202',
-    ],
-    meeting: {
-      title: 'So so meeting',
-      id: 4,
-      type: 'regular',
-      image: 'https://picsum.photos/200/202',
-    },
-    likes: {
-      count: 0,
-      isLiked: false,
-    },
-    createdAt: '2023-02-13T10:00:00.000Z',
-  },
-];
-
 export default function WrittenReviews() {
-  const [searchParams] = useSearchParams();
-  const page = Number(searchParams.get('page')) || 1;
-  const pagination = usePagination({
-    currentPage: page,
-    totalPages: 6,
-    maxVisiblePages: 5,
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <WrittenReviewContent />
+    </Suspense>
+  );
+}
+
+function WrittenReviewContent() {
+  const { currentPage, pageSize, maxVisiblePages, handlePageChange } =
+    useWrittenReviewPage();
+
+  const { data: writtenReviews } = useWrittenReviewsQuery({
+    type: 'all',
+    page: currentPage,
+    size: pageSize,
   });
+
   return (
     <div className="mt-8 flex flex-col gap-20">
-      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {MOCK_REVIEW_LIST.map((review) => (
-          <div key={review.id}>
-            <WrittenReviewCard review={review} />
-          </div>
-        ))}
-      </div>
+      <WrittenReviewGrid reviews={writtenReviews?.reviews || []} />
+      <ReviewPagination
+        currentPage={currentPage}
+        totalPages={writtenReviews?.pageInfo.totalPages || 1}
+        maxVisiblePages={maxVisiblePages}
+        onPageChange={handlePageChange}
+      />
+    </div>
+  );
+}
+
+function WrittenReviewGrid({
+  reviews,
+}: {
+  reviews: GetWrittenReviewsResult['reviews'];
+}) {
+  return (
+    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+      {reviews.map((review) => (
+        <div key={review.reviewId}>
+          <WrittenReviewCard
+            review={{
+              id: review.reviewId,
+              content: review.content,
+              rating: review.rating,
+              images: review.images,
+              meeting: {
+                name: review.meetingName,
+                id: review.meetingId,
+                recruitmentType: review.recruitmentType,
+                image: review.thumbnailImage,
+              },
+              createdAt: review.createdAt,
+            }}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function useWrittenReviewPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = Number(searchParams.get('page')) || 1;
+
+  const handlePageChange = useCallback(
+    (page: number) => {
+      setSearchParams((prev) => {
+        const newParams = new URLSearchParams(prev);
+        newParams.set('page', page.toString());
+        return newParams;
+      });
+    },
+    [setSearchParams],
+  );
+
+  return {
+    currentPage,
+    pageSize: 9,
+    maxVisiblePages: 5,
+    handlePageChange,
+  };
+}
+
+interface ReviewPaginationProps {
+  currentPage: number;
+  totalPages: number;
+  maxVisiblePages?: number;
+  onPageChange?: (page: number) => void;
+}
+
+function ReviewPagination({
+  currentPage,
+  totalPages,
+  maxVisiblePages = 5,
+  onPageChange,
+}: ReviewPaginationProps) {
+  const createPageSearch = (page: number) => {
+    const newSearchParams = new URLSearchParams();
+    newSearchParams.set('page', page.toString());
+    return newSearchParams.toString();
+  };
+
+  const generatePageNumbers = () => {
+    const pages: number[] = [];
+    const startPage = Math.max(
+      1,
+      currentPage - Math.floor(maxVisiblePages / 2),
+    );
+    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
+
+  const pages = generatePageNumbers();
+  const hasPreviousPage = currentPage > 1;
+  const hasNextPage = currentPage < totalPages;
+
+  if (totalPages <= 1) {
+    return null;
+  }
+
+  return (
+    <div className="mt-20">
       <Pagination>
         <PaginationContent>
-          <PaginationItem>
+          {hasPreviousPage && (
             <PaginationPrevious
               to={{
-                search: `?page=${Math.max(pagination.currentPage - 5, 1)}`,
+                search: createPageSearch(currentPage - 1),
               }}
+              onClick={() => onPageChange?.(currentPage - 1)}
             />
-          </PaginationItem>
-          {pagination.pages.map((page) => (
+          )}
+          {pages.map((page) => (
             <PaginationItem key={page}>
               <PaginationLink
-                isActive={pagination.currentPage === page}
+                isActive={page === currentPage}
                 to={{
-                  search: '?page=' + page,
+                  search: createPageSearch(page),
                 }}
+                onClick={() => onPageChange?.(page)}
               >
                 {page}
               </PaginationLink>
             </PaginationItem>
           ))}
-          <PaginationItem>
+          {hasNextPage && (
             <PaginationNext
               to={{
-                search: `?page=${Math.min(pagination.currentPage + 5, pagination.totalPages)}`,
+                search: createPageSearch(currentPage + 1),
               }}
+              onClick={() => onPageChange?.(currentPage + 1)}
             />
-          </PaginationItem>
+          )}
         </PaginationContent>
       </Pagination>
     </div>
