@@ -2,8 +2,8 @@ import { axiosInstance } from '@/lib/axios';
 import { API_V1_BASE_URL } from '@/constants/api';
 
 import type { APIResponse } from '@/types/api';
-import type { useGuideBooksParamsType } from '@/hooks/business/useGuideBooksParams';
 import type { Guidebook, GuidebookSummary } from '@/types/entities';
+import type { GuideBookListFilters } from '@/schemas/guideBooksFilters';
 
 export type GuideBookListResult = {
   pageInfo: {
@@ -20,14 +20,20 @@ export type GuideBookListResult = {
 };
 
 export const getGuideBookList = async (
-  params: useGuideBooksParamsType['params'],
+  filters: GuideBookListFilters,
   pageParam: number = 0,
 ) => {
+  const searchParams = new URLSearchParams();
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== undefined && value !== null) {
+      searchParams.append(key, String(value));
+    }
+  });
+
   const res = await axiosInstance<APIResponse<GuideBookListResult>>({
     method: 'GET',
     baseURL: API_V1_BASE_URL,
-    url: `guidebooks?type=${params.type}&targetType=${params.targetType}&level=${params.level}&time=${params.time}&cursor=${pageParam}&size=9`,
-    // url: `guidebooks?search={params.search}&type=${params.type}&targetType=${params.targetType}&mode={params.mode}&level=${params.level}&time=${params.time}&cursor=${pageParam}&size=9`,
+    url: `/guidebooks?${searchParams.toString()}&cursor=${pageParam}&size=9`,
   });
   const data = res.data;
   return data.result;

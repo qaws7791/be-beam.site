@@ -3,10 +3,10 @@ import { TabsList, TabsTrigger } from '../atoms/tabs/Tabs';
 import { Button } from '../atoms/button/Button';
 
 export default function GuideBooksFilterControls({
-  openDialog,
+  setIsOpen,
   list,
 }: {
-  openDialog: () => void;
+  setIsOpen: (value: boolean) => void;
   list: FilterOption[];
 }) {
   return (
@@ -26,7 +26,7 @@ export default function GuideBooksFilterControls({
       <Button
         variant="tertiary"
         className="h-auto min-w-auto border-gray-300 text-b1 text-black"
-        onClick={openDialog}
+        onClick={() => setIsOpen(true)}
       >
         <img src="/images/icons/filter.svg" alt="filter_icon" />
         필터

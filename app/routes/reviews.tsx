@@ -48,7 +48,7 @@ export default function Reviews() {
   return (
     <CommonTemplate>
       <img
-        src="https://placehold.co/1480x524"
+        src="/images/meeting_review_banner.png"
         alt="후기들이 증명해주는 비빔의 모임"
         className="rounded-[27px]"
         width={1480}
