@@ -1,9 +1,9 @@
 import { axiosInstance } from '@/lib/axios';
 import { API_V1_BASE_URL } from '@/constants/api';
+import type { GuideBookListFilters } from '@/schemas/guideBooksFilters';
 
 import type { APIResponse } from '@/types/api';
 import type { Guidebook, GuidebookSummary } from '@/types/entities';
-import type { GuideBookListFilters } from '@/schemas/guideBooksFilters';
 
 export type GuideBookListResult = {
   pageInfo: {
@@ -63,3 +63,15 @@ export const getGuideBookDetail = async (id: number) => {
   const data = res.data;
   return data.result;
 };
+
+export const getGuideBookPdf = async (guideBook: GuideBookDetailResult) => {
+  const res = await axiosInstance<Blob>({
+    baseURL: API_V1_BASE_URL,
+    url: `/guidebooks/download?pdf=${guideBook.file}`,
+    method: 'GET',
+    responseType: 'blob',
+  });
+  return res.data;
+};
+
+export const downloadGuideBookPdf = () => {};

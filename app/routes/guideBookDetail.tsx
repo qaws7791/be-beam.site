@@ -1,7 +1,7 @@
 import { useParams } from 'react-router';
 import { Suspense } from 'react';
 import useGuideBookQuery from '@/hooks/api/useGuideBookQuery';
-import { handleDownload } from './download';
+import { getGuideBookPdf } from '@/api/guideBooks';
 import { metaTemplates } from '@/config/meta-templates';
 
 import Slider from '@/components/organisms/Slider';
@@ -19,7 +19,31 @@ export default function GuideBookDetail() {
   const id = Number(useParams().guideBookId);
   const { data: guideBook } = useGuideBookQuery(id);
 
-  console.log(guideBook);
+  const handleDownload = (blobData: Blob, fileName: string) => {
+    const blob = new Blob([blobData], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    window.URL.revokeObjectURL(url);
+  };
+
+  const handleDownloadClick = async () => {
+    if (!guideBook || !guideBook.file) {
+      alert('가이드북 파일 정보가 없습니다.');
+      return;
+    } else {
+      const pdfBlob = await getGuideBookPdf(guideBook);
+
+      handleDownload(pdfBlob, `${guideBook.title}_BE:BEAM 가이드북`);
+    }
+  };
 
   return (
     <CommonTemplate>
@@ -37,7 +61,7 @@ export default function GuideBookDetail() {
                 slideHeight="h-[480px]"
               />
               <Button
-                onClick={() => handleDownload(String(guideBook.file))}
+                onClick={handleDownloadClick}
                 className="mt-4 min-w-full gap-1 py-8 text-t3 text-white"
               >
                 <img src="/images/icons/w_download.svg" alt="download_icon" />
