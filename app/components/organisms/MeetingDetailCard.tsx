@@ -60,13 +60,15 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
     if (
       (recruitmentStatus === '모집중' &&
         (userStatus === '신청중' || userStatus === '확정')) ||
-      (recruitmentStatus === '모집종료' && userStatus === '확정')
+      (recruitmentStatus === '모집마감' && userStatus === '확정')
     ) {
       return {
         text: '신청 취소하기',
         onClickHandler: () =>
           open('CANCEL_MEETING_MODAL', {
+            meetingId: meeting.id,
             statusType: 'applying', // participating
+            refetchKey: 'meeting',
           }),
         disable: false,
       };
@@ -86,6 +88,7 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
           open('CANCEL_MEETING_MODAL', {
             meetingId: meeting.id,
             statusType: 'participating', // applying
+            refetchKey: 'meeting',
           }),
         disable: false,
       };
@@ -100,7 +103,7 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
 
     // 거절당하거나 신청취소완료시 재신청 불가능하게 하려면 여기 추가 => 모집 종료나 모임 중
     if (
-      recruitmentStatus === '모집종료' &&
+      recruitmentStatus === '모집마감' &&
       (!userStatus ||
         userStatus === '거절' ||
         userStatus === '신청전' ||
@@ -120,7 +123,8 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
         userStatus === '신청전' ||
         userStatus === '신청중' ||
         userStatus === '신청취소완료' ||
-        userStatus === '중도이탈완료')
+        userStatus === '중도이탈완료' ||
+        userStatus === '참여완료')
     ) {
       return {
         text: '모임 중',

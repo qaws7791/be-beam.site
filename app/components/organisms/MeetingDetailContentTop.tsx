@@ -1,15 +1,16 @@
-import type { MeetingDetailType } from '@/types/components';
+import { useModalStore } from '@/stores/useModalStore';
+
+import type { Meeting } from '@/types/entities';
 import Text from '../atoms/text/Text';
 import RecruitmentTypeAndTopic from '../molecules/RecruitmentTypeAndTopic';
 import { DropdownMenuItem } from '../atoms/dropdown-menu/DropdownMenu';
 import MoreDropdownMenu from './MoreDropdownMenu';
 import Badge from '../atoms/badge/Badge';
-import { useModalStore } from '@/stores/useModalStore';
 
 export default function MeetingDetailContentTop({
   meeting,
 }: {
-  meeting: MeetingDetailType;
+  meeting: Meeting;
 }) {
   const { open } = useModalStore();
 

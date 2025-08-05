@@ -27,7 +27,6 @@ export default function useHostFollowAndFollowCancelMutation(
           : '호스트를 팔로우하였습니다.',
       );
       queryClient.invalidateQueries({ queryKey: [refetchKey] });
-      close();
     },
     onError: (err) => {
       toast.error(

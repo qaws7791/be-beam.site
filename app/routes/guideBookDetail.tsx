@@ -20,36 +20,39 @@ export default function GuideBookDetail() {
   const { data: guideBook } = useGuideBookQuery(id);
 
   console.log(guideBook);
-  console.log('ffkfkfk');
 
   return (
     <CommonTemplate>
       <Suspense fallback={<LoadingSpinner />}>
-        <div className="flex items-start gap-10">
-          <div className="sticky top-[100px] w-full max-w-[500px] self-start">
-            <Slider
-              images={guideBook?.images}
-              delay={5000}
-              isCount={true}
-              slideWidth="w-full"
-              slideHeight="h-[480px]"
-            />
-            <Button
-              onClick={() => handleDownload(guideBook.file)}
-              className="mt-4 min-w-full gap-1 py-8 text-t3 text-white"
-            >
-              <img src="/images/icons/w_download.svg" alt="download_icon" />
-              가이드북 다운로드 받기
-            </Button>
-          </div>
+        {!guideBook ? (
+          <p>가이드북 정보를 찾을 수 없습니다.</p>
+        ) : (
+          <div className="flex items-start gap-10">
+            <div className="sticky top-[100px] w-full max-w-[500px] self-start">
+              <Slider
+                images={guideBook.images}
+                delay={5000}
+                isCount={true}
+                slideWidth="w-full"
+                slideHeight="h-[480px]"
+              />
+              <Button
+                onClick={() => handleDownload(String(guideBook.file))}
+                className="mt-4 min-w-full gap-1 py-8 text-t3 text-white"
+              >
+                <img src="/images/icons/w_download.svg" alt="download_icon" />
+                가이드북 다운로드 받기
+              </Button>
+            </div>
 
-          <div className="flex-1">
-            <GuideBookDetailContent guideBook={guideBook} />
-            <GuideBookRecommendation
-              recommendationData={guideBook?.recommendations}
-            />
+            <div className="flex-1">
+              <GuideBookDetailContent guideBook={guideBook} />
+              <GuideBookRecommendation
+                recommendationData={guideBook.recommendations}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </Suspense>
     </CommonTemplate>
   );

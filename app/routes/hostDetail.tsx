@@ -1,6 +1,8 @@
+import { Suspense } from 'react';
 import { useParams } from 'react-router';
 import { getHostDetail } from '@/api/hosts';
 import { withOptionalAuth } from '@/lib/auth.server';
+import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 import { metaTemplates } from '@/config/meta-templates';
 
 import type { Route } from './+types/hostDetail';
@@ -18,9 +20,8 @@ export function meta() {
 }
 
 export async function loader({ request, params }: Route.LoaderArgs) {
-  const queryClient = new QueryClient();
-
   return withOptionalAuth(request, async () => {
+    const queryClient = new QueryClient();
     const cookiesHeaderFromBrowser = request.headers.get('Cookie');
 
     const axiosRequestConfigHeaders: { Cookie?: string } = {};
@@ -52,9 +53,11 @@ export default function HostDetail({ loaderData }: Route.ComponentProps) {
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <CommonTemplate>
-        <HostDetailWrap id={id} />
-      </CommonTemplate>
+      <Suspense fallback={<LoadingSpinner />}>
+        <CommonTemplate>
+          <HostDetailWrap id={id} />
+        </CommonTemplate>
+      </Suspense>
     </HydrationBoundary>
   );
 }

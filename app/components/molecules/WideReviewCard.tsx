@@ -207,10 +207,12 @@ export default function WideReviewCard({
               updateReviewMutation.mutate(
                 {
                   reviewId: review.id,
-                  rating: review.rating,
-                  content: review.content,
-                  existingImages: review.existingImages,
-                  newImages: review.newImages,
+                  data: {
+                    rating: review.rating,
+                    content: review.content,
+                    existingImages: review.existingImages,
+                    newImages: review.newImages,
+                  },
                 },
                 {
                   onSuccess: () => {

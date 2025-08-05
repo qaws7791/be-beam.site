@@ -11,6 +11,7 @@ export function meta() {
 export async function loader({ request }: Route.LoaderArgs) {
   return guestOnly(request, '/');
 }
+
 export default function Login() {
   return (
     <LoginTemplate>

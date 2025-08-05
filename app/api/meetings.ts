@@ -2,6 +2,7 @@ import { axiosInstance } from '@/lib/axios';
 import { API_V1_BASE_URL, API_V2_BASE_URL } from '@/constants/api';
 import type { APIResponse, CursorPaginationResult } from '@/types/api';
 import type {
+  GuidebookRecommendation,
   ImageType,
   Meeting,
   MeetingAttendance,
@@ -55,8 +56,7 @@ export type MeetingDetailResult = {
   id: Meeting['id'];
   recruitingState: Meeting['recruitmentStatus'];
   recruitmentType: Meeting['recruitmentType'];
-  guidebookReferenceId: Meeting['guidebookReferenceId'];
-  guidebookReferenceTitle: Meeting['guidebookReferenceTitle'];
+  guidebook: GuidebookRecommendation;
   selectionType: Meeting['selectionType'];
   name: Meeting['name'];
   topic: Meeting['topic'];
@@ -119,25 +119,25 @@ export const likeMeeting = async (meeting: { id: number; liked: boolean }) => {
 
 export const cancelMeeting = (
   data: {
-    reasonType: string;
-    description: string;
+    cancellationReasonType: '개인일정' | '단순변심' | '위치' | '기타';
+    cancelReason: string;
   },
   id: number,
+  statusType: 'participating' | 'applied',
 ) => {
   return axiosInstance({
     baseURL: API_V1_BASE_URL,
-    method: 'POST',
-    url: `/meetings/${id}/cancel`,
+    method: 'DELETE',
+    url: `/meetings/${id}/cancellations/${statusType === 'participating' ? 'midway' : 'apply'}-cancel`,
     data,
   });
 };
 
-export const breakawayMeeting = (id: number) => {
+export const DeleteMeeting = (id: number) => {
   return axiosInstance({
+    method: 'DELETE',
     baseURL: API_V1_BASE_URL,
-    method: 'POST',
-    // 아무 정보도 없어서 임시로 설정한 api 주소
-    url: `/meetings/${id}/breakaway`,
+    url: `/meetings/${id}`,
   });
 };
 

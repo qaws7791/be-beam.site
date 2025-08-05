@@ -1,6 +1,7 @@
 // 현재 smart 패턴 컴포넌트로 동작. 후에 smart 컴포넌트를 분리시킬지 고민(dumb 디렉토리에 위치)
 
 import { useEffect, useState } from 'react';
+import { useRouteLoaderData } from 'react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { axiosInstance } from '@/lib/axios';
 import { API_V1_BASE_URL } from '@/constants/api';
@@ -12,8 +13,7 @@ import type { Review } from '@/types/entities';
 import MeetingReviewCardHeader from '../molecules/MeetingReviewCardHeader';
 import { Button } from '../atoms/button/Button';
 import MeetingReviewEditForm from './MeetingReviewEditForm';
-import MeetingReviewContent from './MeetingRevirewContent';
-import { useRouteLoaderData } from 'react-router';
+import MeetingReviewContent from './MeetingReviewContent';
 
 interface EditType {
   isActive: boolean;
