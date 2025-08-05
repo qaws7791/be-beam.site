@@ -3,19 +3,11 @@ import Logo from '../atoms/logo/Logo';
 import NavMenu from '../molecules/NavMenu';
 import SearchInput from '../molecules/SearchInput';
 import NavbarUserSection from '../molecules/NavbarUserSection';
+import useUserSession from '@/hooks/business/useUserSession';
 
-export default function Navbar({
-  user,
-}: {
-  user?: {
-    nickname: string;
-    profileImage: string;
-    introduction: string;
-  } | null;
-}) {
+export default function Navbar() {
   const navigate = useNavigate();
-
-  console.log(user);
+  const { user } = useUserSession();
 
   return (
     <div className="fixed top-0 left-0 z-22 h-25 w-full border-b-1 border-gray-300 bg-white">

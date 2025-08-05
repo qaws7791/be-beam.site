@@ -12,6 +12,11 @@ import ReviewableMeetingCard from '@/components/organisms/ReviewableMeetingCard'
 import useReviewableReviewsQuery from '@/hooks/api/useReviewableReviewsQuery';
 import { Suspense, useCallback } from 'react';
 import { useSearchParams } from 'react-router';
+import { metaTemplates } from '@/config/meta-templates';
+
+export function meta() {
+  return metaTemplates.reviewableReviews();
+}
 
 export default function ReviewableReviews() {
   return (

@@ -1,3 +1,4 @@
+import { metaTemplates } from '@/config/meta-templates';
 import {
   dehydrate,
   HydrationBoundary,
@@ -24,13 +25,7 @@ import {
 import Text from '@/components/atoms/text/Text';
 
 export function meta() {
-  return [
-    { title: '내가 참여한 모임 페이지 입니다.' },
-    {
-      name: 'description',
-      content: '내가 참여 중인 모임을 한눈에 확인 할 수 있어요.',
-    },
-  ];
+  return metaTemplates.participatedMeeting();
 }
 
 export async function loader({ request }: Route.LoaderArgs) {

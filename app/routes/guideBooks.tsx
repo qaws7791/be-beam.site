@@ -12,6 +12,7 @@ import useGuidBookFilterDialog, {
   type FilterState,
 } from '@/hooks/ui/useGuideBookFilterDialog';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
+import { metaTemplates } from '@/config/meta-templates';
 
 // interface GuideBookFilters {
 //   type: string;
@@ -19,13 +20,6 @@ import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 //   level: string;
 //   time: string;
 // }
-
-export function meta() {
-  return [
-    { title: '가이드북 페이지' },
-    { name: 'description', content: '필요한 가이드북을 확인하세요!' },
-  ];
-}
 
 // function getFiltersFromUrl(request: Request): GuideBookFilters {
 //   const url = new URL(request.url);
@@ -59,6 +53,10 @@ export function meta() {
 //     dehydratedState: dehydrate(queryClient),
 //   };
 // }
+
+export function meta() {
+  return metaTemplates.guideBooks();
+}
 
 export default function GuideBooks() {
   const typeList: FilterOption[] = [

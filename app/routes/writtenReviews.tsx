@@ -12,6 +12,11 @@ import WrittenReviewCard from '@/components/organisms/WrittenReviewCard';
 import useWrittenReviewsQuery from '@/hooks/api/useWrittenReviewsQuery';
 import { Suspense, useCallback } from 'react';
 import { useSearchParams } from 'react-router';
+import { metaTemplates } from '@/config/meta-templates';
+
+export function meta() {
+  return metaTemplates.writtenReviews();
+}
 
 export default function WrittenReviews() {
   return (

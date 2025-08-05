@@ -22,15 +22,10 @@ import {
 } from '@/components/atoms/tabs/Tabs';
 import CreatedMeetingWrap from '@/components/organisms/CreatedMeetingWrap';
 import Text from '@/components/atoms/text/Text';
+import { metaTemplates } from '@/config/meta-templates';
 
 export function meta() {
-  return [
-    { title: '내가 개설한 모임 페이지 입니다.' },
-    {
-      name: 'description',
-      content: '내가 개설한 모임을 한눈에 확인 할 수 있어요.',
-    },
-  ];
+  return metaTemplates.createdMeeting();
 }
 
 export async function loader({ request }: Route.LoaderArgs) {

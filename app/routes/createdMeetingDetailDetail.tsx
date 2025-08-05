@@ -1,6 +1,6 @@
 import { useParams } from 'react-router';
 import useCreatedMeetingDetailDetailParams from '@/hooks/business/useCreatedMeetingDetailDetailParams';
-
+import { metaTemplates } from '@/config/meta-templates';
 import {
   Tabs,
   TabsContent,
@@ -25,13 +25,7 @@ import { Suspense } from 'react';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 
 export function meta() {
-  return [
-    { title: '내가 개설한 모임 상세 정보 페이지 입니다.' },
-    {
-      name: 'description',
-      content: '내가 개설한 모임의 상세 정보를 확인하세요.',
-    },
-  ];
+  return metaTemplates.createdMeetingDetailDetail();
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
