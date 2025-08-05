@@ -18,12 +18,10 @@ import GuideBooksFilterControls from '@/components/organisms/TargetTypeTab';
 import GuideBooksContent from '@/components/sections/GuideBooksContent';
 // import SearchInput from '@/components/molecules/SearchInput';
 import useGuidBookFilterDialog from '@/hooks/ui/useGuideBookFilterDialog';
+import { metaTemplates } from '@/config/meta-templates';
 
 export function meta() {
-  return [
-    { title: '가이드북 페이지' },
-    { name: 'description', content: '필요한 가이드북을 확인하세요!' },
-  ];
+  return metaTemplates.guideBooks();
 }
 
 export async function loader({ request }: Route.LoaderArgs) {

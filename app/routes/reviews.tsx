@@ -13,15 +13,10 @@ import useReviewsParams from '@/hooks/business/useReviewsParams';
 import { RadioGroup, RadioGroupItem } from '@radix-ui/react-radio-group';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
+import { metaTemplates } from '@/config/meta-templates';
 
 export function meta() {
-  return [
-    { title: '리뷰 페이지' },
-    {
-      name: 'description',
-      content: '여러 사람들이 작성한 모임 후기를 확인하세요!',
-    },
-  ];
+  return metaTemplates.reviews();
 }
 
 export default function Reviews() {
@@ -35,7 +30,10 @@ export default function Reviews() {
 
   const { ref, inView } = useInView();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useReviewsQuery(params);
+    useReviewsQuery({
+      ...params,
+      size: 20,
+    });
 
   const allReviews = data?.pages.flatMap((page) => page.reviews);
 

@@ -15,7 +15,7 @@ import { editCreatedMeetingFirstSchema } from '@/schemas/meeting';
 import { requireAuth } from '@/lib/auth.server';
 import { getTopics } from '@/api/topics';
 import { getMyCreatedMeetingIntro } from '@/api/users';
-
+import { metaTemplates } from '@/config/meta-templates';
 import type { Route } from './+types/createdMeetingDetailIntro';
 import type { Topic } from '@/types/entities';
 import { cn } from '@/lib/tailwind';
@@ -26,13 +26,7 @@ import { Textarea } from '@/components/atoms/textarea/Textarea';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 
 export function meta() {
-  return [
-    { title: '내가 개설한 모임 소개 페이지 입니다.' },
-    {
-      name: 'description',
-      content: '내가 개설한 모임의 소개 정보를 확인하세요.',
-    },
-  ];
+  return metaTemplates.createdMeetingDetailIntro();
 }
 
 export async function loader({ request }: Route.LoaderArgs) {

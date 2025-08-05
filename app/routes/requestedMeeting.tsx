@@ -4,6 +4,8 @@ import {
   QueryClient,
   type DehydratedState,
 } from '@tanstack/react-query';
+import { metaTemplates } from '@/config/meta-templates';
+
 import type { FilterOption } from '@/types/components';
 import { Tabs, TabsList, TabsTrigger } from '@/components/atoms/tabs/Tabs';
 import Text from '@/components/atoms/text/Text';
@@ -20,13 +22,7 @@ import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
 import RequestedMeetingWrap from '@/components/organisms/RequestedMeetingWrap';
 
 export function meta() {
-  return [
-    { title: '내가 신청한 모임 페이지 입니다.' },
-    {
-      name: 'description',
-      content: '내가 참여 신청 중인 모임을 한눈에 확인 할 수 있어요.',
-    },
-  ];
+  return metaTemplates.requestedMeeting();
 }
 
 export async function loader({ request }: Route.LoaderArgs) {

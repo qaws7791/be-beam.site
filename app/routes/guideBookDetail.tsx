@@ -2,6 +2,7 @@ import { useParams } from 'react-router';
 import { Suspense } from 'react';
 import useGuideBookQuery from '@/hooks/api/useGuideBookQuery';
 import { handleDownload } from './download';
+import { metaTemplates } from '@/config/meta-templates';
 
 import Slider from '@/components/organisms/Slider';
 import { Button } from '@/components/atoms/button/Button';
@@ -11,13 +12,8 @@ import CommonTemplate from '@/components/templates/CommonTemplate';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 
 export function meta() {
-  return [
-    { title: '가이드북 상세페이지' },
-    { name: 'description', content: '가이드북 상세정보를 확인하세요.' },
-  ];
+  return metaTemplates.guideBookDetail();
 }
-
-export async function loader() {}
 
 export default function GuideBookDetail() {
   const id = Number(useParams().guideBookId);

@@ -1,4 +1,5 @@
 import { getBanner, getRecommendationMeeting } from '@/api/home';
+import { metaTemplates } from '@/config/meta-templates';
 
 import type { Route } from './+types/home';
 import HomeTemplate from '@/components/templates/HomeTemplate';
@@ -13,13 +14,7 @@ import {
 } from '@tanstack/react-query';
 
 export function meta() {
-  return [
-    { title: '홈 화면입니다.' },
-    {
-      name: 'description',
-      content: 'BE:BEAM 모임 커뮤니티에 오신 것을 환영합니다.',
-    },
-  ];
+  return metaTemplates.home();
 }
 
 export async function loader() {
