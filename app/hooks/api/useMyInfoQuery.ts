@@ -8,8 +8,10 @@ export const myInfoQueryOptions = () => {
     select: (data) => ({
       ...data,
       gender: data.gender,
-      birthday: data.birthday.replaceAll('-', '.'),
-      phoneNumber: data.phoneNumber.replaceAll('-', ''),
+      birthday:
+        data.birthday !== null ? data.birthday.replaceAll('-', '.') : null,
+      phoneNumber:
+        data.phoneNumber !== null ? data.phoneNumber.replaceAll('-', '') : null,
     }),
   });
 };

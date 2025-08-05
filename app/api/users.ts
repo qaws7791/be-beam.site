@@ -185,11 +185,11 @@ export const getMyInfo = async (): Promise<MyInfoResult> => {
 };
 
 export type UpdateMyInfoParams = {
-  name: string;
-  phoneNumber: string;
+  name: string | null;
+  phoneNumber: string | null;
   email: string;
-  birthday: string;
-  gender: '남성' | '여성';
+  birthday: string | null;
+  gender: '남성' | '여성' | null;
   terms: boolean;
   userTerms: boolean;
   marketingTerms: boolean;
