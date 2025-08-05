@@ -160,11 +160,11 @@ export interface Host {
 }
 
 export interface UserInformation {
-  name: string;
-  phoneNumber: string;
+  name: string | null;
+  phoneNumber: string | null;
   email: string;
-  birthday: string;
-  gender: '여성' | '남성';
+  birthday: string | null;
+  gender: '여성' | '남성' | null;
   /** 약관 동의 여부 */
   terms: boolean;
   userTerms: boolean;
