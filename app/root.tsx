@@ -1,5 +1,4 @@
 import {
-  data,
   isRouteErrorResponse,
   Links,
   Meta,
@@ -14,12 +13,20 @@ import Navbar from './components/organisms/Navbar';
 import { Toaster } from './components/atoms/toaster/Toaster';
 import Footer from './components/organisms/Footer';
 import ModalProvider from './components/provider/ModalProvider';
-import { authenticateUser } from './lib/auth.server';
+import { metaTemplates } from './config/meta-templates';
+import { userContext } from './context';
+import { globalStorageMiddleware, sessionMiddleware } from './middlewares/auth';
 import TanstackQueryProvider from './providers/TanstackQueryProvider';
+
+export const unstable_middleware = [sessionMiddleware, globalStorageMiddleware];
 
 if (import.meta.env.DEV && typeof window !== 'undefined') {
   import('./mocks/browser').then(({ worker }) => worker.start());
 }
+
+export const meta = () => {
+  return metaTemplates.root();
+};
 
 export const links: Route.LinksFunction = () => [
   {
@@ -49,17 +56,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
-  const authResult = await authenticateUser(request);
-  return data({ user: authResult.user, headers: authResult.headers });
+export async function loader({ context }: Route.LoaderArgs) {
+  const user = context.get(userContext);
+  return { user };
 }
 
-export default function App({ loaderData }: Route.ComponentProps) {
+export default function App() {
   const path = useLocation().pathname.slice(1);
   return (
     <TanstackQueryProvider>
       <div className="bg-white whitespace-pre-wrap text-black">
-        <Navbar user={loaderData.user} />
+        <Navbar />
         <Outlet />
         <Toaster />
         <ModalProvider />

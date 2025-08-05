@@ -1,12 +1,12 @@
-import type { GuideBookType } from '@/types/components';
 import Text from '../atoms/text/Text';
 import Badge from '../atoms/badge/Badge';
 import InfoItem from '../molecules/InfoItem';
+import type { Guidebook } from '@/types/entities';
 
 export default function GuideBookDetailContent({
   guideBook,
 }: {
-  guideBook: GuideBookType;
+  guideBook: Guidebook;
 }) {
   const infoData = [
     {
@@ -32,7 +32,7 @@ export default function GuideBookDetailContent({
   return (
     <div className="box-border w-full py-6">
       <Text variant="T3_Semibold" color="primary">
-        {guideBook?.guidbookType}
+        {guideBook?.guidebookType}
       </Text>
       <Text variant="H2_Semibold" className="mt-2">
         {guideBook?.title}

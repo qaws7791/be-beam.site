@@ -17,11 +17,6 @@ const myLikesData = [
     value: 'review',
     title: '후기',
   },
-  {
-    to: '/myPage/likes/host',
-    value: 'host',
-    title: '호스트',
-  },
 ];
 
 export default function MyLikesLayout() {
@@ -32,9 +27,9 @@ export default function MyLikesLayout() {
   return (
     <div className="flex-1">
       <div className="flex flex-col gap-2.5">
-        <h1 className="text-h2 text-gray-950">찜리스트</h1>
+        <h1 className="text-h2 text-gray-950">좋아요 리스트</h1>
         <p className="text-b2 text-gray-600">
-          내가 좋아하는 모임, 후기, 호스트를 모아보세요.
+          내가 좋아하는 모임, 후기를 모아보세요.
         </p>
       </div>
       <div className="mt-12 flex items-center gap-3">

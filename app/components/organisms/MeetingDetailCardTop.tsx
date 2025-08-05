@@ -17,7 +17,7 @@ export default function MeetingDetailCardTop({
     meeting?.recruitmentStatus === '모집예정'
       ? '현재 모임 모집 예정입니다 !'
       : meeting?.recruitmentStatus === '모집중' ||
-          meeting?.recruitmentStatus === '모집종료'
+          meeting?.recruitmentStatus === '모집마감'
         ? `📢 현재 0명이 모임 신청 중이에요 !`
         : meeting?.recruitmentStatus === '모임중'
           ? `📢 현재 ${meeting?.participantCount}명이 모임 참여 중이에요 !`
@@ -69,7 +69,7 @@ export default function MeetingDetailCardTop({
               ? 'primary'
               : meeting?.recruitmentStatus === '모집중'
                 ? 'blue'
-                : meeting?.recruitmentStatus === '모집종료'
+                : meeting?.recruitmentStatus === '모집마감'
                   ? 'tertiary'
                   : meeting?.recruitmentStatus === '모임중'
                     ? 'pink'

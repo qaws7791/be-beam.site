@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import useTopicsQuery from '@/hooks/api/useTopicsQuery';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
+import { createMeetingFirstSchema } from '@/schemas/meeting';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
-import { createMeetingFirstSchema } from '@/schemas/meeting';
-import type { CreateMeetingType } from '@/types/components';
 
-import clsx from 'clsx';
+import { cn } from '@/lib/tailwind';
+import type { CreateMeetingType } from '@/types/components';
 import Text from '../atoms/text/Text';
 import { Input } from '../atoms/input/Input';
 import { Textarea } from '../atoms/textarea/Textarea';
 import { Button } from '../atoms/button/Button';
 import Badge from '../atoms/badge/Badge';
-import useTopicsQuery from '@/hooks/api/useTopicsQuery';
+import type { Topic } from '@/types/entities';
 
 interface CreateMeetingSecondContentProps {
   tab: number;
@@ -57,15 +58,7 @@ export default function CreateMeetingSecondContent({
     name: 'images',
   });
 
-  const topicList = [
-    { id: 1, name: '✍️글쓰기' },
-    { id: 2, name: '🥂소셜다이닝' },
-    { id: 3, name: '🏃‍♂️운동·야외활동' },
-    { id: 4, name: '🎨️예술·사진' },
-  ];
-
   const { data: topics } = useTopicsQuery();
-  console.log(topics);
 
   const [currentHashtagInput, setCurrentHashtagInput] = useState('');
   const [thumbnailImagePreview, setThumbnailImagePreview] = useState(
@@ -212,12 +205,12 @@ export default function CreateMeetingSecondContent({
             control={control}
             render={({ field }) => (
               <>
-                {topicList.map((topic) => (
+                {topics?.map((topic: Topic) => (
                   <Button
                     type="button"
                     key={topic.id}
                     variant="tertiary"
-                    className={clsx(
+                    className={cn(
                       'mt-3 mr-2 h-9 rounded-md border-gray-300 px-4 text-b1',
                       field.value === topic.id
                         ? 'border-primary bg-primary-light text-primary'
@@ -230,7 +223,7 @@ export default function CreateMeetingSecondContent({
                       setForm({ ...form, topicId: topic.id });
                     }}
                   >
-                    {topic.name}
+                    {topic.topic}
                   </Button>
                 ))}
               </>
@@ -281,7 +274,7 @@ export default function CreateMeetingSecondContent({
           <div className="mt-3 flex w-full gap-3">
             <div className="relative h-[316px] w-[316px] rounded-lg border-1 border-gray-300">
               <img
-                className={clsx(
+                className={cn(
                   thumbnailImagePreview === '' && 'hidden',
                   'h-full w-full overflow-hidden rounded-lg object-cover',
                 )}
@@ -319,6 +312,7 @@ export default function CreateMeetingSecondContent({
                 )}
               />
             </div>
+
             <div className="grid flex-1 grid-cols-4 gap-2">
               {imageFields.map((field, index) => (
                 <div
@@ -344,7 +338,7 @@ export default function CreateMeetingSecondContent({
               ))}
 
               <div
-                className={clsx(
+                className={cn(
                   imageFields.length === 10 && 'hidden',
                   'relative aspect-square w-full rounded-lg border-1 border-gray-300',
                 )}

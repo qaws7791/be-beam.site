@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 
-import type { MeetingDetailType } from '@/types/components';
+import type { Meeting } from '@/types/entities';
 import MeetingDetailContentTop from '../organisms/MeetingDetailContentTop';
 import MeetingDetailContentMiddle from '../organisms/MeetingDetailContentMiddle';
 import MeetingDetailContentBottom from '../organisms/MeetingDetailContentBottom';
@@ -8,7 +8,7 @@ import MeetingDetailContentBottom from '../organisms/MeetingDetailContentBottom'
 export default function MeetingDetailContent({
   meeting,
 }: {
-  meeting: MeetingDetailType;
+  meeting: Meeting;
 }) {
   const navigate = useNavigate();
 

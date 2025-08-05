@@ -1,5 +1,5 @@
+import type { FilterOption } from '@/types/components';
 import type { FilterState } from '@/hooks/ui/useGuideBookFilterDialog';
-import type { FilterOption } from '@/routes/guideBooks';
 import { Button } from '../atoms/button/Button';
 import {
   Dialog,
@@ -63,7 +63,7 @@ export default function GuideBooksFilterDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleDialogClose}>
-      <DialogContent className="max-w-auto box-border rounded-lg bg-white p-7 shadow-lg">
+      <DialogContent className="box-border w-full max-w-[480px] rounded-lg bg-white p-7 shadow-lg">
         <DialogHeader className="mb-3 flex w-full flex-row items-center justify-between">
           <DialogTitle className="text-t2">필터</DialogTitle>
         </DialogHeader>

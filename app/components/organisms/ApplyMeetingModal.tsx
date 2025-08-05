@@ -5,7 +5,7 @@ import type { z } from 'zod';
 import { applyMeetingSchema } from '@/schemas/meeting';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import type { MeetingDetailType } from '@/types/components';
+import type { Meeting } from '@/types/entities';
 import {
   Dialog,
   DialogContent,
@@ -21,7 +21,7 @@ import toast from 'react-hot-toast';
 
 export default function ApplyMeetingModal() {
   const { isOpen, modalProps, close } = useModalStore();
-  const meeting = modalProps.meeting as MeetingDetailType;
+  const meeting = modalProps.meeting as Meeting;
 
   const { control, reset, handleSubmit, formState } = useForm<
     z.infer<typeof applyMeetingSchema>

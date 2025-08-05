@@ -9,6 +9,20 @@ import Text from '@/components/atoms/text/Text';
 import HostCard from '@/components/molecules/HostCard';
 import MeetingCard from '@/components/organisms/MeetingCard';
 import { Link, useSearchParams } from 'react-router';
+import type { Route } from './+types/search';
+import { metaTemplates } from '@/config/meta-templates';
+
+export function meta({ data }: Route.MetaArgs) {
+  return metaTemplates.search({ query: data?.query || undefined });
+}
+
+export function loader(args: Route.LoaderArgs) {
+  const searchParams = new URL(args.request.url).searchParams;
+  const query = searchParams.get('q');
+  return {
+    query: query || undefined,
+  };
+}
 
 export default function Search() {
   const [searchParams, setSearchParams] = useSearchParams();

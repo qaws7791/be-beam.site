@@ -2,6 +2,11 @@ import { API_V1_BASE_URL } from '@/constants/api';
 import { axiosInstance } from '@/lib/axios';
 import type { APIResponse } from '@/types/api';
 import type {
+  EditCreateMeetingIntroType,
+  EditMeetingDetailType,
+} from '@/types/components';
+import type { EditMeetingSchedule } from '@/types/entities';
+import type {
   Host,
   ImageType,
   LinkType,
@@ -336,80 +341,169 @@ export async function getReviewableReviews(params: GetReviewableReviewsParams) {
   return data.result;
 }
 
-export type ParticipationMeetingListParams = {
-  status: 'participating' | 'completed' | 'cancelled';
-  page: number;
-  size: number;
-};
-
-export type ParticipationMeetingListResult = {
-  nickname: UserProfile['nickname'];
-  profileImage: UserProfile['profileImage'];
-  meetings: {
-    id: Meeting['id'];
-    title: Meeting['name'];
-    recruitmentType: Meeting['recruitmentType'];
-    image: Meeting['meetingImages'];
-    meetingStartTime: MeetingSchedule['meetingStartTime'];
-    address: Meeting['address'];
-    status: Meeting['userStatus'];
-  }[];
-};
-
-export const getParticipationMeetingList = async (
-  params: ParticipationMeetingListParams,
-) => {
-  const searchParams = new URLSearchParams({
-    page: params.page.toString(),
-    size: params.size.toString(),
-    status: params.status,
-  });
-  const res = await axiosInstance<APIResponse<ParticipationMeetingListResult>>({
-    method: 'GET',
-    url: `/users/participation-meetings?${searchParams.toString()}`,
-  });
-  const data = res.data;
-  return data.result;
-};
-
-export type OpeningMeetingListParams = {
-  page: number;
-  size: number;
-  type: 'regular' | 'small';
-};
-
-export type OpeningMeetingListResult = {
-  nickname: UserProfile['nickname'];
-  profileImage: UserProfile['profileImage'];
-  meetings: {
-    id: Meeting['id'];
-    title: Meeting['name'];
-    recruitmentType: Meeting['recruitmentType'];
-    image: Meeting['meetingImages'];
-    meetingStartTime: MeetingSchedule['meetingStartTime'];
-    address: Meeting['address'];
-    status: Meeting['userStatus'];
-  }[];
-};
-
-export const getOpeningMeetingList = async (
-  params: OpeningMeetingListParams,
-) => {
-  const searchParams = new URLSearchParams({
-    page: params.page.toString(),
-    size: params.size.toString(),
-    type: params.type,
-  });
-  const res = await axiosInstance<APIResponse<OpeningMeetingListResult>>({
-    method: 'GET',
-    url: `/users/opening-meetings?${searchParams.toString()}`,
-  });
-  const data = res.data;
-  return data.result;
-};
-
 export const withdrawUser = async () => {
   await axiosInstance.delete<void>('/users/', {
     baseURL: API_V1_BASE_URL,
   });
 };
+
+export async function getMyCreatedMeetingIntro(id: number) {
+  const res = await axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${id}/mypage/introduction`,
+    method: 'GET',
+  });
+  return res.data.result;
+}
+
+export async function getMyCreatedMeetingDetail(id: number) {
+  const res = await axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${id}/mypage/detail`,
+    method: 'GET',
+  });
+  return res.data.result;
+}
+
+export async function getMyCreatedMeetingSchedule(id: number) {
+  const res = await axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${id}/mypage/schedules`,
+    method: 'GET',
+  });
+  return res.data.result;
+}
+
+export async function EditMeetingIntro(
+  id: number,
+  form: EditCreateMeetingIntroType,
+  existingImages: string[],
+) {
+  const formData = new FormData();
+
+  if (form.thumbnailImage) {
+    formData.append('thumbnailImage', form.thumbnailImage);
+  }
+
+  if (form.images) {
+    form.images.forEach((file) => {
+      formData.append('files', file.value);
+    });
+  }
+
+  formData.append(
+    'data',
+    new Blob(
+      [
+        JSON.stringify({
+          name: form.name,
+          introduction: form.introduction,
+          topicId: form.topicId,
+          hashtags: form.hashtags.map((hashtag) => hashtag.value),
+          existingImages: existingImages,
+          hostDescription: form.hostDescription,
+        }),
+      ],
+      { type: 'application/json' },
+    ),
+  );
+
+  return axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    method: 'PATCH',
+    url: `/meetings/${id}/mypage/introduction`,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    data: formData,
+  });
+}
+
+export async function EditMeetingDetail(
+  id: number,
+  form: EditMeetingDetailType,
+) {
+  axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${id}/mypage/detail`,
+    method: 'PATCH',
+    data: {
+      ...form,
+      minParticipants: Number(form.minParticipants),
+      maxParticipants: Number(form.maxParticipants),
+      recruitingEndTime: form.recruitingEndTime + 'T00:00:00',
+      paymentAmount: Number(form.paymentAmount),
+    },
+  });
+}
+
+export async function EditMeetingSchedule(
+  id: number,
+  form: { schedules: EditMeetingSchedule[] },
+) {
+  return axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${id}/mypage/schedules`,
+    method: 'PATCH',
+    data: form,
+  });
+}
+
+export async function getMyCreatedMeetingApplicants(id: number) {
+  const res = await axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${id}/mypage/applicants`,
+    method: 'GET',
+  });
+  return res.data.result;
+}
+
+export async function getMyCreatedMeetingParticipants(id: number) {
+  const res = await axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${id}/mypage/participants`,
+    method: 'GET',
+  });
+  return res.data.result;
+}
+
+export function acceptOrRejectApplication(
+  id: number,
+  form: { userId: number; type: string },
+) {
+  return axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${id}/users/${form.userId}`,
+    method: 'PATCH',
+    data: {
+      status: form.type,
+    },
+  });
+}
+
+export async function getMyCreatedMeetingAttendance(id: number) {
+  const res = await axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${id}/mypage/attendance`,
+    method: 'GET',
+  });
+  return res.data.result;
+}
+
+export function checkAttendance(
+  meetingId: number,
+  data: {
+    scheduleId: number;
+    userId: number;
+    status: string;
+  },
+) {
+  return axiosInstance({
+    baseURL: API_V1_BASE_URL,
+    url: `/meetings/${meetingId}/schedules/${data.scheduleId}/users/${data.userId}`,
+    method: 'PATCH',
+    data: {
+      status: data.status,
+    },
+  });
+}

@@ -1,6 +1,9 @@
+import { Suspense } from 'react';
 import { useParams } from 'react-router';
 import { getHostDetail } from '@/api/hosts';
 import { withOptionalAuth } from '@/lib/auth.server';
+import LoadingSpinner from '@/components/molecules/LoadingSpinner';
+import { metaTemplates } from '@/config/meta-templates';
 
 import type { Route } from './+types/hostDetail';
 import CommonTemplate from '@/components/templates/CommonTemplate';
@@ -13,16 +16,12 @@ import {
 import HostDetailWrap from '@/components/organisms/HostDetailWrap';
 
 export function meta() {
-  return [
-    { title: '호스트 상세페이지' },
-    { name: 'description', content: '호스트 상세정보를 확인하세요.' },
-  ];
+  return metaTemplates.hostDetail();
 }
 
 export async function loader({ request, params }: Route.LoaderArgs) {
-  const queryClient = new QueryClient();
-
   return withOptionalAuth(request, async () => {
+    const queryClient = new QueryClient();
     const cookiesHeaderFromBrowser = request.headers.get('Cookie');
 
     const axiosRequestConfigHeaders: { Cookie?: string } = {};
@@ -54,9 +53,11 @@ export default function HostDetail({ loaderData }: Route.ComponentProps) {
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <CommonTemplate>
-        <HostDetailWrap id={id} />
-      </CommonTemplate>
+      <Suspense fallback={<LoadingSpinner />}>
+        <CommonTemplate>
+          <HostDetailWrap id={id} />
+        </CommonTemplate>
+      </Suspense>
     </HydrationBoundary>
   );
 }

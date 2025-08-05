@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as SelectPrimitive from '@radix-ui/react-select';
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/tailwind';
+import ArrowDownFillIcon from '../icons/ArrowDownFillIcon';
 
 const Select = SelectPrimitive.Root;
 
@@ -23,8 +24,10 @@ SelectValue.displayName = SelectPrimitive.Value.displayName;
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
+    iconClassName?: string;
+  }
+>(({ className, iconClassName, children, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
@@ -35,11 +38,7 @@ const SelectTrigger = React.forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <img
-        src="/images/icons/fillDropDown.svg"
-        alt="dropDown_icon"
-        className="h-6 w-6 opacity-50"
-      />
+      <ArrowDownFillIcon className={cn('size-6', iconClassName)} />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
@@ -83,7 +82,7 @@ const SelectLabel = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Label
     ref={ref}
-    className={cn('px-2 py-1.5 text-sm font-semibold', className)}
+    className={cn('font-semibol px-2 py-1.5 text-center text-sm', className)}
     {...props}
   />
 ));

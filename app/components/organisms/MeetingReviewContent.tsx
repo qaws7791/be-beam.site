@@ -1,13 +1,8 @@
+import type { Review } from '@/types/entities';
 import { cn } from '@/lib/tailwind';
-
-import type { MeetingReviewType } from './MeetingReviewCard';
 import Text from '../atoms/text/Text';
 
-export default function MeetingReviewContent({
-  review,
-}: {
-  review: MeetingReviewType;
-}) {
+export default function MeetingReviewContent({ review }: { review: Review }) {
   return (
     <div>
       <div className="flex w-full items-center">

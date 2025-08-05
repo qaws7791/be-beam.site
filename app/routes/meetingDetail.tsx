@@ -8,18 +8,15 @@ import { useParams } from 'react-router';
 import { withOptionalAuth } from '@/lib/auth.server';
 import { getMeetingDetail } from '@/api/meetings';
 import { getMeetingReviews } from '@/api/meetingReviews';
-
+import { metaTemplates } from '@/config/meta-templates';
 import type { Route } from './+types/meetingDetail';
 import type { meetingReviewFilterType } from '@/components/sections/MeetingDetailMeetingReviewsContainer';
 import CommonTemplate from '@/components/templates/CommonTemplate';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 import MeetingDetailWrap from '@/components/organisms/MeetingDetailWrap';
 
-export function meta() {
-  return [
-    { title: '모임 상세페이지' },
-    { name: 'description', content: '모임 상세정보를 확인하세요.' },
-  ];
+export async function meta() {
+  return metaTemplates.meetingDetail();
 }
 
 export async function loader({ request, params }: Route.LoaderArgs) {
@@ -58,7 +55,6 @@ export async function loader({ request, params }: Route.LoaderArgs) {
     ]);
 
     const dehydratedState = dehydrate(queryClient);
-
     return { dehydratedState };
   });
 }

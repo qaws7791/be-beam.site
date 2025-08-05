@@ -13,6 +13,11 @@ import useMyNotificationsQuery from '@/hooks/api/useMyNotificationsQuery';
 import useMyNotificationsFilter from '@/hooks/business/useMyNotificationsFilter';
 import usePagination from '@/hooks/ui/usePagination';
 import { useSearchParams } from 'react-router';
+import { metaTemplates } from '@/config/meta-templates';
+
+export function meta() {
+  return metaTemplates.myNotifications();
+}
 
 const myNotificationsData: {
   value: 'all' | 'meeting' | 'review' | 'host';

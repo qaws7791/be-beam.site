@@ -12,7 +12,7 @@ export default function useApplyMeetingMutation(
     mutationFn: (data: { joinReason: string }) => applyMeeting(id, data),
     onSuccess: () => {
       toast.success('모임 참여 신청을 하였습니다.');
-      queryClient.refetchQueries({ queryKey: [refetchKey] });
+      queryClient.invalidateQueries({ queryKey: [refetchKey] });
       close();
     },
     onError: (err) => {

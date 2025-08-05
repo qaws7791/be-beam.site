@@ -62,6 +62,17 @@ export const axiosInstance = axios.create({
 const requestInterceptor = async (
   config: InternalAxiosRequestConfig,
 ): Promise<InternalAxiosRequestConfig> => {
+  if (typeof window === 'undefined') {
+    const getRequestStorage = await import('../middlewares/auth').then(
+      (module) => module.getRequestStorage,
+    );
+    const requestStorage = getRequestStorage();
+    if (!requestStorage) {
+      return config;
+    }
+    const requestCookie = requestStorage.request.headers.get('Cookie');
+    config.headers['Cookie'] = requestCookie;
+  }
   return config;
 };
 
