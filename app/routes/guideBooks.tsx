@@ -9,16 +9,14 @@ import {
 } from '@/schemas/guideBooksFilters';
 import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
 import { getGuideBookList } from '@/api/guideBooks';
+import { metaTemplates } from '@/config/meta-templates';
 
 import type { Route } from './+types/guideBooks';
 import type { FilterOption } from '@/types/components';
 import { Tabs } from '@/components/atoms/tabs/Tabs';
-import GuideBooksFilterDialog from '@/components/organisms/GuideBooksFilterDialog';
 import GuideBooksFilterControls from '@/components/organisms/TargetTypeTab';
 import GuideBooksContent from '@/components/sections/GuideBooksContent';
 // import SearchInput from '@/components/molecules/SearchInput';
-import useGuidBookFilterDialog from '@/hooks/ui/useGuideBookFilterDialog';
-import { metaTemplates } from '@/config/meta-templates';
 
 export function meta() {
   return metaTemplates.guideBooks();
@@ -81,16 +79,6 @@ export default function GuideBooks({ loaderData }: Route.ComponentProps) {
     },
   ];
 
-  const {
-    isOpen,
-    setIsOpen,
-    dialogFilter,
-    updateDialogFilter,
-    resetDialogFilterAll,
-    resetDialogFilter,
-    submitFilter,
-  } = useGuidBookFilterDialog(filters, setFilter);
-
   return (
     <HydrationBoundary state={dehydratedState}>
       <div>
@@ -117,7 +105,10 @@ export default function GuideBooks({ loaderData }: Route.ComponentProps) {
               })
             }
           >
-            <GuideBooksFilterControls setIsOpen={setIsOpen} list={typeList} />
+            <GuideBooksFilterControls
+              list={typeList}
+              initialFilters={initialFilters}
+            />
             <GuideBooksContent list={typeList} filters={filters} />
           </Tabs>
         </div>
@@ -129,17 +120,6 @@ export default function GuideBooks({ loaderData }: Route.ComponentProps) {
               onSearchChange={setFilter}
               search={filters.search}
         /> */}
-
-        {/* 공용 모달로 교체 */}
-        <GuideBooksFilterDialog
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          dialogFilter={dialogFilter}
-          updateDialogFilter={updateDialogFilter}
-          resetDialogFilterAll={resetDialogFilterAll}
-          resetDialogFilter={resetDialogFilter}
-          submitFilter={submitFilter}
-        />
       </div>
     </HydrationBoundary>
   );

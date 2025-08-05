@@ -14,7 +14,7 @@ import CommonTemplate from '@/components/templates/CommonTemplate';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 import MeetingDetailWrap from '@/components/organisms/MeetingDetailWrap';
 
-export async function meta() {
+export function meta() {
   return metaTemplates.meetingDetail();
 }
 

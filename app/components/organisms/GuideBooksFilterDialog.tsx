@@ -1,5 +1,12 @@
+import {
+  GuideBookListFilterSchema,
+  type GuideBookListFilters,
+} from '@/schemas/guideBooksFilters';
+import { useModalStore } from '@/stores/useModalStore';
+import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
+import useGuidBookFilterDialog from '@/hooks/ui/useGuideBookFilterDialog';
+
 import type { FilterOption } from '@/types/components';
-import type { FilterState } from '@/hooks/ui/useGuideBookFilterDialog';
 import { Button } from '../atoms/button/Button';
 import {
   Dialog,
@@ -11,25 +18,25 @@ import {
 import Text from '../atoms/text/Text';
 import GuideBooksFilterTabGroup from '../molecules/GuideBooksFilterTabGroup';
 
-interface GuideBooksFilterDialogProps {
-  isOpen: boolean;
-  setIsOpen: (value: boolean) => void;
-  dialogFilter: FilterState;
-  updateDialogFilter: (field: keyof FilterState, value: string) => void;
-  resetDialogFilter: () => void;
-  resetDialogFilterAll: () => void;
-  submitFilter: (filter: FilterState) => void;
-}
+export default function GuideBooksFilterDialog() {
+  const { modalProps, isOpen, close } = useModalStore();
+  const { initialFilters } = modalProps as {
+    initialFilters: GuideBookListFilters;
+  };
 
-export default function GuideBooksFilterDialog({
-  isOpen,
-  setIsOpen,
-  dialogFilter,
-  updateDialogFilter,
-  resetDialogFilterAll,
-  resetDialogFilter,
-  submitFilter,
-}: GuideBooksFilterDialogProps) {
+  const { filters, setFilter } = useUrlFilters(
+    GuideBookListFilterSchema,
+    initialFilters,
+  );
+
+  const {
+    dialogFilter,
+    updateDialogFilter,
+    resetDialogFilterAll,
+    resetDialogFilter,
+    submitFilter,
+  } = useGuidBookFilterDialog(filters, setFilter);
+
   const targetTypeList: FilterOption[] = [
     { text: '전체', value: 'all' },
     { text: '커뮤니티 기획자', value: 'planner' },
@@ -54,11 +61,9 @@ export default function GuideBooksFilterDialog({
     { text: '1시간 이상', value: 'over1hour' },
   ];
 
-  const handleDialogClose = (open: boolean) => {
-    if (!open) {
-      resetDialogFilter();
-    }
-    setIsOpen(open);
+  const handleDialogClose = () => {
+    resetDialogFilter();
+    close();
   };
 
   return (

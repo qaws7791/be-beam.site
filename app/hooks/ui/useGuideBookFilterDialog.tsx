@@ -1,4 +1,5 @@
 import type { GuideBookListFilters } from '@/schemas/guideBooksFilters';
+import { useModalStore } from '@/stores/useModalStore';
 import { useCallback, useEffect, useState } from 'react';
 
 export interface FilterState {
@@ -20,7 +21,8 @@ export default function useGuidBookFilterDialog(
   setFilter: (newFilter: Partial<GuideBookListFilters>) => void,
 ) {
   const { targetType, level, time } = filters;
-  const [isOpen, setIsOpen] = useState(false);
+
+  const { close } = useModalStore();
   const [dialogFilter, setDialogFilter] =
     useState<FilterState>(INITIAL_FILTER_STATE);
 
@@ -46,7 +48,7 @@ export default function useGuidBookFilterDialog(
   const submitFilter = (dialogFilter: FilterState) => {
     const { targetType, level, time } = dialogFilter;
 
-    setIsOpen(false);
+    close();
     setFilter({ targetType, level, time });
     resetDialogFilter();
   };
@@ -56,8 +58,6 @@ export default function useGuidBookFilterDialog(
   };
 
   return {
-    isOpen,
-    setIsOpen,
     dialogFilter,
     updateDialogFilter,
     resetDialogFilterAll,
