@@ -4,6 +4,11 @@ import axios from 'axios';
 import { useModalStore } from '@/stores/useModalStore';
 import useParticipatedMeetingParams from '@/hooks/business/useParticipatedMeetingParams';
 import usePagination from '@/hooks/ui/usePagination';
+import { metaTemplates } from '@/config/meta-templates';
+
+export function meta() {
+  return metaTemplates.participatedMeeting();
+}
 
 import type { FilterOption } from '@/types/components';
 import { DropdownMenuItem } from '@/components/atoms/dropdown-menu/DropdownMenu';

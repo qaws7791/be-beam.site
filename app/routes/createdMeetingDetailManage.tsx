@@ -1,11 +1,7 @@
+import { metaTemplates } from '@/config/meta-templates';
+
 export function meta() {
-  return [
-    { title: '내가 개설한 모임 관리 페이지 입니다.' },
-    {
-      name: 'description',
-      content: '내가 개설한 모임을 관리하세요.',
-    },
-  ];
+  return metaTemplates.createdMeetingDetailManage();
 }
 
 export default function CreatedMeetingDetailManage() {

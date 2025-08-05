@@ -12,6 +12,11 @@ import useMyHostLikesQuery from '@/hooks/api/useMyHostLikesQuery';
 import type { Host } from '@/types/entities';
 import { Suspense, useCallback } from 'react';
 import { useSearchParams } from 'react-router';
+import { metaTemplates } from '@/config/meta-templates';
+
+export function meta() {
+  return metaTemplates.myFollowing();
+}
 
 export default function MyFollowingPage() {
   return (

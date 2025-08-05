@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 import { useForm } from 'react-hook-form';
 import useCreatedMeetingDetailQuery from '@/hooks/api/useCreatedMeetingDetailQuery';
 import useCreatedMeetingDetailIntroReducer from '@/hooks/business/useCreatedMeetingDetailIntroReducer';
+import { metaTemplates } from '@/config/meta-templates';
 
 import { cn } from '@/lib/tailwind';
 import { Button } from '@/components/atoms/button/Button';
@@ -21,13 +22,7 @@ interface MeetingIntroFormFields {
 }
 
 export function meta() {
-  return [
-    { title: '내가 개설한 모임 소개 페이지 입니다.' },
-    {
-      name: 'description',
-      content: '내가 개설한 모임의 소개 정보를 확인하세요.',
-    },
-  ];
+  return metaTemplates.createdMeetingDetailIntro();
 }
 
 export default function CreatedMeetingDetailIntro() {

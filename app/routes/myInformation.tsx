@@ -14,6 +14,11 @@ import useMyInfoQuery from '@/hooks/api/useMyInfoQuery';
 import useUpdateMyInfoMutation from '@/hooks/api/useUpdateMyInfoMutation';
 import { FormMessage } from '@/components/atoms/form/FormMessage';
 import useMyInfoForm, { myInfoSchema } from '@/hooks/business/useMyInfoForm';
+import { metaTemplates } from '@/config/meta-templates';
+
+export function meta() {
+  return metaTemplates.myInformation();
+}
 
 export default function MyInformation() {
   const myinfoQuery = useMyInfoQuery();

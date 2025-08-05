@@ -13,6 +13,7 @@ import Navbar from './components/organisms/Navbar';
 import { Toaster } from './components/atoms/toaster/Toaster';
 import Footer from './components/organisms/Footer';
 import ModalProvider from './components/provider/ModalProvider';
+import { metaTemplates } from './config/meta-templates';
 import { userContext } from './context';
 import { globalStorageMiddleware, sessionMiddleware } from './middlewares/auth';
 import TanstackQueryProvider from './providers/TanstackQueryProvider';
@@ -22,6 +23,10 @@ export const unstable_middleware = [sessionMiddleware, globalStorageMiddleware];
 if (import.meta.env.DEV && typeof window !== 'undefined') {
   import('./mocks/browser').then(({ worker }) => worker.start());
 }
+
+export const meta = () => {
+  return metaTemplates.root();
+};
 
 export const links: Route.LinksFunction = () => [
   {
