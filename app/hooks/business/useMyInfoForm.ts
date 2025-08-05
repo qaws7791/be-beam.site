@@ -3,20 +3,25 @@ import { useForm, type UseFormProps } from 'react-hook-form';
 import { z } from 'zod';
 
 export const myInfoSchema = z.object({
-  name: z.string(),
+  name: z.string().nullable(),
   phoneNumber: z
     .string()
     .min(11, '휴대전화번호는 11자리입니다.')
     .max(11, '휴대전화번호는 11자리입니다.')
-    .regex(/^01[016789]\d{7,8}$/, '올바른 휴대전화번호를 입력해주세요.'),
+    .regex(/^01[016789]\d{7,8}$/, '올바른 휴대전화번호를 입력해주세요.')
+    .nullable(),
   email: z.string().email('올바른 이메일 주소를 입력해주세요.'),
   birthday: z
     .string()
     .regex(
       /^[0-9]{4}.[0-9]{2}.[0-9]{2}$/,
       '올바른 생년월일을 입력해주세요.(YYYY.MM.DD)',
-    ),
-  gender: z.string().refine((value) => ['남성', '여성'].includes(value)),
+    )
+    .nullable(),
+  gender: z
+    .string()
+    .refine((value) => ['남성', '여성'].includes(value))
+    .nullable(),
   terms: z.boolean(),
   userTerms: z.boolean(),
   marketingTerms: z.boolean(),
