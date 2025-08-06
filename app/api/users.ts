@@ -287,7 +287,7 @@ export type GetWrittenReviewsResult = {
 
 export async function getWrittenReviews(params: GetWrittenReviewsParams) {
   const searchParams = new URLSearchParams({
-    written: 'false',
+    written: 'true',
     type: params.type,
     page: params.page.toString(),
     size: params.size.toString(),
@@ -326,7 +326,7 @@ export type GetReviewableReviewsResult = {
 
 export async function getReviewableReviews(params: GetReviewableReviewsParams) {
   const searchParams = new URLSearchParams({
-    written: 'true',
+    written: 'false',
     type: params.type,
     page: params.page.toString(),
     size: params.size.toString(),
