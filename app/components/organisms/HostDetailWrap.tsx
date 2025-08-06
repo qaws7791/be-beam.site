@@ -24,7 +24,6 @@ export default function HostDetailWrap({ id }: { id: number }) {
   const user = rootLoaderData.user;
 
   const { data: host } = useHostQuery(id);
-  console.log(host);
 
   const { mutate: followHost, isPending: isPending } =
     useHostFollowAndFollowCancelMutation(id, host, 'hostDetail');

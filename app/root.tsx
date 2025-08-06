@@ -7,16 +7,17 @@ import {
   ScrollRestoration,
   useLocation,
 } from 'react-router';
+import { metaTemplates } from './config/meta-templates';
+import { userContext } from './context';
+import { globalStorageMiddleware, sessionMiddleware } from './middlewares/auth';
+import TanstackQueryProvider from './providers/TanstackQueryProvider';
 import './app.css';
+
 import type { Route } from './+types/root';
 import Navbar from './components/organisms/Navbar';
 import { Toaster } from './components/atoms/toaster/Toaster';
 import Footer from './components/organisms/Footer';
 import ModalProvider from './components/provider/ModalProvider';
-import { metaTemplates } from './config/meta-templates';
-import { userContext } from './context';
-import { globalStorageMiddleware, sessionMiddleware } from './middlewares/auth';
-import TanstackQueryProvider from './providers/TanstackQueryProvider';
 
 export const unstable_middleware = [sessionMiddleware, globalStorageMiddleware];
 

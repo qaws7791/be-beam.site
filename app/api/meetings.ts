@@ -11,7 +11,6 @@ import type {
   Topic,
 } from '@/types/entities';
 import type { MeetingListFilters } from '@/schemas/meetingFilters';
-import { type AxiosRequestConfig } from 'axios';
 
 export type MeetingListResult = {
   pageInfo: CursorPaginationResult;
@@ -31,7 +30,6 @@ export type MeetingListResult = {
 export const getMeetingList = async (
   filters: MeetingListFilters,
   pageParam: number = 0,
-  axiosRequestConfig?: AxiosRequestConfig,
 ) => {
   const searchParams = new URLSearchParams();
   Object.entries(filters).forEach(([key, value]) => {
@@ -46,7 +44,6 @@ export const getMeetingList = async (
     baseURL: API_V2_BASE_URL,
     url: url,
     method: 'GET',
-    ...axiosRequestConfig,
   });
 
   return res.data.result;
@@ -84,15 +81,11 @@ export type MeetingDetailResult = {
   userStatus: Meeting['userStatus'];
 };
 
-export const getMeetingDetail = async (
-  id: number,
-  axiosRequestConfig?: AxiosRequestConfig,
-) => {
+export const getMeetingDetail = async (id: number) => {
   const res = await axiosInstance({
     baseURL: API_V2_BASE_URL,
     url: `/meetings/${id}`,
     method: 'GET',
-    ...axiosRequestConfig,
   });
   return res.data.result;
 };

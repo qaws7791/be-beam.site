@@ -1,49 +1,67 @@
+import type { GuideBookListFilters } from '@/schemas/guideBooksFilters';
+import { useModalStore } from '@/stores/useModalStore';
 import { useCallback, useEffect, useState } from 'react';
 
 export interface FilterState {
-  targetType: string;
-  level: string;
-  time: string;
+  targetType: 'all' | 'planner' | 'participant';
+  // mode: "online" | "offline" | "mix";
+  level: 'all' | 'before' | 'ongoing' | 'completed';
+  time: 'all' | 'under30min' | 'under1hour' | 'over1hour';
 }
 
 const INITIAL_FILTER_STATE: FilterState = {
   targetType: 'all',
+  // mode: "all",
   level: 'all',
   time: 'all',
 };
 
-export default function useGuidBookFilterDialog(params: FilterState) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [filter, setFilter] = useState<FilterState>(INITIAL_FILTER_STATE);
+export default function useGuidBookFilterDialog(
+  filters: GuideBookListFilters,
+  setFilter: (newFilter: Partial<GuideBookListFilters>) => void,
+) {
+  const { targetType, level, time } = filters;
+
+  const { close } = useModalStore();
+  const [dialogFilter, setDialogFilter] =
+    useState<FilterState>(INITIAL_FILTER_STATE);
 
   useEffect(() => {
-    setFilter({
-      targetType: params.targetType,
-      level: params.level,
-      time: params.time,
+    setDialogFilter({
+      targetType,
+      // mode,
+      level,
+      time,
     });
-  }, [params]);
+  }, [targetType, level, time]);
 
-  const openDialog = () => setIsOpen(true);
-  const closeDialog = () => setIsOpen(false);
-
-  const updateFilter = useCallback(
+  const updateDialogFilter = useCallback(
     (field: keyof FilterState, value: string) => {
-      setFilter((prev) => ({ ...prev, [field]: value }));
+      setDialogFilter((prev) => ({ ...prev, [field]: value }));
     },
     [],
   );
 
-  const resetFilter = () => setFilter(INITIAL_FILTER_STATE);
+  const resetDialogFilterAll = () => setDialogFilter(INITIAL_FILTER_STATE);
+
+  // 최종 searchParams() 업데이트
+  const submitFilter = (dialogFilter: FilterState) => {
+    const { targetType, level, time } = dialogFilter;
+
+    close();
+    setFilter({ targetType, level, time });
+    resetDialogFilter();
+  };
+
+  const resetDialogFilter = () => {
+    setDialogFilter((prev) => ({ ...prev, targetType, level, time }));
+  };
 
   return {
-    isOpen,
-    setIsOpen,
-    filter,
-    setFilter,
-    openDialog,
-    closeDialog,
-    updateFilter,
-    resetFilter,
+    dialogFilter,
+    updateDialogFilter,
+    resetDialogFilterAll,
+    resetDialogFilter,
+    submitFilter,
   };
 }

@@ -1,5 +1,12 @@
+import {
+  GuideBookListFilterSchema,
+  type GuideBookListFilters,
+} from '@/schemas/guideBooksFilters';
+import { useModalStore } from '@/stores/useModalStore';
+import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
+import useGuidBookFilterDialog from '@/hooks/ui/useGuideBookFilterDialog';
+
 import type { FilterOption } from '@/types/components';
-import type { FilterState } from '@/hooks/ui/useGuideBookFilterDialog';
 import { Button } from '../atoms/button/Button';
 import {
   Dialog,
@@ -11,32 +18,36 @@ import {
 import Text from '../atoms/text/Text';
 import GuideBooksFilterTabGroup from '../molecules/GuideBooksFilterTabGroup';
 
-interface GuideBooksFilterDialogProps {
-  isOpen: boolean;
-  setIsOpen: (value: boolean) => void;
-  params: FilterState;
-  filter: FilterState;
-  setFilter: (filter: FilterState) => void;
-  updateFilter: (field: keyof FilterState, value: string) => void;
-  resetFilter: () => void;
-  handleApplyFilter: (filter: FilterState) => void;
-}
+export default function GuideBooksFilterDialog() {
+  const { modalProps, isOpen, close } = useModalStore();
+  const { initialFilters } = modalProps as {
+    initialFilters: GuideBookListFilters;
+  };
 
-export default function GuideBooksFilterDialog({
-  isOpen,
-  setIsOpen,
-  params,
-  filter,
-  setFilter,
-  updateFilter,
-  resetFilter,
-  handleApplyFilter,
-}: GuideBooksFilterDialogProps) {
+  const { filters, setFilter } = useUrlFilters(
+    GuideBookListFilterSchema,
+    initialFilters,
+  );
+
+  const {
+    dialogFilter,
+    updateDialogFilter,
+    resetDialogFilterAll,
+    resetDialogFilter,
+    submitFilter,
+  } = useGuidBookFilterDialog(filters, setFilter);
+
   const targetTypeList: FilterOption[] = [
     { text: '전체', value: 'all' },
     { text: '커뮤니티 기획자', value: 'planner' },
     { text: '참여자', value: 'participant' },
   ];
+  // const modeList: FilterOption[] = [
+  //   { text: '전체', value: 'all' },
+  //   { text: '오프라인', value: 'offline' },
+  //   { text: '온라인', value: 'online' },
+  //   { text: '혼합', value: 'mix' },
+  // ];
   const levelList: FilterOption[] = [
     { text: '전체', value: 'all' },
     { text: '시작 전', value: 'before' },
@@ -50,15 +61,9 @@ export default function GuideBooksFilterDialog({
     { text: '1시간 이상', value: 'over1hour' },
   ];
 
-  const handleDialogClose = (open: boolean) => {
-    if (!open) {
-      setFilter({
-        targetType: params.targetType,
-        level: params.level,
-        time: params.time,
-      });
-    }
-    setIsOpen(open);
+  const handleDialogClose = () => {
+    resetDialogFilter();
+    close();
   };
 
   return (
@@ -74,20 +79,32 @@ export default function GuideBooksFilterDialog({
               대상 유형
             </Text>
             <GuideBooksFilterTabGroup
-              value={filter.targetType}
+              value={dialogFilter.targetType}
               list={targetTypeList}
-              onValueChange={(value) => updateFilter('targetType', value)}
+              onValueChange={(value) => updateDialogFilter('targetType', value)}
             />
           </div>
+
+          {/* API 수정 완료시 활성화 */}
+          {/* <div className="mb-9 flex w-full flex-col gap-3">
+            <Text variant="T3_Semibold" className="mb-1">
+              사용 유형
+            </Text>
+            <GuideBooksFilterTabGroup
+              value={dialogFilter.mode}
+              list={modeList}
+              onValueChange={(value) => updateDialogFilter('mode', value)}
+            />
+          </div> */}
 
           <div className="mb-9 flex w-full flex-col gap-3">
             <Text variant="T3_Semibold" className="mb-1">
               필요 단계
             </Text>
             <GuideBooksFilterTabGroup
-              value={filter.level}
+              value={dialogFilter.level}
               list={levelList}
-              onValueChange={(value) => updateFilter('level', value)}
+              onValueChange={(value) => updateDialogFilter('level', value)}
             />
           </div>
 
@@ -96,20 +113,23 @@ export default function GuideBooksFilterDialog({
               예상 소요 시간
             </Text>
             <GuideBooksFilterTabGroup
-              value={filter.time}
+              value={dialogFilter.time}
               list={timeList}
-              onValueChange={(value) => updateFilter('time', value)}
+              onValueChange={(value) => updateDialogFilter('time', value)}
             />
           </div>
         </div>
 
         <DialogFooter className="mt-3 flex w-full justify-between">
-          <Button className="h-12 min-w-auto px-10" onClick={resetFilter}>
+          <Button
+            className="h-12 min-w-auto px-10"
+            onClick={resetDialogFilterAll}
+          >
             초기화
           </Button>
           <Button
             className="h-12 flex-1"
-            onClick={() => handleApplyFilter(filter)}
+            onClick={() => submitFilter(dialogFilter)}
           >
             적용하기
           </Button>

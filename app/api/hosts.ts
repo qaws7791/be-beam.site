@@ -2,7 +2,6 @@ import { API_V1_BASE_URL } from '@/constants/api';
 import { axiosInstance } from '@/lib/axios';
 import type { APIResponse } from '@/types/api';
 import type { Host } from '@/types/entities';
-import type { AxiosRequestConfig } from 'axios';
 
 export type HostDetailResult = {
   hostName: Host['hostName'];
@@ -14,15 +13,11 @@ export type HostDetailResult = {
   followed: Host['followed'];
 };
 
-export const getHostDetail = async (
-  id: number,
-  config?: AxiosRequestConfig,
-) => {
+export const getHostDetail = async (id: number) => {
   const res = await axiosInstance<APIResponse<HostDetailResult>>({
     method: 'GET',
     url: `/hosts/${id}`,
     baseURL: API_V1_BASE_URL,
-    ...config,
   });
   const data = res.data;
   return data.result;

@@ -1,19 +1,25 @@
-import { Outlet, useRouteLoaderData } from 'react-router';
+import { Outlet } from 'react-router';
+import useUserSession from '@/hooks/business/useUserSession';
+import { requireAuthMiddleware } from '@/middlewares/auth';
 
 import MyPageTemplate from '@/components/templates/MyPageTemplate';
 import SideBar from '@/components/organisms/SideBar';
-import { requireAuthMiddleware } from '@/middlewares/auth';
 
 export const unstable_middleware = [requireAuthMiddleware];
 
 export default function MyPage() {
-  const rootLoaderData = useRouteLoaderData('root');
-  const user = rootLoaderData.user;
+  const { user } = useUserSession();
 
   return (
     <MyPageTemplate>
-      <SideBar user={user} />
-      <Outlet />
+      {!user ? (
+        <p>유저가 존재하지 않습니다.</p>
+      ) : (
+        <>
+          <SideBar user={user} />
+          <Outlet />
+        </>
+      )}
     </MyPageTemplate>
   );
 }
