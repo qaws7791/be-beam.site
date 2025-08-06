@@ -65,7 +65,7 @@ export default function UserInformationForm({
       onSubmit={form.handleSubmit(handleSubmit)}
     >
       <div className="flex w-full flex-col gap-2">
-        <Label htmlFor="name">닉네임</Label>
+        <Label htmlFor="name">이름</Label>
         <Input {...form.register('name')} />
         {form.formState.errors.name && (
           <FormMessage variant="error">
