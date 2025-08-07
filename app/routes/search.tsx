@@ -275,7 +275,7 @@ function GuidebookSearchResults({ query }: { query: string }) {
           >
             <img
               className="h-[240px] w-full object-cover"
-              src="https://placehold.co/600x400"
+              src={guidebook.thumbnailImage}
               alt="guidBook_thumbnail"
             />
             <div className="box-border w-full border-t-1 border-gray-300 px-7 py-8">
