@@ -26,13 +26,12 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
       queryFn: () => getMyCreatedMeetingIntro(id),
     }),
     queryClient.prefetchQuery({
-      queryKey: ['createdMeetingIDetail', id],
+      queryKey: ['createdMeetingDetail', id],
       queryFn: () => getMyCreatedMeetingDetail(id),
     }),
   ]);
 
   const dehydratedState = dehydrate(queryClient);
-
   return { dehydratedState };
 }
 
