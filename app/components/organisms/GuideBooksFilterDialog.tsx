@@ -40,7 +40,7 @@ export default function GuideBooksFilterDialog() {
   const targetTypeList: FilterOption[] = [
     { text: '전체', value: 'all' },
     { text: '커뮤니티 기획자', value: 'planner' },
-    { text: '참여자', value: 'participant' },
+    { text: '참여자', value: 'member' },
   ];
   // const modeList: FilterOption[] = [
   //   { text: '전체', value: 'all' },
