@@ -24,7 +24,7 @@ type ReviewUpdateFormProps = {
   }) => void;
   defaultValues?: Pick<
     z.infer<typeof updateReviewSchema>,
-    'rating' | 'content' | 'existingImages' | 'id'
+    'rating' | 'content' | 'images' | 'id'
   >;
 };
 
@@ -40,8 +40,10 @@ export function ReviewUpdateForm({
     defaultValues: {
       rating: defaultValues?.rating || 0,
       content: defaultValues?.content || '',
-      existingImages: defaultValues?.existingImages || [],
-      newImages: [],
+      images: {
+        existingImages: defaultValues?.images?.existingImages || [],
+        newImages: [],
+      },
       id: defaultValues?.id || 0,
     },
   });
@@ -51,8 +53,8 @@ export function ReviewUpdateForm({
     onReviewSubmit({
       rating: data.rating,
       content: data.content,
-      existingImages: data.existingImages,
-      newImages: data.newImages || [],
+      existingImages: data.images.existingImages,
+      newImages: data.images.newImages || [],
       id: data.id,
     });
     reset();
@@ -107,25 +109,19 @@ export function ReviewUpdateForm({
       <div className="flex flex-col gap-5">
         <p className="text text-t2">사진으로 남기고 싶은 장면이 있었나요?</p>
         <Controller
-          name="existingImages"
+          name="images"
           control={control}
-          render={({ field }) => (
-            <Controller
-              name="newImages"
-              control={control}
-              render={({ field: newImagesField }) => {
-                return (
-                  <ImageInput
-                    existingImages={field.value}
-                    onChangeExistingImages={field.onChange}
-                    images={newImagesField.value}
-                    onImagesChange={newImagesField.onChange}
-                    maxImages={10}
-                  />
-                );
-              }}
-            />
-          )}
+          render={({ field: { value, onChange }, fieldState }) => {
+            return (
+              <ImageInput
+                maxImages={10}
+                existingImages={value.existingImages || []}
+                newImages={value.newImages || []}
+                onChange={onChange}
+                error={fieldState.error?.message}
+              />
+            );
+          }}
         />
       </div>
       <div className="flex justify-end gap-2">
