@@ -12,7 +12,7 @@ export default function useEditMeetingScheduleMutation(id: number) {
       EditMeetingSchedule(id, form),
     onSuccess: () => {
       toast.success('모임 수정을 완료하였습니다.');
-      queryClient.invalidateQueries({ queryKey: ['createdMeetingDetail'] });
+      queryClient.invalidateQueries({ queryKey: ['createdMeetingSchedules'] });
       close();
     },
     onError: (err) => {

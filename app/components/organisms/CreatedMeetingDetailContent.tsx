@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import useEditMeetingDetailMutation from '@/hooks/api/useEditMeetingDetailMutation';
 import { Controller, useForm } from 'react-hook-form';
 import type { z } from 'zod';
@@ -20,40 +19,26 @@ export default function CreatedMeetingDetailContent({
 }: {
   meetingId: number;
 }) {
-  const { data: detail } = useQuery({
+  const { data: detail } = useSuspenseQuery({
     queryKey: ['createdMeetingDetail', meetingId],
     queryFn: () => getMyCreatedMeetingDetail(meetingId),
   });
 
-  const { control, handleSubmit, formState, reset } = useForm<
+  const { control, handleSubmit, formState } = useForm<
     z.infer<typeof editCreatedMeetingSecondSchema>
   >({
     resolver: zodResolver(editCreatedMeetingSecondSchema),
     defaultValues: {
-      selectionType: undefined,
-      meetingMode: undefined,
-      minParticipants: 0,
-      maxParticipants: 0,
-      paymentAmount: 0,
-      recruitingEndTime: undefined,
-      info: '',
+      selectionType: detail.selectionType || undefined,
+      meetingMode: detail.meetingMode || undefined,
+      minParticipants: detail.minParticipants || 0,
+      maxParticipants: detail.maxParticipants || 0,
+      recruitingEndTime:
+        format(detail.recruitingEndTime, 'yyyy-MM-dd') || undefined,
+      paymentAmount: detail.paymentAmount || 0,
+      info: detail.info || '',
     },
   });
-
-  useEffect(() => {
-    if (detail) {
-      reset({
-        selectionType: detail.selectionType || undefined,
-        meetingMode: detail.meetingMode || undefined,
-        minParticipants: detail.minParticipants || 0,
-        maxParticipants: detail.maxParticipants || 0,
-        recruitingEndTime:
-          format(detail.recruitingEndTime, 'yyyy-MM-dd') || undefined,
-        paymentAmount: detail.paymentAmount || 0,
-        info: detail.info || '',
-      });
-    }
-  }, [detail, reset]);
 
   const { mutate: editMeetingDetail, isPending } =
     useEditMeetingDetailMutation(meetingId);

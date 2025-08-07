@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useCallback, useMemo, useState } from 'react';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import useEditMeetingScheduleMutation from '@/hooks/api/useEditMeetingScheduleMutation';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import type { z } from 'zod';
@@ -33,8 +33,8 @@ export default function CreatedMeetingScheduleContent({
     Set<number | null>
   >(new Set());
 
-  const { data: schedule } = useQuery({
-    queryKey: ['createdMeetingSchedule', meetingId],
+  const { data: schedule } = useSuspenseQuery({
+    queryKey: ['createdMeetingSchedules', meetingId],
     queryFn: () => getMyCreatedMeetingSchedule(meetingId),
   });
 
@@ -48,21 +48,24 @@ export default function CreatedMeetingScheduleContent({
   }, [schedule]);
   console.log(allSchedule);
 
-  const { control, handleSubmit, formState, reset } = useForm<
+  const { control, handleSubmit, formState } = useForm<
     z.infer<typeof editCreatedMeetingThirdSchema>
   >({
     resolver: zodResolver(editCreatedMeetingThirdSchema),
     defaultValues: {
-      schedules: [
-        {
-          id: null,
-          meetingDate: '',
-          meetingStartTime: '',
-          meetingEndTime: '',
-          address: '',
-          addressDetail: '',
-        },
-      ],
+      schedules:
+        allSchedule.length > 0
+          ? allSchedule
+          : [
+              {
+                id: null,
+                meetingDate: '',
+                meetingStartTime: '',
+                meetingEndTime: '',
+                address: '',
+                addressDetail: '',
+              },
+            ],
     },
   });
 
@@ -71,23 +74,6 @@ export default function CreatedMeetingScheduleContent({
     control,
     name: 'schedules',
   });
-
-  useEffect(() => {
-    if (allSchedule) {
-      reset({
-        schedules: allSchedule || [
-          {
-            id: null,
-            address: '',
-            addressDetail: '',
-            meetingDate: '',
-            meetingStartTime: '',
-            meetingEndTime: '',
-          },
-        ],
-      });
-    }
-  }, [allSchedule, reset]);
 
   const handleSelectOne = useCallback((fieldId: number, isChecked: boolean) => {
     setSelectedScheduleIds((prev) => {
