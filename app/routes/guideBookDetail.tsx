@@ -30,6 +30,20 @@ export async function loader({ params }: Route.LoaderArgs) {
   };
 }
 
+export async function clientLoader({ params }: Route.LoaderArgs) {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['guideBook', Number(params.guideBookId)],
+    queryFn: () => getGuideBookDetail(Number(params.guideBookId)),
+  });
+
+  const dehydratedState = dehydrate(queryClient);
+  return {
+    dehydratedState,
+  };
+}
+
 export default function GuideBookDetail({ loaderData }: Route.ComponentProps) {
   const id = Number(useParams().guideBookId);
   const { dehydratedState } = loaderData;
