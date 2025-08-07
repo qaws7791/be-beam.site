@@ -1,15 +1,16 @@
 import { useParams } from 'react-router';
 import { Suspense } from 'react';
-import { getGuideBookDetail } from '@/api/guideBooks';
-import { metaTemplates } from '@/config/meta-templates';
-import type { Route } from './+types/guideBookDetail';
-import CommonTemplate from '@/components/templates/CommonTemplate';
-import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+import { getGuideBookDetail } from '@/api/guideBooks';
+import { metaTemplates } from '@/config/meta-templates';
+
+import type { Route } from './+types/guideBookDetail';
+import CommonTemplate from '@/components/templates/CommonTemplate';
+import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 import GuideBookDetailWrap from '@/components/organisms/GuideBookDetailWrap';
 
 export function meta() {

@@ -45,6 +45,29 @@ export async function loader({ request }: Route.LoaderArgs) {
   };
 }
 
+export async function clientLoader({ request }: Route.LoaderArgs) {
+  const queryClient = new QueryClient();
+
+  const url = new URL(request.url);
+  const urlSearchParams = new URLSearchParams(url.search);
+  const rawFilters = Object.fromEntries(urlSearchParams.entries());
+  const parsedFilters: GuideBookListFilters = GuideBookListFilterSchema.parse({
+    ...rawFilters,
+  });
+
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: ['guideBooks', parsedFilters],
+    queryFn: ({ pageParam }) => getGuideBookList(parsedFilters, pageParam),
+    initialPageParam: 0,
+  });
+
+  const dehydratedState = dehydrate(queryClient);
+  return {
+    dehydratedState,
+    filters: parsedFilters,
+  };
+}
+
 export default function GuideBooks({ loaderData }: Route.ComponentProps) {
   const { dehydratedState, filters: initialFilters } = loaderData;
   const { filters, setFilter } = useUrlFilters(
