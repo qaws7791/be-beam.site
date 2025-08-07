@@ -249,6 +249,7 @@ export const updateMyProfile = async (params: UpdateMyProfileParams) => {
   return data.result;
 };
 
+// 나중에 전부 결과값 타입 추가할 예정
 export async function getCreatedMeetingDetail(id: number) {
   const res = await axios({
     method: 'GET',
