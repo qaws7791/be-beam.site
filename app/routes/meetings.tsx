@@ -48,6 +48,28 @@ export async function loader({ request }: Route.LoaderArgs) {
   return { dehydratedState, topics, filters: parsedFilters };
 }
 
+export async function clientLoader({ request }: Route.LoaderArgs) {
+  const queryClient = new QueryClient();
+
+  const url = new URL(request.url);
+  const urlSearchParams = new URLSearchParams(url.search);
+  const rawFilters = Object.fromEntries(urlSearchParams.entries());
+  const parsedFilters: MeetingListFilters = MeetingListFilterSchema.parse({
+    ...rawFilters,
+  });
+
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: ['meetings', parsedFilters],
+    queryFn: ({ pageParam }) => getMeetingList(parsedFilters, pageParam),
+    initialPageParam: 0,
+  });
+
+  const topics = await getTopics();
+  const dehydratedState = dehydrate(queryClient);
+
+  return { dehydratedState, topics, filters: parsedFilters };
+}
+
 export default function Meetings({ loaderData }: Route.ComponentProps) {
   const { open } = useModalStore();
 
