@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 import { useParams } from 'react-router';
-
 import {
   dehydrate,
   HydrationBoundary,
@@ -19,6 +18,20 @@ export function meta() {
 }
 
 export async function loader({ params }: Route.LoaderArgs) {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['hostDetail', Number(params.hostId)],
+    queryFn: () => getHostDetail(Number(params.hostId)),
+  });
+
+  const dehydratedState = dehydrate(queryClient);
+  return {
+    dehydratedState,
+  };
+}
+
+export async function clientLoader({ params }: Route.LoaderArgs) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({

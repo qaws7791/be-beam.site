@@ -44,7 +44,6 @@ export async function loader({ request }: Route.LoaderArgs) {
 
   const topics = await getTopics();
   const dehydratedState = dehydrate(queryClient);
-
   return { dehydratedState, topics, filters: parsedFilters };
 }
 
@@ -66,7 +65,6 @@ export async function clientLoader({ request }: Route.LoaderArgs) {
 
   const topics = await getTopics();
   const dehydratedState = dehydrate(queryClient);
-
   return { dehydratedState, topics, filters: parsedFilters };
 }
 
@@ -75,9 +73,7 @@ export default function Meetings({ loaderData }: Route.ComponentProps) {
 
   const rootLoaderData = useRouteLoaderData('root');
   const user = rootLoaderData.user;
-
   const { dehydratedState, topics, filters } = loaderData;
-
   const { filters: meetingFilters, setFilter } = useUrlFilters(
     MeetingListFilterSchema,
     filters,

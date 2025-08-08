@@ -72,7 +72,6 @@ export async function clientLoader({ params }: Route.LoaderArgs) {
 
 export default function MeetingDetail({ loaderData }: Route.ComponentProps) {
   const id = Number(useParams().meetingId);
-
   const { dehydratedState } = loaderData;
 
   return (
