@@ -11,8 +11,9 @@ import { Button } from '../atoms/button/Button';
 
 export default function MeetingDetailWrap({ id }: { id: number }) {
   const { open } = useModalStore();
-
   const { data: meeting } = useMeetingQuery(id);
+
+  console.log(meeting);
 
   return (
     <div className="flex items-start gap-8">

@@ -1,11 +1,13 @@
+import useLikeMeetingMutation from '@/hooks/api/useLikeMeetingMutation';
 import { useModalStore } from '@/stores/useModalStore';
 
-import MeetingDetailCardTop from './MeetingDetailCardTop';
-import { Button } from '../atoms/button/Button';
 import type { Meeting } from '@/types/entities';
 import { cn } from '@/lib/tailwind';
+import MeetingDetailCardTop from './MeetingDetailCardTop';
+import { Button } from '../atoms/button/Button';
 import toast from 'react-hot-toast';
-import useLikeMeetingMutation from '@/hooks/api/useLikeMeetingMutation';
+import HeartFillIcon from '../atoms/icons/HeartFillIcon';
+import HeartIcon from '../atoms/icons/HeartIcon';
 
 export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
   const { open } = useModalStore();
@@ -36,7 +38,6 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
       };
     }
 
-    // 나중에 개인정보 비어있을 시에 신청 못하게 막기
     if (
       recruitmentStatus === '모집중' &&
       (!userStatus ||
@@ -101,7 +102,6 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
       };
     }
 
-    // 거절당하거나 신청취소완료시 재신청 불가능하게 하려면 여기 추가 => 모집 종료나 모임 중
     if (
       recruitmentStatus === '모집마감' &&
       (!userStatus ||
@@ -171,7 +171,7 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
             meeting?.liked
               ? 'border-primary bg-primary-light text-primary'
               : 'border-gray-300 text-gray-700',
-            'gap-1 px-6 text-t3',
+            'gap-1 px-6 text-t1',
           )}
           onClick={() => {
             if (userStatus) {
@@ -182,16 +182,12 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
             }
           }}
         >
-          좋아요
-          <img
-            className="h-4 w-4"
-            src={
-              meeting?.liked
-                ? '/images/icons/orange_fill_like.svg'
-                : '/images/icons/like.svg'
-            }
-            alt="like_icon"
-          />
+          {meeting?.liked ? (
+            <HeartFillIcon width={28} height={28} />
+          ) : (
+            <HeartIcon width={28} height={28} />
+          )}
+          {meeting.likesCount}
         </Button>
 
         <Button
