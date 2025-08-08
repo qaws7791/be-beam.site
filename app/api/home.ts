@@ -7,7 +7,6 @@ import type {
   MeetingSchedule,
 } from '@/types/entities';
 import { axiosInstance } from '@/lib/axios';
-import type { AxiosRequestConfig } from 'axios';
 
 export type HomeBannersResult = {
   banners: {
@@ -29,7 +28,6 @@ export const getBanner = async () => {
 export type RecommendationMeetingsParams = {
   type: 'all' | 'regular' | 'small';
   topic: 'likes' | 'random' | 'recent';
-  axiosRequestConfig: AxiosRequestConfig;
 };
 
 export type RecommendationMeeting = {
@@ -48,13 +46,11 @@ export type RecommendationMeetingsResult = RecommendationMeeting[];
 export const getRecommendationMeeting = async (
   topic: RecommendationMeetingsParams['topic'],
   type: RecommendationMeetingsParams['type'],
-  axiosRequestConfig?: RecommendationMeetingsParams['axiosRequestConfig'],
 ) => {
   const res = await axiosInstance<APIResponse<RecommendationMeetingsResult>>({
     baseURL: API_V1_BASE_URL,
     url: `/home/${topic}-meetings?type=${type}`,
     method: 'GET',
-    ...axiosRequestConfig,
   });
   return res.data.result;
 };

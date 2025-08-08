@@ -9,18 +9,20 @@ import GridGroup from './gridGroup/GridGroup';
 import useMeetingRecommendationQuery from '@/hooks/api/useMeetingRecommendationsQuery';
 import LoadingSpinner from '../molecules/LoadingSpinner';
 import useLikeMeetingMutation from '@/hooks/api/useLikeMeetingMutation';
+import { Button } from '../atoms/button/Button';
 
 export default function MeetingRecommendations({
   title,
   type,
   className,
+  moreUrl,
 }: {
   title: string;
   type: 'likes' | 'random' | 'recent';
   className?: string;
+  moreUrl: string;
 }) {
   const navigate = useNavigate();
-
   const rootLoaderData = useRouteLoaderData('root');
   const user = rootLoaderData.user;
 
@@ -59,17 +61,28 @@ export default function MeetingRecommendations({
             setTab(value as 'all' | 'regular' | 'small')
           }
         >
-          <TabsList className="h-auto gap-3 before:h-0">
-            {tabList.map((data, idx) => (
-              <TabsTrigger
-                key={idx}
-                className="cursor-pointer rounded-3xl bg-gray-200 px-5 py-3 text-b1 transition-all duration-700 after:content-none data-[state=active]:bg-gray-900 data-[state=active]:text-white"
-                value={data.value}
-              >
-                {data.text}
-              </TabsTrigger>
-            ))}
-          </TabsList>
+          <div className="flex w-full items-center justify-between">
+            <TabsList className="h-auto gap-3 before:h-0">
+              {tabList.map((data, idx) => (
+                <TabsTrigger
+                  key={idx}
+                  className="cursor-pointer rounded-3xl bg-gray-200 px-5 py-3 text-b1 transition-all duration-700 after:content-none data-[state=active]:bg-gray-900 data-[state=active]:text-white"
+                  value={data.value}
+                >
+                  {data.text}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
+            <Button
+              onClick={() =>
+                navigate(`/meetings?search=&recruitment-type=${tab}&${moreUrl}`)
+              }
+              className="px-4 py-3"
+            >
+              더보기
+            </Button>
+          </div>
 
           {tabList?.map((tab, idx) => (
             <TabsContent key={idx} value={tab.value} className="mt-5 w-full">
