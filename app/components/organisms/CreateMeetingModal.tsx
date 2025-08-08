@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useModalStore } from '@/stores/useModalStore';
 import type { CreateMeetingType } from '@/types/components';
 
-import clsx from 'clsx';
 import { Dialog, DialogContent } from '../atoms/dialog/Dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../atoms/tabs/Tabs';
 import CreateMeetingFirstContent from './CreateMeetingFirstContent';
@@ -100,7 +99,7 @@ export default function CreateMeetingModal() {
 
                   <TabsTrigger
                     value={String(tab1.value)}
-                    className={clsx(
+                    className={cn(
                       tab > tab1.value && 'text-gray-500',
                       'mt-4 after:h-0 data-[state=active]:text-primary',
                     )}

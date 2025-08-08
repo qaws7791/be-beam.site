@@ -17,6 +17,7 @@ export default [
   route('/login', 'routes/login.tsx'),
   route('/login/callback', 'routes/loginCallback.tsx'),
   route('/search', 'routes/search.tsx'),
+  route('/createMeeting', 'routes/createMeeting.tsx'),
   layout('layouts/myPage.tsx', [
     ...prefix('/myPage', [
       route('/participated', 'routes/participatedMeeting.tsx'),
