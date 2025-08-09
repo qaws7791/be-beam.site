@@ -99,20 +99,26 @@ function AllSearchResults({ query }: { query: string }) {
             <ArrowRightIcon className="size-6 text-gray-600" />
           </div>
         </div>
-        <div className="mt-6 grid grid-cols-4 gap-5">
-          {data?.meetings.map((meeting) => (
-            <MeetingCard
-              key={meeting.id}
-              image={meeting.image}
-              name={meeting.name}
-              meetingStartTime={meeting.meetingStartTime}
-              recruitmentType={meeting.recruitmentType}
-              recruitmentStatus={meeting.recruitmentStatus}
-              address={meeting.address}
-              onClick={() => {}}
-            />
-          ))}
-        </div>
+        {data?.meetings.length ? (
+          <div className="mt-6 grid grid-cols-4 gap-5">
+            {data?.meetings.map((meeting) => (
+              <MeetingCard
+                key={meeting.id}
+                image={meeting.image}
+                name={meeting.name}
+                meetingStartTime={meeting.meetingStartTime}
+                recruitmentType={meeting.recruitmentType}
+                recruitmentStatus={meeting.recruitmentStatus}
+                address={meeting.address}
+                onClick={() => {}}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-6 flex h-[200px] items-center justify-center">
+            <p className="text-t3 text-gray-600">모임이 없습니다.</p>
+          </div>
+        )}
       </div>
       <div>
         <div className="flex items-center justify-between">
@@ -135,33 +141,39 @@ function AllSearchResults({ query }: { query: string }) {
             <ArrowRightIcon className="size-6 text-gray-600" />
           </div>
         </div>
-        <div className="mt-6 grid grid-cols-4 gap-5">
-          {data?.guidebooks.map((guidebook) => (
-            <Link
-              className="w-full cursor-pointer overflow-hidden rounded-3xl border-1 border-gray-300"
-              key={guidebook.id}
-              to={`/guideBook/${guidebook.id}`}
-            >
-              <img
-                className="h-[240px] w-full object-cover"
-                src={guidebook.thumbnailImage}
-                alt="guidBook_thumbnail"
-              />
-              <div className="box-border w-full border-t-1 border-gray-300 px-7 py-8">
-                <Text variant="T2_Semibold" className="truncate">
-                  {guidebook.title}
-                </Text>
-                <Text
-                  variant="T4_Regular"
-                  color="gray-700"
-                  className="mt-3 truncate"
-                >
-                  {guidebook.description}
-                </Text>
-              </div>
-            </Link>
-          ))}
-        </div>
+        {data?.guidebooks.length ? (
+          <div className="mt-6 grid grid-cols-4 gap-5">
+            {data?.guidebooks.map((guidebook) => (
+              <Link
+                className="w-full cursor-pointer overflow-hidden rounded-3xl border-1 border-gray-300"
+                key={guidebook.id}
+                to={`/guideBook/${guidebook.id}`}
+              >
+                <img
+                  className="h-[240px] w-full object-cover"
+                  src={guidebook.thumbnailImage}
+                  alt="guidBook_thumbnail"
+                />
+                <div className="box-border w-full border-t-1 border-gray-300 px-7 py-8">
+                  <Text variant="T2_Semibold" className="truncate">
+                    {guidebook.title}
+                  </Text>
+                  <Text
+                    variant="T4_Regular"
+                    color="gray-700"
+                    className="mt-3 truncate"
+                  >
+                    {guidebook.description}
+                  </Text>
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="mt-6 flex h-[200px] items-center justify-center">
+            <p className="text-t3 text-gray-600">가이드북이 없습니다.</p>
+          </div>
+        )}
       </div>
       <div>
         <div className="flex items-center justify-between">
@@ -184,18 +196,24 @@ function AllSearchResults({ query }: { query: string }) {
             <ArrowRightIcon className="size-6 text-gray-600" />
           </div>
         </div>
-        <div className="mt-6 grid grid-cols-4 gap-5">
-          {data?.hosts.map((host) => (
-            <HostCard
-              key={host.id}
-              host={{
-                profileImage: host.profileImage,
-                nickname: host.nickname,
-                introduction: '호스트 소개',
-              }}
-            />
-          ))}
-        </div>
+        {data?.hosts.length ? (
+          <div className="mt-6 grid grid-cols-4 gap-5">
+            {data?.hosts.map((host) => (
+              <HostCard
+                key={host.id}
+                host={{
+                  profileImage: host.profileImage,
+                  nickname: host.nickname,
+                  introduction: '호스트 소개',
+                }}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-6 flex h-[200px] items-center justify-center">
+            <p className="text-t3 text-gray-600">호스트가 없습니다.</p>
+          </div>
+        )}
       </div>
     </>
   );
@@ -222,25 +240,31 @@ function MeetingSearchResults({ query }: { query: string }) {
           <span className="text-b2">N건</span>
         </div>
       </div>
-      <div className="mt-6 grid grid-cols-4 gap-5">
-        {allMeetings?.map((meeting) => (
-          <MeetingCard
-            key={meeting.id}
-            image={meeting.image}
-            recruitmentType={meeting.recruitmentType}
-            recruitmentStatus={meeting.recruitmentStatus}
-            name={meeting.name}
-            meetingStartTime={meeting.meetingStartTime}
-            address={meeting.address}
-            onClick={() => {}}
-          />
-        ))}
-        {allMeetings?.length > 0 && (
-          <div ref={ref}>
-            {isFetchingNextPage && <p>더 많은 모임을 가져오는 중</p>}
-          </div>
-        )}
-      </div>
+      {allMeetings.length ? (
+        <div className="mt-6 grid grid-cols-4 gap-5">
+          {allMeetings?.map((meeting) => (
+            <MeetingCard
+              key={meeting.id}
+              image={meeting.image}
+              recruitmentType={meeting.recruitmentType}
+              recruitmentStatus={meeting.recruitmentStatus}
+              name={meeting.name}
+              meetingStartTime={meeting.meetingStartTime}
+              address={meeting.address}
+              onClick={() => {}}
+            />
+          ))}
+          {allMeetings?.length > 0 && (
+            <div ref={ref}>
+              {isFetchingNextPage && <p>더 많은 모임을 가져오는 중</p>}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="mt-6 flex h-[200px] items-center justify-center">
+          <p className="text-t3 text-gray-600">모임이 없습니다.</p>
+        </div>
+      )}
     </div>
   );
 }
@@ -266,38 +290,44 @@ function GuidebookSearchResults({ query }: { query: string }) {
           <span className="text-b2">N건</span>
         </div>
       </div>
-      <div className="mt-6 grid grid-cols-4 gap-5">
-        {allGuidebooks?.map((guidebook) => (
-          <Link
-            className="w-full cursor-pointer overflow-hidden rounded-3xl border-1 border-gray-300"
-            key={guidebook.id}
-            to={`/guideBook/${guidebook.id}`}
-          >
-            <img
-              className="h-[240px] w-full object-cover"
-              src={guidebook.thumbnailImage}
-              alt="guidBook_thumbnail"
-            />
-            <div className="box-border w-full border-t-1 border-gray-300 px-7 py-8">
-              <Text variant="T2_Semibold" className="truncate">
-                {guidebook.title}
-              </Text>
-              <Text
-                variant="T4_Regular"
-                color="gray-700"
-                className="mt-3 truncate"
-              >
-                {guidebook.description}
-              </Text>
+      {allGuidebooks.length ? (
+        <div className="mt-6 grid grid-cols-4 gap-5">
+          {allGuidebooks?.map((guidebook) => (
+            <Link
+              className="w-full cursor-pointer overflow-hidden rounded-3xl border-1 border-gray-300"
+              key={guidebook.id}
+              to={`/guideBook/${guidebook.id}`}
+            >
+              <img
+                className="h-[240px] w-full object-cover"
+                src={guidebook.thumbnailImage}
+                alt="guidBook_thumbnail"
+              />
+              <div className="box-border w-full border-t-1 border-gray-300 px-7 py-8">
+                <Text variant="T2_Semibold" className="truncate">
+                  {guidebook.title}
+                </Text>
+                <Text
+                  variant="T4_Regular"
+                  color="gray-700"
+                  className="mt-3 truncate"
+                >
+                  {guidebook.description}
+                </Text>
+              </div>
+            </Link>
+          ))}
+          {allGuidebooks?.length > 0 && (
+            <div ref={ref}>
+              {isFetchingNextPage && <p>더 많은 가이드북을 가져오는 중</p>}
             </div>
-          </Link>
-        ))}
-        {allGuidebooks?.length > 0 && (
-          <div ref={ref}>
-            {isFetchingNextPage && <p>더 많은 가이드북을 가져오는 중</p>}
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      ) : (
+        <div className="mt-6 flex h-[200px] items-center justify-center">
+          <p className="text-t3 text-gray-600">가이드북이 없습니다.</p>
+        </div>
+      )}
     </div>
   );
 }
@@ -323,23 +353,29 @@ function HostsSearchResults({ query }: { query: string }) {
           <span className="text-b2">N건</span>
         </div>
       </div>
-      <div className="mt-6 grid grid-cols-4 gap-5">
-        {allHosts?.map((host) => (
-          <HostCard
-            key={host.id}
-            host={{
-              profileImage: host.profileImage,
-              nickname: host.nickname,
-              introduction: host.introduction,
-            }}
-          />
-        ))}
-        {allHosts?.length > 0 && (
-          <div ref={ref}>
-            {isFetchingNextPage && <p>더 많은 호스트를 가져오는 중</p>}
-          </div>
-        )}
-      </div>
+      {allHosts.length ? (
+        <div className="mt-6 grid grid-cols-4 gap-5">
+          {allHosts?.map((host) => (
+            <HostCard
+              key={host.id}
+              host={{
+                profileImage: host.profileImage,
+                nickname: host.nickname,
+                introduction: host.introduction,
+              }}
+            />
+          ))}
+          {allHosts?.length > 0 && (
+            <div ref={ref}>
+              {isFetchingNextPage && <p>더 많은 호스트를 가져오는 중</p>}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="mt-6 flex h-[200px] items-center justify-center">
+          <p className="text-t3 text-gray-600">호스트가 없습니다.</p>
+        </div>
+      )}
     </div>
   );
 }

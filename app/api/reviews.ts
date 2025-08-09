@@ -86,19 +86,22 @@ export const createReview = async (
   meetingId: number,
   data: CreateReviewData,
 ) => {
-  console.log('createReview', meetingId, data);
+  const formData = new FormData();
+  data.images.forEach((image) => {
+    formData.append('files', image);
+  });
+  const jsonData = JSON.stringify({
+    rating: data.rating,
+    text: data.text,
+  });
+  formData.append('data', jsonData);
+  await axiosInstance.post(`/meetings/${meetingId}/reviews`, formData, {
+    baseURL: API_V1_BASE_URL,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return;
-  // const formData = new FormData();
-  // data.images.forEach((image) => {
-  //   formData.append('files', image);
-  // });
-  // const jsonData = JSON.stringify({
-  //   rating: data.rating,
-  //   text: data.text,
-  // });
-  // formData.append('data', jsonData);
-  // await axiosInstance.post(`/meetings/${meetingId}/reviews`, formData);
-  // return;
 };
 
 export type UpdateReviewData = {
@@ -112,25 +115,28 @@ export const updateReview = async (
   reviewId: number,
   data: UpdateReviewData,
 ) => {
-  console.log('updateReview', reviewId, data);
+  const formData = new FormData();
+  data.newImages.forEach((image) => {
+    formData.append('files', image);
+  });
+  const jsonData = JSON.stringify({
+    rating: data.rating,
+    text: data.content,
+    existingImages: data.existingImages,
+  });
+  formData.append('data', jsonData);
+  await axiosInstance.patch(`/reviews/${reviewId}`, formData, {
+    baseURL: API_V1_BASE_URL,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return;
-  // const formData = new FormData();
-  // data.newImages.forEach((image) => {
-  //   formData.append('files', image);
-  // });
-  // const jsonData = JSON.stringify({
-  //   rating: data.rating,
-  //   text: data.content,
-  //   existingImages: data.existingImages,
-  // });
-  // formData.append('data', jsonData);
-  // await axiosInstance.patch(`/reviews/${reviewId}`, formData);
-  // return;
 };
 
 export const deleteReview = async ({ reviewId }: { reviewId: number }) => {
-  console.log('deleteReview', reviewId);
+  await axiosInstance.delete(`/reviews/${reviewId}`, {
+    baseURL: API_V1_BASE_URL,
+  });
   return;
-  // await axiosInstance.delete(`/reviews/${reviewId}`);
-  // return;
 };

@@ -139,7 +139,10 @@ export default function WrittenReviewCard({ review }: WrittenReviewCardProps) {
                 defaultValues={{
                   rating: review.rating,
                   content: review.content,
-                  existingImages: review.images,
+                  images: {
+                    existingImages: review.images,
+                    newImages: [],
+                  },
                   id: review.id,
                 }}
               />

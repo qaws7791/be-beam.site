@@ -1,4 +1,3 @@
-import type { MeetingListFilters } from '@/schemas/meetingFilters';
 import { cn } from '@/lib/tailwind';
 import { Input } from '../atoms/input/Input';
 
@@ -6,7 +5,7 @@ export interface SearchInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   placeHolder: string;
   inputStyle?: string;
-  onSearchChange: (newFilter: Partial<MeetingListFilters>) => void;
+  onSearchChange: (str: string) => void;
   search: string;
 }
 
@@ -21,7 +20,7 @@ export default function SearchInput({
       <Input
         placeholder={placeHolder}
         className="h-auto border-none bg-transparent py-0 shadow-none focus:border-none"
-        onChange={(e) => onSearchChange({ search: e.target.value })}
+        onChange={(e) => onSearchChange(e.target.value)}
         value={search}
       />
       <img

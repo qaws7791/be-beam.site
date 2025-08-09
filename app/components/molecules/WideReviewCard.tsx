@@ -208,7 +208,10 @@ export default function WideReviewCard({
             defaultValues={{
               rating: review.rating,
               content: review.text,
-              existingImages: review.images,
+              images: {
+                existingImages: review.images,
+                newImages: [],
+              },
               id: review.reviewId,
             }}
           />
