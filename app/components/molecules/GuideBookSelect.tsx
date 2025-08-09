@@ -82,22 +82,15 @@ export default function GuideBookSelect({
     if (isSelectOpen) {
       const currentScrollElement = scrollContainerRef.current;
       if (currentScrollElement) {
-        console.log('--- Attaching scroll listener ---');
         currentScrollElement.addEventListener('scroll', handleScroll);
-        handleScroll();
-      } else {
-        console.log(
-          'Scroll element not found when trying to attach listener after opening.',
-        );
       }
-    }
 
-    return () => {
-      const currentScrollElement = scrollContainerRef.current;
-      if (currentScrollElement) {
-        currentScrollElement.removeEventListener('scroll', handleScroll);
-      }
-    };
+      return () => {
+        if (currentScrollElement) {
+          currentScrollElement.removeEventListener('scroll', handleScroll);
+        }
+      };
+    }
   }, [isSelectOpen, handleScroll]);
 
   const onSelectChange = (newValueString: string) => {

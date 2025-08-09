@@ -1,20 +1,28 @@
 import { useEffect, useState } from 'react';
-import type { CreateMeetingType } from '@/types/components';
+import type { CreateMeeting } from '@/types/components';
 
 import { cn } from '@/lib/tailwind';
-import Text from '../atoms/text/Text';
-import { Button } from '../atoms/button/Button';
-import { Label } from '../atoms/label/Label';
-import { RadioGroup, RadioGroupItem } from '../atoms/radio-group/RadioGroup';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../atoms/tabs/Tabs';
-import GuideBookSelect from '../molecules/GuideBookSelect';
+import Text from '@/components/atoms/text/Text';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/atoms/tabs/Tabs';
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from '@/components/atoms/radio-group/RadioGroup';
+import { Label } from '@/components/atoms/label/Label';
+import GuideBookSelect from '@/components/molecules/GuideBookSelect';
+import { Button } from '@/components/atoms/button/Button';
 
 interface CreateMeetingFirstContentProps {
   userRole: string;
   tab: number;
   setTab: (tab: number) => void;
-  form: CreateMeetingType;
-  setForm: (form: CreateMeetingType) => void;
+  form: CreateMeeting;
+  setForm: (form: CreateMeeting) => void;
 }
 
 export default function CreateMeetingFirstContent({
@@ -33,16 +41,20 @@ export default function CreateMeetingFirstContent({
       } else if ((userRole as string) === '소모임 호스트') {
         return 'small';
       } else {
-        return '';
+        return undefined;
       }
     }
   });
-  const [isGuideBookRefer, setIsGuideBookRefer] = useState(
-    form.isGuideBookRefer ?? 'false',
+  const [isGuideBookRefer, setIsGuideBookRefer] = useState(() => {
+    return 'isGuideBookRefer' in form ? form.isGuideBookRefer : 'false';
+  });
+  const [selectedGuideBook, setSelectedGuideBook] = useState<number | null>(
+    () => {
+      const guideId =
+        'guidbookReferenceId' in form ? form.guidbookReferenceId : null;
+      return typeof guideId === 'number' ? guideId : null;
+    },
   );
-  const [selectedGuideBook, setSelectedGuideBook] = useState<
-    number | null | undefined
-  >(form.guidbookReferenceId ?? null);
 
   const meetingTypeTabList = [
     {
@@ -66,22 +78,30 @@ export default function CreateMeetingFirstContent({
   ];
 
   useEffect(() => {
-    console.log(meetingTypeTab);
     if (meetingTypeTab) {
-      setForm({
-        ...form,
-        recruitmentType: meetingTypeTab === 'small' ? '소모임' : '정기모임',
-        isGuideBookRefer:
-          meetingTypeTab === 'regular' ? 'false' : form.isGuideBookRefer,
-        guidbookReferenceId:
-          meetingTypeTab === 'regular' ? null : form.guidbookReferenceId,
-      });
+      setForm(
+        meetingTypeTab === 'regular'
+          ? {
+              ...form,
+              recruitmentType: '정기모임',
+              isGuideBookRefer: 'false',
+              guidebookReferenceId: null,
+            }
+          : {
+              ...form,
+              recruitmentType: '소모임',
+              isGuideBookRefer: isGuideBookRefer,
+              guidebookReferenceId:
+                isGuideBookRefer === 'false' ? null : selectedGuideBook,
+            },
+      );
     }
-  }, [meetingTypeTab, setForm]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [meetingTypeTab, isGuideBookRefer, selectedGuideBook, setForm]);
 
   return (
     <div className="w-full">
-      <div className="h-[300px] w-full overflow-y-scroll">
+      <div className="w-full">
         <Text variant="T2_Semibold" className="mb-4">
           모임 분류
         </Text>
@@ -127,10 +147,12 @@ export default function CreateMeetingFirstContent({
                         value={isGuideBookRefer}
                         onValueChange={(value) => {
                           setIsGuideBookRefer(value as 'false' | 'true');
-                          setForm({
-                            ...form,
-                            isGuideBookRefer: value as 'false' | 'true',
-                          });
+                          if (form.recruitmentType === '소모임') {
+                            setForm({
+                              ...form,
+                              isGuideBookRefer: value as 'false' | 'true',
+                            });
+                          }
                         }}
                         className="mt-6 gap-4"
                       >
@@ -172,11 +194,16 @@ export default function CreateMeetingFirstContent({
                         <GuideBookSelect
                           value={selectedGuideBook}
                           onValueChange={(value) => {
-                            setSelectedGuideBook(value);
-                            setForm({
-                              ...form,
-                              guidbookReferenceId: value ?? null,
-                            });
+                            setSelectedGuideBook(value as number);
+                            if (form.recruitmentType === '소모임') {
+                              setForm({
+                                ...form,
+                                guidebookReferenceId:
+                                  form.isGuideBookRefer === 'false'
+                                    ? null
+                                    : form.guidebookReferenceId,
+                              });
+                            }
                           }}
                         />
                       </div>
@@ -192,7 +219,7 @@ export default function CreateMeetingFirstContent({
         onClick={() => {
           setTab(tab + 1);
         }}
-        className="absolute bottom-0 w-full"
+        className="mt-20 w-full"
         disabled={userRole === '일반 참가자'}
       >
         다음

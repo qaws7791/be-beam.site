@@ -6,19 +6,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
 
 import { cn } from '@/lib/tailwind';
-import type { CreateMeetingType } from '@/types/components';
-import Text from '../atoms/text/Text';
-import { Input } from '../atoms/input/Input';
-import { Textarea } from '../atoms/textarea/Textarea';
-import { Button } from '../atoms/button/Button';
-import Badge from '../atoms/badge/Badge';
+import type { CreateMeeting } from '@/types/components';
 import type { Topic } from '@/types/entities';
+import Text from '@/components/atoms/text/Text';
+import { Input } from '@/components/atoms/input/Input';
+import { Textarea } from '@/components/atoms/textarea/Textarea';
+import { Button } from '@/components/atoms/button/Button';
+import { Tag } from '@/components/atoms/tag/Tag';
 
 interface CreateMeetingSecondContentProps {
   tab: number;
   setTab: (tab: number) => void;
-  form: CreateMeetingType;
-  setForm: (form: CreateMeetingType) => void;
+  form: CreateMeeting;
+  setForm: (form: CreateMeeting) => void;
 }
 
 export default function CreateMeetingSecondContent({
@@ -153,11 +153,12 @@ export default function CreateMeetingSecondContent({
         ],
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imageFields, setForm]);
 
   return (
     <form onSubmit={handleSubmit(() => setTab(tab + 1))} className="w-full">
-      <div className="h-[300px] w-full overflow-y-scroll">
+      <div className="w-full">
         <div className="mb-7 w-full">
           <Text variant="T2_Semibold">모임명</Text>
           <Controller
@@ -271,7 +272,7 @@ export default function CreateMeetingSecondContent({
         <div className="mb-7 w-full">
           <Text variant="T2_Semibold">사진 등록</Text>
 
-          <div className="mt-3 flex w-full gap-3">
+          <div className="mt-3 flex w-full items-start gap-3">
             <div className="relative h-[316px] w-[316px] rounded-lg border-1 border-gray-300">
               <img
                 className={cn(
@@ -282,10 +283,12 @@ export default function CreateMeetingSecondContent({
                 alt="meeting_thumbnail_image"
               />
 
-              <Badge
-                text="대표이미지"
-                className="absolute top-2 left-2 inline-block border-none px-2 py-[6px] text-c1"
-              />
+              <Tag
+                variant="primary"
+                className="absolute top-2 left-2 px-2 py-[6px] text-c1"
+              >
+                대표이미지
+              </Tag>
 
               <Controller
                 name="thumbnailImage"
@@ -313,11 +316,11 @@ export default function CreateMeetingSecondContent({
               />
             </div>
 
-            <div className="grid flex-1 grid-cols-4 gap-2">
+            <div className="grid flex-1 grid-cols-5 items-start gap-2">
               {imageFields.map((field, index) => (
                 <div
                   key={field.id}
-                  className="relative h-[100px] w-[100px] rounded-lg"
+                  className="relative aspect-square w-full rounded-lg"
                 >
                   <img
                     src={URL.createObjectURL(field.value)}
@@ -394,7 +397,7 @@ export default function CreateMeetingSecondContent({
         </div>
       </div>
 
-      <div className="absolute bottom-0 flex w-full items-center gap-3">
+      <div className="mt-20 flex w-full items-center gap-3">
         <Button
           type="button"
           variant="tertiary"

@@ -1,12 +1,11 @@
 import { formatNumberWithComma } from '@/utils/cash';
 
 import type { Meeting } from '@/types/entities';
-import Badge from '../atoms/badge/Badge';
+import { Tag } from '../atoms/tag/Tag';
 import Text from '../atoms/text/Text';
 import RecruitmentTypeAndTopic from '../molecules/RecruitmentTypeAndTopic';
 import MeetingCardInfoItemWrap from './MeetingCardInfoItemWrap';
 import TitleAndDescription from '../molecules/TitleAndDes';
-import { Tag } from '../atoms/tag/Tag';
 
 export default function MeetingDetailCardTop({
   meeting,
@@ -80,11 +79,12 @@ export default function MeetingDetailCardTop({
         </Tag>
       </div>
 
-      <Badge
-        text={meetingStatusComment}
+      <Tag
         variant="tertiary"
-        className="mt-4 inline-block rounded-md bg-gray-200 p-2 text-b3 text-gray-600"
-      />
+        className="mt-4 rounded-md px-2 py-5 text-b3 text-gray-600"
+      >
+        {meetingStatusComment}
+      </Tag>
 
       <MeetingCardInfoItemWrap meeting={meeting} />
 

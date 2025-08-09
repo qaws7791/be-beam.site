@@ -5,7 +5,7 @@ import Text from '../atoms/text/Text';
 import RecruitmentTypeAndTopic from '../molecules/RecruitmentTypeAndTopic';
 import { DropdownMenuItem } from '../atoms/dropdown-menu/DropdownMenu';
 import MoreDropdownMenu from './MoreDropdownMenu';
-import Badge from '../atoms/badge/Badge';
+import { Tag } from '../atoms/tag/Tag';
 
 export default function MeetingDetailContentTop({
   meeting,
@@ -43,11 +43,13 @@ export default function MeetingDetailContentTop({
 
       <div className="mt-5 flex items-center gap-2">
         {meeting?.hashtags?.map((hashtag, idx) => (
-          <Badge
+          <Tag
             key={idx}
-            text={`#${hashtag}`}
-            className="rounded-md bg-primary-light px-2 py-1 text-b1 text-primary"
-          />
+            variant="primary"
+            className="rounded-md border-1 border-primary px-2 py-1 text-b1"
+          >
+            {`#${hashtag}`}
+          </Tag>
         ))}
       </div>
     </div>

@@ -30,6 +30,7 @@ export const metaTemplates = {
     ];
   },
 
+  // 로그인 페이지
   login: () => {
     return [
       { title: '로그인 | 비빔' },
@@ -40,6 +41,7 @@ export const metaTemplates = {
     ];
   },
 
+  // 전체 검색 페이지
   search: ({ query }: { query?: string } = {}) => {
     return [
       { title: query ? `'${query}' 검색 결과 | 비빔` : '검색 | 비빔' },
@@ -134,6 +136,17 @@ export const metaTemplates = {
         content:
           hostIntroduction ||
           '호스트의 프로필과 운영하는 모임 정보를 확인하세요.',
+      },
+    ];
+  },
+
+  // 모임 생성 페이지
+  createMeeting: () => {
+    return [
+      { title: '모임 생성 | 비빔' },
+      {
+        name: 'description',
+        content: '내가 원하는 모임을 생성하세요.',
       },
     ];
   },

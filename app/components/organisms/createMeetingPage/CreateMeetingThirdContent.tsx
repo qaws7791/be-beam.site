@@ -2,20 +2,20 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { createMeetingSecondSchema } from '@/schemas/meeting';
 import type { z } from 'zod';
-import type { CreateMeetingType } from '@/types/components';
 
-import clsx from 'clsx';
-import Text from '../atoms/text/Text';
-import { Button } from '../atoms/button/Button';
-import { Input } from '../atoms/input/Input';
-import { Textarea } from '../atoms/textarea/Textarea';
-import { DateRangePicker } from '../molecules/DateRangePicker';
+import type { CreateMeeting } from '@/types/components';
+import { cn } from '@/lib/tailwind';
+import Text from '@/components/atoms/text/Text';
+import { Button } from '@/components/atoms/button/Button';
+import { Input } from '@/components/atoms/input/Input';
+import { DateRangePicker } from '@/components/molecules/DateRangePicker';
+import { Textarea } from '@/components/atoms/textarea/Textarea';
 
 interface CreateMeetingThirdContentProps {
   tab: number;
   setTab: (tab: number) => void;
-  form: CreateMeetingType;
-  setForm: (form: CreateMeetingType) => void;
+  form: CreateMeeting;
+  setForm: (form: CreateMeeting) => void;
 }
 
 export default function CreateMeetingThirdContent({
@@ -46,7 +46,7 @@ export default function CreateMeetingThirdContent({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-      <div className="h-[300px] w-full overflow-y-scroll">
+      <div className="w-full">
         <div className="mb-7 w-full">
           <Text variant="T2_Semibold">모집 방법</Text>
           <Controller
@@ -59,7 +59,7 @@ export default function CreateMeetingThirdContent({
                     type="button"
                     key={idx}
                     variant="tertiary"
-                    className={clsx(
+                    className={cn(
                       'mt-3 mr-2 h-9 rounded-md border-gray-300 px-4 text-b1',
                       field.value === selectionType
                         ? 'border-primary bg-primary-light text-primary'
@@ -100,7 +100,7 @@ export default function CreateMeetingThirdContent({
                     type="button"
                     key={idx}
                     variant="tertiary"
-                    className={clsx(
+                    className={cn(
                       'mt-3 mr-2 h-9 rounded-md border-gray-300 px-4 text-b1',
                       field.value === meetingMode
                         ? 'border-primary bg-primary-light text-primary'
@@ -259,7 +259,7 @@ export default function CreateMeetingThirdContent({
         </div>
       </div>
 
-      <div className="absolute bottom-0 flex w-full items-center gap-3">
+      <div className="mt-20 flex w-full items-center gap-3">
         <Button
           type="button"
           variant="tertiary"
