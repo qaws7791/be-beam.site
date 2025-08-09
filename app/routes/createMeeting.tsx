@@ -1,5 +1,9 @@
+import { useEffect, useState } from 'react';
 import { metaTemplates } from '@/config/meta-templates';
 
+import { cn } from '@/lib/tailwind';
+import type { Route } from './+types/createdMeeting';
+import type { CreateMeeting } from '@/types/components';
 import CreateMeetingTemplate from '@/components/templates/CreateMeetingTemplate';
 import {
   Tabs,
@@ -7,10 +11,6 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/components/atoms/tabs/Tabs';
-import { useState } from 'react';
-import { cn } from '@/lib/tailwind';
-import type { Route } from './+types/createdMeeting';
-import type { CreateMeeting } from '@/types/components';
 import CreateMeetingFirstContent from '@/components/organisms/createMeetingPage/CreateMeetingFirstContent';
 import CreateMeetingSecondContent from '@/components/organisms/createMeetingPage/CreateMeetingSecondContent';
 import CreateMeetingThirdContent from '@/components/organisms/createMeetingPage/CreateMeetingThirdContent';
@@ -81,6 +81,13 @@ export default function CreatedMeeting() {
       },
     ],
   });
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  }, [tab]);
 
   return (
     <CreateMeetingTemplate>
