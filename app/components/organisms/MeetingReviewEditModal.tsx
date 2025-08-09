@@ -121,11 +121,12 @@ export default function MeetingReviewEditModal() {
             <Controller
               name="images"
               control={control}
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <ImageInput
-                  images={field.value}
-                  onImagesChange={field.onChange}
                   maxImages={10}
+                  newImages={field.value || []}
+                  onChange={(data) => field.onChange(data)}
+                  error={fieldState.error?.message}
                 />
               )}
             />
