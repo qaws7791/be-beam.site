@@ -1,6 +1,7 @@
 import Text from '../atoms/text/Text';
-import Badge from '../atoms/badge/Badge';
+import { Tag } from '../atoms/tag/Tag';
 import InfoItem from '../molecules/InfoItem';
+
 import type { Guidebook } from '@/types/entities';
 
 export default function GuideBookDetailContent({
@@ -43,12 +44,9 @@ export default function GuideBookDetailContent({
 
       <div className="mt-5 flex w-full items-center gap-2">
         {guideBook?.hashtags?.map((hashtag, idx) => (
-          <Badge
-            key={idx}
-            text={`#${hashtag}`}
-            variant="tertiary"
-            className="bg-primary-light p-2 text-b1 text-primary"
-          />
+          <Tag key={idx} variant="primary" className="px-2 py-4 text-b1">
+            {`#${hashtag}`}
+          </Tag>
         ))}
       </div>
 

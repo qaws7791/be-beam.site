@@ -5,7 +5,7 @@ import { cn, focusVisibleRing } from '@/lib/tailwind';
 import CloseIcon from '../icons/CloseIcon';
 
 const tagVariants = cva(
-  'inline-flex items-center justify-center rounded-md border-none pl-2 py-1 text-c1 font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none transition-[color,box-shadow] h-6.5',
+  'inline-flex items-center justify-center rounded-md pl-2 py-1 text-c1 font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none transition-[color,box-shadow] h-6.5',
   {
     variants: {
       variant: {

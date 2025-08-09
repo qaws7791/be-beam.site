@@ -7,7 +7,7 @@ import { cn } from '@/lib/tailwind';
 import { Button } from '../atoms/button/Button';
 import Text from '../atoms/text/Text';
 import GridGroup from './gridGroup/GridGroup';
-import Badge from '../atoms/badge/Badge';
+import { Tag } from '../atoms/tag/Tag';
 import toast from 'react-hot-toast';
 
 interface meetingType {
@@ -133,10 +133,9 @@ export default function HostDetailWrap({ id }: { id: number }) {
                 >
                   {meeting.meetingName}
                 </Text>
-                <Badge
-                  text={meeting.topic}
-                  className="mt-3 inline-block border-none px-2 py-1 text-b1"
-                />
+                <Tag className="mt-3 border-none px-2 py-1 text-b1">
+                  {meeting.topic}
+                </Tag>
               </div>
             </div>
           ))}
