@@ -70,99 +70,22 @@ export interface FiltersType {
   values: string[];
 }
 
-export interface RecommendationsGuideBookType {
-  id: number;
-  title: string;
-  image: string;
-  description: string;
-}
-
 export interface FilterOption {
   text: string;
   value: string;
 }
 
-export interface GuideBookType {
-  id: number;
-  title: string;
-  guidbookType: string;
-  targetType: string;
-  hashtags: string[];
-  level: string;
-  time: string;
-  description: string;
-  benefits: string[];
-  images: string[];
-  file: string;
-  recommendations: RecommendationsGuideBookType[];
-}
-
-export interface GetCreateMeetingDetailDataType {
-  selectionType: string;
-  meetingMode: string;
-  minParticipants: number;
-  maxParticipants: number;
-  recruitingStartTime: string;
-  recruitingEndTime: string;
-  schedules: {
-    content: string;
-    address: string;
-    addressDetail: string;
-    meetingDate: string;
-    meetingStartTime: string;
-    meetingEndTime: string;
-  }[];
-  paymentAmount: number;
-  info: string;
-}
-
-export interface CreatedMeetingDetailStateType {
-  intro: {
-    thumbnailImagePreview: string;
-    thumbnailImage: null | File;
-    name: string;
-    introduction: string;
-    topic: number | null;
-    hashtags: string[];
-    totalImages: string[];
-    addImages: File[] | [];
-    existingImages: string[];
-    hostDescription: string;
-  };
-  detail: {
-    selectionType: string;
-    mode: string;
-    minParticipants: number;
-    maxParticipants: number;
-    schedules: {
-      content: string | number;
-      address: string;
-      addressDetail: string | undefined;
-      meetingDate: string;
-      meetingStartTime: string;
-      meetingEndTime: string;
-    }[];
-    recruitingStartTime: string;
-    recruitingEndTime: string;
-    paymentAmount: number;
-    info: string;
-  };
-}
-
-export interface CreateMeetingType {
+interface BaseCreateMeetingType {
   thumbnailImage: File | null;
   thumbnailImagePreview: string | '';
   name: string;
-  recruitmentType: '정기모임' | '소모임' | undefined;
   selectionType: '선발형' | '선착순' | null;
   meetingMode: '온라인' | '오프라인' | '혼합' | null;
   topicId: number | null;
   hashtags: string[];
-  isGuideBookRefer: 'false' | 'true';
-  guidbookReferenceId: null | number | undefined;
   introduction: string;
-  images: [] | File[];
-  imagesPreview: [] | string[];
+  images: File[];
+  imagesPreview: string[];
   minParticipants: number;
   maxParticipants: number;
   hostDescription: string;
@@ -178,6 +101,33 @@ export interface CreateMeetingType {
     addressDetail: string;
   }[];
 }
+
+// 정기모임 (recruitmentType: '정기모임')
+export interface RegularMeetingType extends BaseCreateMeetingType {
+  recruitmentType: '정기모임';
+  isGuideBookRefer: 'false';
+  guidebookReferenceId: null;
+}
+
+// 소모임 (recruitmentType: '소모임')
+export interface SmallMeetingType extends BaseCreateMeetingType {
+  recruitmentType: '소모임';
+  isGuideBookRefer: 'false' | 'true';
+  guidebookReferenceId: number | null;
+}
+
+// 초기 상태 (recruitmentType: undefined)
+export interface InitialCreateMeetingType extends BaseCreateMeetingType {
+  recruitmentType: undefined;
+  isGuideBookRefer: 'false';
+  guidebookReferenceId?: null;
+}
+
+// 최종 타입: 정기모임 또는 소모임
+export type CreateMeeting =
+  | RegularMeetingType
+  | SmallMeetingType
+  | InitialCreateMeetingType;
 
 export interface EditCreateMeetingIntroType {
   thumbnailImage?: File;

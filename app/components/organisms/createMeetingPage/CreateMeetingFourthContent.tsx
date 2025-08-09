@@ -1,32 +1,32 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { axiosInstance } from '@/lib/axios';
+import { API_V1_BASE_URL } from '@/constants/api';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
 import { createMeetingFourthSchema } from '@/schemas/meeting';
-import type { CreateMeetingType } from '@/types/components';
+import type { CreateMeeting } from '@/types/components';
 import { format } from 'date-fns';
 
-import Text from '../atoms/text/Text';
-import { Button } from '../atoms/button/Button';
+import toast from 'react-hot-toast';
+import { Button } from '@/components/atoms/button/Button';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '../atoms/accordion/Accrodion';
-import { DateInput } from '../molecules/DateInput';
-import { TimeInput } from '../molecules/TimeInput';
-import { AddressInput } from '../molecules/AddressInput';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
-import { axiosInstance } from '@/lib/axios';
-import { API_V1_BASE_URL } from '@/constants/api';
-import { useModalStore } from '@/stores/useModalStore';
+} from '@/components/atoms/accordion/Accrodion';
+import Text from '@/components/atoms/text/Text';
+import { DateInput } from '@/components/molecules/DateInput';
+import { TimeInput } from '@/components/molecules/TimeInput';
+import { AddressInput } from '@/components/molecules/AddressInput';
+import { useNavigate } from 'react-router';
 
 interface CreateMeetingFourthContentProps {
   tab: number;
   setTab: (tab: number) => void;
-  form: CreateMeetingType;
-  setForm: (form: CreateMeetingType) => void;
+  form: CreateMeeting;
+  setForm: (form: CreateMeeting) => void;
 }
 
 export default function CreateMeetingFourthContent({
@@ -35,8 +35,9 @@ export default function CreateMeetingFourthContent({
   form,
   setForm,
 }: CreateMeetingFourthContentProps) {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { close } = useModalStore();
+
   const { control, handleSubmit, formState } = useForm<
     z.infer<typeof createMeetingFourthSchema>
   >({
@@ -60,8 +61,10 @@ export default function CreateMeetingFourthContent({
     name: 'schedules',
   });
 
+  console.log(form);
+
   const { mutate: createMeeting, isPending } = useMutation({
-    mutationFn: (form: CreateMeetingType) => {
+    mutationFn: (form: CreateMeeting) => {
       const formData = new FormData();
 
       if (form.thumbnailImage) {
@@ -71,6 +74,12 @@ export default function CreateMeetingFourthContent({
       form.images.forEach((file) => {
         formData.append('files', file);
       });
+
+      let recruitingEndDate;
+      if (form.recruitingEndTime) {
+        recruitingEndDate = new Date(form.recruitingEndTime);
+        recruitingEndDate.setDate(recruitingEndDate.getDate() + 1);
+      }
 
       formData.append(
         'data',
@@ -83,7 +92,7 @@ export default function CreateMeetingFourthContent({
               meetingMode: form.meetingMode,
               topicId: form.topicId,
               hashtags: form.hashtags,
-              guidbookReferenceId: form.guidbookReferenceId,
+              guidbookReferenceId: form.guidebookReferenceId,
               introduction: form.introduction,
               minParticipants: form.minParticipants,
               maxParticipants: form.maxParticipants,
@@ -92,10 +101,9 @@ export default function CreateMeetingFourthContent({
                 form.recruitingStartTime as Date,
                 "yyyy-MM-dd'T'HH:mm:ss",
               ),
-              recruitingEndTime: format(
-                form.recruitingEndTime as Date,
-                "yyyy-MM-dd'T'HH:mm:ss",
-              ),
+              recruitingEndTime: recruitingEndDate
+                ? format(recruitingEndDate, "yyyy-MM-dd'T'HH:mm:ss")
+                : null,
               paymentAmount: form.paymentAmount,
               info: form.info,
               schedules: form.schedules,
@@ -118,7 +126,7 @@ export default function CreateMeetingFourthContent({
     onSuccess: () => {
       toast.success('모임 개설을 완료하였습니다.');
       queryClient.invalidateQueries({ queryKey: ['meetings'] });
-      close();
+      navigate('/meetings');
     },
     onError: (err) => {
       toast.error('오류가 발생하였습니다. 다시 시도해주세요.');
@@ -129,13 +137,11 @@ export default function CreateMeetingFourthContent({
   const onSubmit = () => {
     if (isPending) return;
     createMeeting(form);
-
-    close();
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-      <div className="h-[300px] w-full overflow-y-scroll">
+      <div className="w-full">
         <div className="flex w-full items-center justify-between">
           <div className="rounded-lg bg-gray-200 p-2 text-b3 text-gray-600">
             📢 ‘일정 등록하기’ 버튼을 눌러 추가 일정을 등록할 수 있어요.
@@ -344,7 +350,7 @@ export default function CreateMeetingFourthContent({
         </div>
       </div>
 
-      <div className="absolute bottom-0 flex w-full items-center gap-3">
+      <div className="mt-20 flex w-full items-center gap-3">
         <Button
           type="button"
           variant="tertiary"

@@ -4,7 +4,6 @@ import MeetingCancelModal from '../organisms/MeetingCancelModal';
 import MeetingReviewEditModal from '../organisms/MeetingReviewEditModal';
 import ApplyMeetingModal from '../organisms/ApplyMeetingModal';
 import DeclareModal from '../organisms/DeclareModal';
-import CreateMeetingModal from '../organisms/CreateMeetingModal';
 import GuideBooksFilterDialog from '../organisms/GuideBooksFilterDialog';
 
 const MODAL_COMPONENTS = {
@@ -13,7 +12,6 @@ const MODAL_COMPONENTS = {
   EDIT_MEETING_REVIEW_MODAL: MeetingReviewEditModal,
   APPLY_MEETING_MODAL: ApplyMeetingModal,
   DECLARE_MODAL: DeclareModal,
-  CREATE_MEETING_MODAL: CreateMeetingModal,
   GUIDEBOOK_FILTER_DIALOG: GuideBooksFilterDialog,
 };
 

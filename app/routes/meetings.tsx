@@ -1,3 +1,5 @@
+import { metaTemplates } from '@/config/meta-templates';
+import { useNavigate, useRouteLoaderData } from 'react-router';
 import { useMemo } from 'react';
 import {
   dehydrate,
@@ -8,12 +10,10 @@ import {
   MeetingListFilterSchema,
   type MeetingListFilters,
 } from '@/schemas/meetingFilters';
+import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
 import { getMeetingList } from '@/api/meetings';
 import { getTopics } from '@/api/topics';
-import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
-import { useModalStore } from '@/stores/useModalStore';
-import { useRouteLoaderData } from 'react-router';
-import { metaTemplates } from '@/config/meta-templates';
+
 import type { Route } from './+types/meetings';
 import type { Topic } from '@/types/entities';
 import CommonTemplate from '@/components/templates/CommonTemplate';
@@ -69,7 +69,7 @@ export async function clientLoader({ request }: Route.LoaderArgs) {
 }
 
 export default function Meetings({ loaderData }: Route.ComponentProps) {
-  const { open } = useModalStore();
+  const navigate = useNavigate();
 
   const rootLoaderData = useRouteLoaderData('root');
   const user = rootLoaderData.user;
@@ -110,9 +110,7 @@ export default function Meetings({ loaderData }: Route.ComponentProps) {
           <Button
             className="fixed bottom-10 left-[50%] ml-[-75px] rounded-full text-t3"
             size="sm"
-            onClick={() =>
-              open('CREATE_MEETING_MODAL', { userRole: user.role })
-            }
+            onClick={() => navigate('/createMeeting')}
           >
             <img src="/images/icons/w_plus.svg" alt="plus_icon" />
             모임 만들기
