@@ -36,7 +36,7 @@ export default function GuideBookSelect({
       | 'planning'
       | 'operation'
       | 'support';
-    targetType: 'all' | 'planner' | 'participant';
+    targetType: 'all' | 'planner' | 'member';
     // mode: 'all' | 'online' | 'offline' | 'mix';
     level: 'all' | 'before' | 'ongoing' | 'completed';
     time: 'all' | 'under30min' | 'under1hour' | 'over1hour';
@@ -76,15 +76,6 @@ export default function GuideBookSelect({
     if (scrollHeight - scrollTop - clientHeight < SCROLL_THRESHOLD) {
       fetchNextPage();
     }
-
-    console.log('Scroll Values:', {
-      scrollTop,
-      clientHeight,
-      scrollHeight,
-      remaining: scrollHeight - scrollTop - clientHeight,
-      threshold: SCROLL_THRESHOLD,
-      canFetch: scrollHeight - scrollTop - clientHeight < SCROLL_THRESHOLD,
-    });
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   useEffect(() => {

@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useCheckAttendanceMutation from '@/hooks/api/useCheckAttendanceMutation';
 import { getMyCreatedMeetingAttendance } from '@/api/users';
@@ -22,35 +21,15 @@ import {
   SelectValue,
 } from '../atoms/select/Select';
 
-interface AttendanceItem {
-  id: number;
-  nickname: string;
-  name: string;
-  image: string;
-  isChecked: '참석' | '불참' | '지각' | '출석 안함' | '출석 완료';
-}
-
 export default function CreatedMeetingAttendanceManageContent({
   meetingId,
 }: {
   meetingId: number;
 }) {
-  const [allAttendances, setAllAttendance] = useState<AttendanceItem[][]>([]);
-
   const { data: attendance } = useQuery<MeetingAttendance>({
     queryKey: ['attendance', meetingId],
     queryFn: () => getMyCreatedMeetingAttendance(meetingId),
   });
-
-  useEffect(() => {
-    if (attendance) {
-      setAllAttendance([
-        attendance?.attendanceStatus?.flatMap(
-          (item) => item.scheduleParticipants,
-        ),
-      ]);
-    }
-  }, [attendance]);
 
   const { mutate: checkAttendance, isPending } =
     useCheckAttendanceMutation(meetingId);
@@ -101,34 +80,33 @@ export default function CreatedMeetingAttendanceManageContent({
 
                     <Select
                       value={
-                        allAttendances?.[idx]?.[index]?.isChecked === '불참' ||
-                        allAttendances?.[idx]?.[index]?.isChecked ===
-                          '출석 안함'
-                          ? '출석 안함'
-                          : '출석 완료'
+                        attendance.scheduleParticipants[index]?.isChecked ===
+                        '불참'
+                          ? 'ABSENT'
+                          : attendance.scheduleParticipants[index]
+                                ?.isChecked === '참석'
+                            ? 'PRESENT'
+                            : 'LATE'
                       }
                       onValueChange={(value) => {
+                        console.log(value);
                         if (isPending) return;
                         checkAttendance({
                           scheduleId: attendance.scheduleId,
                           userId: participant.id,
-                          status:
-                            value === '불참' || value === '출석 안함'
-                              ? 'ABSENT'
-                              : value === '참석' || value === '출석 완료'
-                                ? 'PRESENT'
-                                : 'LATE',
+                          status: value,
                         });
                       }}
                     >
                       <SelectTrigger
                         className={cn(
-                          allAttendances?.[idx]?.[index]?.isChecked ===
-                            '불참' ||
-                            allAttendances?.[idx]?.[index]?.isChecked ===
-                              '출석 안함'
+                          attendance.scheduleParticipants[index]?.isChecked ===
+                            '불참'
                             ? 'border-0 bg-gray-200'
-                            : 'bg-black text-white',
+                            : attendance.scheduleParticipants[index]
+                                  ?.isChecked === '참석'
+                              ? 'bg-black text-white'
+                              : 'bg-red-600 text-white',
                           'w-auto rounded-full text-b1',
                         )}
                       >
@@ -137,13 +115,24 @@ export default function CreatedMeetingAttendanceManageContent({
                       <SelectContent className="border-0 bg-white">
                         <SelectGroup>
                           <SelectLabel>출석 여부</SelectLabel>
-                          {['출석 완료', '출석 안함'].map(
-                            (item, idx: number) => (
-                              <SelectItem key={idx} value={item}>
-                                {item}
-                              </SelectItem>
-                            ),
-                          )}
+                          {[
+                            {
+                              label: '출석 완료',
+                              value: 'PRESENT',
+                            },
+                            {
+                              label: '출석 안함',
+                              value: 'ABSENT',
+                            },
+                            {
+                              label: '지각',
+                              value: 'LATE',
+                            },
+                          ].map((item, idx: number) => (
+                            <SelectItem key={idx} value={item.value}>
+                              {item.label}
+                            </SelectItem>
+                          ))}
                         </SelectGroup>
                       </SelectContent>
                     </Select>

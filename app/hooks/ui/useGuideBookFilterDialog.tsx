@@ -3,7 +3,7 @@ import { useModalStore } from '@/stores/useModalStore';
 import { useCallback, useEffect, useState } from 'react';
 
 export interface FilterState {
-  targetType: 'all' | 'planner' | 'participant';
+  targetType: 'all' | 'planner' | 'member';
   // mode: "online" | "offline" | "mix";
   level: 'all' | 'before' | 'ongoing' | 'completed';
   time: 'all' | 'under30min' | 'under1hour' | 'over1hour';

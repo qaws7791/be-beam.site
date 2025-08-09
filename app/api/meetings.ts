@@ -139,16 +139,6 @@ export type TopicListResult = {
   topic: Topic['topic'];
 }[];
 
-export const getMeetingTopicList = async () => {
-  const res = await axiosInstance<APIResponse<TopicListResult>>({
-    method: 'GET',
-    url: `/meetings/topics`,
-    baseURL: API_V1_BASE_URL,
-  });
-  const data = res.data;
-  return data.result;
-};
-
 export type MeetingIntroductionForHostResult = {
   id: Meeting['id'];
   name: Meeting['name'];

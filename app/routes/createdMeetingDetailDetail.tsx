@@ -1,6 +1,24 @@
+import { Suspense } from 'react';
 import { useParams } from 'react-router';
-import useCreatedMeetingDetailDetailParams from '@/hooks/business/useCreatedMeetingDetailDetailParams';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+  type DehydratedState,
+} from '@tanstack/react-query';
+import {
+  MyCreatedMeetingDetailFilterSchema,
+  type MyCreatedMeetingDetailFilters,
+} from '@/schemas/userFilters';
+import { requireAuth } from '@/lib/auth.server';
+import {
+  getMyCreatedMeetingDetail,
+  getMyCreatedMeetingSchedule,
+} from '@/api/users';
+import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
 import { metaTemplates } from '@/config/meta-templates';
+
+import type { Route } from './+types/createdMeetingDetailDetail';
 import {
   Tabs,
   TabsContent,
@@ -9,19 +27,6 @@ import {
 } from '@/components/atoms/tabs/Tabs';
 import CreatedMeetingDetailContent from '@/components/organisms/CreatedMeetingDetailContent';
 import CreatedMeetingScheduleContent from '@/components/organisms/CreatedMeetingScheduleContent';
-import { requireAuth } from '@/lib/auth.server';
-import type { Route } from './+types/createdMeetingDetailDetail';
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-  type DehydratedState,
-} from '@tanstack/react-query';
-import {
-  getMyCreatedMeetingDetail,
-  getMyCreatedMeetingSchedule,
-} from '@/api/users';
-import { Suspense } from 'react';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 
 export function meta() {
@@ -32,10 +37,20 @@ export async function loader({ request }: Route.LoaderArgs) {
   return await requireAuth(request, '/login');
 }
 
-export async function clientLoader({ params }: Route.ClientLoaderArgs) {
+export async function clientLoader({
+  request,
+  params,
+}: Route.ClientLoaderArgs) {
+  const queryClient = new QueryClient();
   const id = Number(params.meetingId);
 
-  const queryClient = new QueryClient();
+  const url = new URL(request.url);
+  const urlSearchParams = new URLSearchParams(url.search);
+  const rawFilters = Object.fromEntries(urlSearchParams.entries());
+  const parsedFilters: MyCreatedMeetingDetailFilters =
+    MyCreatedMeetingDetailFilterSchema.parse({
+      ...rawFilters,
+    });
 
   await Promise.all([
     queryClient.prefetchQuery({
@@ -50,18 +65,23 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
 
   const dehydratedState = dehydrate(queryClient);
 
-  return { dehydratedState };
+  return { filters: parsedFilters, dehydratedState };
 }
 
 export default function CreatedMeetingDetailDetail({
   loaderData,
 }: Route.ComponentProps) {
-  const { dehydratedState } = loaderData as {
+  const { filters: initialFilters, dehydratedState } = loaderData as {
+    filters: MyCreatedMeetingDetailFilters;
     dehydratedState: DehydratedState;
   };
 
   const id = Number(useParams()?.meetingId);
-  const { params, handleUpdateType } = useCreatedMeetingDetailDetailParams();
+
+  const { filters, setFilter } = useUrlFilters(
+    MyCreatedMeetingDetailFilterSchema,
+    initialFilters,
+  );
 
   const typeList = [
     { text: '🥳모임 상세', value: 'meeting' },
@@ -75,8 +95,10 @@ export default function CreatedMeetingDetailDetail({
           <Tabs
             defaultValue="meeting"
             className="text-b1"
-            value={params.type}
-            onValueChange={handleUpdateType}
+            value={filters.type}
+            onValueChange={(value) =>
+              setFilter({ type: value as 'meeting' | 'schedule' })
+            }
           >
             <TabsList className="h-auto gap-4 before:h-0">
               {typeList.map((type, idx) => (

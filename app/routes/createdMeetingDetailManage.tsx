@@ -5,8 +5,6 @@ import {
   QueryClient,
   type DehydratedState,
 } from '@tanstack/react-query';
-import { axiosInstance } from '@/lib/axios';
-import { API_V1_BASE_URL } from '@/constants/api';
 import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
 import {
   MyCreatedMeetingManageFilterSchema,
@@ -15,6 +13,7 @@ import {
 import { requireAuth } from '@/lib/auth.server';
 import {
   getMyCreatedMeetingApplicants,
+  getMyCreatedMeetingAttendance,
   getMyCreatedMeetingParticipants,
 } from '@/api/users';
 
@@ -61,14 +60,7 @@ export async function clientLoader({ request, params }: Route.LoaderArgs) {
     }),
     queryClient.prefetchQuery({
       queryKey: ['attendance', id],
-      queryFn: async () => {
-        const res = await axiosInstance({
-          baseURL: API_V1_BASE_URL,
-          url: `/meetings/${id}/mypage/attendance`,
-          method: 'GET',
-        });
-        return res.data.result;
-      },
+      queryFn: () => getMyCreatedMeetingAttendance(id),
     }),
   ]);
   const dehydratedState = dehydrate(queryClient);

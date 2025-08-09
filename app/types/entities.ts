@@ -144,6 +144,7 @@ export interface EditMeetingSchedule {
 }
 
 export interface Host {
+  id: number;
   hostName: string;
   hostImage: ImageType;
   hostInstruction: string;
@@ -247,6 +248,7 @@ export interface Participant {
 
 export interface MeetingAttendanceParticipant {
   id: number;
+  nickname: string;
   name: string;
   image: ImageType;
   isChecked: boolean;
