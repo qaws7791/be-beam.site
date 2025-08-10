@@ -11,15 +11,10 @@ import HeartIcon from '../atoms/icons/HeartIcon';
 
 export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
   const { open } = useModalStore();
-
-  const {
-    userStatus,
-    recruitmentStatus,
-    // id: meetingId
-  } = meeting;
+  const { userStatus, recruitmentStatus } = meeting;
 
   const getMeetingButtonProps = (
-    meeting: Meeting | undefined | null, // <-- meeting 타입을 optional로 변경
+    meeting: Meeting | undefined | null,
     open: (type: string, props: unknown) => void,
   ) => {
     if (!meeting) {
@@ -48,13 +43,13 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
       return {
         text: '신청하기',
         onClickHandler: () => {
-          if (userStatus) {
+          if (userStatus && !meeting.isHost) {
             open('APPLY_MEETING_MODAL', { meeting });
           } else {
             toast('로그인 후 다시 시도해주세요.');
           }
         },
-        disable: false,
+        disable: meeting.isHost,
       };
     }
 

@@ -79,6 +79,7 @@ export type MeetingDetailResult = {
   liked: Meeting['liked'];
   reviewable: Meeting['reviewable'];
   userStatus: Meeting['userStatus'];
+  isHost: Meeting['isHost'];
 };
 
 export const getMeetingDetail = async (id: number) => {
