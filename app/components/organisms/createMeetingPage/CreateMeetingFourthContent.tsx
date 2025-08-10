@@ -196,7 +196,7 @@ export default function CreateMeetingFourthContent({
                         form.recruitmentType === '소모임' && 'hidden',
                       )}
                     >
-                      {idx + 1}일차
+                      {idx + 1}일차_
                     </span>
                     일정
                   </Text>

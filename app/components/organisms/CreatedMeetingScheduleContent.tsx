@@ -8,7 +8,7 @@ import { editCreatedMeetingThirdSchema } from '@/schemas/meeting';
 import {
   getMyCreatedMeetingApplicants,
   getMyCreatedMeetingDetail,
-  getMyCreatedMeetingParticipants,
+  getMyCreatedMeetingIntro,
   getMyCreatedMeetingSchedule,
 } from '@/api/users';
 import { format } from 'date-fns';
@@ -44,12 +44,16 @@ export default function CreatedMeetingScheduleContent({
     Set<number | null>
   >(new Set());
   const [
+    { data: intro },
     { data: schedule },
     { data: detail },
     { data: applicants },
-    { data: participants },
   ] = useSuspenseQueries({
     queries: [
+      {
+        queryKey: ['createdMeetingIntro', meetingId],
+        queryFn: () => getMyCreatedMeetingIntro(meetingId),
+      },
       {
         queryKey: ['createdMeetingSchedules', meetingId],
         queryFn: () => getMyCreatedMeetingSchedule(meetingId),
@@ -61,10 +65,6 @@ export default function CreatedMeetingScheduleContent({
       {
         queryKey: ['applicants', meetingId],
         queryFn: () => getMyCreatedMeetingApplicants(meetingId),
-      },
-      {
-        queryKey: ['participants', meetingId],
-        queryFn: () => getMyCreatedMeetingParticipants(meetingId),
       },
     ],
   });
@@ -141,7 +141,10 @@ export default function CreatedMeetingScheduleContent({
     useEditMeetingScheduleMutation(meetingId);
 
   const isEdit = !(
-    applicants.applicantCount > 0 || participants.participantCount > 1
+    applicants.applicantCount > 0 ||
+    intro.meetingStatus === '모집마감' ||
+    intro.meetingStatus === '모임완료' ||
+    intro.meetingStatus === '모임중'
   );
 
   return (
