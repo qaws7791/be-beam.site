@@ -341,7 +341,10 @@ export default function CreateMeetingFourthContent({
 
                   <Button
                     type="button"
-                    className="w-full"
+                    className={cn(
+                      form.recruitmentType === '소모임' && 'hidden',
+                      'w-full',
+                    )}
                     onClick={() => {
                       remove(idx);
                       setForm({
