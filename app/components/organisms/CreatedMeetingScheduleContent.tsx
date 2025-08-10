@@ -5,7 +5,10 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import type { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { editCreatedMeetingThirdSchema } from '@/schemas/meeting';
-import { getMyCreatedMeetingSchedule } from '@/api/users';
+import {
+  getMyCreatedMeetingDetail,
+  getMyCreatedMeetingSchedule,
+} from '@/api/users';
 import { format } from 'date-fns';
 
 import type { MeetingSchedule } from '@/types/entities';
@@ -38,6 +41,11 @@ export default function CreatedMeetingScheduleContent({
     queryFn: () => getMyCreatedMeetingSchedule(meetingId),
   });
 
+  const { data: detail } = useSuspenseQuery({
+    queryKey: ['createdMeetingDetail', meetingId],
+    queryFn: () => getMyCreatedMeetingDetail(meetingId),
+  });
+
   const allSchedule = useMemo(() => {
     return schedule?.schedules.map((s: MeetingSchedule) => ({
       ...s,
@@ -46,7 +54,6 @@ export default function CreatedMeetingScheduleContent({
       meetingEndTime: s.meetingEndTime.slice(11),
     }));
   }, [schedule]);
-  console.log(allSchedule);
 
   const { control, handleSubmit, formState } = useForm<
     z.infer<typeof editCreatedMeetingThirdSchema>
@@ -125,13 +132,19 @@ export default function CreatedMeetingScheduleContent({
           <Button
             onClick={handleDeleteSelected}
             disabled={selectedScheduleIds.size === 0}
-            className="flex h-12 items-center gap-1 border-1 border-[#FF4D4C] bg-[#ffeded] px-4 py-2 text-[#FF4D4C] hover:bg-[#ffeded]"
+            className={cn(
+              detail.recruitmentType === '소모임' ? 'hidden' : 'flex',
+              'h-12 items-center gap-1 border-1 border-[#FF4D4C] bg-[#ffeded] px-4 py-2 text-[#FF4D4C] hover:bg-[#ffeded]',
+            )}
           >
             <TrashIcon />
             삭제
           </Button>
           <Button
-            className="flex h-12 min-w-40 items-center gap-2"
+            className={cn(
+              detail.recruitmentType === '소모임' ? 'hidden' : 'flex',
+              'h-12 min-w-40 items-center gap-2',
+            )}
             onClick={() => {
               const newSchedule = {
                 id: null,
@@ -177,7 +190,10 @@ export default function CreatedMeetingScheduleContent({
                 <div className="flex items-center gap-2">
                   <Checkbox
                     id={`select-schedule-${idx}`}
-                    className="mr-2 size-5 cursor-pointer data-[state=checked]:border-[#FF4D4C] data-[state=checked]:bg-[#FF4D4C]"
+                    className={cn(
+                      detail.recruitmentType === '소모임' && 'hidden',
+                      'mr-2 size-5 cursor-pointer data-[state=checked]:border-[#FF4D4C] data-[state=checked]:bg-[#FF4D4C]',
+                    )}
                     checked={selectedScheduleIds.has(idx)}
                     onCheckedChange={(value: boolean) =>
                       handleSelectOne(idx, value)
@@ -188,7 +204,14 @@ export default function CreatedMeetingScheduleContent({
                     color="gray-900"
                     className="text-left"
                   >
-                    {idx + 1}일차 일정
+                    <span
+                      className={cn(
+                        detail.recruitmentType === '소모임' && 'hidden',
+                      )}
+                    >
+                      {idx + 1}일차
+                    </span>
+                    일정
                   </Text>
                 </div>
               </AccordionTrigger>
