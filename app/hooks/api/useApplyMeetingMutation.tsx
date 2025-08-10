@@ -13,6 +13,7 @@ export default function useApplyMeetingMutation(
     onSuccess: () => {
       toast.success('모임 참여 신청을 하였습니다.');
       queryClient.invalidateQueries({ queryKey: [refetchKey] });
+      queryClient.invalidateQueries({ queryKey: ['applicants'] });
       close();
     },
     onError: (err) => {
