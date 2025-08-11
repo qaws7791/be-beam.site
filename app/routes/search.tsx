@@ -14,9 +14,11 @@ import useSearchMeetingsQuery from '@/hooks/api/useSearchMeetingsQuery';
 import useSearchTotalQuery from '@/hooks/api/useSearchTotalQuery';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { Link, useSearchParams } from 'react-router';
+import { Link, useNavigate, useSearchParams } from 'react-router';
 import type { Route } from './+types/search';
 import { metaTemplates } from '@/config/meta-templates';
+import useLikeMeetingMutation from '@/hooks/api/useLikeMeetingMutation';
+import useUserSession from '@/hooks/business/useUserSession';
 
 export function meta({ data }: Route.MetaArgs) {
   return metaTemplates.search({ query: data?.query || undefined });
@@ -76,6 +78,9 @@ export default function Search() {
 function AllSearchResults({ query }: { query: string }) {
   const [, setSearchParams] = useSearchParams();
   const { data } = useSearchTotalQuery({ search: query });
+  const { mutate: likeMeeting, isPending } = useLikeMeetingMutation('meetings');
+  const { user } = useUserSession();
+  const navigate = useNavigate();
   return (
     <>
       <div>
@@ -110,7 +115,15 @@ function AllSearchResults({ query }: { query: string }) {
                 recruitmentType={meeting.recruitmentType}
                 recruitmentStatus={meeting.recruitmentStatus}
                 address={meeting.address}
-                onClick={() => {}}
+                liked={meeting.liked}
+                isLikeBtn={user ? true : false}
+                onClick={() => navigate(`/meeting/${meeting.id}`)}
+                onLikeClick={() => {
+                  if (isPending) return;
+                  if (meeting) {
+                    likeMeeting(meeting as { id: number; liked: boolean });
+                  }
+                }}
               />
             ))}
           </div>
@@ -198,16 +211,7 @@ function AllSearchResults({ query }: { query: string }) {
         </div>
         {data?.hosts.length ? (
           <div className="mt-6 grid grid-cols-4 gap-5">
-            {data?.hosts.map((host) => (
-              <HostCard
-                key={host.id}
-                host={{
-                  profileImage: host.profileImage,
-                  nickname: host.nickname,
-                  introduction: '호스트 소개',
-                }}
-              />
-            ))}
+            {data?.hosts.map((host) => <HostCard key={host.id} host={host} />)}
           </div>
         ) : (
           <div className="mt-6 flex h-[200px] items-center justify-center">
@@ -355,16 +359,7 @@ function HostsSearchResults({ query }: { query: string }) {
       </div>
       {allHosts.length ? (
         <div className="mt-6 grid grid-cols-4 gap-5">
-          {allHosts?.map((host) => (
-            <HostCard
-              key={host.id}
-              host={{
-                profileImage: host.profileImage,
-                nickname: host.nickname,
-                introduction: host.introduction,
-              }}
-            />
-          ))}
+          {allHosts?.map((host) => <HostCard key={host.id} host={host} />)}
           {allHosts?.length > 0 && (
             <div ref={ref}>
               {isFetchingNextPage && <p>더 많은 호스트를 가져오는 중</p>}
