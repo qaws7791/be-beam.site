@@ -8,18 +8,19 @@ import { Button } from '../atoms/button/Button';
 import toast from 'react-hot-toast';
 import HeartFillIcon from '../atoms/icons/HeartFillIcon';
 import HeartIcon from '../atoms/icons/HeartIcon';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../atoms/tooltip/Tooltip';
 
 export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
   const { open } = useModalStore();
-
-  const {
-    userStatus,
-    recruitmentStatus,
-    // id: meetingId
-  } = meeting;
+  const { userStatus, recruitmentStatus } = meeting;
 
   const getMeetingButtonProps = (
-    meeting: Meeting | undefined | null, // <-- meeting 타입을 optional로 변경
+    meeting: Meeting | undefined | null,
     open: (type: string, props: unknown) => void,
   ) => {
     if (!meeting) {
@@ -48,13 +49,13 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
       return {
         text: '신청하기',
         onClickHandler: () => {
-          if (userStatus) {
+          if (userStatus && !meeting.isHost) {
             open('APPLY_MEETING_MODAL', { meeting });
           } else {
             toast('로그인 후 다시 시도해주세요.');
           }
         },
-        disable: false,
+        disable: meeting.isHost,
       };
     }
 
@@ -68,7 +69,7 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
         onClickHandler: () =>
           open('CANCEL_MEETING_MODAL', {
             meetingId: meeting.id,
-            statusType: 'applying', // participating
+            statusType: 'applying',
             refetchKey: 'meeting',
           }),
         disable: false,
@@ -147,7 +148,7 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
           toast('로그인 후 다시 시도해주세요.');
         }
       },
-      disable: false,
+      disable: meeting.isHost,
     };
   };
 
@@ -190,14 +191,36 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
           {meeting.likesCount}
         </Button>
 
-        <Button
-          size="lg"
-          className="flex-1 gap-1 text-t3 text-white"
-          onClick={onClickHandler}
-          disabled={disable}
-        >
-          {buttonText}
-        </Button>
+        {buttonText === '신청하기' && meeting.isHost ? (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span tabIndex={-1} className="flex flex-1">
+                  <Button
+                    size="lg"
+                    className="flex-1 gap-1 text-t3 text-white"
+                    onClick={onClickHandler}
+                    disabled={disable}
+                  >
+                    {buttonText}
+                  </Button>
+                </span>
+              </TooltipTrigger>
+              <TooltipContent className="text-center">
+                <p>호스트는 모임 신청을 할 수 없습니다.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ) : (
+          <Button
+            size="lg"
+            className="flex-1 gap-1 text-t3 text-white"
+            onClick={onClickHandler}
+            disabled={disable}
+          >
+            {buttonText}
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -82,6 +82,7 @@ export interface Meeting {
   liked: boolean;
   reviewable: boolean;
   userStatus: string;
+  isHost: boolean;
 }
 
 export interface MeetingApplicants {
@@ -124,6 +125,7 @@ export interface MeetingAttendanceSchedule {
   checkedCount: number;
   totalCount: number;
   scheduleParticipants: AttendanceScheduleParticipants[];
+  attendanceCheckAvailable: boolean;
 }
 
 export interface AttendanceScheduleParticipants {

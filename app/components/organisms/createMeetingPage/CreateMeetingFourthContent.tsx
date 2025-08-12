@@ -21,6 +21,7 @@ import { DateInput } from '@/components/molecules/DateInput';
 import { TimeInput } from '@/components/molecules/TimeInput';
 import { AddressInput } from '@/components/molecules/AddressInput';
 import { useNavigate } from 'react-router';
+import { cn } from '@/lib/tailwind';
 
 interface CreateMeetingFourthContentProps {
   tab: number;
@@ -150,7 +151,10 @@ export default function CreateMeetingFourthContent({
           <Button
             type="button"
             size="sm"
-            className="px-5"
+            className={cn(
+              form.recruitmentType === '소모임' && 'hidden',
+              'px-5',
+            )}
             onClick={() => {
               const newSchedule = {
                 meetingDate: '',
@@ -187,7 +191,14 @@ export default function CreateMeetingFourthContent({
                     color="gray-900"
                     className="text-left"
                   >
-                    {idx + 1}일차 일정
+                    <span
+                      className={cn(
+                        form.recruitmentType === '소모임' && 'hidden',
+                      )}
+                    >
+                      {idx + 1}일차_
+                    </span>
+                    일정
                   </Text>
                 </AccordionTrigger>
 
@@ -330,7 +341,10 @@ export default function CreateMeetingFourthContent({
 
                   <Button
                     type="button"
-                    className="w-full"
+                    className={cn(
+                      form.recruitmentType === '소모임' && 'hidden',
+                      'w-full',
+                    )}
                     onClick={() => {
                       remove(idx);
                       setForm({

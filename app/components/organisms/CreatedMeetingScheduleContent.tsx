@@ -1,11 +1,16 @@
 import { useCallback, useMemo, useState } from 'react';
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSuspenseQueries } from '@tanstack/react-query';
 import useEditMeetingScheduleMutation from '@/hooks/api/useEditMeetingScheduleMutation';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import type { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { editCreatedMeetingThirdSchema } from '@/schemas/meeting';
-import { getMyCreatedMeetingSchedule } from '@/api/users';
+import {
+  getMyCreatedMeetingApplicants,
+  getMyCreatedMeetingDetail,
+  getMyCreatedMeetingIntro,
+  getMyCreatedMeetingSchedule,
+} from '@/api/users';
 import { format } from 'date-fns';
 
 import type { MeetingSchedule } from '@/types/entities';
@@ -23,6 +28,12 @@ import {
 } from '../atoms/accordion/Accrodion';
 import { Checkbox } from '../atoms/checkbox/Checkbox';
 import TrashIcon from '../atoms/icons/TrashIcon';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../atoms/tooltip/Tooltip';
 
 export default function CreatedMeetingScheduleContent({
   meetingId,
@@ -32,10 +43,30 @@ export default function CreatedMeetingScheduleContent({
   const [selectedScheduleIds, setSelectedScheduleIds] = useState<
     Set<number | null>
   >(new Set());
-
-  const { data: schedule } = useSuspenseQuery({
-    queryKey: ['createdMeetingSchedules', meetingId],
-    queryFn: () => getMyCreatedMeetingSchedule(meetingId),
+  const [
+    { data: intro },
+    { data: schedule },
+    { data: detail },
+    { data: applicants },
+  ] = useSuspenseQueries({
+    queries: [
+      {
+        queryKey: ['createdMeetingIntro', meetingId],
+        queryFn: () => getMyCreatedMeetingIntro(meetingId),
+      },
+      {
+        queryKey: ['createdMeetingSchedules', meetingId],
+        queryFn: () => getMyCreatedMeetingSchedule(meetingId),
+      },
+      {
+        queryKey: ['createdMeetingDetail', meetingId],
+        queryFn: () => getMyCreatedMeetingDetail(meetingId),
+      },
+      {
+        queryKey: ['applicants', meetingId],
+        queryFn: () => getMyCreatedMeetingApplicants(meetingId),
+      },
+    ],
   });
 
   const allSchedule = useMemo(() => {
@@ -46,7 +77,6 @@ export default function CreatedMeetingScheduleContent({
       meetingEndTime: s.meetingEndTime.slice(11),
     }));
   }, [schedule]);
-  console.log(allSchedule);
 
   const { control, handleSubmit, formState } = useForm<
     z.infer<typeof editCreatedMeetingThirdSchema>
@@ -110,6 +140,13 @@ export default function CreatedMeetingScheduleContent({
   const { mutate: editCreateMeeting, isPending } =
     useEditMeetingScheduleMutation(meetingId);
 
+  const isEdit = !(
+    applicants.applicantCount > 0 ||
+    intro.meetingStatus === '모집마감' ||
+    intro.meetingStatus === '모임완료' ||
+    intro.meetingStatus === '모임중'
+  );
+
   return (
     <div className="w-full py-8">
       <div className="flex w-full items-center justify-between">
@@ -125,13 +162,19 @@ export default function CreatedMeetingScheduleContent({
           <Button
             onClick={handleDeleteSelected}
             disabled={selectedScheduleIds.size === 0}
-            className="flex h-12 items-center gap-1 border-1 border-[#FF4D4C] bg-[#ffeded] px-4 py-2 text-[#FF4D4C] hover:bg-[#ffeded]"
+            className={cn(
+              (detail.recruitmentType === '소모임' || !isEdit) && 'hidden',
+              'h-12 items-center gap-1 border-1 border-[#FF4D4C] bg-[#ffeded] px-4 py-2 text-[#FF4D4C] hover:bg-[#ffeded]',
+            )}
           >
             <TrashIcon />
             삭제
           </Button>
           <Button
-            className="flex h-12 min-w-40 items-center gap-2"
+            className={cn(
+              (detail.recruitmentType === '소모임' || !isEdit) && 'hidden',
+              'h-12 min-w-40 items-center gap-2',
+            )}
             onClick={() => {
               const newSchedule = {
                 id: null,
@@ -152,7 +195,6 @@ export default function CreatedMeetingScheduleContent({
 
       <form
         onSubmit={handleSubmit((data) => {
-          console.log(data);
           if (isPending) return;
           editCreateMeeting(data);
         })}
@@ -177,7 +219,11 @@ export default function CreatedMeetingScheduleContent({
                 <div className="flex items-center gap-2">
                   <Checkbox
                     id={`select-schedule-${idx}`}
-                    className="mr-2 size-5 cursor-pointer data-[state=checked]:border-[#FF4D4C] data-[state=checked]:bg-[#FF4D4C]"
+                    className={cn(
+                      (detail.recruitmentType === '소모임' || !isEdit) &&
+                        'hidden',
+                      'mr-2 size-5 cursor-pointer data-[state=checked]:border-[#FF4D4C] data-[state=checked]:bg-[#FF4D4C]',
+                    )}
                     checked={selectedScheduleIds.has(idx)}
                     onCheckedChange={(value: boolean) =>
                       handleSelectOne(idx, value)
@@ -188,7 +234,14 @@ export default function CreatedMeetingScheduleContent({
                     color="gray-900"
                     className="text-left"
                   >
-                    {idx + 1}일차 일정
+                    <span
+                      className={cn(
+                        detail.recruitmentType === '소모임' && 'hidden',
+                      )}
+                    >
+                      {idx + 1}일차_
+                    </span>
+                    일정
                   </Text>
                 </div>
               </AccordionTrigger>
@@ -205,6 +258,7 @@ export default function CreatedMeetingScheduleContent({
                         onChange={field.onChange}
                         placeholder="YYYY.MM.DD"
                         className="mt-2"
+                        disabled={!isEdit}
                       />
                     )}
                   />
@@ -223,6 +277,7 @@ export default function CreatedMeetingScheduleContent({
                           placeholder="00:00 AM/PM"
                           className="w-full"
                           format12Hour={true}
+                          disabled={!isEdit}
                         />
                       )}
                     />
@@ -237,6 +292,7 @@ export default function CreatedMeetingScheduleContent({
                           placeholder="00:00 AM/PM"
                           className="w-full"
                           format12Hour={true}
+                          disabled={!isEdit}
                         />
                       )}
                     />
@@ -262,6 +318,7 @@ export default function CreatedMeetingScheduleContent({
                             }}
                             placeholder="모집 장소를 선택해주세요."
                             className="mt-2 w-full"
+                            disabled={!isEdit}
                           />
                         )}
                       />
@@ -273,13 +330,34 @@ export default function CreatedMeetingScheduleContent({
           </Accordion>
         ))}
         <div className="flex w-full justify-center">
-          <Button
-            className="mt-5 min-w-100"
-            type="submit"
-            disabled={!formState.isValid}
-          >
-            수정 완료
-          </Button>
+          {!isEdit ? (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span tabIndex={-1}>
+                    <Button
+                      className="mt-5 min-w-100"
+                      type="submit"
+                      disabled={!formState.isValid || !isEdit}
+                    >
+                      수정 완료
+                    </Button>
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent className="text-center">
+                  <p>신청자가 없을 때만 스케줄 수정 가능합니다.</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ) : (
+            <Button
+              className="mt-5 min-w-100"
+              type="submit"
+              disabled={!formState.isValid || !isEdit}
+            >
+              수정 완료
+            </Button>
+          )}
         </div>
       </form>
     </div>
