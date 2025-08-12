@@ -8,6 +8,7 @@ import {
 } from '@/utils/cookie';
 import { redirect, type unstable_MiddlewareFunction } from 'react-router';
 import { AsyncLocalStorage } from 'node:async_hooks';
+import { hasPermission, type UserRole } from '@/constants/roles';
 
 const requestStorage = new AsyncLocalStorage<{ request: Request }>();
 
@@ -91,14 +92,19 @@ export const sessionMiddleware: unstable_MiddlewareFunction = async (
  * @description
  * 로그인 상태를 확인하여 로그인되지 않은 경우 로그인 페이지로 리다이렉션
  */
-export const requireAuthMiddleware: unstable_MiddlewareFunction = async ({
-  context,
-}) => {
-  const user = context.get(userContext);
-  if (!user) {
-    return redirect('/login');
-  }
-};
+export const requireAuthMiddleware: (
+  role: UserRole,
+) => unstable_MiddlewareFunction =
+  (role) =>
+  async ({ context }) => {
+    const user = context.get(userContext);
+
+    if (!user || !hasPermission(user.role, role)) {
+      return redirect('/login');
+    }
+
+    return;
+  };
 
 async function tryGetProfile(cookieHeader: string) {
   try {
