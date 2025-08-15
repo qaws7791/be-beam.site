@@ -54,7 +54,7 @@ function AlertDialogContent({
       <AlertDialogPrimitive.Content
         data-slot="alert-dialog-content"
         className={cn(
-          'fixed top-[50%] left-[50%] z-50 grid w-full max-w-[328px] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-xl border bg-white p-6 shadow-[0_8px_36px_0_rgba(0,0,0,0.15)] duration-200 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+          'fixed top-[50%] left-[50%] z-50 grid w-[328px] translate-x-[-50%] translate-y-[-50%] rounded-xl bg-white p-6 shadow-[0_8px_36px_0_rgba(0,0,0,0.15)] duration-200 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
           className,
         )}
         {...props}
@@ -70,7 +70,7 @@ function AlertDialogHeader({
   return (
     <div
       data-slot="alert-dialog-header"
-      className={cn('flex flex-col gap-2 text-center', className)}
+      className={cn('flex flex-col gap-6.5 text-center', className)}
       {...props}
     />
   );
@@ -83,7 +83,7 @@ function AlertDialogFooter({
   return (
     <div
       data-slot="alert-dialog-footer"
-      className={cn('flex w-full gap-2', className)}
+      className={cn('flex w-full gap-2 overflow-auto pt-6.5', className)}
       {...props}
     />
   );
@@ -109,7 +109,7 @@ function AlertDialogDescription({
   return (
     <AlertDialogPrimitive.Description
       data-slot="alert-dialog-description"
-      className={cn('text-b1 text-gray-700', className)}
+      className={cn('text-b3 text-gray-700', className)}
       {...props}
     />
   );
@@ -124,7 +124,7 @@ function AlertDialogAction({
       className={cn(
         focusVisibleRing(),
         buttonVariants({ size: 'sm' }),
-        'w-full flex-1',
+        'w-full flex-1 p-0',
         className,
       )}
       {...props}
@@ -141,7 +141,7 @@ function AlertDialogCancel({
       className={cn(
         focusVisibleRing(),
         buttonVariants({ variant: 'tertiary', size: 'sm' }),
-        'w-full flex-1',
+        'w-full flex-1 p-0',
         className,
       )}
       {...props}
