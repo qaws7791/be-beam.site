@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { createReviewSchema } from '@/schemas/reviews';
 import useCreateReviewMutation from '@/hooks/api/useCreateReviewMutation';
 
-import type { MeetingDetailType } from '@/types/components';
+import type { Meeting } from '@/types/entities';
 import {
   Dialog,
   DialogContent,
@@ -21,7 +21,7 @@ import { Button } from '../atoms/button/Button';
 
 export default function MeetingReviewEditModal() {
   const { isOpen, modalProps, close } = useModalStore();
-  const meeting = modalProps.meeting as MeetingDetailType;
+  const meeting = modalProps.meeting as Meeting;
 
   const createReviewMutation = useCreateReviewMutation();
 
@@ -31,10 +31,12 @@ export default function MeetingReviewEditModal() {
     images: File[];
   }) => {
     createReviewMutation.mutate({
-      rating: review.rating,
-      text: review.content,
-      images: review.images,
-      meetingId: (modalProps.meeting as MeetingDetailType).id,
+      data: {
+        rating: review.rating,
+        text: review.content,
+        images: review.images,
+      },
+      meetingId: (modalProps.meeting as Meeting).id,
     });
     close();
   };
@@ -119,11 +121,12 @@ export default function MeetingReviewEditModal() {
             <Controller
               name="images"
               control={control}
-              render={({ field }) => (
+              render={({ field, fieldState }) => (
                 <ImageInput
-                  images={field.value}
-                  onImagesChange={field.onChange}
                   maxImages={10}
+                  newImages={field.value || []}
+                  onChange={(data) => field.onChange(data)}
+                  error={fieldState.error?.message}
                 />
               )}
             />

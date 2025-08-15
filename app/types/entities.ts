@@ -2,7 +2,7 @@ export type MeetingRecruitmentType = '정기모임' | '소모임';
 export type MeetingRecruitmentStatus =
   | '모집예정'
   | '모집중'
-  | '모집종료'
+  | '모집마감'
   | '모임중'
   | '모임완료';
 
@@ -10,12 +10,19 @@ export type ImageType = string;
 
 export type LinkType = string;
 
+export interface GuidebookSummary {
+  id: number;
+  title: string;
+  thumbnailImage: ImageType;
+  description: string;
+}
+
 export interface Guidebook {
   id: number;
   guidebookType: string;
   title: string;
   description: string;
-  image: ImageType[];
+  images: ImageType[];
   hashtags: string[];
   level: string;
   targetType: string;
@@ -28,7 +35,8 @@ export interface Guidebook {
 export interface GuidebookRecommendation {
   id: number;
   title: string;
-  image: ImageType;
+  thumbnailImage: string;
+  description: string;
 }
 
 export interface Topic {
@@ -48,8 +56,7 @@ export interface Meeting {
   id: number;
   recruitmentStatus: MeetingRecruitmentStatus;
   recruitmentType: MeetingRecruitmentType;
-  guidebookReferenceId: number | null;
-  guidebookReferenceTitle: string | null;
+  guidebook: GuidebookRecommendation;
   selectionType: string;
   name: string;
   topic: string;
@@ -75,12 +82,73 @@ export interface Meeting {
   liked: boolean;
   reviewable: boolean;
   userStatus: string;
+  isHost: boolean;
+}
+
+export interface MeetingApplicants {
+  applicantCount: number;
+  applicants: Applicants[];
+}
+
+export interface Applicants {
+  id: number;
+  nickname: string;
+  name: string;
+  image: string;
+  phoneNumber: string;
+  joinReason: string;
+  userStatus: string;
+}
+
+export interface MeetingParticipants {
+  participantCount: number;
+  participants: Participants[];
+}
+
+export interface Participants {
+  id: number;
+  authority: string;
+  name: string;
+  nickname: string;
+  phoneNumber: string;
+  image: string;
+  userStatus: string;
+}
+
+export interface MeetingAttendance {
+  attendanceStatus: MeetingAttendanceSchedule[];
+}
+
+export interface MeetingAttendanceSchedule {
+  scheduleId: number;
+  round: number;
+  checkedCount: number;
+  totalCount: number;
+  scheduleParticipants: AttendanceScheduleParticipants[];
+  attendanceCheckAvailable: boolean;
+}
+
+export interface AttendanceScheduleParticipants {
+  id: number;
+  nickname: string;
+  name: string;
+  image: string;
+  isChecked: '참석' | '불참' | '지각';
+}
+
+export interface EditMeetingSchedule {
+  id: null | number;
+  meetingDate: string;
+  meetingStartTime: string;
+  meetingEndTime: string;
+  address: string;
+  addressDetail: string;
 }
 
 export interface Host {
   id: number;
   hostName: string;
-  hostImage: string;
+  hostImage: ImageType;
   hostInstruction: string;
   followCount: number;
   openingMeetingCount: number;
@@ -95,11 +163,11 @@ export interface Host {
 }
 
 export interface UserInformation {
-  name: string;
-  phoneNumber: string;
+  name: string | null;
+  phoneNumber: string | null;
   email: string;
-  birthday: string;
-  gender: '여성' | '남성';
+  birthday: string | null;
+  gender: '여성' | '남성' | null;
   /** 약관 동의 여부 */
   terms: boolean;
   userTerms: boolean;
@@ -117,11 +185,22 @@ export interface MeetingSummary {
   id?: number;
   name: string;
   recruitmentType: string;
-  recruitmentStatus: string;
+  recruitmentStatus?: string;
   image: ImageType;
   meetingStartTime: string;
   address: string;
   liked?: boolean;
+}
+
+export interface MyPageMeetingSummary {
+  id: number;
+  name: string;
+  recruitmentType: string;
+  recruitmentStatus: string;
+  thumbnailImage: string;
+  meetingStartTime: string;
+  address: string;
+  userStatus: string;
 }
 
 export interface Review {
@@ -136,11 +215,17 @@ export interface Review {
   /** 로그인한 사용자 정보 */
   liked: boolean;
   myReview: boolean;
+  meeting: {
+    id: number;
+    name: string;
+    recruitmentType: string;
+    image: string;
+  };
 }
 
 export interface Banner {
   bannerId: number;
-  bannerImg: ImageType;
+  bannerImage: string;
   bannerUrl: string;
 }
 
@@ -165,6 +250,7 @@ export interface Participant {
 
 export interface MeetingAttendanceParticipant {
   id: number;
+  nickname: string;
   name: string;
   image: ImageType;
   isChecked: boolean;

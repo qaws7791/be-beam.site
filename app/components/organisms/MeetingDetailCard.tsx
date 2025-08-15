@@ -1,23 +1,26 @@
+import useLikeMeetingMutation from '@/hooks/api/useLikeMeetingMutation';
 import { useModalStore } from '@/stores/useModalStore';
 
-import MeetingDetailCardTop from './MeetingDetailCardTop';
-import { Button } from '../atoms/button/Button';
 import type { Meeting } from '@/types/entities';
 import { cn } from '@/lib/tailwind';
+import MeetingDetailCardTop from './MeetingDetailCardTop';
+import { Button } from '../atoms/button/Button';
 import toast from 'react-hot-toast';
-import useLikeMeetingMutation from '@/hooks/api/useLikeMeetingMutation';
+import HeartFillIcon from '../atoms/icons/HeartFillIcon';
+import HeartIcon from '../atoms/icons/HeartIcon';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../atoms/tooltip/Tooltip';
 
 export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
   const { open } = useModalStore();
-
-  const {
-    userStatus,
-    recruitmentStatus,
-    // id: meetingId
-  } = meeting;
+  const { userStatus, recruitmentStatus } = meeting;
 
   const getMeetingButtonProps = (
-    meeting: Meeting | undefined | null, // <-- meeting 타입을 optional로 변경
+    meeting: Meeting | undefined | null,
     open: (type: string, props: unknown) => void,
   ) => {
     if (!meeting) {
@@ -36,7 +39,6 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
       };
     }
 
-    // 나중에 개인정보 비어있을 시에 신청 못하게 막기
     if (
       recruitmentStatus === '모집중' &&
       (!userStatus ||
@@ -47,26 +49,28 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
       return {
         text: '신청하기',
         onClickHandler: () => {
-          if (userStatus) {
+          if (userStatus && !meeting.isHost) {
             open('APPLY_MEETING_MODAL', { meeting });
           } else {
             toast('로그인 후 다시 시도해주세요.');
           }
         },
-        disable: false,
+        disable: meeting.isHost,
       };
     }
 
     if (
       (recruitmentStatus === '모집중' &&
         (userStatus === '신청중' || userStatus === '확정')) ||
-      (recruitmentStatus === '모집종료' && userStatus === '확정')
+      (recruitmentStatus === '모집마감' && userStatus === '확정')
     ) {
       return {
         text: '신청 취소하기',
         onClickHandler: () =>
           open('CANCEL_MEETING_MODAL', {
-            statusType: 'applying', // participating
+            meetingId: meeting.id,
+            statusType: 'applying',
+            refetchKey: 'meeting',
           }),
         disable: false,
       };
@@ -86,6 +90,7 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
           open('CANCEL_MEETING_MODAL', {
             meetingId: meeting.id,
             statusType: 'participating', // applying
+            refetchKey: 'meeting',
           }),
         disable: false,
       };
@@ -98,9 +103,8 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
       };
     }
 
-    // 거절당하거나 신청취소완료시 재신청 불가능하게 하려면 여기 추가 => 모집 종료나 모임 중
     if (
-      recruitmentStatus === '모집종료' &&
+      recruitmentStatus === '모집마감' &&
       (!userStatus ||
         userStatus === '거절' ||
         userStatus === '신청전' ||
@@ -120,7 +124,8 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
         userStatus === '신청전' ||
         userStatus === '신청중' ||
         userStatus === '신청취소완료' ||
-        userStatus === '중도이탈완료')
+        userStatus === '중도이탈완료' ||
+        userStatus === '참여완료')
     ) {
       return {
         text: '모임 중',
@@ -143,7 +148,7 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
           toast('로그인 후 다시 시도해주세요.');
         }
       },
-      disable: false,
+      disable: meeting.isHost,
     };
   };
 
@@ -167,7 +172,7 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
             meeting?.liked
               ? 'border-primary bg-primary-light text-primary'
               : 'border-gray-300 text-gray-700',
-            'gap-1 px-6 text-t3',
+            'gap-1 px-6 text-t1',
           )}
           onClick={() => {
             if (userStatus) {
@@ -178,26 +183,44 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
             }
           }}
         >
-          좋아요
-          <img
-            className="h-4 w-4"
-            src={
-              meeting?.liked
-                ? '/images/icons/orange_fill_like.svg'
-                : '/images/icons/like.svg'
-            }
-            alt="like_icon"
-          />
+          {meeting?.liked ? (
+            <HeartFillIcon width={28} height={28} />
+          ) : (
+            <HeartIcon width={28} height={28} />
+          )}
+          {meeting.likesCount}
         </Button>
 
-        <Button
-          size="lg"
-          className="flex-1 gap-1 text-t3 text-white"
-          onClick={onClickHandler}
-          disabled={disable}
-        >
-          {buttonText}
-        </Button>
+        {buttonText === '신청하기' && meeting.isHost ? (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span tabIndex={-1} className="flex flex-1">
+                  <Button
+                    size="lg"
+                    className="flex-1 gap-1 text-t3 text-white"
+                    onClick={onClickHandler}
+                    disabled={disable}
+                  >
+                    {buttonText}
+                  </Button>
+                </span>
+              </TooltipTrigger>
+              <TooltipContent className="text-center">
+                <p>호스트는 모임 신청을 할 수 없습니다.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ) : (
+          <Button
+            size="lg"
+            className="flex-1 gap-1 text-t3 text-white"
+            onClick={onClickHandler}
+            disabled={disable}
+          >
+            {buttonText}
+          </Button>
+        )}
       </div>
     </div>
   );

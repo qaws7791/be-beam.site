@@ -11,7 +11,7 @@ import { axiosInstance } from '@/lib/axios';
 export type HomeBannersResult = {
   banners: {
     bannerId: Banner['bannerId'];
-    bannerImg: Banner['bannerImg'];
+    bannerImage: Banner['bannerImage'];
     bannerUrl: Banner['bannerUrl'];
   }[];
 };
@@ -25,77 +25,32 @@ export const getBanner = async () => {
   return res.data.result;
 };
 
-export type LikesMeetingsParams = {
+export type RecommendationMeetingsParams = {
   type: 'all' | 'regular' | 'small';
+  topic: 'likes' | 'random' | 'recent';
 };
-export type LikesMeetingsResult = {
+
+export type RecommendationMeeting = {
   id: Meeting['id'];
   name: Meeting['name'];
   recruitmentStatus: Meeting['recruitmentStatus'];
   recruitmentType: Meeting['recruitmentType'];
-  meetingDateTime: MeetingSchedule['meetingStartTime'];
+  meetingStartTime: MeetingSchedule['meetingStartTime'];
   thumbnailImage: ImageType;
   liked: Meeting['liked'];
   address: Meeting['address'];
-  addressDetail: MeetingSchedule['addressDetail'];
-}[];
+};
 
-export const getLikesMeetings = async ({ type }: LikesMeetingsParams) => {
-  const res = await axiosInstance<APIResponse<LikesMeetingsResult>>({
-    method: 'GET',
-    url: `/home/likes-meetings?type=${type}`,
+export type RecommendationMeetingsResult = RecommendationMeeting[];
+
+export const getRecommendationMeeting = async (
+  topic: RecommendationMeetingsParams['topic'],
+  type: RecommendationMeetingsParams['type'],
+) => {
+  const res = await axiosInstance<APIResponse<RecommendationMeetingsResult>>({
     baseURL: API_V1_BASE_URL,
-  });
-  const data = res.data;
-  return data.result;
-};
-
-export type RandomMeetingsParams = {
-  type: 'all' | 'regular' | 'small';
-};
-export type RandomMeetingsResult = {
-  id: Meeting['id'];
-  name: Meeting['name'];
-  recruitmentStatus: Meeting['recruitmentStatus'];
-  recruitmentType: Meeting['recruitmentType'];
-  meetingDateTime: MeetingSchedule['meetingStartTime'];
-  thumbnailImage: ImageType;
-  liked: Meeting['liked'];
-  address: Meeting['address'];
-  addressDetail: MeetingSchedule['addressDetail'];
-}[];
-
-export const getRandomMeetings = async ({ type }: LikesMeetingsParams) => {
-  const res = await axiosInstance<APIResponse<LikesMeetingsResult>>({
+    url: `/home/${topic}-meetings?type=${type}`,
     method: 'GET',
-    url: `/home/random-meetings?type=${type}`,
-    baseURL: API_V1_BASE_URL,
   });
-  const data = res.data;
-  return data.result;
-};
-
-export type RecentMeetingsParams = {
-  type: 'all' | 'regular' | 'small';
-};
-export type RecentMeetingsResult = {
-  id: Meeting['id'];
-  name: Meeting['name'];
-  recruitmentStatus: Meeting['recruitmentStatus'];
-  recruitmentType: Meeting['recruitmentType'];
-  meetingDateTime: MeetingSchedule['meetingStartTime'];
-  thumbnailImage: ImageType;
-  liked: Meeting['liked'];
-  address: Meeting['address'];
-  addressDetail: MeetingSchedule['addressDetail'];
-}[];
-
-export const getRecentMeetings = async ({ type }: LikesMeetingsParams) => {
-  const res = await axiosInstance<APIResponse<LikesMeetingsResult>>({
-    method: 'GET',
-    url: `/home/recent-meetings?type=${type}`,
-    baseURL: API_V1_BASE_URL,
-  });
-  const data = res.data;
-  return data.result;
+  return res.data.result;
 };

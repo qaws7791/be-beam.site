@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 
 export default function useHostFollowAndFollowCancelMutation(
   id: number,
-  host: Host,
+  host: Omit<Host, 'id'>,
   refetchKey: string,
 ) {
   const queryClient = useQueryClient();
@@ -27,7 +27,6 @@ export default function useHostFollowAndFollowCancelMutation(
           : '호스트를 팔로우하였습니다.',
       );
       queryClient.invalidateQueries({ queryKey: [refetchKey] });
-      close();
     },
     onError: (err) => {
       toast.error(

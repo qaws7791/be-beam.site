@@ -1,66 +1,80 @@
-import { useMemo } from 'react';
-import useGuideBooksQuery from '@/hooks/api/useGuideBooksQuery';
-import useInfiniteScroll from '@/hooks/ui/useInfiniteScroll';
-import useGuideBooksParams from '@/hooks/business/useGuideBooksParams';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
+import {
+  GuideBookListFilterSchema,
+  type GuideBookListFilters,
+} from '@/schemas/guideBooksFilters';
+import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
+import { getGuideBookList } from '@/api/guideBooks';
+import { metaTemplates } from '@/config/meta-templates';
 
+import type { Route } from './+types/guideBooks';
 import type { FilterOption } from '@/types/components';
 import { Tabs } from '@/components/atoms/tabs/Tabs';
-import GuideBooksFilterDialog from '@/components/organisms/GuideBooksFilterDialog';
 import GuideBooksFilterControls from '@/components/organisms/TargetTypeTab';
 import GuideBooksContent from '@/components/sections/GuideBooksContent';
-import useGuidBookFilterDialog, {
-  type FilterState,
-} from '@/hooks/ui/useGuideBookFilterDialog';
-import LoadingSpinner from '@/components/molecules/LoadingSpinner';
-
-// interface GuideBookFilters {
-//   type: string;
-//   targetType: string;
-//   level: string;
-//   time: string;
-// }
+// import SearchInput from '@/components/molecules/SearchInput';
 
 export function meta() {
-  return [
-    { title: '가이드북 페이지' },
-    { name: 'description', content: '필요한 가이드북을 확인하세요!' },
-  ];
+  return metaTemplates.guideBooks();
 }
 
-// function getFiltersFromUrl(request: Request): GuideBookFilters {
-//   const url = new URL(request.url);
-//   const searchParams = url.searchParams;
+export async function loader({ request }: Route.LoaderArgs) {
+  const queryClient = new QueryClient();
 
-//   return {
-//     type: searchParams.get('type') || 'all',
-//     targetType: searchParams.get('target-type') || 'all',
-//     level: searchParams.get('level') || 'all',
-//     time: searchParams.get('time') || 'all',
-//   };
-// }
+  const url = new URL(request.url);
+  const urlSearchParams = new URLSearchParams(url.search);
+  const rawFilters = Object.fromEntries(urlSearchParams.entries());
+  const parsedFilters: GuideBookListFilters = GuideBookListFilterSchema.parse({
+    ...rawFilters,
+  });
 
-// export async function loader({ request }: Route.LoaderArgs) {
-//   const filters = getFiltersFromUrl(request);
-//   console.log(filters);
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: ['guideBooks', parsedFilters],
+    queryFn: ({ pageParam }) => getGuideBookList(parsedFilters, pageParam),
+    initialPageParam: 0,
+  });
 
-//   await queryClient.prefetchQuery({
-//     queryKey: ['guideBooks', filters],
-//     queryFn: async () => {
-//       const res = await axiosInstanceV1({
-//         method: 'GET',
-//         url: `guidebooks?type=${filters.type}&target-type=${filters.targetType}&level=${filters.level}&time=${filters.time}&cursor=0&size=9`,
-//       });
-//       const data = res.data;
-//       return data;
-//     },
-//   });
+  const dehydratedState = dehydrate(queryClient);
+  return {
+    dehydratedState,
+    filters: parsedFilters,
+  };
+}
 
-//   return {
-//     dehydratedState: dehydrate(queryClient),
-//   };
-// }
+export async function clientLoader({ request }: Route.LoaderArgs) {
+  const queryClient = new QueryClient();
 
-export default function GuideBooks() {
+  const url = new URL(request.url);
+  const urlSearchParams = new URLSearchParams(url.search);
+  const rawFilters = Object.fromEntries(urlSearchParams.entries());
+  const parsedFilters: GuideBookListFilters = GuideBookListFilterSchema.parse({
+    ...rawFilters,
+  });
+
+  await queryClient.prefetchInfiniteQuery({
+    queryKey: ['guideBooks', parsedFilters],
+    queryFn: ({ pageParam }) => getGuideBookList(parsedFilters, pageParam),
+    initialPageParam: 0,
+  });
+
+  const dehydratedState = dehydrate(queryClient);
+  return {
+    dehydratedState,
+    filters: parsedFilters,
+  };
+}
+
+export default function GuideBooks({ loaderData }: Route.ComponentProps) {
+  const { dehydratedState, filters: initialFilters } = loaderData;
+  const { filters, setFilter } = useUrlFilters(
+    GuideBookListFilterSchema,
+    initialFilters,
+  );
+
   const typeList: FilterOption[] = [
     {
       text: '전체',
@@ -88,88 +102,48 @@ export default function GuideBooks() {
     },
   ];
 
-  const {
-    params,
-    handleUpdateType,
-    handleUpdateTargetType,
-    handleUpdateLevel,
-    handleUpdateTime,
-  } = useGuideBooksParams();
-
-  const {
-    isOpen,
-    setIsOpen,
-    filter,
-    setFilter,
-    openDialog,
-    closeDialog,
-    updateFilter,
-    resetFilter,
-  } = useGuidBookFilterDialog(params);
-
-  const handleApplyFilter = (filterState: FilterState) => {
-    closeDialog();
-    handleUpdateTargetType(filterState.targetType);
-    handleUpdateLevel(filterState.level);
-    handleUpdateTime(filterState.time);
-    resetFilter();
-  };
-
-  const {
-    isLoading,
-    data: guideBooks,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useGuideBooksQuery(params);
-
-  const allGuideBooks = useMemo(() => {
-    return guideBooks?.pages?.flatMap((page) => page.guideBooks) || [];
-  }, [guideBooks]);
-
-  useInfiniteScroll({
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  });
-
   return (
-    <div>
-      {/* { <HydrationBoundary state={dehydratedState}></HydrationBoundary>} */}
-      <img
-        src="https://placehold.co/1920x490"
-        alt="가이드북 배너"
-        className="mt-25 h-[490px] w-full object-cover"
-      />
+    <HydrationBoundary state={dehydratedState}>
+      <div>
+        <img
+          src="/images/guideBook_banner.png"
+          alt="가이드북 배너"
+          className="mt-25 h-[490px] w-full object-cover"
+        />
 
-      <div className="mx-auto w-full max-w-[1480px] py-16">
-        <Tabs
-          defaultValue="all"
-          className="text-b1"
-          value={params.type}
-          onValueChange={handleUpdateType}
-        >
-          <GuideBooksFilterControls openDialog={openDialog} list={typeList} />
-          <GuideBooksContent list={typeList} datas={allGuideBooks} />
+        <div className="mx-auto w-full max-w-[1480px] py-16">
+          <Tabs
+            defaultValue="all"
+            className="text-b1"
+            value={filters.type}
+            onValueChange={(value) =>
+              setFilter({
+                type: value as
+                  | 'all'
+                  | 'communication'
+                  | 'engagement'
+                  | 'planning'
+                  | 'operation'
+                  | 'support',
+              })
+            }
+          >
+            <GuideBooksFilterControls
+              list={typeList}
+              initialFilters={initialFilters}
+            />
+            <GuideBooksContent list={typeList} filters={filters} />
+          </Tabs>
+        </div>
 
-          {isLoading && <LoadingSpinner />}
-
-          {isFetchingNextPage && (
-            <LoadingSpinner loadingComment="더 많은 가이드북을 Loading..." />
-          )}
-        </Tabs>
+        {/* API 수정 완료시 활성화 */}
+        {/* <SearchInput
+              placeHolder="입력해주세요"
+              inputStyle="w-full max-w-[400px] px-4 py-3 border-1 border-gray-300 rounded-full"
+              onSearchChange={setFilter}
+              search={filters.search}
+        /> */}
       </div>
-
-      <GuideBooksFilterDialog
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        params={params}
-        filter={filter}
-        setFilter={setFilter}
-        updateFilter={updateFilter}
-        resetFilter={resetFilter}
-        handleApplyFilter={handleApplyFilter}
-      />
-    </div>
+    </HydrationBoundary>
   );
 }

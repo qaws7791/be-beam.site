@@ -1,30 +1,87 @@
+import { Suspense } from 'react';
 import { useParams } from 'react-router';
-import useCreatedMeetingDetailQuery from '@/hooks/api/useCreatedMeetingDetailQuery';
-import useCreatedMeetingDetailDetailParams from '@/hooks/business/useCreatedMeetingDetailDetailParams';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+  type DehydratedState,
+} from '@tanstack/react-query';
+import {
+  MyCreatedMeetingDetailFilterSchema,
+  type MyCreatedMeetingDetailFilters,
+} from '@/schemas/userFilters';
+import { requireAuth } from '@/lib/auth.server';
+import {
+  getMyCreatedMeetingDetail,
+  getMyCreatedMeetingSchedule,
+} from '@/api/users';
+import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
+import { metaTemplates } from '@/config/meta-templates';
 
+import type { Route } from './+types/createdMeetingDetailDetail';
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from '@/components/atoms/tabs/Tabs';
-import CreatedMeetingDetailMeetingDetailContent from '@/components/organisms/CreatedMeetingDetailMeetingDetailContent';
-import CreatedScheduleDetailMeetingDetailContent from '@/components/organisms/CreatedScheduleDetailMeetingDetailContent';
+import CreatedMeetingDetailContent from '@/components/organisms/CreatedMeetingDetailContent';
+import CreatedMeetingScheduleContent from '@/components/organisms/CreatedMeetingScheduleContent';
+import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 
 export function meta() {
-  return [
-    { title: '내가 개설한 모임 상세 정보 페이지 입니다.' },
-    {
-      name: 'description',
-      content: '내가 개설한 모임의 상세 정보를 확인하세요.',
-    },
-  ];
+  return metaTemplates.createdMeetingDetailDetail();
 }
 
-export default function CreatedMeetingDetailDetail() {
+export async function loader({ request }: Route.LoaderArgs) {
+  return await requireAuth(request, '/login');
+}
+
+export async function clientLoader({
+  request,
+  params,
+}: Route.ClientLoaderArgs) {
+  const queryClient = new QueryClient();
+  const id = Number(params.meetingId);
+
+  const url = new URL(request.url);
+  const urlSearchParams = new URLSearchParams(url.search);
+  const rawFilters = Object.fromEntries(urlSearchParams.entries());
+  const parsedFilters: MyCreatedMeetingDetailFilters =
+    MyCreatedMeetingDetailFilterSchema.parse({
+      ...rawFilters,
+    });
+
+  await Promise.all([
+    queryClient.prefetchQuery({
+      queryKey: ['createdMeetingDetail', id],
+      queryFn: () => getMyCreatedMeetingDetail(id),
+    }),
+    queryClient.prefetchQuery({
+      queryKey: ['createdMeetingSchedules', id],
+      queryFn: () => getMyCreatedMeetingSchedule(id),
+    }),
+  ]);
+
+  const dehydratedState = dehydrate(queryClient);
+
+  return { filters: parsedFilters, dehydratedState };
+}
+
+export default function CreatedMeetingDetailDetail({
+  loaderData,
+}: Route.ComponentProps) {
+  const { filters: initialFilters, dehydratedState } = loaderData as {
+    filters: MyCreatedMeetingDetailFilters;
+    dehydratedState: DehydratedState;
+  };
+
   const id = Number(useParams()?.meetingId);
-  const { data: createdMeetingDetail } = useCreatedMeetingDetailQuery(id);
-  const { params, handleUpdateType } = useCreatedMeetingDetailDetailParams();
+
+  const { filters, setFilter } = useUrlFilters(
+    MyCreatedMeetingDetailFilterSchema,
+    initialFilters,
+  );
 
   const typeList = [
     { text: '🥳모임 상세', value: 'meeting' },
@@ -32,39 +89,41 @@ export default function CreatedMeetingDetailDetail() {
   ];
 
   return (
-    <div className="w-full py-6">
-      <Tabs
-        defaultValue="meeting"
-        className="text-b1"
-        value={params.type}
-        onValueChange={handleUpdateType}
-      >
-        <TabsList className="h-auto gap-4 before:h-0">
-          {typeList.map((type, idx) => (
-            <TabsTrigger
-              key={idx}
-              className="h-auto cursor-pointer rounded-full bg-gray-200 px-4 py-3 text-b1 transition-all duration-700 after:content-none data-[state=active]:bg-gray-900 data-[state=active]:text-white"
-              value={type.value}
-            >
-              {type.text}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+    <HydrationBoundary state={dehydratedState}>
+      <Suspense fallback={<LoadingSpinner />}>
+        <div className="w-full py-6">
+          <Tabs
+            defaultValue="meeting"
+            className="text-b1"
+            value={filters.type}
+            onValueChange={(value) =>
+              setFilter({ type: value as 'meeting' | 'schedule' })
+            }
+          >
+            <TabsList className="h-auto gap-4 before:h-0">
+              {typeList.map((type, idx) => (
+                <TabsTrigger
+                  key={idx}
+                  className="h-auto cursor-pointer rounded-full bg-gray-200 px-4 py-3 text-b1 transition-all duration-700 after:content-none data-[state=active]:bg-gray-900 data-[state=active]:text-white"
+                  value={type.value}
+                >
+                  {type.text}
+                </TabsTrigger>
+              ))}
+            </TabsList>
 
-        {typeList.map((tab) => (
-          <TabsContent key={tab.value} value={tab.value} className="w-full">
-            {tab.value === 'meeting' ? (
-              <CreatedMeetingDetailMeetingDetailContent
-                createdMeetingDetail={createdMeetingDetail}
-              />
-            ) : (
-              <CreatedScheduleDetailMeetingDetailContent
-                createdMeetingDetail={createdMeetingDetail}
-              />
-            )}
-          </TabsContent>
-        ))}
-      </Tabs>
-    </div>
+            {typeList.map((tab) => (
+              <TabsContent key={tab.value} value={tab.value} className="w-full">
+                {tab.value === 'meeting' ? (
+                  <CreatedMeetingDetailContent meetingId={id} />
+                ) : (
+                  <CreatedMeetingScheduleContent meetingId={id} />
+                )}
+              </TabsContent>
+            ))}
+          </Tabs>
+        </div>
+      </Suspense>
+    </HydrationBoundary>
   );
 }

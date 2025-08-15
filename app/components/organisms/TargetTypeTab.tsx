@@ -1,14 +1,19 @@
+import type { GuideBookListFilters } from '@/schemas/guideBooksFilters';
+
 import type { FilterOption } from '@/types/components';
 import { TabsList, TabsTrigger } from '../atoms/tabs/Tabs';
 import { Button } from '../atoms/button/Button';
+import { useModalStore } from '@/stores/useModalStore';
 
 export default function GuideBooksFilterControls({
-  openDialog,
   list,
+  initialFilters,
 }: {
-  openDialog: () => void;
   list: FilterOption[];
+  initialFilters: GuideBookListFilters;
 }) {
+  const { open } = useModalStore();
+
   return (
     <div className="flex w-full items-center justify-between">
       <TabsList className="h-auto gap-4 before:h-0">
@@ -26,7 +31,11 @@ export default function GuideBooksFilterControls({
       <Button
         variant="tertiary"
         className="h-auto min-w-auto border-gray-300 text-b1 text-black"
-        onClick={openDialog}
+        onClick={() =>
+          open('GUIDEBOOK_FILTER_DIALOG', {
+            initialFilters,
+          })
+        }
       >
         <img src="/images/icons/filter.svg" alt="filter_icon" />
         필터

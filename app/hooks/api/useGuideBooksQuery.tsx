@@ -1,13 +1,12 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import type { useGuideBooksParamsType } from '../business/useGuideBooksParams';
 import { getGuideBookList } from '@/api/guideBooks';
 
-export default function useGuideBooksQuery(
-  params: useGuideBooksParamsType['params'],
-) {
+import type { GuideBookListFilters } from '@/schemas/guideBooksFilters';
+
+export default function useGuideBooksQuery(filters: GuideBookListFilters) {
   return useInfiniteQuery({
-    queryKey: ['guideBooks', params],
-    queryFn: ({ pageParam }) => getGuideBookList(params, pageParam),
+    queryKey: ['guideBooks', filters],
+    queryFn: ({ pageParam }) => getGuideBookList(filters, pageParam),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       return lastPage.pageInfo.hasNext

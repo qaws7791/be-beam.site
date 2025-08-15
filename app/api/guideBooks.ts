@@ -1,9 +1,9 @@
-import { API_V1_BASE_URL } from '@/constants/api';
-import type { useGuideBooksParamsType } from '@/hooks/business/useGuideBooksParams';
 import { axiosInstance } from '@/lib/axios';
+import { API_V1_BASE_URL } from '@/constants/api';
+import type { GuideBookListFilters } from '@/schemas/guideBooksFilters';
+
 import type { APIResponse } from '@/types/api';
-import type { Guidebook } from '@/types/entities';
-import axios from 'axios';
+import type { Guidebook, GuidebookSummary } from '@/types/entities';
 
 export type GuideBookListResult = {
   pageInfo: {
@@ -11,26 +11,29 @@ export type GuideBookListResult = {
     size: number;
     hasNext: boolean;
   };
-  guideBooks: {
+  guidebooks: {
     id: Guidebook['id'];
     title: Guidebook['title'];
-    image: Guidebook['image'];
+    thumbnailImage: GuidebookSummary['thumbnailImage'];
     description: Guidebook['description'];
   }[];
 };
 
 export const getGuideBookList = async (
-  params: useGuideBooksParamsType['params'],
+  filters: GuideBookListFilters,
   pageParam: number = 0,
 ) => {
-  // const res = await axiosInstanceV1({
-  //   method: 'GET',
-  //   url: `guidebooks?type=${type}&target-type=${filter.targetType}&level=${filter.level}&time=${filter.time}&cursor=0&size=9`,
-  // });
+  const searchParams = new URLSearchParams();
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== undefined && value !== null) {
+      searchParams.append(key, String(value));
+    }
+  });
 
-  const res = await axios<APIResponse<GuideBookListResult>>({
+  const res = await axiosInstance<APIResponse<GuideBookListResult>>({
     method: 'GET',
-    url: `/api/web/v1/guidbooks?type=${params.type}&target-type=${params.targetType}&level=${params.level}&time=${params.time}&cursor=${pageParam}&size=9`,
+    baseURL: API_V1_BASE_URL,
+    url: `/guidebooks?${searchParams.toString()}&cursor=${pageParam}&size=9`,
   });
   const data = res.data;
   return data.result;
@@ -41,7 +44,7 @@ export type GuideBookDetailResult = {
   guidebookType: Guidebook['guidebookType'];
   title: Guidebook['title'];
   description: Guidebook['description'];
-  image: Guidebook['image'];
+  images: Guidebook['images'];
   hashtags: Guidebook['hashtags'];
   level: Guidebook['level'];
   targetType: Guidebook['targetType'];
@@ -49,14 +52,26 @@ export type GuideBookDetailResult = {
   benefits: Guidebook['benefits'];
   file: Guidebook['file'];
   recommendations: Guidebook['recommendations'];
-}[];
+};
 
 export const getGuideBookDetail = async (id: number) => {
   const res = await axiosInstance<APIResponse<GuideBookDetailResult>>({
     baseURL: API_V1_BASE_URL,
-    method: 'GET',
     url: `/guidebooks/${id}`,
+    method: 'GET',
   });
   const data = res.data;
   return data.result;
 };
+
+export const getGuideBookPdf = async (guideBook: GuideBookDetailResult) => {
+  const res = await axiosInstance<Blob>({
+    baseURL: API_V1_BASE_URL,
+    url: `/guidebooks/download?pdf=${guideBook.file}`,
+    method: 'GET',
+    responseType: 'blob',
+  });
+  return res.data;
+};
+
+export const downloadGuideBookPdf = () => {};

@@ -11,8 +11,8 @@ import { Button } from '../atoms/button/Button';
 
 export default function MeetingDetailWrap({ id }: { id: number }) {
   const { open } = useModalStore();
-
   const { data: meeting } = useMeetingQuery(id);
+
   console.log(meeting);
 
   return (
@@ -33,7 +33,7 @@ export default function MeetingDetailWrap({ id }: { id: number }) {
         <MeetingDetailCard meeting={meeting} />
         <div
           className={cn(
-            'mt-5 box-border flex w-full flex-col items-center rounded-xl border-1 border-gray-300 p-12',
+            'mt-5 box-border flex w-full flex-col items-center rounded-xl border-1 border-gray-300 p-12 text-center',
             meeting?.reviewable ? 'block' : 'hidden',
           )}
         >
@@ -44,7 +44,7 @@ export default function MeetingDetailWrap({ id }: { id: number }) {
           </Text>
           <Button
             size="sm"
-            className="w-82"
+            className="w-full"
             onClick={() =>
               open('EDIT_MEETING_REVIEW_MODAL', {
                 meeting,

@@ -1,12 +1,11 @@
 import { formatNumberWithComma } from '@/utils/cash';
 
 import type { Meeting } from '@/types/entities';
-import Badge from '../atoms/badge/Badge';
+import { Tag } from '../atoms/tag/Tag';
 import Text from '../atoms/text/Text';
 import RecruitmentTypeAndTopic from '../molecules/RecruitmentTypeAndTopic';
 import MeetingCardInfoItemWrap from './MeetingCardInfoItemWrap';
 import TitleAndDescription from '../molecules/TitleAndDes';
-import { Tag } from '../atoms/tag/Tag';
 
 export default function MeetingDetailCardTop({
   meeting,
@@ -17,7 +16,7 @@ export default function MeetingDetailCardTop({
     meeting?.recruitmentStatus === '모집예정'
       ? '현재 모임 모집 예정입니다 !'
       : meeting?.recruitmentStatus === '모집중' ||
-          meeting?.recruitmentStatus === '모집종료'
+          meeting?.recruitmentStatus === '모집마감'
         ? `📢 현재 0명이 모임 신청 중이에요 !`
         : meeting?.recruitmentStatus === '모임중'
           ? `📢 현재 ${meeting?.participantCount}명이 모임 참여 중이에요 !`
@@ -69,7 +68,7 @@ export default function MeetingDetailCardTop({
               ? 'primary'
               : meeting?.recruitmentStatus === '모집중'
                 ? 'blue'
-                : meeting?.recruitmentStatus === '모집종료'
+                : meeting?.recruitmentStatus === '모집마감'
                   ? 'tertiary'
                   : meeting?.recruitmentStatus === '모임중'
                     ? 'pink'
@@ -80,11 +79,12 @@ export default function MeetingDetailCardTop({
         </Tag>
       </div>
 
-      <Badge
-        text={meetingStatusComment}
+      <Tag
         variant="tertiary"
-        className="mt-4 inline-block rounded-md bg-gray-200 p-2 text-b3 text-gray-600"
-      />
+        className="mt-4 rounded-md px-2 py-5 text-b3 text-gray-600"
+      >
+        {meetingStatusComment}
+      </Tag>
 
       <MeetingCardInfoItemWrap meeting={meeting} />
 

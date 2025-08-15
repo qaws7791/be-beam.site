@@ -1,11 +1,13 @@
 import { useModalStore } from '@/stores/useModalStore';
+import useMyInfoQuery from '@/hooks/api/useMyInfoQuery';
 import useApplyMeetingMutation from '@/hooks/api/useApplyMeetingMutation';
 import { Controller, useForm } from 'react-hook-form';
 import type { z } from 'zod';
 import { applyMeetingSchema } from '@/schemas/meeting';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import type { MeetingDetailType } from '@/types/components';
+import type { Meeting } from '@/types/entities';
+import type { MyInfoResult } from '@/api/users';
 import {
   Dialog,
   DialogContent,
@@ -21,7 +23,7 @@ import toast from 'react-hot-toast';
 
 export default function ApplyMeetingModal() {
   const { isOpen, modalProps, close } = useModalStore();
-  const meeting = modalProps.meeting as MeetingDetailType;
+  const meeting = modalProps.meeting as Meeting;
 
   const { control, reset, handleSubmit, formState } = useForm<
     z.infer<typeof applyMeetingSchema>
@@ -32,14 +34,25 @@ export default function ApplyMeetingModal() {
     },
   });
 
+  const { data: myInfo } = useMyInfoQuery();
   const { mutate: applyMeeting, isPending } = useApplyMeetingMutation(
     meeting.id,
     'meeting',
   );
 
+  function hasAllFields(obj: MyInfoResult) {
+    return Object.values(obj).every((value) => {
+      return value !== null && value !== undefined && value !== '';
+    });
+  }
+
   const onSubmit = (data: z.infer<typeof applyMeetingSchema>) => {
-    if (isPending) return;
-    applyMeeting(data);
+    if (myInfo && hasAllFields(myInfo)) {
+      if (isPending) return;
+      applyMeeting(data);
+    } else {
+      toast('개인정보를 전부 채운 후 다시 시도해주세요.');
+    }
 
     reset();
     close();

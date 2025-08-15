@@ -18,7 +18,7 @@ export type ApplicationMeetingListResult = {
   meetings: {
     id: Meeting['id'];
     name: Meeting['name'];
-    recruitmentStatus: Meeting['recruitingState'];
+    recruitmentStatus: Meeting['recruitmentStatus'];
     recruitmentType: Meeting['recruitmentType'];
     meetingStartTime: MeetingSchedule['meetingStartTime'];
     address: Meeting['address'];

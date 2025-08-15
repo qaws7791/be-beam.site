@@ -1,6 +1,5 @@
 import type { profileFormSchema } from '@/hooks/business/useProfileForm';
 import useProfileForm from '@/hooks/business/useProfileForm';
-import React from 'react';
 import { Controller } from 'react-hook-form';
 import type { z } from 'zod';
 import ProfileImageInput from '../atoms/ProfileImageInput';

@@ -1,60 +1,61 @@
 import { useParams } from 'react-router';
 import { Suspense } from 'react';
-import useGuideBookQuery from '@/hooks/api/useGuideBookQuery';
-import { handleDownload } from './download';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
+import { getGuideBookDetail } from '@/api/guideBooks';
+import { metaTemplates } from '@/config/meta-templates';
 
-import Slider from '@/components/organisms/Slider';
-import { Button } from '@/components/atoms/button/Button';
-import GuideBookDetailContent from '@/components/sections/GuideBookDetailContent';
-import GuideBookRecommendation from '@/components/sections/GuideBookRecommendation';
+import type { Route } from './+types/guideBookDetail';
 import CommonTemplate from '@/components/templates/CommonTemplate';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
+import GuideBookDetailWrap from '@/components/organisms/GuideBookDetailWrap';
 
 export function meta() {
-  return [
-    { title: '가이드북 상세페이지' },
-    { name: 'description', content: '가이드북 상세정보를 확인하세요.' },
-  ];
+  return metaTemplates.guideBookDetail();
 }
 
-export async function loader() {}
+export async function loader({ params }: Route.LoaderArgs) {
+  const queryClient = new QueryClient();
 
-export default function GuideBookDetail() {
+  await queryClient.prefetchQuery({
+    queryKey: ['guideBook', Number(params.guideBookId)],
+    queryFn: () => getGuideBookDetail(Number(params.guideBookId)),
+  });
+
+  const dehydratedState = dehydrate(queryClient);
+  return {
+    dehydratedState,
+  };
+}
+
+export async function clientLoader({ params }: Route.LoaderArgs) {
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ['guideBook', Number(params.guideBookId)],
+    queryFn: () => getGuideBookDetail(Number(params.guideBookId)),
+  });
+
+  const dehydratedState = dehydrate(queryClient);
+  return {
+    dehydratedState,
+  };
+}
+
+export default function GuideBookDetail({ loaderData }: Route.ComponentProps) {
   const id = Number(useParams().guideBookId);
-  const { data: guideBook } = useGuideBookQuery(id);
-
-  console.log(guideBook);
-  console.log('ffkfkfk');
+  const { dehydratedState } = loaderData;
 
   return (
-    <CommonTemplate>
-      <Suspense fallback={<LoadingSpinner />}>
-        <div className="flex items-start gap-10">
-          <div className="sticky top-[100px] w-full max-w-[500px] self-start">
-            <Slider
-              images={guideBook?.images}
-              delay={5000}
-              isCount={true}
-              slideWidth="w-full"
-              slideHeight="h-[480px]"
-            />
-            <Button
-              onClick={() => handleDownload(guideBook.file)}
-              className="mt-4 min-w-full gap-1 py-8 text-t3 text-white"
-            >
-              <img src="/images/icons/w_download.svg" alt="download_icon" />
-              가이드북 다운로드 받기
-            </Button>
-          </div>
-
-          <div className="flex-1">
-            <GuideBookDetailContent guideBook={guideBook} />
-            <GuideBookRecommendation
-              recommendationData={guideBook?.recommendations}
-            />
-          </div>
-        </div>
-      </Suspense>
-    </CommonTemplate>
+    <HydrationBoundary state={dehydratedState}>
+      <CommonTemplate>
+        <Suspense fallback={<LoadingSpinner />}>
+          <GuideBookDetailWrap guideBookId={id} />
+        </Suspense>
+      </CommonTemplate>
+    </HydrationBoundary>
   );
 }

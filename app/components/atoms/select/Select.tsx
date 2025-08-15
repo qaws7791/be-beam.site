@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as SelectPrimitive from '@radix-ui/react-select';
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/tailwind';
+import ArrowDownFillIcon from '../icons/ArrowDownFillIcon';
 
 const Select = SelectPrimitive.Root;
 
@@ -22,9 +23,11 @@ const SelectValue = React.forwardRef<
 SelectValue.displayName = SelectPrimitive.Value.displayName;
 
 const SelectTrigger = React.forwardRef<
-  React.ComponentRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+  React.ElementRef<typeof SelectPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & {
+    iconClassName?: string;
+  }
+>(({ className, iconClassName, children, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
@@ -35,11 +38,7 @@ const SelectTrigger = React.forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <img
-        src="/images/icons/fillDropDown.svg"
-        alt="dropDown_icon"
-        className="h-6 w-6 fill-black"
-      />
+      <ArrowDownFillIcon className={cn('size-6', iconClassName)} />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));

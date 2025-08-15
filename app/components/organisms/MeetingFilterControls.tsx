@@ -66,7 +66,7 @@ export default function MeetingFilterControls({
         <SearchInput
           placeHolder="입력해주세요"
           inputStyle="w-full max-w-[400px] px-4 py-3 border-1 border-gray-300 rounded-full"
-          onSearchChange={setFilter}
+          onSearchChange={(search) => setFilter({ search })}
           search={meetingFilters.search}
         />
       </div>

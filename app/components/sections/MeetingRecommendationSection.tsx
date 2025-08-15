@@ -15,13 +15,19 @@ export default function MeetingRecommendationSection() {
         title="좋아요 기반  추천 리스트"
         type="likes"
         className="mb-20"
+        moreUrl="search=&topic=all&recruitment-status=all&mode=all&cost=all&sort=likes"
       />
       <MeetingRecommendations
         title="랜덤 추천 리스트"
         type="random"
         className="mb-20"
+        moreUrl="search=&topic=all&recruitment-status=all&mode=all&cost=all&sort=recent"
       />
-      <MeetingRecommendations title="최신 등록 모임 리스트" type="recent" />
+      <MeetingRecommendations
+        title="최신 등록 모임 리스트"
+        type="recent"
+        moreUrl="search=&topic=all&recruitment-status=all&mode=all&cost=all&sort=recent"
+      />
     </div>
   );
 }

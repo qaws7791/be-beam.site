@@ -32,6 +32,7 @@ import {
 } from '../atoms/alert-dialog/AlertDialog';
 import useUpdateReviewMutation from '@/hooks/api/useUpdateReviewMutation';
 import useDeleteReviewMutation from '@/hooks/api/useDeleteReviewMutation';
+import { ImageViewerModal } from '../organisms/ImageViewerModal';
 
 interface WideReviewCardProps {
   reviewId: number;
@@ -65,13 +66,13 @@ export default function WideReviewCard({
   const [modalState, setModalState] = useState<
     'update' | 'delete' | 'report' | null
   >(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
+    null,
+  );
 
-  const [isImagesExpanded, setIsImagesExpanded] = useState(false);
   const hasMoreImages = review.images.length > MAX_IMAGES_DISPLAY;
 
-  const displayImages = isImagesExpanded
-    ? review.images
-    : review.images.slice(0, MAX_IMAGES_DISPLAY);
+  const displayImages = review.images.slice(0, MAX_IMAGES_DISPLAY);
 
   return (
     <>
@@ -128,8 +129,7 @@ export default function WideReviewCard({
             <div className="flex max-w-[840px] flex-wrap gap-2">
               {displayImages.map((image, index) => {
                 const isLastImage = index === MAX_IMAGES_DISPLAY - 1;
-                const shouldShowOverlay =
-                  !isImagesExpanded && hasMoreImages && isLastImage;
+                const shouldShowOverlay = hasMoreImages && isLastImage;
 
                 return (
                   <div
@@ -139,19 +139,13 @@ export default function WideReviewCard({
                     <img
                       src={image}
                       alt="review"
-                      className={`size-37 shrink-0 rounded-lg object-cover ${
-                        shouldShowOverlay ? 'cursor-pointer' : ''
-                      }`}
-                      onClick={
-                        shouldShowOverlay
-                          ? () => setIsImagesExpanded(true)
-                          : undefined
-                      }
+                      className={`size-37 shrink-0 cursor-pointer rounded-lg object-cover`}
+                      onClick={() => setSelectedImageIndex(index)}
                     />
                     {shouldShowOverlay && (
                       <div
                         className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-lg bg-black/50"
-                        onClick={() => setIsImagesExpanded(true)}
+                        onClick={() => setSelectedImageIndex(index)}
                       >
                         <span className="text-b1 text-white">사진 더 보기</span>
                       </div>
@@ -160,16 +154,6 @@ export default function WideReviewCard({
                 );
               })}
             </div>
-
-            {/* 접기 버튼 (확장된 상태일 때만 표시) */}
-            {isImagesExpanded && hasMoreImages && (
-              <button
-                className="mt-2 text-sm text-gray-500 hover:text-gray-700"
-                onClick={() => setIsImagesExpanded(false)}
-              >
-                접기
-              </button>
-            )}
           </div>
         )}
 
@@ -207,10 +191,12 @@ export default function WideReviewCard({
               updateReviewMutation.mutate(
                 {
                   reviewId: review.id,
-                  rating: review.rating,
-                  content: review.content,
-                  existingImages: review.existingImages,
-                  newImages: review.newImages,
+                  data: {
+                    rating: review.rating,
+                    content: review.content,
+                    existingImages: review.existingImages,
+                    newImages: review.newImages,
+                  },
                 },
                 {
                   onSuccess: () => {
@@ -222,7 +208,10 @@ export default function WideReviewCard({
             defaultValues={{
               rating: review.rating,
               content: review.text,
-              existingImages: review.images,
+              images: {
+                existingImages: review.images,
+                newImages: [],
+              },
               id: review.reviewId,
             }}
           />
@@ -288,6 +277,13 @@ export default function WideReviewCard({
           />
         </DialogContent>
       </Dialog>
+      <ImageViewerModal
+        title="후기 이미지"
+        images={review.images}
+        initialIndex={selectedImageIndex || 0}
+        isOpen={selectedImageIndex !== null}
+        onOpenChange={() => setSelectedImageIndex(null)}
+      />
     </>
   );
 }

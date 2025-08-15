@@ -4,7 +4,7 @@ import MeetingCancelModal from '../organisms/MeetingCancelModal';
 import MeetingReviewEditModal from '../organisms/MeetingReviewEditModal';
 import ApplyMeetingModal from '../organisms/ApplyMeetingModal';
 import DeclareModal from '../organisms/DeclareModal';
-import CreateMeetingModal from '../organisms/CreateMeetingModal';
+import GuideBooksFilterDialog from '../organisms/GuideBooksFilterDialog';
 
 const MODAL_COMPONENTS = {
   CONFIRM_DIALOG: ConfirmDialog,
@@ -12,7 +12,7 @@ const MODAL_COMPONENTS = {
   EDIT_MEETING_REVIEW_MODAL: MeetingReviewEditModal,
   APPLY_MEETING_MODAL: ApplyMeetingModal,
   DECLARE_MODAL: DeclareModal,
-  CREATE_MEETING_MODAL: CreateMeetingModal,
+  GUIDEBOOK_FILTER_DIALOG: GuideBooksFilterDialog,
 };
 
 export default function ModalProvider() {

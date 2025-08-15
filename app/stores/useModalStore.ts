@@ -7,7 +7,7 @@ export type ModalType =
   | 'EDIT_MEETING_REVIEW_MODAL'
   | 'APPLY_MEETING_MODAL'
   | 'DECLARE_MODAL'
-  | 'CREATE_MEETING_MODAL';
+  | 'GUIDEBOOK_FILTER_DIALOG';
 
 interface ModalProps {
   [key: string]: unknown;

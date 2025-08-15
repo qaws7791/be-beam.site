@@ -1,12 +1,13 @@
-import type { GuideBookType } from '@/types/components';
 import Text from '../atoms/text/Text';
-import Badge from '../atoms/badge/Badge';
+import { Tag } from '../atoms/tag/Tag';
 import InfoItem from '../molecules/InfoItem';
+
+import type { Guidebook } from '@/types/entities';
 
 export default function GuideBookDetailContent({
   guideBook,
 }: {
-  guideBook: GuideBookType;
+  guideBook: Guidebook;
 }) {
   const infoData = [
     {
@@ -32,7 +33,7 @@ export default function GuideBookDetailContent({
   return (
     <div className="box-border w-full py-6">
       <Text variant="T3_Semibold" color="primary">
-        {guideBook?.guidbookType}
+        {guideBook?.guidebookType}
       </Text>
       <Text variant="H2_Semibold" className="mt-2">
         {guideBook?.title}
@@ -43,12 +44,9 @@ export default function GuideBookDetailContent({
 
       <div className="mt-5 flex w-full items-center gap-2">
         {guideBook?.hashtags?.map((hashtag, idx) => (
-          <Badge
-            key={idx}
-            text={`#${hashtag}`}
-            variant="tertiary"
-            className="bg-primary-light p-2 text-b1 text-primary"
-          />
+          <Tag key={idx} variant="primary" className="px-2 py-4 text-b1">
+            {`#${hashtag}`}
+          </Tag>
         ))}
       </div>
 

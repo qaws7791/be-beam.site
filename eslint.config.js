@@ -10,10 +10,12 @@ import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import reactHooks from 'eslint-plugin-react-hooks';
 import { fileURLToPath } from 'node:url';
 import pluginQuery from '@tanstack/eslint-plugin-query';
+import { globalIgnores } from 'eslint/config';
 
 const gitignorePath = fileURLToPath(new URL('.gitignore', import.meta.url));
 
 export default tseslint.config(
+  globalIgnores(['public/mockServiceWorker.js']),
   eslint.configs.recommended,
   {
     files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],

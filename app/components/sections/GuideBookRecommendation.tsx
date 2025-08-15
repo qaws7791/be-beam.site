@@ -1,12 +1,13 @@
 import { useNavigate } from 'react-router';
-import type { RecommendationsGuideBookType } from '@/types/components';
+
+import type { GuidebookRecommendation } from '@/types/entities';
 import Text from '../atoms/text/Text';
 import GuideBookRecommendationCard from '../molecules/GuideBookRecommendationCard';
 
 export default function GuideBookRecommendation({
   recommendationData,
 }: {
-  recommendationData: RecommendationsGuideBookType[];
+  recommendationData: GuidebookRecommendation[];
 }) {
   const navigate = useNavigate();
   return (
@@ -18,9 +19,9 @@ export default function GuideBookRecommendation({
       <div className="mt-5 w-full">
         {recommendationData?.map((data) => (
           <GuideBookRecommendationCard
-            key={data.id}
-            recommendationData={data}
-            onClick={() => navigate(`/guideBook/${data.id}`)}
+            key={data?.id}
+            data={data}
+            onClick={() => navigate(`/guideBook/${data?.id}`)}
           />
         ))}
       </div>

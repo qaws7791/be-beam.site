@@ -18,8 +18,6 @@ export default function DropdownMenuGroup({
   selectedFilters,
   onDropdownChange,
 }: DropdownMenuGroupProps) {
-  console.log(selectedFilters);
-  console.log(datas);
   return (
     <div className="flex w-full gap-3 overflow-x-auto">
       {datas.map((item) => {

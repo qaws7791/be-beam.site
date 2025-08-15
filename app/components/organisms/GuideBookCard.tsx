@@ -1,8 +1,8 @@
-import type { GuideBookType } from '@/types/components';
 import Text from '../atoms/text/Text';
 import { useNavigate } from 'react-router';
+import type { GuidebookSummary } from '@/types/entities';
 
-export default function GuideBookCard({ data }: { data: GuideBookType }) {
+export default function GuideBookCard({ data }: { data: GuidebookSummary }) {
   const navigate = useNavigate();
 
   return (
@@ -13,7 +13,7 @@ export default function GuideBookCard({ data }: { data: GuideBookType }) {
     >
       <img
         className="h-[240px] w-full object-cover"
-        src={data.image}
+        src={data.thumbnailImage}
         alt="guidBook_thumbnail"
       />
       <div className="box-border w-full border-t-1 border-gray-300 px-7 py-8">
