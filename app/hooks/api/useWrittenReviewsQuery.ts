@@ -1,4 +1,7 @@
-import { getWrittenReviews, type GetWrittenReviewsParams } from '@/api/users';
+import {
+  getWrittenReviews,
+  type GetWrittenReviewsParams,
+} from '@/shared/api/endpoints/users';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 export function writtenReviewsQueryOptions(params: GetWrittenReviewsParams) {

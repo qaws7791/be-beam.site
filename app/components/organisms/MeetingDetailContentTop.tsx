@@ -1,6 +1,6 @@
-import { useModalStore } from '@/stores/useModalStore';
+import { useModalStore } from '@/shared/stores/useModalStore';
 
-import type { Meeting } from '@/types/entities';
+import type { Meeting } from '@/shared/types/entities';
 import Text from '../atoms/text/Text';
 import RecruitmentTypeAndTopic from '../molecules/RecruitmentTypeAndTopic';
 import { DropdownMenuItem } from '../atoms/dropdown-menu/DropdownMenu';

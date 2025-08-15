@@ -1,7 +1,7 @@
-import { checkAttendance } from '@/api/users';
+import { checkAttendance } from '@/shared/api/endpoints/users';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import type { APIResponse } from '@/types/api';
+import type { APIResponse } from '@/shared/types/api';
 import type { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 

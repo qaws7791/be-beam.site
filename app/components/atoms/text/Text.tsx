@@ -1,6 +1,6 @@
 import { colorStyles, variantStyles } from './Text.styles';
-import type { TextProps } from '../../../types/components';
-import { cn } from '@/lib/tailwind';
+import type { TextProps } from '../../../shared/types/components';
+import { cn } from '@/styles/tailwind';
 
 export default function Text({
   as: Component = 'p',

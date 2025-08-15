@@ -3,8 +3,8 @@ import MeetingCardGroup from '../sections/MeetingCardGroup';
 import useInfiniteScroll from '@/hooks/ui/useInfiniteScroll';
 import { useMemo } from 'react';
 import LoadingSpinner from '../molecules/LoadingSpinner';
-import type { UserProfile } from '@/types/entities';
-import type { MeetingListFilters } from '@/schemas/meetingFilters';
+import type { UserProfile } from '@/shared/types/entities';
+import type { MeetingListFilters } from '@/features/meetings/schemas/meetingFilters';
 
 interface MeetingWrapProps {
   meetingFilters: MeetingListFilters;

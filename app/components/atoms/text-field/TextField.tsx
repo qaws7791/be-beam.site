@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Label } from '../label/Label';
 import { FormMessage } from '../form/FormMessage';
 import { Input } from '../input/Input';
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 import InputDeleteIcon from '../icons/InputDeleteIcon';
 
 interface TextFieldProps extends React.ComponentProps<'input'> {

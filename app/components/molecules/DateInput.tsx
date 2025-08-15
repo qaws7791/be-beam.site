@@ -4,7 +4,7 @@ import React, { useMemo, useState } from 'react';
 import { format, isValid, parseISO } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { Button } from '@/components/atoms/button/Button';
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 import {
   Popover,
   PopoverContent,

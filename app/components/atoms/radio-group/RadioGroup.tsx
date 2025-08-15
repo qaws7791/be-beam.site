@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 
-import { cn, focusVisibleRing } from '@/lib/tailwind';
+import { cn, focusVisibleRing } from '@/styles/tailwind';
 
 function RadioGroup({
   className,

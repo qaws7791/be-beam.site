@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 
-import { cn, focusVisibleRing } from '@/lib/tailwind';
+import { cn, focusVisibleRing } from '@/styles/tailwind';
 
 function Tabs({
   className,

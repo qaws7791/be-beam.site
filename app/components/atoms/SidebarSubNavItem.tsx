@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router';
-import type { SideBarSectionItems } from '@/types/components';
-import { cn } from '@/lib/tailwind';
+import type { SideBarSectionItems } from '@/shared/types/components';
+import { cn } from '@/styles/tailwind';
 
 export default function SidebarSubNavItem({
   to,

@@ -1,5 +1,5 @@
 import SidebarSubNavItem from '../atoms/SidebarSubNavItem';
-import type { SideBarSectionItems } from '@/types/components';
+import type { SideBarSectionItems } from '@/shared/types/components';
 
 export default function SidebarSection({
   title,

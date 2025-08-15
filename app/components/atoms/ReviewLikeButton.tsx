@@ -1,4 +1,4 @@
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 import HeartFillIcon from './icons/HeartFillIcon';
 import HeartIcon from './icons/HeartIcon';
 import useLikeReviewMutation from '@/hooks/api/useLikeReviewMutation';

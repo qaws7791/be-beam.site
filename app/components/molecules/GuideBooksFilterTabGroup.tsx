@@ -1,4 +1,4 @@
-import type { FilterOption } from '@/types/components';
+import type { FilterOption } from '@/shared/types/components';
 import { Tabs, TabsList, TabsTrigger } from '../atoms/tabs/Tabs';
 
 interface GuideBooksFilterTabGroupProps {

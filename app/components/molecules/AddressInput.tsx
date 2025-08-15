@@ -4,7 +4,7 @@ import type React from 'react';
 import { useDaumPostcodePopup } from 'react-daum-postcode'; // 다음 주소 검색 팝업 훅
 import { Input } from '@/components/atoms/input/Input'; // 당신의 Input 컴포넌트
 import { Button } from '@/components/atoms/button/Button'; // 당신의 Button 컴포넌트
-import { cn } from '@/lib/tailwind'; // 당신의 cn 유틸리티 함수
+import { cn } from '@/styles/tailwind'; // 당신의 cn 유틸리티 함수
 
 const SCRIPT_URL =
   'https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';

@@ -1,10 +1,10 @@
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createMeetingSecondSchema } from '@/schemas/meeting';
+import { createMeetingSecondSchema } from '@/features/meetings/schemas/meeting';
 import type { z } from 'zod';
 
-import type { CreateMeeting } from '@/types/components';
-import { cn } from '@/lib/tailwind';
+import type { CreateMeeting } from '@/shared/types/components';
+import { cn } from '@/styles/tailwind';
 import Text from '@/components/atoms/text/Text';
 import { Button } from '@/components/atoms/button/Button';
 import { Input } from '@/components/atoms/input/Input';

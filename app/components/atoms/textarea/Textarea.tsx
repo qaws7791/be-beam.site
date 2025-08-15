@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 import { Label } from '../label/Label';
 import { FormMessage } from '../form/FormMessage';
 

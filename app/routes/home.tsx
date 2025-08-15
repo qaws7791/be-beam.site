@@ -3,8 +3,11 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
-import { getBanner, getRecommendationMeeting } from '@/api/home';
-import { metaTemplates } from '@/config/meta-templates';
+import {
+  getBanner,
+  getRecommendationMeeting,
+} from '@/shared/api/endpoints/home';
+import { metaTemplates } from '@/shared/config/meta-templates';
 
 import type { Route } from './+types/home';
 import HomeTemplate from '@/components/templates/HomeTemplate';

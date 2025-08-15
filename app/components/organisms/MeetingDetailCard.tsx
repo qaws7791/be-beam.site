@@ -1,8 +1,8 @@
 import useLikeMeetingMutation from '@/hooks/api/useLikeMeetingMutation';
-import { useModalStore } from '@/stores/useModalStore';
+import { useModalStore } from '@/shared/stores/useModalStore';
 
-import type { Meeting } from '@/types/entities';
-import { cn } from '@/lib/tailwind';
+import type { Meeting } from '@/shared/types/entities';
+import { cn } from '@/styles/tailwind';
 import MeetingDetailCardTop from './MeetingDetailCardTop';
 import { Button } from '../atoms/button/Button';
 import toast from 'react-hot-toast';

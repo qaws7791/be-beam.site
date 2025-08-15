@@ -2,7 +2,7 @@ import useMyProfileQuery from '@/hooks/api/useMyProfileQuery';
 import { z } from 'zod';
 import type { profileFormSchema } from '@/hooks/business/useProfileForm';
 import useUpdateProfileMutation from '@/hooks/api/useUpdateProfileMutation';
-import { metaTemplates } from '@/config/meta-templates';
+import { metaTemplates } from '@/shared/config/meta-templates';
 import ProfileForm from '@/components/organisms/ProfileForm';
 
 export function meta() {

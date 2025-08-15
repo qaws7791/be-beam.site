@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { getMeetingList } from '@/api/meetings';
-import type { MeetingListFilters } from '@/schemas/meetingFilters';
+import { getMeetingList } from '@/shared/api/endpoints/meetings';
+import type { MeetingListFilters } from '@/features/meetings/schemas/meetingFilters';
 
 export default function useMeetingsQuery(meetingFilters: MeetingListFilters) {
   return useInfiniteQuery({

@@ -1,12 +1,12 @@
 import {
   GuideBookListFilterSchema,
   type GuideBookListFilters,
-} from '@/schemas/guideBooksFilters';
-import { useModalStore } from '@/stores/useModalStore';
+} from '@/features/guidebooks/schemas/guideBooksFilters';
+import { useModalStore } from '@/shared/stores/useModalStore';
 import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
 import useGuidBookFilterDialog from '@/hooks/ui/useGuideBookFilterDialog';
 
-import type { FilterOption } from '@/types/components';
+import type { FilterOption } from '@/shared/types/components';
 import { Button } from '../atoms/button/Button';
 import {
   Dialog,

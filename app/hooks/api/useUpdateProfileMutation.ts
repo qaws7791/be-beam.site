@@ -1,4 +1,4 @@
-import { updateMyProfile } from '@/api/users';
+import { updateMyProfile } from '@/shared/api/endpoints/users';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { myProfileQueryOptions } from './useMyProfileQuery';
 

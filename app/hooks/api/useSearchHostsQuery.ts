@@ -1,4 +1,7 @@
-import { getSearchHostResult, type SearchHostParams } from '@/api/searches';
+import {
+  getSearchHostResult,
+  type SearchHostParams,
+} from '@/shared/api/endpoints/searches';
 import { infiniteQueryOptions, useInfiniteQuery } from '@tanstack/react-query';
 
 export const searchHostsQueryOptions = (

@@ -5,9 +5,9 @@ import {
 } from '@tanstack/react-query';
 import { Suspense } from 'react';
 import { useParams } from 'react-router';
-import { getMeetingDetail } from '@/api/meetings';
-import { getMeetingReviews } from '@/api/meetingReviews';
-import { metaTemplates } from '@/config/meta-templates';
+import { getMeetingDetail } from '@/shared/api/endpoints/meetings';
+import { getMeetingReviews } from '@/shared/api/endpoints/meetingReviews';
+import { metaTemplates } from '@/shared/config/meta-templates';
 import type { Route } from './+types/meetingDetail';
 import type { meetingReviewFilterType } from '@/components/sections/MeetingDetailMeetingReviewsContainer';
 import CommonTemplate from '@/components/templates/CommonTemplate';

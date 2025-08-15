@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import useTopicsQuery from '@/hooks/api/useTopicsQuery';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import { createMeetingFirstSchema } from '@/schemas/meeting';
+import { createMeetingFirstSchema } from '@/features/meetings/schemas/meeting';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
 
-import { cn } from '@/lib/tailwind';
-import type { CreateMeeting } from '@/types/components';
-import type { Topic } from '@/types/entities';
+import { cn } from '@/styles/tailwind';
+import type { CreateMeeting } from '@/shared/types/components';
+import type { Topic } from '@/shared/types/entities';
 import Text from '@/components/atoms/text/Text';
 import { Input } from '@/components/atoms/input/Input';
 import { Textarea } from '@/components/atoms/textarea/Textarea';

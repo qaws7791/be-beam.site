@@ -1,7 +1,10 @@
 import { Controller, useForm } from 'react-hook-form';
 import { Button } from '../atoms/button/Button';
 import { Label } from '../atoms/label/Label';
-import { REPORT_REASONS, REPORT_REASONS_VALUES } from '@/constants/reports';
+import {
+  REPORT_REASONS,
+  REPORT_REASONS_VALUES,
+} from '@/shared/constants/reports';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RadioGroup, RadioGroupItem } from '../atoms/radio-group/RadioGroup';

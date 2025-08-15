@@ -1,4 +1,4 @@
-import { updateMyInfo } from '@/api/users';
+import { updateMyInfo } from '@/shared/api/endpoints/users';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { myInfoQueryOptions } from './useMyInfoQuery';
 

@@ -1,4 +1,4 @@
-import type { Banner } from '@/types/entities';
+import type { Banner } from '@/shared/types/entities';
 import Slider from './Slider';
 
 export default function MainVisualSlider({ banners }: { banners: Banner[] }) {

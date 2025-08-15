@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
-import { cn, focusVisibleRing } from '@/lib/tailwind';
+import { cn, focusVisibleRing } from '@/styles/tailwind';
 
 type ChoiceChipSingleProps = ToggleGroupPrimitive.ToggleGroupSingleProps & {
   alwaysSelected?: boolean;

@@ -3,11 +3,11 @@ import useEditMeetingDetailMutation from '@/hooks/api/useEditMeetingDetailMutati
 import { Controller, useForm } from 'react-hook-form';
 import type { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { editCreatedMeetingSecondSchema } from '@/schemas/meeting';
-import { getMyCreatedMeetingDetail } from '@/api/users';
+import { editCreatedMeetingSecondSchema } from '@/features/meetings/schemas/meeting';
+import { getMyCreatedMeetingDetail } from '@/shared/api/endpoints/users';
 import { format } from 'date-fns';
 
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 import Text from '../atoms/text/Text';
 import { Input } from '../atoms/input/Input';
 import { DateInput } from '../molecules/DateInput';

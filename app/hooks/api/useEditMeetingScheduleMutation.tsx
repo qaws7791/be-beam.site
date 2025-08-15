@@ -1,5 +1,5 @@
-import { EditMeetingSchedule } from '@/api/users';
-import type { EditMeetingSchedule as EditMeetingScheduleType } from '@/types/entities';
+import { EditMeetingSchedule } from '@/shared/api/endpoints/users';
+import type { EditMeetingSchedule as EditMeetingScheduleType } from '@/shared/types/entities';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import toast from 'react-hot-toast';

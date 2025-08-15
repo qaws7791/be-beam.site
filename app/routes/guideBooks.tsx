@@ -6,13 +6,13 @@ import {
 import {
   GuideBookListFilterSchema,
   type GuideBookListFilters,
-} from '@/schemas/guideBooksFilters';
+} from '@/features/guidebooks/schemas/guideBooksFilters';
 import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
-import { getGuideBookList } from '@/api/guideBooks';
-import { metaTemplates } from '@/config/meta-templates';
+import { getGuideBookList } from '@/shared/api/endpoints/guideBooks';
+import { metaTemplates } from '@/shared/config/meta-templates';
 
 import type { Route } from './+types/guideBooks';
-import type { FilterOption } from '@/types/components';
+import type { FilterOption } from '@/shared/types/components';
 import { Tabs } from '@/components/atoms/tabs/Tabs';
 import GuideBooksFilterControls from '@/components/organisms/TargetTypeTab';
 import GuideBooksContent from '@/components/sections/GuideBooksContent';

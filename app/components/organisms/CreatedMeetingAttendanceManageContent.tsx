@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import useCheckAttendanceMutation from '@/hooks/api/useCheckAttendanceMutation';
-import { getMyCreatedMeetingAttendance } from '@/api/users';
+import { getMyCreatedMeetingAttendance } from '@/shared/api/endpoints/users';
 
-import type { MeetingAttendance } from '@/types/entities';
-import { cn } from '@/lib/tailwind';
+import type { MeetingAttendance } from '@/shared/types/entities';
+import { cn } from '@/styles/tailwind';
 import Text from '../atoms/text/Text';
 import {
   Accordion,

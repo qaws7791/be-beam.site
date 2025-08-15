@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import type { CreateMeeting } from '@/types/components';
+import type { CreateMeeting } from '@/shared/types/components';
 
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 import Text from '@/components/atoms/text/Text';
 import {
   Tabs,

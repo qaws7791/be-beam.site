@@ -1,4 +1,4 @@
-import type { GetWrittenReviewsResult } from '@/api/users';
+import type { GetWrittenReviewsResult } from '@/shared/api/endpoints/users';
 import {
   Pagination,
   PaginationContent,
@@ -12,7 +12,7 @@ import WrittenReviewCard from '@/components/organisms/WrittenReviewCard';
 import useWrittenReviewsQuery from '@/hooks/api/useWrittenReviewsQuery';
 import { Suspense, useCallback } from 'react';
 import { useSearchParams } from 'react-router';
-import { metaTemplates } from '@/config/meta-templates';
+import { metaTemplates } from '@/shared/config/meta-templates';
 
 export function meta() {
   return metaTemplates.writtenReviews();

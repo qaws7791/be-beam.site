@@ -2,7 +2,7 @@ import { z } from 'zod';
 import useMyInfoQuery from '@/hooks/api/useMyInfoQuery';
 import useUpdateMyInfoMutation from '@/hooks/api/useUpdateMyInfoMutation';
 import { myInfoSchema } from '@/hooks/business/useMyInfoForm';
-import { metaTemplates } from '@/config/meta-templates';
+import { metaTemplates } from '@/shared/config/meta-templates';
 import toast from 'react-hot-toast';
 import UserInformationForm from '@/components/organisms/UserInformationForm';
 

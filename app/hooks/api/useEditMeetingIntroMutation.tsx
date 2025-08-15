@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import type { EditCreateMeetingIntroType } from '@/types/components';
+import type { EditCreateMeetingIntroType } from '@/shared/types/components';
 import toast from 'react-hot-toast';
-import { EditMeetingIntro } from '@/api/users';
+import { EditMeetingIntro } from '@/shared/api/endpoints/users';
 
 export default function useEditMeetingIntroMutation(
   id: number,

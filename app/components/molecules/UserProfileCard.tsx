@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import Text from '../atoms/text/Text';
-import type { UserType } from '@/types/commons';
+import type { UserType } from '@/shared/types/commons';
 
 export default function UserProfileCard({ user }: { user: UserType }) {
   return (

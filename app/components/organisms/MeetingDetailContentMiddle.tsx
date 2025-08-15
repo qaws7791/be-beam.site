@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router';
-import { extractTime, formatToMonthAndDayDate } from '@/utils/date';
+import { extractTime, formatToMonthAndDayDate } from '@/shared/utils/date';
 
-import { cn } from '@/lib/tailwind';
-import type { Meeting } from '@/types/entities';
+import { cn } from '@/styles/tailwind';
+import type { Meeting } from '@/shared/types/entities';
 import Text from '../atoms/text/Text';
 import TitleAndDes from '../molecules/TitleAndDes';
 import InfoItem from '../molecules/InfoItem';

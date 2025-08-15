@@ -1,4 +1,4 @@
-import type { Review } from '@/types/entities';
+import type { Review } from '@/shared/types/entities';
 import { DropdownMenuItem } from '../atoms/dropdown-menu/DropdownMenu';
 import MoreDropdownMenu from '../organisms/MoreDropdownMenu';
 import MeetingReviewEditorProfile from './MeetingReviewEditorProfile';

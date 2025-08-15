@@ -1,4 +1,4 @@
-import type { MeetingListFilters } from '@/schemas/meetingFilters';
+import type { MeetingListFilters } from '@/features/meetings/schemas/meetingFilters';
 import DropdownMenuGroup from '../molecules/DropdownMenuGroup';
 import SearchInput from '../molecules/SearchInput';
 import TabsGroup from '../molecules/TabsGroup';

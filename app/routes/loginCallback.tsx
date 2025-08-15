@@ -1,5 +1,5 @@
 import { redirect } from 'react-router';
-import { metaTemplates } from '@/config/meta-templates';
+import { metaTemplates } from '@/shared/config/meta-templates';
 
 export function meta() {
   return metaTemplates.loginCallback();

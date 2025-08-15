@@ -1,4 +1,4 @@
-import { reportComplaint } from '@/api/complaints';
+import { reportComplaint } from '@/shared/api/endpoints/complaints';
 import { useMutation } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 

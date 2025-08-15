@@ -1,6 +1,6 @@
 'use client'; // 클라이언트 컴포넌트임을 명시 (React Hook 사용 시 필요)
 
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 import * as React from 'react';
 
 const Table = React.forwardRef<

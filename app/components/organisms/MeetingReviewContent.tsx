@@ -1,5 +1,5 @@
-import type { Review } from '@/types/entities';
-import { cn } from '@/lib/tailwind';
+import type { Review } from '@/shared/types/entities';
+import { cn } from '@/styles/tailwind';
 import Text from '../atoms/text/Text';
 
 export default function MeetingReviewContent({ review }: { review: Review }) {

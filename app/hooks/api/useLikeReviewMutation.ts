@@ -1,4 +1,7 @@
-import { likeReview, type ReviewListResult } from '@/api/reviews';
+import {
+  likeReview,
+  type ReviewListResult,
+} from '@/shared/api/endpoints/reviews';
 import {
   useMutation,
   useQueryClient,

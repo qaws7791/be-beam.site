@@ -7,8 +7,8 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-import type { Banner } from '@/types/entities';
-import { cn } from '@/lib/tailwind';
+import type { Banner } from '@/shared/types/entities';
+import { cn } from '@/styles/tailwind';
 import Text from '../atoms/text/Text';
 import { Button } from '../atoms/button/Button';
 

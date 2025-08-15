@@ -1,8 +1,8 @@
 import { Controller, useForm } from 'react-hook-form';
 import type { z } from 'zod';
-import { cancelMeetingReasonSchema } from '@/schemas/meeting';
+import { cancelMeetingReasonSchema } from '@/features/meetings/schemas/meeting';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useModalStore } from '@/stores/useModalStore';
+import { useModalStore } from '@/shared/stores/useModalStore';
 import useCancelMeetingMutation from '@/hooks/api/useCancelMeetingMutation';
 
 import {

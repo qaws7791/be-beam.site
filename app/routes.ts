@@ -18,19 +18,19 @@ export default [
   route('/login/callback', 'routes/loginCallback.tsx'),
   route('/search', 'routes/search.tsx'),
   route('/createMeeting', 'routes/createMeeting.tsx'),
-  layout('layouts/myPage.tsx', [
+  layout('shared/components/layout/myPage.tsx', [
     ...prefix('/myPage', [
       route('/participated', 'routes/participatedMeeting.tsx'),
       route('/requested', 'routes/requestedMeeting.tsx'),
       route('/created', 'routes/createdMeeting.tsx'),
       ...prefix('/reviews', [
         index('routes/myReviews.tsx'),
-        layout('layouts/myReview.tsx', [
+        layout('shared/components/layout/myReview.tsx', [
           route('/written', 'routes/writtenReviews.tsx'),
           route('/reviewable', 'routes/reviewableReviews.tsx'),
         ]),
       ]),
-      layout('layouts/myLikes.tsx', [
+      layout('shared/components/layout/myLikes.tsx', [
         ...prefix('/likes', [
           index('routes/myLikes.tsx'),
           route('/regular', 'routes/regularMeetingLikes.tsx'),
@@ -44,7 +44,7 @@ export default [
       route('/notifications', 'routes/myNotifications.tsx'),
     ]),
   ]),
-  layout('layouts/createdMeetingDetail.tsx', [
+  layout('shared/components/layout/createdMeetingDetail.tsx', [
     ...prefix('/myPage/created/:meetingId', [
       route('/intro', 'routes/createdMeetingDetailIntro.tsx'),
       route('/detail', 'routes/createdMeetingDetailDetail.tsx'),

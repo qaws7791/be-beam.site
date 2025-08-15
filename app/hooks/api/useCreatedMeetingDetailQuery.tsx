@@ -1,4 +1,4 @@
-import { getCreatedMeetingDetail } from '@/api/users';
+import { getCreatedMeetingDetail } from '@/shared/api/endpoints/users';
 import { useQuery } from '@tanstack/react-query';
 
 export default function useCreatedMeetingDetailQuery(id: number) {

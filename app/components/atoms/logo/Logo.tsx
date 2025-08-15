@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router';
 import { logoSizeStyles } from './Logo.styles';
 
-import { cn } from '@/lib/tailwind';
-import type { LogoProps } from '../../../types/components';
+import { cn } from '@/styles/tailwind';
+import type { LogoProps } from '../../../shared/types/components';
 
 export default function Logo({
   variant = 'header',

@@ -1,9 +1,9 @@
 import { useNavigate, useRouteLoaderData } from 'react-router';
 import useHostQuery from '@/hooks/api/useHostQuery';
 import useHostFollowAndFollowCancelMutation from '@/hooks/api/useHostFollowAndFollowCancelMutation';
-import { useModalStore } from '@/stores/useModalStore';
+import { useModalStore } from '@/shared/stores/useModalStore';
 
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 import { Button } from '../atoms/button/Button';
 import Text from '../atoms/text/Text';
 import GridGroup from './gridGroup/GridGroup';

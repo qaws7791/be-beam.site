@@ -1,14 +1,14 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
-import { useModalStore } from '@/stores/useModalStore';
+import { useModalStore } from '@/shared/stores/useModalStore';
 import usePagination from '@/hooks/ui/usePagination';
 import {
   getParticipationMeetingList,
   type MyPageMeetingResult,
-} from '@/api/mypage';
+} from '@/shared/api/endpoints/mypage';
 
-import type { MyParticipatedMeetingFilters } from '@/schemas/userFilters';
+import type { MyParticipatedMeetingFilters } from '@/features/mypage/schemas/userFilters';
 import GridGroup from './gridGroup/GridGroup';
 import MeetingCard from './MeetingCard';
 import MoreDropdownMenu from './MoreDropdownMenu';

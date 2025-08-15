@@ -1,4 +1,4 @@
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 
 interface MeetingBannerProps {
   imageUrl: string;

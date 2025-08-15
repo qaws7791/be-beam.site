@@ -16,7 +16,7 @@ import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import type { Route } from './+types/search';
-import { metaTemplates } from '@/config/meta-templates';
+import { metaTemplates } from '@/shared/config/meta-templates';
 import useLikeMeetingMutation from '@/hooks/api/useLikeMeetingMutation';
 import useUserSession from '@/hooks/business/useUserSession';
 

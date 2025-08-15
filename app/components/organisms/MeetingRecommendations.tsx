@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useRouteLoaderData } from 'react-router';
 
-import type { RecommendationMeeting } from '@/api/home';
+import type { RecommendationMeeting } from '@/shared/api/endpoints/home';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../atoms/tabs/Tabs';
 import Text from '../atoms/text/Text';
 import MeetingCard from './MeetingCard';

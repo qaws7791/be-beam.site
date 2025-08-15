@@ -1,4 +1,7 @@
-import { getTotalSearchResult, type SearchTotalParams } from '@/api/searches';
+import {
+  getTotalSearchResult,
+  type SearchTotalParams,
+} from '@/shared/api/endpoints/searches';
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
 export const searchTotalQueryOptions = (params: SearchTotalParams) =>

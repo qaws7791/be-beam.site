@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { metaTemplates } from '@/config/meta-templates';
+import { metaTemplates } from '@/shared/config/meta-templates';
 
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 import type { Route } from './+types/createdMeeting';
-import type { CreateMeeting } from '@/types/components';
+import type { CreateMeeting } from '@/shared/types/components';
 import CreateMeetingTemplate from '@/components/templates/CreateMeetingTemplate';
 import {
   Tabs,

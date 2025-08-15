@@ -1,7 +1,7 @@
 import useMeetingQuery from '@/hooks/api/useMeetingQuery';
-import { useModalStore } from '@/stores/useModalStore';
+import { useModalStore } from '@/shared/stores/useModalStore';
 
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 import MeetingDetailContent from '../sections/MeetingDetailContent';
 import Slider from './Slider';
 import MeetingDetailMeetingReviewsContainer from '../sections/MeetingDetailMeetingReviewsContainer';

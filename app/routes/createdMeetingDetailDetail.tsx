@@ -9,14 +9,14 @@ import {
 import {
   MyCreatedMeetingDetailFilterSchema,
   type MyCreatedMeetingDetailFilters,
-} from '@/schemas/userFilters';
-import { requireAuth } from '@/lib/auth.server';
+} from '@/features/mypage/schemas/userFilters';
+import { requireAuth } from '@/shared/.server/auth.server';
 import {
   getMyCreatedMeetingDetail,
   getMyCreatedMeetingSchedule,
-} from '@/api/users';
+} from '@/shared/api/endpoints/users';
 import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
-import { metaTemplates } from '@/config/meta-templates';
+import { metaTemplates } from '@/shared/config/meta-templates';
 
 import type { Route } from './+types/createdMeetingDetailDetail';
 import {

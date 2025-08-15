@@ -1,7 +1,7 @@
 import {
   getReviewableReviews,
   type GetReviewableReviewsParams,
-} from '@/api/users';
+} from '@/shared/api/endpoints/users';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 export function reviewableReviewsQueryOptions(

@@ -1,4 +1,7 @@
-import { createReview, type CreateReviewData } from '@/api/reviews';
+import {
+  createReview,
+  type CreateReviewData,
+} from '@/shared/api/endpoints/reviews';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 
-import type { GuidebookRecommendation } from '@/types/entities';
+import type { GuidebookRecommendation } from '@/shared/types/entities';
 import Text from '../atoms/text/Text';
 import GuideBookRecommendationCard from '../molecules/GuideBookRecommendationCard';
 

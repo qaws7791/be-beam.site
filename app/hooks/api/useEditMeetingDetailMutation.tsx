@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { EditMeetingDetail } from '@/api/users';
+import { EditMeetingDetail } from '@/shared/api/endpoints/users';
 
-import type { EditMeetingDetailType } from '@/types/components';
+import type { EditMeetingDetailType } from '@/shared/types/components';
 import toast from 'react-hot-toast';
 
 export default function useEditMeetingDetailMutation(id: number) {

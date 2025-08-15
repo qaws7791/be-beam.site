@@ -5,8 +5,8 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
-import { getHostDetail } from '@/api/hosts';
-import { metaTemplates } from '@/config/meta-templates';
+import { getHostDetail } from '@/shared/api/endpoints/hosts';
+import { metaTemplates } from '@/shared/config/meta-templates';
 
 import type { Route } from './+types/hostDetail';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';

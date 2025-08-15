@@ -1,10 +1,10 @@
-import { useModalStore } from '@/stores/useModalStore';
+import { useModalStore } from '@/shared/stores/useModalStore';
 import type { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createReviewSchema } from '@/schemas/reviews';
+import { createReviewSchema } from '@/features/reviews/schemas/reviews';
 import useCreateReviewMutation from '@/hooks/api/useCreateReviewMutation';
 
-import type { Meeting } from '@/types/entities';
+import type { Meeting } from '@/shared/types/entities';
 import {
   Dialog,
   DialogContent,

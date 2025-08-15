@@ -5,7 +5,7 @@ import { useSuspenseQueries } from '@tanstack/react-query';
 import {
   getMyCreatedMeetingDetail,
   getMyCreatedMeetingIntro,
-} from '@/api/users';
+} from '@/shared/api/endpoints/users';
 import Text from '../atoms/text/Text';
 
 export default function CreatedMeetingDetailWrap({

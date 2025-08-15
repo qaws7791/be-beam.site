@@ -4,7 +4,7 @@ import * as React from 'react';
 import * as NavigationMenuPrimitive from '@radix-ui/react-navigation-menu';
 import { Link } from 'react-router';
 
-import { cn, focusVisibleRing } from '@/lib/tailwind';
+import { cn, focusVisibleRing } from '@/styles/tailwind';
 
 function TabNav({
   className,

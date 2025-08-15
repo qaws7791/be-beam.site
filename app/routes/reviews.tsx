@@ -13,7 +13,7 @@ import useReviewsParams from '@/hooks/business/useReviewsParams';
 import { RadioGroup, RadioGroupItem } from '@radix-ui/react-radio-group';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
-import { metaTemplates } from '@/config/meta-templates';
+import { metaTemplates } from '@/shared/config/meta-templates';
 
 export function meta() {
   return metaTemplates.reviews();

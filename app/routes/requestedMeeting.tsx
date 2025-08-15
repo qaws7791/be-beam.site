@@ -4,20 +4,20 @@ import {
   QueryClient,
   type DehydratedState,
 } from '@tanstack/react-query';
-import { metaTemplates } from '@/config/meta-templates';
+import { metaTemplates } from '@/shared/config/meta-templates';
 
-import type { FilterOption } from '@/types/components';
+import type { FilterOption } from '@/shared/types/components';
 import { Tabs, TabsList, TabsTrigger } from '@/components/atoms/tabs/Tabs';
 import Text from '@/components/atoms/text/Text';
 import { TabsContent } from '@radix-ui/react-tabs';
 
 import type { Route } from './+types/requestedMeeting';
-import { requireAuth } from '@/lib/auth.server';
+import { requireAuth } from '@/shared/.server/auth.server';
 import {
   MyApplicatedMeetingFilterSchema,
   type MyApplicatedMeetingFilters,
-} from '@/schemas/userFilters';
-import { getApplicationMeetingList } from '@/api/mypage';
+} from '@/features/mypage/schemas/userFilters';
+import { getApplicationMeetingList } from '@/shared/api/endpoints/mypage';
 import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
 import RequestedMeetingWrap from '@/components/organisms/RequestedMeetingWrap';
 

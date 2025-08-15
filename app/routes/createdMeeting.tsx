@@ -7,13 +7,13 @@ import {
 import {
   MyCreatedMeetingFilterSchema,
   type MyCreatedMeetingFilters,
-} from '@/schemas/userFilters';
+} from '@/features/mypage/schemas/userFilters';
 import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
-import { requireAuth } from '@/lib/auth.server';
-import { getOpeningMeetingList } from '@/api/mypage';
+import { requireAuth } from '@/shared/.server/auth.server';
+import { getOpeningMeetingList } from '@/shared/api/endpoints/mypage';
 
 import type { Route } from './+types/createdMeeting';
-import type { FilterOption } from '@/types/components';
+import type { FilterOption } from '@/shared/types/components';
 import {
   Tabs,
   TabsContent,
@@ -22,7 +22,7 @@ import {
 } from '@/components/atoms/tabs/Tabs';
 import CreatedMeetingWrap from '@/components/organisms/CreatedMeetingWrap';
 import Text from '@/components/atoms/text/Text';
-import { metaTemplates } from '@/config/meta-templates';
+import { metaTemplates } from '@/shared/config/meta-templates';
 
 export function meta() {
   return metaTemplates.createdMeeting();

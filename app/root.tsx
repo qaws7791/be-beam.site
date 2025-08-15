@@ -7,11 +7,14 @@ import {
   ScrollRestoration,
   useLocation,
 } from 'react-router';
-import { metaTemplates } from './config/meta-templates';
-import { userContext } from './context';
-import { globalStorageMiddleware, sessionMiddleware } from './middlewares/auth';
-import TanstackQueryProvider from './providers/TanstackQueryProvider';
-import './app.css';
+import { metaTemplates } from './shared/config/meta-templates';
+import { userContext } from './shared/.server/context';
+import {
+  globalStorageMiddleware,
+  sessionMiddleware,
+} from './shared/.server/auth';
+import TanstackQueryProvider from './shared/providers/TanstackQueryProvider';
+import './styles/app.css';
 
 import type { Route } from './+types/root';
 import Navbar from './components/organisms/Navbar';

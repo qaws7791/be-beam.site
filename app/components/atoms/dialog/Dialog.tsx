@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 
-import { cn, focusRing } from '@/lib/tailwind';
+import { cn, focusRing } from '@/styles/tailwind';
 import XIcon from '../icons/XIcon';
 
 function Dialog({

@@ -1,4 +1,4 @@
-import { getMyProfile } from '@/api/users';
+import { getMyProfile } from '@/shared/api/endpoints/users';
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
 export const myProfileQueryOptions = () =>

@@ -1,6 +1,6 @@
-import { formatNumberWithComma } from '@/utils/cash';
+import { formatNumberWithComma } from '@/shared/utils/cash';
 
-import type { Meeting } from '@/types/entities';
+import type { Meeting } from '@/shared/types/entities';
 import { Tag } from '../atoms/tag/Tag';
 import Text from '../atoms/text/Text';
 import RecruitmentTypeAndTopic from '../molecules/RecruitmentTypeAndTopic';

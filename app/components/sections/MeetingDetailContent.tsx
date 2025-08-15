@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 
-import type { Meeting } from '@/types/entities';
+import type { Meeting } from '@/shared/types/entities';
 import MeetingDetailContentTop from '../organisms/MeetingDetailContentTop';
 import MeetingDetailContentMiddle from '../organisms/MeetingDetailContentMiddle';
 import MeetingDetailContentBottom from '../organisms/MeetingDetailContentBottom';

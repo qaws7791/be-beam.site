@@ -2,7 +2,7 @@ import Text from '../atoms/text/Text';
 import { Tag } from '../atoms/tag/Tag';
 import InfoItem from '../molecules/InfoItem';
 
-import type { Guidebook } from '@/types/entities';
+import type { Guidebook } from '@/shared/types/entities';
 
 export default function GuideBookDetailContent({
   guideBook,

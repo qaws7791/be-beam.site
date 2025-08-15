@@ -1,5 +1,5 @@
 import { Tabs, TabsList, TabsTrigger } from '@/components/atoms/tabs/Tabs';
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 
 interface TabsGroupProps {
   categories: {

@@ -4,7 +4,7 @@ import SideBarNavItem from '../atoms/SideBarNavItem';
 import UserProfileCard from '../molecules/UserProfileCard';
 import SidebarSection from '../molecules/SidebarSection';
 
-import type { UserType } from '@/types/commons';
+import type { UserType } from '@/shared/types/commons';
 
 export default function SideBar({ user }: { user: UserType }) {
   const [isMeetingPage, setIsMeetingPage] = useState(true);

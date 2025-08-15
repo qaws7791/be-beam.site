@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router';
 import useLikeMeetingMutation from '@/hooks/api/useLikeMeetingMutation';
 
-import type { MeetingSummary } from '@/types/entities';
+import type { MeetingSummary } from '@/shared/types/entities';
 import MeetingCard from '../organisms/MeetingCard';
 import GridGroup from '../organisms/gridGroup/GridGroup';
 

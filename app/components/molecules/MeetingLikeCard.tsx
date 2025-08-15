@@ -1,4 +1,8 @@
-import type { ImageType, Meeting, MeetingSchedule } from '@/types/entities';
+import type {
+  ImageType,
+  Meeting,
+  MeetingSchedule,
+} from '@/shared/types/entities';
 import ClockIcon from '../atoms/icons/ClockIcon';
 import HeartFillIcon from '../atoms/icons/HeartFillIcon';
 import LocationIcon from '../atoms/icons/LocationIcon';

@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import useGuideBooksQuery from '@/hooks/api/useGuideBooksQuery';
-import type { GuideBookListFilters } from '@/schemas/guideBooksFilters';
+import type { GuideBookListFilters } from '@/features/guidebooks/schemas/guideBooksFilters';
 import useInfiniteScroll from '@/hooks/ui/useInfiniteScroll';
 
-import type { FilterOption } from '@/types/components';
+import type { FilterOption } from '@/shared/types/components';
 import { TabsContent } from '../atoms/tabs/Tabs';
 import GridGroup from '../organisms/gridGroup/GridGroup';
 import GuideBookCard from '../organisms/GuideBookCard';

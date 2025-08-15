@@ -1,4 +1,4 @@
-import { getMeetingReviews } from '@/api/meetingReviews';
+import { getMeetingReviews } from '@/shared/api/endpoints/meetingReviews';
 import type { meetingReviewFilterType } from '@/components/sections/MeetingDetailMeetingReviewsContainer';
 import { useInfiniteQuery } from '@tanstack/react-query';
 

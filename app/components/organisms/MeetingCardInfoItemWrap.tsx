@@ -1,6 +1,6 @@
-import { formatToMonthAndDayDate } from '@/utils/date';
+import { formatToMonthAndDayDate } from '@/shared/utils/date';
 
-import type { Meeting } from '@/types/entities';
+import type { Meeting } from '@/shared/types/entities';
 import InfoItem from '../molecules/InfoItem';
 
 export default function MeetingCardInfoItemWrap({

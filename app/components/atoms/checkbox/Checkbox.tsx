@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 
-import { cn, focusVisibleRing } from '@/lib/tailwind';
+import { cn, focusVisibleRing } from '@/styles/tailwind';
 import CheckIcon from '../icons/CheckIcon';
 
 function Checkbox({

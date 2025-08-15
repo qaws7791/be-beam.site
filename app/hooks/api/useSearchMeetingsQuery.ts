@@ -1,7 +1,7 @@
 import {
   getSearchMeetingResult,
   type SearchMeetingParams,
-} from '@/api/searches';
+} from '@/shared/api/endpoints/searches';
 import { infiniteQueryOptions, useInfiniteQuery } from '@tanstack/react-query';
 
 export const searchMeetingsQueryOptions = (

@@ -1,4 +1,4 @@
-import { metaTemplates } from '@/config/meta-templates';
+import { metaTemplates } from '@/shared/config/meta-templates';
 import {
   dehydrate,
   HydrationBoundary,
@@ -8,14 +8,14 @@ import {
 import {
   MyParticipatedMeetingFilterSchema,
   type MyParticipatedMeetingFilters,
-} from '@/schemas/userFilters';
-import { requireAuth } from '@/lib/auth.server';
+} from '@/features/mypage/schemas/userFilters';
+import { requireAuth } from '@/shared/.server/auth.server';
 import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
-import { getParticipationMeetingList } from '@/api/mypage';
+import { getParticipationMeetingList } from '@/shared/api/endpoints/mypage';
 import ParticipatedMeetingWrap from '@/components/organisms/ParticipatedMeetingWrap';
 
 import type { Route } from './+types/participatedMeeting';
-import type { FilterOption } from '@/types/components';
+import type { FilterOption } from '@/shared/types/components';
 import {
   Tabs,
   TabsContent,

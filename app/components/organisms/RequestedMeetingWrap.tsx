@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
-import type { MyApplicatedMeetingFilters } from '@/schemas/userFilters';
-import { useModalStore } from '@/stores/useModalStore';
+import type { MyApplicatedMeetingFilters } from '@/features/mypage/schemas/userFilters';
+import { useModalStore } from '@/shared/stores/useModalStore';
 import usePagination from '@/hooks/ui/usePagination';
-import { axiosInstance } from '@/lib/axios';
-import { API_V2_BASE_URL } from '@/constants/api';
+import { axiosInstance } from '@/shared/api/axios';
+import { API_V2_BASE_URL } from '@/shared/constants/api';
 
-import type { MyPageMeetingSummary } from '@/types/entities';
+import type { MyPageMeetingSummary } from '@/shared/types/entities';
 import GridGroup from './gridGroup/GridGroup';
 import MeetingCard from './MeetingCard';
 import MoreDropdownMenu from './MoreDropdownMenu';

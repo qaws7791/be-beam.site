@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as SelectPrimitive from '@radix-ui/react-select';
 import { Check } from 'lucide-react';
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 import ArrowDownFillIcon from '../icons/ArrowDownFillIcon';
 
 const Select = SelectPrimitive.Root;

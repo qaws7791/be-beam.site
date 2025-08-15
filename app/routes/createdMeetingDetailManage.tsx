@@ -9,13 +9,13 @@ import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
 import {
   MyCreatedMeetingManageFilterSchema,
   type MyCreatedMeetingManageFilters,
-} from '@/schemas/userFilters';
-import { requireAuth } from '@/lib/auth.server';
+} from '@/features/mypage/schemas/userFilters';
+import { requireAuth } from '@/shared/.server/auth.server';
 import {
   getMyCreatedMeetingApplicants,
   getMyCreatedMeetingAttendance,
   getMyCreatedMeetingParticipants,
-} from '@/api/users';
+} from '@/shared/api/endpoints/users';
 
 import type { Route } from './+types/createdMeetingDetailManage';
 import {
@@ -27,7 +27,7 @@ import {
 import CreatedMeetingApplicantsManageContent from '@/components/organisms/CreatedMeetingApplicantsManageContent';
 import CreatedMeetingParticipantsManageContent from '@/components/organisms/CreatedMeetingParticipantsManageContent';
 import CreatedMeetingAttendanceManageContent from '@/components/organisms/CreatedMeetingAttendanceManageContent';
-import { metaTemplates } from '@/config/meta-templates';
+import { metaTemplates } from '@/shared/config/meta-templates';
 
 export function meta() {
   return metaTemplates.createdMeetingDetailManage();

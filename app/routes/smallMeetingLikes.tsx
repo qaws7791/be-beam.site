@@ -1,5 +1,5 @@
 import useMyMeetingLikesQuery from '@/hooks/api/useMyMeetingLikesQuery';
-import { metaTemplates } from '@/config/meta-templates';
+import { metaTemplates } from '@/shared/config/meta-templates';
 import MeetingCard from '@/components/organisms/MeetingCard';
 import useLikeMeetingMutation from '@/hooks/api/useLikeMeetingMutation';
 import { useNavigate } from 'react-router';

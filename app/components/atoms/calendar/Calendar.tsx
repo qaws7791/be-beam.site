@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import { DayButton, DayPicker, getDefaultClassNames } from 'react-day-picker';
 
-import { cn, focusVisibleRing } from '@/lib/tailwind';
+import { cn, focusVisibleRing } from '@/styles/tailwind';
 import ArrowRightIcon from '@/components/atoms/icons/ArrowRightIcon';
 import ArrowDownIcon from '@/components/atoms/icons/ArrowDownIcon';
 import { cva, cx } from 'class-variance-authority';

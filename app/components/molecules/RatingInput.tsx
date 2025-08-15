@@ -1,4 +1,4 @@
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 import StarIcon from '../atoms/icons/StarIcon';
 import StarOutlineIcon from '../atoms/icons/StarOutlineIcon';
 import { useState } from 'react';

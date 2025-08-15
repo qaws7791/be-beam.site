@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { cn, focusVisibleRing } from '@/lib/tailwind';
+import { cn, focusVisibleRing } from '@/styles/tailwind';
 import SearchIcon from '../icons/SearchIcon';
 import XIcon from '../icons/XIcon';
 

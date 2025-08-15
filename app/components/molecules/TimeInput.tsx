@@ -12,7 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '../atoms/popover/Popover';
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 
 interface TimeInputProps {
   value: string;

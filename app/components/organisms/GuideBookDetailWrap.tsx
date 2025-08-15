@@ -1,5 +1,5 @@
 import useGuideBookQuery from '@/hooks/api/useGuideBookQuery';
-import { getGuideBookPdf } from '@/api/guideBooks';
+import { getGuideBookPdf } from '@/shared/api/endpoints/guideBooks';
 
 import Slider from '@/components/organisms/Slider';
 import { Button } from '../atoms/button/Button';

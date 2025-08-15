@@ -6,12 +6,12 @@ import {
   QueryClient,
   type DehydratedState,
 } from '@tanstack/react-query';
-import { requireAuth } from '@/lib/auth.server';
-import { getTopics } from '@/api/topics';
+import { requireAuth } from '@/shared/.server/auth.server';
+import { getTopics } from '@/shared/api/endpoints/topics';
 
 import type { Route } from './+types/createdMeetingDetailIntro';
-import { metaTemplates } from '@/config/meta-templates';
-import { getMyCreatedMeetingIntro } from '@/api/users';
+import { metaTemplates } from '@/shared/config/meta-templates';
+import { getMyCreatedMeetingIntro } from '@/shared/api/endpoints/users';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 import CreatedMeetingDetailIntroWrap from '@/components/organisms/CreatedMeetingDetailIntroWrap';
 

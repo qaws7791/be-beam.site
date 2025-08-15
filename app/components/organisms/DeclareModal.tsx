@@ -1,7 +1,7 @@
-import { useModalStore } from '@/stores/useModalStore';
+import { useModalStore } from '@/shared/stores/useModalStore';
 import { Controller, useForm } from 'react-hook-form';
 import type { z } from 'zod';
-import { declareReasonSchema } from '@/schemas/meeting';
+import { declareReasonSchema } from '@/features/meetings/schemas/meeting';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import {

@@ -1,4 +1,4 @@
-import { metaTemplates } from '@/config/meta-templates';
+import { metaTemplates } from '@/shared/config/meta-templates';
 import { useNavigate, useRouteLoaderData } from 'react-router';
 import { useMemo } from 'react';
 import {
@@ -9,13 +9,13 @@ import {
 import {
   MeetingListFilterSchema,
   type MeetingListFilters,
-} from '@/schemas/meetingFilters';
+} from '@/features/meetings/schemas/meetingFilters';
 import { useUrlFilters } from '@/hooks/ui/userUrlFilters';
-import { getMeetingList } from '@/api/meetings';
-import { getTopics } from '@/api/topics';
+import { getMeetingList } from '@/shared/api/endpoints/meetings';
+import { getTopics } from '@/shared/api/endpoints/topics';
 
 import type { Route } from './+types/meetings';
-import type { Topic } from '@/types/entities';
+import type { Topic } from '@/shared/types/entities';
 import CommonTemplate from '@/components/templates/CommonTemplate';
 import Banner from '@/components/atoms/Banner';
 import MeetingFilterControls from '@/components/organisms/MeetingFilterControls';

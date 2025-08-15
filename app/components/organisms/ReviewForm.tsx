@@ -5,7 +5,7 @@ import { ImageInput } from '@/components/molecules/ImageInput';
 import { z } from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createReviewSchema } from '@/schemas/reviews';
+import { createReviewSchema } from '@/features/reviews/schemas/reviews';
 import MeetingTypeTag from '../atoms/MeetingTypeTag';
 
 type MeetingType = '정기모임' | '소모임';

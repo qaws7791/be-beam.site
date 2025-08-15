@@ -5,8 +5,8 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
-import { getGuideBookDetail } from '@/api/guideBooks';
-import { metaTemplates } from '@/config/meta-templates';
+import { getGuideBookDetail } from '@/shared/api/endpoints/guideBooks';
+import { metaTemplates } from '@/shared/config/meta-templates';
 
 import type { Route } from './+types/guideBookDetail';
 import CommonTemplate from '@/components/templates/CommonTemplate';

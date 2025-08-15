@@ -1,4 +1,4 @@
-import { getMyInfo } from '@/api/users';
+import { getMyInfo } from '@/shared/api/endpoints/users';
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
 export const myInfoQueryOptions = () => {

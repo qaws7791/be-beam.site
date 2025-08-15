@@ -4,17 +4,17 @@ import useEditMeetingScheduleMutation from '@/hooks/api/useEditMeetingScheduleMu
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import type { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { editCreatedMeetingThirdSchema } from '@/schemas/meeting';
+import { editCreatedMeetingThirdSchema } from '@/features/meetings/schemas/meeting';
 import {
   getMyCreatedMeetingApplicants,
   getMyCreatedMeetingDetail,
   getMyCreatedMeetingIntro,
   getMyCreatedMeetingSchedule,
-} from '@/api/users';
+} from '@/shared/api/endpoints/users';
 import { format } from 'date-fns';
 
-import type { MeetingSchedule } from '@/types/entities';
-import { cn } from '@/lib/tailwind';
+import type { MeetingSchedule } from '@/shared/types/entities';
+import { cn } from '@/styles/tailwind';
 import Text from '../atoms/text/Text';
 import { DateInput } from '../molecules/DateInput';
 import { TimeInput } from '../molecules/TimeInput';

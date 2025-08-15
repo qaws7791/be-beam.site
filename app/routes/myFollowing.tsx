@@ -9,10 +9,10 @@ import {
 } from '@/components/atoms/pagination/Pagination';
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 import useMyHostLikesQuery from '@/hooks/api/useMyHostLikesQuery';
-import type { Host } from '@/types/entities';
+import type { Host } from '@/shared/types/entities';
 import { Suspense, useCallback } from 'react';
 import { useSearchParams } from 'react-router';
-import { metaTemplates } from '@/config/meta-templates';
+import { metaTemplates } from '@/shared/config/meta-templates';
 
 export function meta() {
   return metaTemplates.myFollowing();

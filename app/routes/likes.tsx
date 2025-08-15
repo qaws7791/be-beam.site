@@ -2,7 +2,7 @@ import { Chip } from '@/components/atoms/chip/Chip';
 import ArrowRightIcon from '@/components/atoms/icons/ArrowRightIcon';
 import { Tag } from '@/components/atoms/tag/Tag';
 import { Link, useSearchParams } from 'react-router';
-import { metaTemplates } from '@/config/meta-templates';
+import { metaTemplates } from '@/shared/config/meta-templates';
 
 export function meta() {
   return metaTemplates.likes();

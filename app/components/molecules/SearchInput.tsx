@@ -1,4 +1,4 @@
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 import { Input } from '../atoms/input/Input';
 
 export interface SearchInputProps

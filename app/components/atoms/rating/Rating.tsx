@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
 import { type LucideProps, StarIcon } from 'lucide-react';
 import {

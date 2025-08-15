@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 import ArrowRightIcon from '../icons/ArrowRightIcon';
 import CheckIcon from '../icons/CheckIcon';
 

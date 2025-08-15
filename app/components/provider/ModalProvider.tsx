@@ -1,4 +1,4 @@
-import { useModalStore } from '@/stores/useModalStore';
+import { useModalStore } from '@/shared/stores/useModalStore';
 import ConfirmDialog from '../organisms/ConfirmDialog';
 import MeetingCancelModal from '../organisms/MeetingCancelModal';
 import MeetingReviewEditModal from '../organisms/MeetingReviewEditModal';

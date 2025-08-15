@@ -1,4 +1,4 @@
-import { getRecommendationMeeting } from '@/api/home';
+import { getRecommendationMeeting } from '@/shared/api/endpoints/home';
 import { useQuery } from '@tanstack/react-query';
 
 export default function useMeetingRecommendationQuery(

@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { getGuideBookList } from '@/api/guideBooks';
+import { getGuideBookList } from '@/shared/api/endpoints/guideBooks';
 
-import type { GuideBookListFilters } from '@/schemas/guideBooksFilters';
+import type { GuideBookListFilters } from '@/features/guidebooks/schemas/guideBooksFilters';
 
 export default function useGuideBooksQuery(filters: GuideBookListFilters) {
   return useInfiniteQuery({

@@ -1,4 +1,4 @@
-import { logout } from '@/api/auth';
+import { logout } from '@/shared/api/endpoints/auth';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
 

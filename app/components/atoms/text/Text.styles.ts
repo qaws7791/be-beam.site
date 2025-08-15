@@ -1,4 +1,4 @@
-import type { TypographyVariant } from '../../../types/components';
+import type { TypographyVariant } from '../../../shared/types/components';
 
 export const variantStyles: Record<TypographyVariant, string> = {
   H0_Bold: 'text-[36px] font-bold leading-[140%]',

@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { getMyCreatedMeetingParticipants } from '@/api/users';
+import { getMyCreatedMeetingParticipants } from '@/shared/api/endpoints/users';
 
-import type { Participants } from '@/types/entities';
-import { cn } from '@/lib/tailwind';
+import type { Participants } from '@/shared/types/entities';
+import { cn } from '@/styles/tailwind';
 import {
   Table,
   TableBody,

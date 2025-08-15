@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { DeleteMeeting } from '@/api/meetings';
+import { DeleteMeeting } from '@/shared/api/endpoints/meetings';
 
 import toast from 'react-hot-toast';
 

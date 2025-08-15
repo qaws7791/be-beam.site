@@ -1,4 +1,4 @@
-import { getMyMeetingLikes } from '@/api/users';
+import { getMyMeetingLikes } from '@/shared/api/endpoints/users';
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
 const myMeetingLikesQueryOptions = ({

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 import { cva } from 'class-variance-authority';
 import { Link, type LinkProps } from 'react-router';
 import ArrowLeftIcon from '../icons/ArrowLeftIcon';

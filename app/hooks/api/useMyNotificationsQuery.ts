@@ -1,4 +1,4 @@
-import { getNotifications } from '@/api/notifications';
+import { getNotifications } from '@/shared/api/endpoints/notifications';
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
 const myNotificationsQueryOptions = ({

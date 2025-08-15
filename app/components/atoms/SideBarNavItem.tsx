@@ -1,4 +1,4 @@
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 import { NavLink } from 'react-router';
 
 export default function SideBarNavItem({

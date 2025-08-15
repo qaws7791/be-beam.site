@@ -1,13 +1,13 @@
-import { useModalStore } from '@/stores/useModalStore';
+import { useModalStore } from '@/shared/stores/useModalStore';
 import useMyInfoQuery from '@/hooks/api/useMyInfoQuery';
 import useApplyMeetingMutation from '@/hooks/api/useApplyMeetingMutation';
 import { Controller, useForm } from 'react-hook-form';
 import type { z } from 'zod';
-import { applyMeetingSchema } from '@/schemas/meeting';
+import { applyMeetingSchema } from '@/features/meetings/schemas/meeting';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import type { Meeting } from '@/types/entities';
-import type { MyInfoResult } from '@/api/users';
+import type { Meeting } from '@/shared/types/entities';
+import type { MyInfoResult } from '@/shared/api/endpoints/users';
 import {
   Dialog,
   DialogContent,

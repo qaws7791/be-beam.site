@@ -1,8 +1,8 @@
-import { formatToMonthAndDayDate } from '@/utils/date';
+import { formatToMonthAndDayDate } from '@/shared/utils/date';
 import Text from '../atoms/text/Text';
 
-import { cn } from '@/lib/tailwind';
-import type { MeetingSummary } from '@/types/entities';
+import { cn } from '@/styles/tailwind';
+import type { MeetingSummary } from '@/shared/types/entities';
 import { Tag } from '../atoms/tag/Tag';
 
 export interface MeetingCardProp extends MeetingSummary {

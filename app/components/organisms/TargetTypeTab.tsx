@@ -1,9 +1,9 @@
-import type { GuideBookListFilters } from '@/schemas/guideBooksFilters';
+import type { GuideBookListFilters } from '@/features/guidebooks/schemas/guideBooksFilters';
 
-import type { FilterOption } from '@/types/components';
+import type { FilterOption } from '@/shared/types/components';
 import { TabsList, TabsTrigger } from '../atoms/tabs/Tabs';
 import { Button } from '../atoms/button/Button';
-import { useModalStore } from '@/stores/useModalStore';
+import { useModalStore } from '@/shared/stores/useModalStore';
 
 export default function GuideBooksFilterControls({
   list,

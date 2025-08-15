@@ -1,4 +1,4 @@
-import { acceptOrRejectApplication } from '@/api/users';
+import { acceptOrRejectApplication } from '@/shared/api/endpoints/users';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import toast from 'react-hot-toast';

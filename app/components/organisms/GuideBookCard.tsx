@@ -1,6 +1,6 @@
 import Text from '../atoms/text/Text';
 import { useNavigate } from 'react-router';
-import type { GuidebookSummary } from '@/types/entities';
+import type { GuidebookSummary } from '@/shared/types/entities';
 
 export default function GuideBookCard({ data }: { data: GuidebookSummary }) {
   const navigate = useNavigate();

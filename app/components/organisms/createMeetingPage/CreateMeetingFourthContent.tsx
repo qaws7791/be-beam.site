@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { axiosInstance } from '@/lib/axios';
-import { API_V1_BASE_URL } from '@/constants/api';
+import { axiosInstance } from '@/shared/api/axios';
+import { API_V1_BASE_URL } from '@/shared/constants/api';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
-import { createMeetingFourthSchema } from '@/schemas/meeting';
-import type { CreateMeeting } from '@/types/components';
+import { createMeetingFourthSchema } from '@/features/meetings/schemas/meeting';
+import type { CreateMeeting } from '@/shared/types/components';
 import { format } from 'date-fns';
 
 import toast from 'react-hot-toast';
@@ -21,7 +21,7 @@ import { DateInput } from '@/components/molecules/DateInput';
 import { TimeInput } from '@/components/molecules/TimeInput';
 import { AddressInput } from '@/components/molecules/AddressInput';
 import { useNavigate } from 'react-router';
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 
 interface CreateMeetingFourthContentProps {
   tab: number;

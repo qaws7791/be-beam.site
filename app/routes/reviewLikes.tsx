@@ -1,4 +1,4 @@
-import type { MyReviewLikesResult } from '@/api/users';
+import type { MyReviewLikesResult } from '@/shared/api/endpoints/users';
 import {
   Pagination,
   PaginationContent,
@@ -10,7 +10,7 @@ import {
 import LoadingSpinner from '@/components/molecules/LoadingSpinner';
 import ReviewLikeCard from '@/components/molecules/ReviewLikeCard';
 import useMyReviewLikesQuery from '@/hooks/api/useMyReviewLikesQuery';
-import { metaTemplates } from '@/config/meta-templates';
+import { metaTemplates } from '@/shared/config/meta-templates';
 import { Suspense, useCallback } from 'react';
 import { useSearchParams } from 'react-router';
 

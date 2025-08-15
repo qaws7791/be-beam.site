@@ -1,11 +1,11 @@
-import type { MeetingListFilters } from '@/schemas/meetingFilters';
+import type { MeetingListFilters } from '@/features/meetings/schemas/meetingFilters';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
 } from '../atoms/dropdown-menu/DropdownMenu';
-import type { FiltersType } from '@/types/components';
+import type { FiltersType } from '@/shared/types/components';
 
 interface DropdownMenuGroupProps {
   datas: FiltersType[];

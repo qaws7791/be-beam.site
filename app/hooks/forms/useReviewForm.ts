@@ -1,4 +1,4 @@
-import { createReviewSchema } from '@/schemas/reviews';
+import { createReviewSchema } from '@/features/reviews/schemas/reviews';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';

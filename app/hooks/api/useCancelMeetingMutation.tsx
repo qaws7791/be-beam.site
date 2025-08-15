@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import toast from 'react-hot-toast';
-import { cancelMeeting } from '@/api/meetings';
+import { cancelMeeting } from '@/shared/api/endpoints/meetings';
 
 export default function useCancelMeetingMutation(
   id: number,

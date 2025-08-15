@@ -10,8 +10,8 @@ import {
   SelectValue,
 } from '../atoms/select/Select';
 import LoadingSpinner from './LoadingSpinner';
-import { cn } from '@/lib/tailwind';
-import type { GuidebookSummary } from '@/types/entities';
+import { cn } from '@/styles/tailwind';
+import type { GuidebookSummary } from '@/shared/types/entities';
 
 interface GuideBookSelectProps {
   value?: number | null;

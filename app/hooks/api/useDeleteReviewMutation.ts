@@ -1,4 +1,4 @@
-import { deleteReview } from '@/api/reviews';
+import { deleteReview } from '@/shared/api/endpoints/reviews';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 

@@ -1,5 +1,5 @@
-import type { getReviewListParams } from '@/api/reviews';
-import { getReviewList } from '@/api/reviews';
+import type { getReviewListParams } from '@/shared/api/endpoints/reviews';
+import { getReviewList } from '@/shared/api/endpoints/reviews';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 export default function useReviewsQuery(

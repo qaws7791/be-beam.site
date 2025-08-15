@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useRouteLoaderData } from 'react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { axiosInstance } from '@/lib/axios';
-import { API_V1_BASE_URL } from '@/constants/api';
-import { readFileAsBase64 } from '@/utils/file';
-import { useModalStore } from '@/stores/useModalStore';
+import { axiosInstance } from '@/shared/api/axios';
+import { API_V1_BASE_URL } from '@/shared/constants/api';
+import { readFileAsBase64 } from '@/shared/utils/file';
+import { useModalStore } from '@/shared/stores/useModalStore';
 import toast from 'react-hot-toast';
 
-import type { Review } from '@/types/entities';
+import type { Review } from '@/shared/types/entities';
 import MeetingReviewCardHeader from '../molecules/MeetingReviewCardHeader';
 import { Button } from '../atoms/button/Button';
 import MeetingReviewEditForm from './MeetingReviewEditForm';

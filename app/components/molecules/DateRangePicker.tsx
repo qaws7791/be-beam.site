@@ -4,7 +4,7 @@ import * as React from 'react';
 import { format } from 'date-fns';
 import type { DateRange } from 'react-day-picker';
 
-import { cn } from '@/lib/tailwind';
+import { cn } from '@/styles/tailwind';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import {
   Popover,

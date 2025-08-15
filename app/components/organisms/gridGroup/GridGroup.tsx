@@ -1,6 +1,6 @@
 import { columnStyles, gapStyles } from './GridGroup.styles';
-import type { GridGroupProps } from '@/types/components';
-import { cn } from '@/lib/tailwind';
+import type { GridGroupProps } from '@/shared/types/components';
+import { cn } from '@/styles/tailwind';
 
 export default function GridGroup({
   children,

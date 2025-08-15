@@ -1,5 +1,5 @@
-import type { GuideBookListFilters } from '@/schemas/guideBooksFilters';
-import { useModalStore } from '@/stores/useModalStore';
+import type { GuideBookListFilters } from '@/features/guidebooks/schemas/guideBooksFilters';
+import { useModalStore } from '@/shared/stores/useModalStore';
 import { useCallback, useEffect, useState } from 'react';
 
 export interface FilterState {

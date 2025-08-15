@@ -1,4 +1,4 @@
-import { getMyReviewLikes } from '@/api/users';
+import { getMyReviewLikes } from '@/shared/api/endpoints/users';
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 
 const myReviewLikesQueryOptions = ({

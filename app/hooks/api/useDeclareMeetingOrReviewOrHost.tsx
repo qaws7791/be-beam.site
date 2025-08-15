@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { declareMeetingOrReviewOrHost } from '@/api/complaints';
+import { declareMeetingOrReviewOrHost } from '@/shared/api/endpoints/complaints';
 import toast from 'react-hot-toast';
 
 export interface DeclareModalPropsType {

@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { axiosInstance } from '@/lib/axios';
-import { API_V1_BASE_URL } from '@/constants/api';
+import { axiosInstance } from '@/shared/api/axios';
+import { API_V1_BASE_URL } from '@/shared/constants/api';
 
-import type { Host } from '@/types/entities';
+import type { Host } from '@/shared/types/entities';
 import toast from 'react-hot-toast';
 
 export default function useHostFollowAndFollowCancelMutation(
