@@ -1,5 +1,4 @@
 import { Chip } from '@/components/atoms/chip/Chip';
-import CaretArrowDownIcon from '@/components/atoms/icons/CaretArrowDownIcon';
 import { Link, Outlet, useMatch } from 'react-router';
 
 export default function MyReviewLayout() {
@@ -38,12 +37,6 @@ export default function MyReviewLayout() {
             >
               작성 가능한 후기
             </Link>
-          </Chip>
-        </div>
-        <div>
-          <Chip variant="secondary">
-            전체
-            <CaretArrowDownIcon className="size-6" />
           </Chip>
         </div>
       </div>
