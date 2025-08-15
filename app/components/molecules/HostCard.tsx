@@ -1,9 +1,11 @@
+import HeartIcon from '@/components/atoms/icons/HeartIcon';
 import HeartFillIcon from '../atoms/icons/HeartFillIcon';
-
 export default function HostCard({
   host,
 }: {
   host: {
+    id: number;
+    liked?: boolean;
     profileImage: string;
     nickname: string;
     introduction: string;
@@ -15,11 +17,17 @@ export default function HostCard({
         <img
           src={host.profileImage}
           alt={host.nickname}
-          className="w-full rounded-3xl object-cover"
+          className="h-[226px] w-full rounded-3xl object-cover"
         />
-        <button className="absolute top-5 right-5">
-          <HeartFillIcon className="size-8 text-error" />
-        </button>
+        {host.liked !== undefined && (
+          <button className="absolute top-5 right-5">
+            {host.liked ? (
+              <HeartFillIcon className="size-8 text-error" />
+            ) : (
+              <HeartIcon className="size-8 text-white" />
+            )}
+          </button>
+        )}
       </div>
       <div className="flex flex-col gap-3">
         <p className="text-t2">{host.nickname}</p>
