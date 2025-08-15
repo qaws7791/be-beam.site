@@ -14,6 +14,14 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
+    ssr: {
+      external: ['node:async_hooks'],
+    },
+    build: {
+      rollupOptions: {
+        external: ['node:async_hooks'],
+      },
+    },
     server: {
       port: 3000,
     },
