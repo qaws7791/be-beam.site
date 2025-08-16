@@ -8,11 +8,11 @@ import {
   useLocation,
 } from 'react-router';
 import { metaTemplates } from './shared/config/meta-templates';
-import { userContext } from './shared/.server/context';
+import { userContext } from './shared/server/context';
 import {
   globalStorageMiddleware,
   sessionMiddleware,
-} from './shared/.server/auth';
+} from './shared/server/auth';
 import TanstackQueryProvider from './shared/providers/TanstackQueryProvider';
 import './styles/app.css';
 

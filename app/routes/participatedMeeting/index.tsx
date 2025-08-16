@@ -9,7 +9,6 @@ import {
   MyParticipatedMeetingFilterSchema,
   type MyParticipatedMeetingFilters,
 } from '@/features/mypage/schemas/userFilters';
-import { requireAuth } from '@/shared/.server/auth.server';
 import { useUrlFilters } from '@/shared/hooks/userUrlFilters';
 import { getParticipationMeetingList } from '@/shared/api/endpoints/mypage';
 import ParticipatedMeetingWrap from '@/routes/participatedMeeting/_components/ParticipatedMeetingWrap';
@@ -22,14 +21,13 @@ import {
 } from '@/shared/components/ui/Tabs';
 import Text from '@/shared/components/ui/Text';
 import type { Route } from '.react-router/types/app/routes/participatedMeeting/+types';
+import { requireAuthMiddleware } from '@/shared/server/auth';
 
 export function meta() {
   return metaTemplates.participatedMeeting();
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
-  return await requireAuth(request, '/login');
-}
+export const unstable_middleware = [requireAuthMiddleware('일반 참가자')];
 
 export async function clientLoader({ request }: Route.LoaderArgs) {
   const queryClient = new QueryClient();

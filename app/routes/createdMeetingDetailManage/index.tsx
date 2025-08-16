@@ -10,7 +10,6 @@ import {
   MyCreatedMeetingManageFilterSchema,
   type MyCreatedMeetingManageFilters,
 } from '@/features/mypage/schemas/userFilters';
-import { requireAuth } from '@/shared/.server/auth.server';
 import {
   getMyCreatedMeetingApplicants,
   getMyCreatedMeetingAttendance,
@@ -28,14 +27,13 @@ import CreatedMeetingParticipantsManageContent from '@/routes/createdMeetingDeta
 import CreatedMeetingAttendanceManageContent from '@/routes/createdMeetingDetailManage/_components/CreatedMeetingAttendanceManageContent';
 import { metaTemplates } from '@/shared/config/meta-templates';
 import type { Route } from '.react-router/types/app/routes/createdMeetingDetailManage/+types';
+import { requireAuthMiddleware } from '@/shared/server/auth';
 
 export function meta() {
   return metaTemplates.createdMeetingDetailManage();
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
-  return await requireAuth(request, '/login');
-}
+export const unstable_middleware = [requireAuthMiddleware('일반 참가자')];
 
 export async function clientLoader({ request, params }: Route.LoaderArgs) {
   const queryClient = new QueryClient();

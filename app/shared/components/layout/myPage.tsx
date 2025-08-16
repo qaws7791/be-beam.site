@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router';
 import useUserSession from '@/features/users/hooks/useUserSession';
-import { requireAuthMiddleware } from '@/shared/.server/auth';
+import { requireAuthMiddleware } from '@/shared/server/auth';
 
 import MyPageTemplate from '@/shared/components/layout/MyPageTemplate';
 import SideBar from '@/shared/components/common/SideBar';

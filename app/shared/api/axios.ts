@@ -63,7 +63,7 @@ const requestInterceptor = async (
   config: InternalAxiosRequestConfig,
 ): Promise<InternalAxiosRequestConfig> => {
   if (typeof window === 'undefined') {
-    const getRequestStorage = await import('../.server/auth').then(
+    const getRequestStorage = await import('../server/auth').then(
       (module) => module.getRequestStorage,
     );
     const requestStorage = getRequestStorage();

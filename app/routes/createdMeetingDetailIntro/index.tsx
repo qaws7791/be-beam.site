@@ -6,7 +6,6 @@ import {
   QueryClient,
   type DehydratedState,
 } from '@tanstack/react-query';
-import { requireAuth } from '@/shared/.server/auth.server';
 import { getTopics } from '@/shared/api/endpoints/topics';
 
 import { metaTemplates } from '@/shared/config/meta-templates';
@@ -14,14 +13,13 @@ import { getMyCreatedMeetingIntro } from '@/shared/api/endpoints/users';
 import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 import CreatedMeetingDetailIntroWrap from '@/routes/createdMeetingDetailIntro/_components/CreatedMeetingDetailIntroWrap';
 import type { Route } from '.react-router/types/app/routes/createdMeetingDetailIntro/+types';
+import { requireAuthMiddleware } from '@/shared/server/auth';
 
 export function meta() {
   return metaTemplates.createdMeetingDetailIntro();
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
-  return await requireAuth(request, '/login');
-}
+export const unstable_middleware = [requireAuthMiddleware('일반 참가자')];
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   const id = Number(params.meetingId);

@@ -9,7 +9,6 @@ import {
   type MyCreatedMeetingFilters,
 } from '@/features/mypage/schemas/userFilters';
 import { useUrlFilters } from '@/shared/hooks/userUrlFilters';
-import { requireAuth } from '@/shared/.server/auth.server';
 import { getOpeningMeetingList } from '@/shared/api/endpoints/mypage';
 
 import type { FilterOption } from '@/shared/types/components';
@@ -23,14 +22,13 @@ import CreatedMeetingWrap from '@/routes/createMeeting/_components/CreatedMeetin
 import Text from '@/shared/components/ui/Text';
 import { metaTemplates } from '@/shared/config/meta-templates';
 import type { Route } from '.react-router/types/app/routes/createdMeeting/+types';
+import { requireAuthMiddleware } from '@/shared/server/auth';
 
 export function meta() {
   return metaTemplates.createdMeeting();
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
-  return await requireAuth(request, '/login');
-}
+export const unstable_middleware = [requireAuthMiddleware('일반 참가자')];
 
 export async function clientLoader({ request }: Route.LoaderArgs) {
   const queryClient = new QueryClient();

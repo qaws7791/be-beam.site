@@ -10,7 +10,6 @@ import type { FilterOption } from '@/shared/types/components';
 import { Tabs, TabsList, TabsTrigger } from '@/shared/components/ui/Tabs';
 import Text from '@/shared/components/ui/Text';
 import { TabsContent } from '@radix-ui/react-tabs';
-import { requireAuth } from '@/shared/.server/auth.server';
 import {
   MyApplicatedMeetingFilterSchema,
   type MyApplicatedMeetingFilters,
@@ -19,14 +18,13 @@ import { getApplicationMeetingList } from '@/shared/api/endpoints/mypage';
 import { useUrlFilters } from '@/shared/hooks/userUrlFilters';
 import RequestedMeetingWrap from '@/routes/requestedMeeting/_components/RequestedMeetingWrap';
 import type { Route } from '.react-router/types/app/routes/requestedMeeting/+types';
+import { requireAuthMiddleware } from '@/shared/server/auth';
 
 export function meta() {
   return metaTemplates.requestedMeeting();
 }
 
-export async function loader({ request }: Route.LoaderArgs) {
-  return await requireAuth(request, '/login');
-}
+export const unstable_middleware = [requireAuthMiddleware('일반 참가자')];
 
 export async function clientLoader({ request }: Route.LoaderArgs) {
   const queryClient = new QueryClient();

@@ -1,5 +1,5 @@
 import { getMyProfile } from '@/shared/api/endpoints/users';
-import { userContext } from '@/shared/.server/context';
+import { userContext } from '@/shared/server/context';
 import * as cookie from 'cookie';
 import { reissueToken } from '@/shared/api/endpoints/auth';
 import {
@@ -93,14 +93,30 @@ export const sessionMiddleware: unstable_MiddlewareFunction = async (
  * 로그인 상태를 확인하여 로그인되지 않은 경우 로그인 페이지로 리다이렉션
  */
 export const requireAuthMiddleware: (
-  role: UserRole,
+  role?: UserRole,
 ) => unstable_MiddlewareFunction =
-  (role) =>
+  (role = '일반 참가자') =>
   async ({ context }) => {
     const user = context.get(userContext);
 
     if (!user || !hasPermission(user.role, role)) {
       return redirect('/login');
+    }
+
+    return;
+  };
+
+/**
+ * @description
+ * 로그인 상태를 확인하여 로그인된 경우 홈페이지로 리다이렉션
+ */
+export const guestOnlyMiddleware: () => unstable_MiddlewareFunction =
+  (redirectTo = '/') =>
+  async ({ context }) => {
+    const user = context.get(userContext);
+
+    if (user) {
+      return redirect(redirectTo);
     }
 
     return;
