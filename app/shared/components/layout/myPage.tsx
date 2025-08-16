@@ -1,9 +1,9 @@
 import { Outlet } from 'react-router';
-import useUserSession from '@/hooks/business/useUserSession';
+import useUserSession from '@/features/users/hooks/useUserSession';
 import { requireAuthMiddleware } from '@/shared/.server/auth';
 
-import MyPageTemplate from '@/components/templates/MyPageTemplate';
-import SideBar from '@/components/organisms/SideBar';
+import MyPageTemplate from '@/shared/components/layout/MyPageTemplate';
+import SideBar from '@/shared/components/common/SideBar';
 
 export const unstable_middleware = [requireAuthMiddleware];
 

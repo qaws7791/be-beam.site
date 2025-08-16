@@ -17,10 +17,10 @@ import TanstackQueryProvider from './shared/providers/TanstackQueryProvider';
 import './styles/app.css';
 
 import type { Route } from './+types/root';
-import Navbar from './components/organisms/Navbar';
-import { Toaster } from './components/atoms/toaster/Toaster';
-import Footer from './components/organisms/Footer';
-import ModalProvider from './components/provider/ModalProvider';
+import Navbar from './shared/components/common/Navbar';
+import { Toaster } from './shared/components/ui/Toaster';
+import ModalProvider from './shared/providers/ModalProvider';
+import Footer from '@/shared/components/common/Footer';
 
 export const unstable_middleware = [sessionMiddleware, globalStorageMiddleware];
 

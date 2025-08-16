@@ -3,7 +3,7 @@ import { API_V1_BASE_URL } from '@/shared/constants/api';
 import type {
   DeclareDataType,
   DeclareModalPropsType,
-} from '@/hooks/api/useDeclareMeetingOrReviewOrHost';
+} from '@/features/report/hooks/useDeclareMeetingOrReviewOrHost';
 import type { APIResponse } from '@/shared/types/api';
 
 interface ReportComplaintData {

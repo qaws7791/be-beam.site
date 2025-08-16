@@ -1,4 +1,4 @@
-import type { meetingReviewFilterType } from '@/components/sections/MeetingDetailMeetingReviewsContainer';
+import type { meetingReviewFilterType } from '@/routes/meetingDetail/_components/MeetingDetailMeetingReviewsContainer';
 import { API_V2_BASE_URL } from '@/shared/constants/api';
 import { axiosInstance } from '@/shared/api/axios';
 import type { APIResponse, CursorPaginationResult } from '@/shared/types/api';
