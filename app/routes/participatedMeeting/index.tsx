@@ -10,7 +10,6 @@ import {
   type MyParticipatedMeetingFilters,
 } from '@/features/mypage/schemas/userFilters';
 import { useUrlFilters } from '@/shared/hooks/userUrlFilters';
-import { getParticipationMeetingList } from '@/shared/api/endpoints/mypage';
 import ParticipatedMeetingWrap from '@/routes/participatedMeeting/_components/ParticipatedMeetingWrap';
 import type { FilterOption } from '@/shared/types/components';
 import {
@@ -22,6 +21,7 @@ import {
 import Text from '@/shared/components/ui/Text';
 import type { Route } from '.react-router/types/app/routes/participatedMeeting/+types';
 import { requireAuthMiddleware } from '@/shared/server/auth';
+import { participatedMeetingsQueryOptions } from '@/features/meetings/hooks/useParticipatedMeetingsQuery';
 
 export function meta() {
   return metaTemplates.participatedMeeting();
@@ -40,10 +40,9 @@ export async function clientLoader({ request }: Route.LoaderArgs) {
       ...rawFilters,
     });
 
-  await queryClient.prefetchQuery({
-    queryKey: ['participatedMeetings', parsedFilters],
-    queryFn: () => getParticipationMeetingList(parsedFilters),
-  });
+  await queryClient.prefetchQuery(
+    participatedMeetingsQueryOptions(parsedFilters),
+  );
 
   const dehydratedState = dehydrate(queryClient);
   return { filters: parsedFilters, dehydratedState };

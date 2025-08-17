@@ -4,10 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import useDeleteMeetingMutation from '@/features/meetings/hooks/useDeleteMeetingMutation';
 import { useModalStore } from '@/shared/stores/useModalStore';
 import usePagination from '@/shared/hooks/usePagination';
-import {
-  getOpeningMeetingList,
-  type MyPageMeetingResult,
-} from '@/shared/api/endpoints/mypage';
+import { type MyPageMeetingResult } from '@/shared/api/endpoints/mypage';
 
 import type { MyCreatedMeetingFilters } from '@/features/mypage/schemas/userFilters';
 import GridGroup from '../../../shared/components/ui/GridGroup';
@@ -23,6 +20,7 @@ import {
 import { DropdownMenuItem } from '../../../shared/components/ui/DropdownMenu';
 import MoreDropdownMenu from '../../../shared/components/common/MoreDropdownMenu';
 import toast from 'react-hot-toast';
+import { createdMeetingsQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingsQuery';
 
 interface CreatedMeetingWrapProps {
   filters: MyCreatedMeetingFilters;
@@ -34,10 +32,9 @@ export default function CreatedMeetingWrap({
   const navigate = useNavigate();
   const { open } = useModalStore();
 
-  const { data: createdMeetings } = useQuery({
-    queryKey: ['createdMeetings', filters],
-    queryFn: () => getOpeningMeetingList(filters),
-  });
+  const { data: createdMeetings } = useQuery(
+    createdMeetingsQueryOptions(filters),
+  );
 
   const pagination = usePagination({
     currentPage: filters.page,

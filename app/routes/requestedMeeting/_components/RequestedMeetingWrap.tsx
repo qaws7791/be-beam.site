@@ -1,17 +1,10 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router';
-import { useQuery } from '@tanstack/react-query';
-import type { MyApplicatedMeetingFilters } from '@/features/mypage/schemas/userFilters';
-import { useModalStore } from '@/shared/stores/useModalStore';
+import type { MyAppliedMeetingFilters } from '@/features/mypage/schemas/userFilters';
 import usePagination from '@/shared/hooks/usePagination';
-import { axiosInstance } from '@/shared/api/axios';
-import { API_V2_BASE_URL } from '@/shared/constants/api';
-
 import type { MyPageMeetingSummary } from '@/shared/types/entities';
 import GridGroup from '../../../shared/components/ui/GridGroup';
 import MeetingCard from '../../../features/meetings/components/MeetingCard';
-import MoreDropdownMenu from '../../../shared/components/common/MoreDropdownMenu';
-import { DropdownMenuItem } from '../../../shared/components/ui/DropdownMenu';
 import {
   Pagination,
   PaginationContent,
@@ -20,30 +13,18 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '../../../shared/components/ui/Pagination';
-import toast from 'react-hot-toast';
+import useAppliedMeetingsQuery from '@/features/meetings/hooks/useAppliedMeetingsQuery';
 
 interface RequestedMeetingWrapProps {
-  filters: MyApplicatedMeetingFilters;
+  filters: MyAppliedMeetingFilters;
 }
 
 export default function RequestedMeetingWrap({
   filters,
 }: RequestedMeetingWrapProps) {
   const navigate = useNavigate();
-  const { open } = useModalStore();
 
-  const { data: requestMeetings } = useQuery({
-    queryKey: ['requestMeetings', filters],
-    queryFn: async () => {
-      const res = await axiosInstance({
-        method: 'GET',
-        baseURL: API_V2_BASE_URL,
-        url: `/users/meetings/application?status=${filters.status}&size=9&page=${filters.page}`,
-      });
-      const data = res.data;
-      return data.result;
-    },
-  });
+  const { data: requestMeetings } = useAppliedMeetingsQuery(filters);
 
   const pagination = usePagination({
     currentPage: filters.page,
@@ -52,7 +33,7 @@ export default function RequestedMeetingWrap({
 
   const handleUpdatePage = useCallback(
     (page: number) => {
-      const currentFilters: MyApplicatedMeetingFilters = filters;
+      const currentFilters: MyAppliedMeetingFilters = filters;
       const updatedFilters = { ...currentFilters, page: page };
       const newSearchParams = new URLSearchParams();
 
@@ -82,7 +63,8 @@ export default function RequestedMeetingWrap({
             onClick={() => navigate(`/meeting/${meeting.id}`)}
             isLikeBtn={false}
           >
-            {requestMeetings?.status !== 'rejected' &&
+            {/* TODO: requestMeetings?.status 값이 무엇인지 모르겠음 */}
+            {/* {requestMeetings?.status !== 'rejected' &&
               meeting.userStatus !== '신청취소중' && (
                 <MoreDropdownMenu btnPosition="right-0 top-0 absolute">
                   <DropdownMenuItem
@@ -107,7 +89,7 @@ export default function RequestedMeetingWrap({
                     모임 취소하기
                   </DropdownMenuItem>
                 </MoreDropdownMenu>
-              )}
+              )} */}
           </MeetingCard>
         ))}
       </GridGroup>

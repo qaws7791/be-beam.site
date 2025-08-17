@@ -5,14 +5,14 @@ import {
 } from '@tanstack/react-query';
 import { Suspense } from 'react';
 import { useParams } from 'react-router';
-import { getMeetingDetail } from '@/shared/api/endpoints/meetings';
-import { getMeetingReviews } from '@/shared/api/endpoints/meetingReviews';
 import { metaTemplates } from '@/shared/config/meta-templates';
 import type { meetingReviewFilterType } from '@/routes/meetingDetail/_components/MeetingDetailMeetingReviewsContainer';
 import CommonTemplate from '@/shared/components/layout/CommonTemplate';
 import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 import MeetingDetailWrap from '@/routes/meetingDetail/_components/MeetingDetailWrap';
 import type { Route } from '.react-router/types/app/routes/meetingDetail/+types';
+import { meetingQueryOptions } from '@/features/meetings/hooks/useMeetingQuery';
+import { meetingReviewsInfiniteQueryOptions } from '@/features/reviews/hooks/useMeetingReviewsQuery';
 
 export function meta() {
   return metaTemplates.meetingDetail();
@@ -28,16 +28,10 @@ export async function loader({ params }: Route.LoaderArgs) {
   };
 
   await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: ['meeting', Number(params.meetingId)],
-      queryFn: () => getMeetingDetail(Number(params.meetingId)),
-    }),
-    queryClient.prefetchInfiniteQuery({
-      queryKey: ['meetingReviews', Number(params.meetingId), filter],
-      queryFn: ({ pageParam }) =>
-        getMeetingReviews(Number(params.meetingId), filter, pageParam),
-      initialPageParam: 0,
-    }),
+    queryClient.prefetchQuery(meetingQueryOptions(Number(params.meetingId))),
+    queryClient.prefetchInfiniteQuery(
+      meetingReviewsInfiniteQueryOptions(Number(params.meetingId), filter),
+    ),
   ]);
 
   const dehydratedState = dehydrate(queryClient);
@@ -54,16 +48,10 @@ export async function clientLoader({ params }: Route.LoaderArgs) {
   };
 
   await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: ['meeting', Number(params.meetingId)],
-      queryFn: () => getMeetingDetail(Number(params.meetingId)),
-    }),
-    queryClient.prefetchInfiniteQuery({
-      queryKey: ['meetingReviews', Number(params.meetingId), filter],
-      queryFn: ({ pageParam }) =>
-        getMeetingReviews(Number(params.meetingId), filter, pageParam),
-      initialPageParam: 0,
-    }),
+    queryClient.prefetchQuery(meetingQueryOptions(Number(params.meetingId))),
+    queryClient.prefetchInfiniteQuery(
+      meetingReviewsInfiniteQueryOptions(Number(params.meetingId), filter),
+    ),
   ]);
 
   const dehydratedState = dehydrate(queryClient);

@@ -1,8 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import useCheckAttendanceMutation from '@/features/meetings/hooks/useCheckAttendanceMutation';
-import { getMyCreatedMeetingAttendance } from '@/shared/api/endpoints/users';
-
-import type { MeetingAttendance } from '@/shared/types/entities';
 import { cn } from '@/styles/tailwind';
 import Text from '../../../shared/components/ui/Text';
 import {
@@ -26,16 +23,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '../../../shared/components/ui/Tooltip';
+import { createdMeetingAttendanceQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingAttendanceQuery';
 
 export default function CreatedMeetingAttendanceManageContent({
   meetingId,
 }: {
   meetingId: number;
 }) {
-  const { data: attendance } = useQuery<MeetingAttendance>({
-    queryKey: ['attendance', meetingId],
-    queryFn: () => getMyCreatedMeetingAttendance(meetingId),
-  });
+  const { data: attendance } = useQuery(
+    createdMeetingAttendanceQueryOptions(meetingId),
+  );
 
   const { mutate: checkAttendance, isPending } =
     useCheckAttendanceMutation(meetingId);

@@ -8,7 +8,6 @@ import {
   type GuideBookListFilters,
 } from '@/features/guidebooks/schemas/guideBooksFilters';
 import { useUrlFilters } from '@/shared/hooks/userUrlFilters';
-import { getGuideBookList } from '@/shared/api/endpoints/guideBooks';
 import { metaTemplates } from '@/shared/config/meta-templates';
 
 import type { FilterOption } from '@/shared/types/components';
@@ -16,6 +15,7 @@ import { Tabs } from '@/shared/components/ui/Tabs';
 import GuideBooksFilterControls from '@/routes/guideBooks/_components/TargetTypeTab';
 import GuideBooksContent from '@/routes/guideBooks/_components/GuideBooksContent';
 import type { Route } from '.react-router/types/app/routes/guideBooks/+types';
+import { guideBooksInfiniteQueryOptions } from '@/features/guidebooks/hooks/useGuideBooksQuery';
 // import SearchInput from '@/components/molecules/SearchInput';
 
 export function meta() {
@@ -32,11 +32,9 @@ export async function loader({ request }: Route.LoaderArgs) {
     ...rawFilters,
   });
 
-  await queryClient.prefetchInfiniteQuery({
-    queryKey: ['guideBooks', parsedFilters],
-    queryFn: ({ pageParam }) => getGuideBookList(parsedFilters, pageParam),
-    initialPageParam: 0,
-  });
+  await queryClient.prefetchInfiniteQuery(
+    guideBooksInfiniteQueryOptions(parsedFilters),
+  );
 
   const dehydratedState = dehydrate(queryClient);
   return {
@@ -55,11 +53,9 @@ export async function clientLoader({ request }: Route.LoaderArgs) {
     ...rawFilters,
   });
 
-  await queryClient.prefetchInfiniteQuery({
-    queryKey: ['guideBooks', parsedFilters],
-    queryFn: ({ pageParam }) => getGuideBookList(parsedFilters, pageParam),
-    initialPageParam: 0,
-  });
+  await queryClient.prefetchInfiniteQuery(
+    guideBooksInfiniteQueryOptions(parsedFilters),
+  );
 
   const dehydratedState = dehydrate(queryClient);
   return {

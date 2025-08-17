@@ -6,15 +6,13 @@ import {
   QueryClient,
   useSuspenseQueries,
 } from '@tanstack/react-query';
-import {
-  getMyCreatedMeetingDetail,
-  getMyCreatedMeetingIntro,
-} from '@/shared/api/endpoints/users';
 import CommonTemplate from '@/shared/components/layout/CommonTemplate';
 import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 import type { Route } from '.react-router/types/app/shared/components/layout/+types/createdMeetingDetail';
 import Text from '@/shared/components/ui/Text';
 import { Tabs, TabsList, TabsTrigger } from '@/shared/components/ui/Tabs';
+import { createdMeetingsIntroQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingsIntroQuery';
+import { createdMeetingDetailQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingDetailQuery';
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   const id = Number(params.meetingId);
@@ -22,14 +20,8 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   const queryClient = new QueryClient();
 
   await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: ['createdMeetingIntro', id],
-      queryFn: () => getMyCreatedMeetingIntro(id),
-    }),
-    queryClient.prefetchQuery({
-      queryKey: ['createdMeetingDetail', id],
-      queryFn: () => getMyCreatedMeetingDetail(id),
-    }),
+    queryClient.prefetchQuery(createdMeetingsIntroQueryOptions(id)),
+    queryClient.prefetchQuery(createdMeetingDetailQueryOptions(id)),
   ]);
 
   const dehydratedState = dehydrate(queryClient);
@@ -75,14 +67,8 @@ export function CreatedMeetingDetailWrap({ meetingId }: { meetingId: number }) {
 
   const queryResult = useSuspenseQueries({
     queries: [
-      {
-        queryKey: ['createdMeetingIntro', meetingId],
-        queryFn: () => getMyCreatedMeetingIntro(meetingId),
-      },
-      {
-        queryKey: ['createdMeetingDetail', meetingId],
-        queryFn: () => getMyCreatedMeetingDetail(meetingId),
-      },
+      createdMeetingsIntroQueryOptions(meetingId),
+      createdMeetingDetailQueryOptions(meetingId),
     ],
   });
   const [{ data: intro }, { data: detail }] = queryResult;

@@ -3,10 +3,7 @@ import { useNavigate } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useModalStore } from '@/shared/stores/useModalStore';
 import usePagination from '@/shared/hooks/usePagination';
-import {
-  getParticipationMeetingList,
-  type MyPageMeetingResult,
-} from '@/shared/api/endpoints/mypage';
+import { type MyPageMeetingResult } from '@/shared/api/endpoints/mypage';
 
 import type { MyParticipatedMeetingFilters } from '@/features/mypage/schemas/userFilters';
 import GridGroup from '../../../shared/components/ui/GridGroup';
@@ -22,6 +19,7 @@ import {
   PaginationPrevious,
 } from '../../../shared/components/ui/Pagination';
 import toast from 'react-hot-toast';
+import { participatedMeetingsQueryOptions } from '@/features/meetings/hooks/useParticipatedMeetingsQuery';
 
 interface ParticipatedMeetingWrapProps {
   filters: MyParticipatedMeetingFilters;
@@ -33,10 +31,9 @@ export default function ParticipatedMeetingWrap({
   const navigate = useNavigate();
   const { open } = useModalStore();
 
-  const { data: participatedMeetings } = useQuery({
-    queryKey: ['participatedMeetings', filters],
-    queryFn: () => getParticipationMeetingList(filters),
-  });
+  const { data: participatedMeetings } = useQuery(
+    participatedMeetingsQueryOptions(filters),
+  );
 
   const pagination = usePagination({
     currentPage: filters.page,

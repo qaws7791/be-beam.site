@@ -1,7 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getMyCreatedMeetingApplicants } from '@/shared/api/endpoints/users';
 import useAcceptOrRejectApplicationMutation from '@/features/meetings/hooks/useAcceptOrRejectApplicationMutation';
-
 import type { Applicants } from '@/shared/types/entities';
 import { cn } from '@/styles/tailwind';
 import {
@@ -15,16 +13,16 @@ import {
 import Text from '../../../shared/components/ui/Text';
 import { Button } from '../../../shared/components/ui/Button';
 import { Tag } from '../../../shared/components/ui/Tag';
+import { createdMeetingApplicantsQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingApplicants';
 
 export default function CreatedMeetingApplicantsManageContent({
   meetingId,
 }: {
   meetingId: number;
 }) {
-  const { data: applicants } = useQuery({
-    queryKey: ['applicants', meetingId],
-    queryFn: () => getMyCreatedMeetingApplicants(meetingId),
-  });
+  const { data: applicants } = useQuery(
+    createdMeetingApplicantsQueryOptions(meetingId),
+  );
   const { mutate: acceptOrRejectApplication, isPending } =
     useAcceptOrRejectApplicationMutation(meetingId);
 

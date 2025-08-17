@@ -4,7 +4,6 @@ import { Controller, useForm } from 'react-hook-form';
 import type { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { editCreatedMeetingSecondSchema } from '@/features/meetings/schemas/meeting';
-import { getMyCreatedMeetingDetail } from '@/shared/api/endpoints/users';
 import { format } from 'date-fns';
 
 import { cn } from '@/styles/tailwind';
@@ -13,16 +12,16 @@ import { Input } from '../../../shared/components/ui/Input';
 import { DateInput } from '../../../shared/components/common/DateInput';
 import { Textarea } from '../../../shared/components/ui/Textarea';
 import { Button } from '../../../shared/components/ui/Button';
+import { createdMeetingDetailQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingDetailQuery';
 
 export default function CreatedMeetingDetailContent({
   meetingId,
 }: {
   meetingId: number;
 }) {
-  const { data: detail } = useSuspenseQuery({
-    queryKey: ['createdMeetingDetail', meetingId],
-    queryFn: () => getMyCreatedMeetingDetail(meetingId),
-  });
+  const { data: detail } = useSuspenseQuery(
+    createdMeetingDetailQueryOptions(meetingId),
+  );
 
   const { control, handleSubmit, formState } = useForm<
     z.infer<typeof editCreatedMeetingSecondSchema>

@@ -6,14 +6,13 @@ import {
   QueryClient,
   type DehydratedState,
 } from '@tanstack/react-query';
-import { getTopics } from '@/shared/api/endpoints/topics';
-
 import { metaTemplates } from '@/shared/config/meta-templates';
-import { getMyCreatedMeetingIntro } from '@/shared/api/endpoints/users';
 import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 import CreatedMeetingDetailIntroWrap from '@/routes/createdMeetingDetailIntro/_components/CreatedMeetingDetailIntroWrap';
 import type { Route } from '.react-router/types/app/routes/createdMeetingDetailIntro/+types';
 import { requireAuthMiddleware } from '@/shared/server/auth';
+import { createdMeetingsIntroQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingsIntroQuery';
+import { topicsQueryOptions } from '@/features/meetings/hooks/useTopicsQuery';
 
 export function meta() {
   return metaTemplates.createdMeetingDetailIntro();
@@ -27,14 +26,8 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   const queryClient = new QueryClient();
 
   await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: ['createdMeetingIntro', id],
-      queryFn: () => getMyCreatedMeetingIntro(id),
-    }),
-    queryClient.prefetchQuery({
-      queryKey: ['topics'],
-      queryFn: () => getTopics(),
-    }),
+    queryClient.prefetchQuery(createdMeetingsIntroQueryOptions(id)),
+    queryClient.prefetchQuery(topicsQueryOptions()),
   ]);
 
   const dehydratedState = dehydrate(queryClient);

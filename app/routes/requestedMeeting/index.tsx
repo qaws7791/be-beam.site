@@ -11,14 +11,14 @@ import { Tabs, TabsList, TabsTrigger } from '@/shared/components/ui/Tabs';
 import Text from '@/shared/components/ui/Text';
 import { TabsContent } from '@radix-ui/react-tabs';
 import {
-  MyApplicatedMeetingFilterSchema,
-  type MyApplicatedMeetingFilters,
+  MyAppliedMeetingFilterSchema,
+  type MyAppliedMeetingFilters,
 } from '@/features/mypage/schemas/userFilters';
-import { getApplicationMeetingList } from '@/shared/api/endpoints/mypage';
 import { useUrlFilters } from '@/shared/hooks/userUrlFilters';
 import RequestedMeetingWrap from '@/routes/requestedMeeting/_components/RequestedMeetingWrap';
 import type { Route } from '.react-router/types/app/routes/requestedMeeting/+types';
 import { requireAuthMiddleware } from '@/shared/server/auth';
+import { appliedMeetingsQueryOptions } from '@/features/meetings/hooks/useAppliedMeetingsQuery';
 
 export function meta() {
   return metaTemplates.requestedMeeting();
@@ -32,15 +32,12 @@ export async function clientLoader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const urlSearchParams = new URLSearchParams(url.search);
   const rawFilters = Object.fromEntries(urlSearchParams.entries());
-  const parsedFilters: MyApplicatedMeetingFilters =
-    MyApplicatedMeetingFilterSchema.parse({
+  const parsedFilters: MyAppliedMeetingFilters =
+    MyAppliedMeetingFilterSchema.parse({
       ...rawFilters,
     });
 
-  await queryClient.prefetchQuery({
-    queryKey: ['applicatedMeetings', parsedFilters],
-    queryFn: () => getApplicationMeetingList(parsedFilters),
-  });
+  await queryClient.prefetchQuery(appliedMeetingsQueryOptions(parsedFilters));
 
   const dehydratedState = dehydrate(queryClient);
   return { filters: parsedFilters, dehydratedState };
@@ -48,12 +45,12 @@ export async function clientLoader({ request }: Route.LoaderArgs) {
 
 export default function RequestedMeeting({ loaderData }: Route.ComponentProps) {
   const { filters: initialFilters, dehydratedState } = loaderData as {
-    filters: MyApplicatedMeetingFilters;
+    filters: MyAppliedMeetingFilters;
     dehydratedState: DehydratedState;
   };
 
   const { filters, setFilter } = useUrlFilters(
-    MyApplicatedMeetingFilterSchema,
+    MyAppliedMeetingFilterSchema,
     initialFilters,
   );
 

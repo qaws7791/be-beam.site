@@ -10,10 +10,6 @@ import {
   MyCreatedMeetingDetailFilterSchema,
   type MyCreatedMeetingDetailFilters,
 } from '@/features/mypage/schemas/userFilters';
-import {
-  getMyCreatedMeetingDetail,
-  getMyCreatedMeetingSchedule,
-} from '@/shared/api/endpoints/users';
 import { useUrlFilters } from '@/shared/hooks/userUrlFilters';
 import { metaTemplates } from '@/shared/config/meta-templates';
 
@@ -28,6 +24,8 @@ import CreatedMeetingScheduleContent from '@/routes/createdMeetingDetailDetail/_
 import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 import type { Route } from '.react-router/types/app/routes/createdMeetingDetailDetail/+types';
 import { requireAuthMiddleware } from '@/shared/server/auth';
+import { createdMeetingDetailQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingDetailQuery';
+import { createdMeetingsScheduleQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingsScheduleQuery';
 
 export function meta() {
   return metaTemplates.createdMeetingDetailDetail();
@@ -51,14 +49,8 @@ export async function clientLoader({
     });
 
   await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: ['createdMeetingDetail', id],
-      queryFn: () => getMyCreatedMeetingDetail(id),
-    }),
-    queryClient.prefetchQuery({
-      queryKey: ['createdMeetingSchedules', id],
-      queryFn: () => getMyCreatedMeetingSchedule(id),
-    }),
+    queryClient.prefetchQuery(createdMeetingDetailQueryOptions(id)),
+    queryClient.prefetchQuery(createdMeetingsScheduleQueryOptions(id)),
   ]);
 
   const dehydratedState = dehydrate(queryClient);

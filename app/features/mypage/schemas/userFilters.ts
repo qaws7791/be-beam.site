@@ -34,13 +34,13 @@ export type MyParticipatedMeetingFilters = z.infer<
 >;
 
 // 나의 모임 - 신청한 모임
-export const MyApplicatedMeetingFilterSchema = z.object({
+export const MyAppliedMeetingFilterSchema = z.object({
   status: z.enum(['applied', 'confirmed', 'rejected']).default('applied'),
   page: z.coerce.number().default(1),
 });
 
-export type MyApplicatedMeetingFilters = z.infer<
-  typeof MyApplicatedMeetingFilterSchema
+export type MyAppliedMeetingFilters = z.infer<
+  typeof MyAppliedMeetingFilterSchema
 >;
 
 // 나의 모임 - 개설한 모임

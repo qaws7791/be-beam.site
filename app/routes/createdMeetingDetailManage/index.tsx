@@ -11,12 +11,6 @@ import {
   type MyCreatedMeetingManageFilters,
 } from '@/features/mypage/schemas/userFilters';
 import {
-  getMyCreatedMeetingApplicants,
-  getMyCreatedMeetingAttendance,
-  getMyCreatedMeetingParticipants,
-} from '@/shared/api/endpoints/users';
-
-import {
   Tabs,
   TabsContent,
   TabsList,
@@ -28,6 +22,9 @@ import CreatedMeetingAttendanceManageContent from '@/routes/createdMeetingDetail
 import { metaTemplates } from '@/shared/config/meta-templates';
 import type { Route } from '.react-router/types/app/routes/createdMeetingDetailManage/+types';
 import { requireAuthMiddleware } from '@/shared/server/auth';
+import { createdMeetingApplicantsQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingApplicants';
+import { createdMeetingParticipantsQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingParticipantsQuery';
+import { createdMeetingAttendanceQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingAttendanceQuery';
 
 export function meta() {
   return metaTemplates.createdMeetingDetailManage();
@@ -48,18 +45,9 @@ export async function clientLoader({ request, params }: Route.LoaderArgs) {
     });
 
   await Promise.all([
-    queryClient.prefetchQuery({
-      queryKey: ['applicants', id],
-      queryFn: () => getMyCreatedMeetingApplicants(id),
-    }),
-    queryClient.prefetchQuery({
-      queryKey: ['participants', id],
-      queryFn: () => getMyCreatedMeetingParticipants(id),
-    }),
-    queryClient.prefetchQuery({
-      queryKey: ['attendance', id],
-      queryFn: () => getMyCreatedMeetingAttendance(id),
-    }),
+    queryClient.prefetchQuery(createdMeetingApplicantsQueryOptions(id)),
+    queryClient.prefetchQuery(createdMeetingParticipantsQueryOptions(id)),
+    queryClient.prefetchQuery(createdMeetingAttendanceQueryOptions(id)),
   ]);
   const dehydratedState = dehydrate(queryClient);
   return { filters: parsedFilters, dehydratedState };

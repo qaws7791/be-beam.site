@@ -5,7 +5,10 @@ import type {
   EditCreateMeetingIntroType,
   EditMeetingDetailType,
 } from '@/shared/types/components';
-import type { EditMeetingSchedule } from '@/shared/types/entities';
+import type {
+  EditMeetingSchedule,
+  MeetingAttendance,
+} from '@/shared/types/entities';
 import type {
   Host,
   ImageType,
@@ -483,7 +486,7 @@ export function acceptOrRejectApplication(
 }
 
 export async function getMyCreatedMeetingAttendance(id: number) {
-  const res = await axiosInstance({
+  const res = await axiosInstance<APIResponse<MeetingAttendance>>({
     baseURL: API_V1_BASE_URL,
     url: `/meetings/${id}/mypage/attendance`,
     method: 'GET',

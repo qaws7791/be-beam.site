@@ -9,7 +9,6 @@ import {
   type MyCreatedMeetingFilters,
 } from '@/features/mypage/schemas/userFilters';
 import { useUrlFilters } from '@/shared/hooks/userUrlFilters';
-import { getOpeningMeetingList } from '@/shared/api/endpoints/mypage';
 
 import type { FilterOption } from '@/shared/types/components';
 import {
@@ -23,6 +22,7 @@ import Text from '@/shared/components/ui/Text';
 import { metaTemplates } from '@/shared/config/meta-templates';
 import type { Route } from '.react-router/types/app/routes/createdMeeting/+types';
 import { requireAuthMiddleware } from '@/shared/server/auth';
+import { createdMeetingsQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingsQuery';
 
 export function meta() {
   return metaTemplates.createdMeeting();
@@ -41,10 +41,7 @@ export async function clientLoader({ request }: Route.LoaderArgs) {
       ...rawFilters,
     });
 
-  await queryClient.prefetchQuery({
-    queryKey: ['createdMeetings', parsedFilters],
-    queryFn: () => getOpeningMeetingList(parsedFilters),
-  });
+  await queryClient.prefetchQuery(createdMeetingsQueryOptions(parsedFilters));
 
   const dehydratedState = dehydrate(queryClient);
   return { filters: parsedFilters, dehydratedState };

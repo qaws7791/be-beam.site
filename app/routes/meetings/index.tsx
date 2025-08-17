@@ -11,7 +11,6 @@ import {
   type MeetingListFilters,
 } from '@/features/meetings/schemas/meetingFilters';
 import { useUrlFilters } from '@/shared/hooks/userUrlFilters';
-import { getMeetingList } from '@/shared/api/endpoints/meetings';
 import { getTopics } from '@/shared/api/endpoints/topics';
 
 import type { Topic } from '@/shared/types/entities';
@@ -21,6 +20,7 @@ import MeetingFilterControls from '@/routes/meetings/_components/MeetingFilterCo
 import MeetingWrap from '@/routes/meetings/_components/MeetingWrap';
 import { Button } from '@/shared/components/ui/Button';
 import type { Route } from '.react-router/types/app/routes/meetings/+types';
+import { meetingsInfiniteQueryOptions } from '@/features/meetings/hooks/useMeetingsQuery';
 
 export function meta() {
   return metaTemplates.meetings();
@@ -36,11 +36,9 @@ export async function loader({ request }: Route.LoaderArgs) {
     ...rawFilters,
   });
 
-  await queryClient.prefetchInfiniteQuery({
-    queryKey: ['meetings', parsedFilters],
-    queryFn: ({ pageParam }) => getMeetingList(parsedFilters, pageParam),
-    initialPageParam: 0,
-  });
+  await queryClient.prefetchInfiniteQuery(
+    meetingsInfiniteQueryOptions(parsedFilters),
+  );
 
   const topics = await getTopics();
   const dehydratedState = dehydrate(queryClient);
@@ -57,11 +55,9 @@ export async function clientLoader({ request }: Route.LoaderArgs) {
     ...rawFilters,
   });
 
-  await queryClient.prefetchInfiniteQuery({
-    queryKey: ['meetings', parsedFilters],
-    queryFn: ({ pageParam }) => getMeetingList(parsedFilters, pageParam),
-    initialPageParam: 0,
-  });
+  await queryClient.prefetchInfiniteQuery(
+    meetingsInfiniteQueryOptions(parsedFilters),
+  );
 
   const topics = await getTopics();
   const dehydratedState = dehydrate(queryClient);

@@ -5,12 +5,6 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import type { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { editCreatedMeetingThirdSchema } from '@/features/meetings/schemas/meeting';
-import {
-  getMyCreatedMeetingApplicants,
-  getMyCreatedMeetingDetail,
-  getMyCreatedMeetingIntro,
-  getMyCreatedMeetingSchedule,
-} from '@/shared/api/endpoints/users';
 import { format } from 'date-fns';
 
 import type { MeetingSchedule } from '@/shared/types/entities';
@@ -34,6 +28,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '../../../shared/components/ui/Tooltip';
+import { createdMeetingsIntroQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingsIntroQuery';
+import { createdMeetingsScheduleQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingsScheduleQuery';
+import { createdMeetingDetailQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingDetailQuery';
+import { createdMeetingApplicantsQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingApplicants';
 
 export default function CreatedMeetingScheduleContent({
   meetingId,
@@ -50,22 +48,10 @@ export default function CreatedMeetingScheduleContent({
     { data: applicants },
   ] = useSuspenseQueries({
     queries: [
-      {
-        queryKey: ['createdMeetingIntro', meetingId],
-        queryFn: () => getMyCreatedMeetingIntro(meetingId),
-      },
-      {
-        queryKey: ['createdMeetingSchedules', meetingId],
-        queryFn: () => getMyCreatedMeetingSchedule(meetingId),
-      },
-      {
-        queryKey: ['createdMeetingDetail', meetingId],
-        queryFn: () => getMyCreatedMeetingDetail(meetingId),
-      },
-      {
-        queryKey: ['applicants', meetingId],
-        queryFn: () => getMyCreatedMeetingApplicants(meetingId),
-      },
+      createdMeetingsIntroQueryOptions(meetingId),
+      createdMeetingsScheduleQueryOptions(meetingId),
+      createdMeetingDetailQueryOptions(meetingId),
+      createdMeetingApplicantsQueryOptions(meetingId),
     ],
   });
 

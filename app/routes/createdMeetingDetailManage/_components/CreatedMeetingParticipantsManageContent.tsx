@@ -1,6 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { getMyCreatedMeetingParticipants } from '@/shared/api/endpoints/users';
-
 import type { Participants } from '@/shared/types/entities';
 import { cn } from '@/styles/tailwind';
 import {
@@ -13,16 +11,16 @@ import {
 } from '../../../shared/components/ui/Table';
 import Text from '../../../shared/components/ui/Text';
 import { Tag } from '../../../shared/components/ui/Tag';
+import { createdMeetingParticipantsQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingParticipantsQuery';
 
 export default function CreatedMeetingParticipantsManageContent({
   meetingId,
 }: {
   meetingId: number;
 }) {
-  const { data: participants } = useQuery({
-    queryKey: ['participants', meetingId],
-    queryFn: () => getMyCreatedMeetingParticipants(meetingId),
-  });
+  const { data: participants } = useQuery(
+    createdMeetingParticipantsQueryOptions(meetingId),
+  );
 
   return (
     <div className="w-full">

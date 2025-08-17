@@ -5,13 +5,13 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
-import { getGuideBookDetail } from '@/shared/api/endpoints/guideBooks';
 import { metaTemplates } from '@/shared/config/meta-templates';
 
 import CommonTemplate from '@/shared/components/layout/CommonTemplate';
 import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 import GuideBookDetailWrap from '@/routes/guideBookDetail/_components/GuideBookDetailWrap';
 import type { Route } from '.react-router/types/app/routes/guideBookDetail/+types';
+import { guideBookQueryOptions } from '@/features/guidebooks/hooks/useGuideBookQuery';
 
 export function meta() {
   return metaTemplates.guideBookDetail();
@@ -20,10 +20,9 @@ export function meta() {
 export async function loader({ params }: Route.LoaderArgs) {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: ['guideBook', Number(params.guideBookId)],
-    queryFn: () => getGuideBookDetail(Number(params.guideBookId)),
-  });
+  await queryClient.prefetchQuery(
+    guideBookQueryOptions(Number(params.guideBookId)),
+  );
 
   const dehydratedState = dehydrate(queryClient);
   return {
@@ -34,10 +33,9 @@ export async function loader({ params }: Route.LoaderArgs) {
 export async function clientLoader({ params }: Route.LoaderArgs) {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: ['guideBook', Number(params.guideBookId)],
-    queryFn: () => getGuideBookDetail(Number(params.guideBookId)),
-  });
+  await queryClient.prefetchQuery(
+    guideBookQueryOptions(Number(params.guideBookId)),
+  );
 
   const dehydratedState = dehydrate(queryClient);
   return {

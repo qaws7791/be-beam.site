@@ -1,10 +1,10 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { infiniteQueryOptions, useInfiniteQuery } from '@tanstack/react-query';
 import { getGuideBookList } from '@/shared/api/endpoints/guideBooks';
 
 import type { GuideBookListFilters } from '@/features/guidebooks/schemas/guideBooksFilters';
 
-export default function useGuideBooksQuery(filters: GuideBookListFilters) {
-  return useInfiniteQuery({
+export const guideBooksInfiniteQueryOptions = (filters: GuideBookListFilters) =>
+  infiniteQueryOptions({
     queryKey: ['guideBooks', filters],
     queryFn: ({ pageParam }) => getGuideBookList(filters, pageParam),
     initialPageParam: 0,
@@ -14,4 +14,7 @@ export default function useGuideBooksQuery(filters: GuideBookListFilters) {
         : undefined;
     },
   });
+
+export default function useGuideBooksQuery(filters: GuideBookListFilters) {
+  return useInfiniteQuery(guideBooksInfiniteQueryOptions(filters));
 }

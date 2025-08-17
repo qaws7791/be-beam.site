@@ -1,9 +1,11 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { infiniteQueryOptions, useInfiniteQuery } from '@tanstack/react-query';
 import { getMeetingList } from '@/shared/api/endpoints/meetings';
 import type { MeetingListFilters } from '@/features/meetings/schemas/meetingFilters';
 
-export default function useMeetingsQuery(meetingFilters: MeetingListFilters) {
-  return useInfiniteQuery({
+export const meetingsInfiniteQueryOptions = (
+  meetingFilters: MeetingListFilters,
+) =>
+  infiniteQueryOptions({
     queryKey: ['meetings', meetingFilters],
     queryFn: ({ pageParam }) => getMeetingList(meetingFilters, pageParam),
     initialPageParam: 0,
@@ -12,7 +14,8 @@ export default function useMeetingsQuery(meetingFilters: MeetingListFilters) {
         ? lastPage.pageInfo.nextCursor
         : undefined;
     },
-    // staleTime: 0,
-    // maxPages: 나중에 위의 페이지가 사라질 것을 고려하여 사용X
   });
+
+export default function useMeetingsQuery(meetingFilters: MeetingListFilters) {
+  return useInfiniteQuery(meetingsInfiniteQueryOptions(meetingFilters));
 }
