@@ -25,7 +25,7 @@ import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 import type { Route } from '.react-router/types/app/routes/createdMeetingDetailDetail/+types';
 import { requireAuthMiddleware } from '@/shared/server/auth';
 import { createdMeetingDetailQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingDetailQuery';
-import { createdMeetingsScheduleQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingsScheduleQuery';
+import { createdMeetingScheduleQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingScheduleQuery';
 
 export function meta() {
   return metaTemplates.createdMeetingDetailDetail();
@@ -50,7 +50,7 @@ export async function clientLoader({
 
   await Promise.all([
     queryClient.prefetchQuery(createdMeetingDetailQueryOptions(id)),
-    queryClient.prefetchQuery(createdMeetingsScheduleQueryOptions(id)),
+    queryClient.prefetchQuery(createdMeetingScheduleQueryOptions(id)),
   ]);
 
   const dehydratedState = dehydrate(queryClient);

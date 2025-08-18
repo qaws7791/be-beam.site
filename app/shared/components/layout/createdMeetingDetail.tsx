@@ -11,7 +11,7 @@ import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 import type { Route } from '.react-router/types/app/shared/components/layout/+types/createdMeetingDetail';
 import Text from '@/shared/components/ui/Text';
 import { Tabs, TabsList, TabsTrigger } from '@/shared/components/ui/Tabs';
-import { createdMeetingsIntroQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingsIntroQuery';
+import { createdMeetingIntroQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingIntroQuery';
 import { createdMeetingDetailQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingDetailQuery';
 
 export async function clientLoader({ params }: Route.ClientLoaderArgs) {
@@ -20,7 +20,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   const queryClient = new QueryClient();
 
   await Promise.all([
-    queryClient.prefetchQuery(createdMeetingsIntroQueryOptions(id)),
+    queryClient.prefetchQuery(createdMeetingIntroQueryOptions(id)),
     queryClient.prefetchQuery(createdMeetingDetailQueryOptions(id)),
   ]);
 
@@ -67,7 +67,7 @@ export function CreatedMeetingDetailWrap({ meetingId }: { meetingId: number }) {
 
   const queryResult = useSuspenseQueries({
     queries: [
-      createdMeetingsIntroQueryOptions(meetingId),
+      createdMeetingIntroQueryOptions(meetingId),
       createdMeetingDetailQueryOptions(meetingId),
     ],
   });

@@ -11,7 +11,7 @@ import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 import CreatedMeetingDetailIntroWrap from '@/routes/createdMeetingDetailIntro/_components/CreatedMeetingDetailIntroWrap';
 import type { Route } from '.react-router/types/app/routes/createdMeetingDetailIntro/+types';
 import { requireAuthMiddleware } from '@/shared/server/auth';
-import { createdMeetingsIntroQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingsIntroQuery';
+import { createdMeetingIntroQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingIntroQuery';
 import { topicsQueryOptions } from '@/features/meetings/hooks/useTopicsQuery';
 
 export function meta() {
@@ -26,7 +26,7 @@ export async function clientLoader({ params }: Route.ClientLoaderArgs) {
   const queryClient = new QueryClient();
 
   await Promise.all([
-    queryClient.prefetchQuery(createdMeetingsIntroQueryOptions(id)),
+    queryClient.prefetchQuery(createdMeetingIntroQueryOptions(id)),
     queryClient.prefetchQuery(topicsQueryOptions()),
   ]);
 

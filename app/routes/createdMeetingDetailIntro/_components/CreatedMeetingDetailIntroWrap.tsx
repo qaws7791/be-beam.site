@@ -11,7 +11,7 @@ import Text from '../../../shared/components/ui/Text';
 import { Button } from '../../../shared/components/ui/Button';
 import { Input } from '../../../shared/components/ui/Input';
 import { Textarea } from '../../../shared/components/ui/Textarea';
-import { createdMeetingsIntroQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingsIntroQuery';
+import { createdMeetingIntroQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingIntroQuery';
 import { topicsQueryOptions } from '@/features/meetings/hooks/useTopicsQuery';
 
 export default function CreatedMeetingDetailIntroWrap({
@@ -20,10 +20,7 @@ export default function CreatedMeetingDetailIntroWrap({
   meetingId: number;
 }) {
   const [{ data: intro }, { data: topics }] = useSuspenseQueries({
-    queries: [
-      createdMeetingsIntroQueryOptions(meetingId),
-      topicsQueryOptions(),
-    ],
+    queries: [createdMeetingIntroQueryOptions(meetingId), topicsQueryOptions()],
   });
 
   const inputRef = useRef<HTMLInputElement>(null);

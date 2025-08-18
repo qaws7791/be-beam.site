@@ -28,8 +28,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '../../../shared/components/ui/Tooltip';
-import { createdMeetingsIntroQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingsIntroQuery';
-import { createdMeetingsScheduleQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingsScheduleQuery';
+import { createdMeetingIntroQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingIntroQuery';
+import { createdMeetingScheduleQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingScheduleQuery';
 import { createdMeetingDetailQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingDetailQuery';
 import { createdMeetingApplicantsQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingApplicants';
 
@@ -48,8 +48,8 @@ export default function CreatedMeetingScheduleContent({
     { data: applicants },
   ] = useSuspenseQueries({
     queries: [
-      createdMeetingsIntroQueryOptions(meetingId),
-      createdMeetingsScheduleQueryOptions(meetingId),
+      createdMeetingIntroQueryOptions(meetingId),
+      createdMeetingScheduleQueryOptions(meetingId),
       createdMeetingDetailQueryOptions(meetingId),
       createdMeetingApplicantsQueryOptions(meetingId),
     ],
