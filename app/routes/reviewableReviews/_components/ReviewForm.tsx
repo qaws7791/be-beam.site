@@ -97,7 +97,7 @@ export function ReviewForm({
             <ImageInput
               maxImages={10}
               newImages={field.value || []}
-              onChange={(data) => field.onChange(data)}
+              onChange={(data) => field.onChange(data.newImages)}
               error={fieldState.error?.message}
             />
           )}
