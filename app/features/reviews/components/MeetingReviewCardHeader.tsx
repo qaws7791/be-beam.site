@@ -4,7 +4,13 @@ import MoreDropdownMenu from '../../../shared/components/common/MoreDropdownMenu
 import MeetingReviewEditorProfile from './MeetingReviewEditorProfile';
 
 interface MeetingReviewCardHeaderProps {
-  review: Review;
+  review: {
+    reviewId: Review['reviewId'];
+    profileImg: Review['profileImg'];
+    nickname: Review['nickname'];
+    createdAt: Review['createdAt'];
+    myReview: Review['myReview'];
+  };
   edit: {
     isActive: boolean;
     id: number | null;

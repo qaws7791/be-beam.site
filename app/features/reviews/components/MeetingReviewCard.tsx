@@ -2,9 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouteLoaderData } from 'react-router';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { axiosInstance } from '@/shared/api/axios';
-import { API_V1_BASE_URL } from '@/shared/constants/api';
 import { readFileAsBase64 } from '@/shared/utils/file';
 import { useModalStore } from '@/shared/stores/useModalStore';
 import toast from 'react-hot-toast';
@@ -14,6 +11,8 @@ import MeetingReviewCardHeader from './MeetingReviewCardHeader';
 import { Button } from '../../../shared/components/ui/Button';
 import MeetingReviewEditForm from './MeetingReviewEditForm';
 import MeetingReviewContent from './MeetingReviewContent';
+import useLikeReviewMutation from '@/features/reviews/hooks/useLikeReviewMutation';
+import useUnlikeReviewMutation from '@/features/reviews/hooks/useUnlikeReviewMutation';
 
 interface EditType {
   isActive: boolean;
@@ -26,13 +25,31 @@ export interface EditDataType {
   existingImages: string[];
 }
 
+interface MeetingReviewCardProps {
+  reviewId: Review['reviewId'];
+  rating: Review['rating'];
+  text: Review['text'];
+  images: Review['images'];
+  liked: Review['liked'];
+  likesCount: Review['likesCount'];
+  profileImg: Review['profileImg'];
+  nickname: Review['nickname'];
+  createdAt: Review['createdAt'];
+  myReview: Review['myReview'];
+}
+
 export default function MeetingReviewCard({
-  review,
-  meetingReviewList,
-}: {
-  review: Review;
-  meetingReviewList: Review[];
-}) {
+  reviewId,
+  rating,
+  text,
+  images,
+  liked,
+  likesCount,
+  profileImg,
+  nickname,
+  createdAt,
+  myReview,
+}: MeetingReviewCardProps) {
   const rootLoaderData = useRouteLoaderData('root');
   const user = rootLoaderData.user;
 
@@ -46,58 +63,53 @@ export default function MeetingReviewCard({
   });
   const [totalEditImages, setTotalEditImages] = useState<string[]>([]);
 
-  const isMyMeetingReviewEdit = edit.isActive && review.reviewId === edit.id;
+  const isMyMeetingReviewEdit = edit.isActive && reviewId === edit.id;
 
   useEffect(() => {
-    if (edit.isActive && review.reviewId === edit.id) {
-      const origin = meetingReviewList.find((r) => r.reviewId === edit.id);
-      if (origin) {
-        setEditData({
-          rating: origin.rating,
-          text: origin.text,
-          existingImages: origin.images,
-        });
-        setTotalEditImages(origin.images);
-      }
+    if (edit.isActive && reviewId === edit.id) {
+      setEditData({
+        rating: rating,
+        text: text,
+        existingImages: images,
+      });
+      setTotalEditImages(images);
     }
-  }, [edit, review.reviewId, meetingReviewList]);
+  }, [edit, reviewId, rating, text, images]);
 
   // 나중에 코드 하나로 합치기(리뷰 좋아요/좋아요 취소 코드)
-  const queryClient = useQueryClient();
-  const { mutate: likeMeetingReview, isPending } = useMutation({
-    mutationFn: () => {
-      return axiosInstance({
-        baseURL: API_V1_BASE_URL,
-        url: `/reviews/${review.reviewId}/like`,
-        method: review.liked ? 'DELETE' : 'POST',
-      });
-    },
-    onSuccess: () => {
-      toast.success(
-        review.liked
-          ? '해당 모임 후기의 좋아요를 취소하였습니다.'
-          : '해당 모임 후기의 좋아요를 눌렀습니다.',
-      );
-      queryClient.invalidateQueries({ queryKey: ['meetingReviews'] });
-    },
-    onError: (err) => {
-      toast.error(
-        `${review.liked ? '해당 모임 후기의 좋아요 취소' : '해당 모임 후기의 좋아요'}를 실패하였습니다. 다시 시도해주세요.`,
-      );
-      console.error('Failed to follow host:', err);
-    },
-  });
+  const { mutate: likeReview, isPending: likeReviewPending } =
+    useLikeReviewMutation();
+  const { mutate: unlikeReview, isPending: unlikeReviewPending } =
+    useUnlikeReviewMutation();
+
+  const handleLikeReview = () => {
+    if (!user) {
+      return alert('로그인 후 이용해주세요.');
+    }
+    if (likeReviewPending || unlikeReviewPending) return;
+    if (liked) {
+      unlikeReview({ reviewId: reviewId });
+    } else {
+      likeReview({ reviewId: reviewId });
+    }
+  };
 
   return (
     <div
-      key={review.reviewId}
+      key={reviewId}
       className="mb-4 w-full rounded-2xl border-1 border-gray-300 p-8"
     >
       <MeetingReviewCardHeader
         edit={edit}
-        review={review}
+        review={{
+          reviewId,
+          profileImg,
+          nickname,
+          createdAt,
+          myReview,
+        }}
         onEditMeetingReview={() => {
-          setEdit({ isActive: true, id: review.reviewId });
+          setEdit({ isActive: true, id: reviewId });
         }}
         onDeleteMeetingReview={() => console.log('삭제')}
         onDeclareMeetingReview={() => {
@@ -106,7 +118,7 @@ export default function MeetingReviewCard({
           } else {
             open('DECLARE_MODAL', {
               type: 'review',
-              id: review.reviewId,
+              id: reviewId,
               refetchKey: 'meetingReviews',
             });
           }
@@ -116,7 +128,7 @@ export default function MeetingReviewCard({
       <div className="mt-4 w-full">
         {isMyMeetingReviewEdit ? (
           <MeetingReviewEditForm
-            rating={review.rating}
+            rating={rating}
             text={editData.text}
             totalEditImages={totalEditImages}
             onRatingChange={(value) => {
@@ -150,32 +162,21 @@ export default function MeetingReviewCard({
             setTotalEditImages={setTotalEditImages}
           />
         ) : (
-          <MeetingReviewContent review={review} />
+          <MeetingReviewContent rating={rating} images={images} text={text} />
         )}
       </div>
 
       <Button
         variant="tertiary"
         className="mt-8 h-10 min-w-31 rounded-full border-gray-300 text-t4 text-gray-500"
-        onClick={() => {
-          if (!user) {
-            toast('로그인 후 다시 시도해주세요.');
-          } else {
-            if (isPending) return;
-            likeMeetingReview();
-          }
-        }}
+        onClick={handleLikeReview}
       >
         <img
           className="h-6 w-6"
-          src={
-            review.liked
-              ? '/images/icons/fill_like.svg'
-              : '/images/icons/like.svg'
-          }
+          src={liked ? '/images/icons/fill_like.svg' : '/images/icons/like.svg'}
           alt="like_icon"
         />
-        좋아요 | {review.likesCount}
+        좋아요 | {likesCount}
       </Button>
     </div>
   );

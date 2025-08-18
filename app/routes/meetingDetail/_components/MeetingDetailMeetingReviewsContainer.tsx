@@ -120,8 +120,16 @@ const MeetingDetailMeetingReviewsContainer = ({
         {meetingReviewList?.map((review) => (
           <MeetingReviewCard
             key={review.reviewId}
-            review={review}
-            meetingReviewList={meetingReviewList}
+            reviewId={review.reviewId}
+            rating={review.rating}
+            text={review.text}
+            images={review.images}
+            liked={review.liked}
+            likesCount={review.likesCount}
+            profileImg={review.profileImg}
+            nickname={review.nickname}
+            createdAt={review.createdAt}
+            myReview={review.myReview}
           />
         ))}
         <Button
