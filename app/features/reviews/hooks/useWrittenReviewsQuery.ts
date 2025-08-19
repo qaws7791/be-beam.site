@@ -3,10 +3,11 @@ import {
   type GetWrittenReviewsParams,
 } from '@/shared/api/endpoints/users';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { reviewQueryKeys } from '@/features/reviews/queries/queryKeys';
 
 export function writtenReviewsQueryOptions(params: GetWrittenReviewsParams) {
   return {
-    queryKey: ['written-reviews', params],
+    queryKey: reviewQueryKeys.writtenReviews(params).queryKey,
     queryFn: () => getWrittenReviews(params),
   };
 }

@@ -7,7 +7,6 @@ export type getReviewListParams = {
   type: 'image' | 'text';
   rating: 'all' | '1' | '2' | '3' | '4' | '5';
   recruitmentType: 'all' | 'regular' | 'small';
-  cursor: number;
   size: number;
 };
 
@@ -37,21 +36,17 @@ export type ReviewListResult = {
   };
 };
 
-export const getReviewList = async ({
-  sort,
-  type,
-  rating,
-  recruitmentType,
-  cursor = 0,
-  size = 20,
-}: getReviewListParams) => {
+export const getReviewList = async (
+  params: getReviewListParams,
+  cursor: number,
+) => {
   const searchParams = new URLSearchParams({
-    sort,
-    type,
-    rating,
-    'recruitment-type': recruitmentType,
+    sort: params.sort,
+    type: params.type,
+    rating: params.rating,
+    'recruitment-type': params.recruitmentType,
     cursor: cursor.toString(),
-    size: size.toString(),
+    size: params.size.toString(),
   });
 
   const res = await axiosInstance.get<{

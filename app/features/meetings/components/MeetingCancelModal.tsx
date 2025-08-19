@@ -50,7 +50,6 @@ export default function MeetingCancelModal() {
 
   const { mutate: cancelMeeting, isPending } = useCancelMeetingMutation(
     modalProps.meetingId as number,
-    modalProps.refetchKey as string,
     modalProps.statusType as 'participating' | 'applied',
   );
 

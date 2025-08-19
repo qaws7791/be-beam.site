@@ -16,7 +16,7 @@ export default function MeetingCardGroup({
 }: MeetingListSectionProps) {
   const navigate = useNavigate();
 
-  const { mutate: likeMeeting, isPending } = useLikeMeetingMutation('meetings');
+  const { mutate: likeMeeting, isPending } = useLikeMeetingMutation();
 
   return (
     <GridGroup columns={4} gap={5} className="mt-8">

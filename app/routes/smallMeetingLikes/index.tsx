@@ -15,8 +15,7 @@ export default function SmallMeetingLikes() {
     size: 10,
     type: 'small',
   });
-  const { mutate: likeMeeting, isPending } =
-    useLikeMeetingMutation('my-meeting-likes');
+  const { mutate: likeMeeting, isPending } = useLikeMeetingMutation();
   return (
     <div className="mt-8 grid grid-cols-3 gap-x-5 gap-y-8">
       {meetingLikes.data?.meetings.map((meeting) => (

@@ -1,9 +1,10 @@
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { getGuideBookDetail } from '@/shared/api/endpoints/guideBooks';
+import { guideBookQueryKeys } from '@/features/guidebooks/queries/queryKeys';
 
 export const guideBookQueryOptions = (id: number) =>
   queryOptions({
-    queryKey: ['guideBook', id],
+    queryKey: guideBookQueryKeys.detail(id).queryKey,
     queryFn: () => getGuideBookDetail(id),
   });
 

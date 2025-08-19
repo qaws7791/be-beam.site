@@ -3,10 +3,11 @@ import {
   type OpeningMeetingListParams,
 } from '@/shared/api/endpoints/mypage';
 import { queryOptions, useQuery } from '@tanstack/react-query';
+import { meetingQueryKeys } from '../queries/queryKeys';
 
 export const createdMeetingsQueryOptions = (params: OpeningMeetingListParams) =>
   queryOptions({
-    queryKey: ['createdMeetings', params],
+    queryKey: meetingQueryKeys.createdMeetings(params).queryKey,
     queryFn: () => getOpeningMeetingList(params),
   });
 

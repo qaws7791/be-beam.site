@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { DeleteMeeting } from '@/shared/api/endpoints/meetings';
 
 import toast from 'react-hot-toast';
+import { meetingQueryKeys } from '@/features/meetings/queries/queryKeys';
 
 export default function useDeleteMeetingMutation() {
   const queryClient = useQueryClient();
@@ -10,7 +11,9 @@ export default function useDeleteMeetingMutation() {
     mutationFn: (meetingId: number) => DeleteMeeting(meetingId),
     onSuccess: () => {
       toast.success('모임을 삭제하였습니다.');
-      queryClient.invalidateQueries({ queryKey: ['createdMeetings'] });
+      queryClient.invalidateQueries({
+        queryKey: meetingQueryKeys.createdMeetings._def,
+      });
       close();
     },
     onError: (err) => {

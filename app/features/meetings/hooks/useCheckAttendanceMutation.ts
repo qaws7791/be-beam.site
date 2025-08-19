@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { APIResponse } from '@/shared/types/api';
 import type { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
+import { meetingQueryKeys } from '@/features/meetings/queries/queryKeys';
 
 export default function useCheckAttendanceMutation(meetingId: number) {
   const queryClient = useQueryClient();
@@ -16,7 +17,9 @@ export default function useCheckAttendanceMutation(meetingId: number) {
     }) => checkAttendance(meetingId, data),
     onSuccess: () => {
       toast.success('출석체크를 진행하였습니다.');
-      queryClient.invalidateQueries({ queryKey: ['attendance'] });
+      queryClient.invalidateQueries({
+        queryKey: meetingQueryKeys.meetingAttendance._def,
+      });
     },
     onError: (err: AxiosError<APIResponse<string>>) => {
       if (err.response) {

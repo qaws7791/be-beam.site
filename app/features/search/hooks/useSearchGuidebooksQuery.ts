@@ -1,19 +1,14 @@
+import { searchQueryKeys } from '@/features/search/queries/queryKeys';
 import {
   getSearchGuidebookResult,
   type SearchGuidebookParams,
 } from '@/shared/api/endpoints/searches';
 import { infiniteQueryOptions, useInfiniteQuery } from '@tanstack/react-query';
 
-export const searchGuidebooksQueryOptions = (
-  params: Omit<SearchGuidebookParams, 'page'>,
-) =>
+export const searchGuidebooksQueryOptions = (params: SearchGuidebookParams) =>
   infiniteQueryOptions({
-    queryKey: ['search-guidebooks', params],
-    queryFn: ({ pageParam }) =>
-      getSearchGuidebookResult({
-        ...params,
-        page: pageParam,
-      }),
+    queryKey: searchQueryKeys.guidebooks(params).queryKey,
+    queryFn: ({ pageParam }) => getSearchGuidebookResult(params, pageParam),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
       return lastPage.pageInfo.hasNext ? lastPage.pageInfo.page + 1 : undefined;
@@ -21,7 +16,7 @@ export const searchGuidebooksQueryOptions = (
   });
 
 export default function useSearchGuidebooksQuery(
-  params: Omit<SearchGuidebookParams, 'page'>,
+  params: SearchGuidebookParams,
 ) {
   return useInfiniteQuery(searchGuidebooksQueryOptions(params));
 }

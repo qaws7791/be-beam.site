@@ -2,8 +2,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { likeMeeting } from '@/shared/api/endpoints/meetings';
 
 import toast from 'react-hot-toast';
+import { meetingQueryKeys } from '@/features/meetings/queries/queryKeys';
 
-export default function useLikeMeetingMutation(refetchKey: string) {
+export default function useLikeMeetingMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -13,7 +14,7 @@ export default function useLikeMeetingMutation(refetchKey: string) {
       toast.success(
         `해당 모임의 ${variables.liked ? '좋아요를 취소하였습니다.' : ' 좋아요를 눌렀습니다.'}`,
       );
-      queryClient.refetchQueries({ queryKey: [refetchKey] });
+      queryClient.refetchQueries({ queryKey: meetingQueryKeys._def });
     },
     onError: (err, variables) => {
       toast.error(

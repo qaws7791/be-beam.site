@@ -1,9 +1,10 @@
 import { getMyProfile } from '@/shared/api/endpoints/users';
 import { queryOptions, useQuery } from '@tanstack/react-query';
+import { userQueryKeys } from '../queries/queryKeys';
 
 export const myProfileQueryOptions = () =>
   queryOptions({
-    queryKey: ['my-profile'],
+    queryKey: userQueryKeys.myProfile.queryKey,
     queryFn: () => getMyProfile(),
     throwOnError: false,
   });

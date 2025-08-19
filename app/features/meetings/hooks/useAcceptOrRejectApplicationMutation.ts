@@ -1,3 +1,4 @@
+import { meetingQueryKeys } from '@/features/meetings/queries/queryKeys';
 import { acceptOrRejectApplication } from '@/shared/api/endpoints/users';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -13,7 +14,9 @@ export default function useAcceptOrRejectApplicationMutation(id: number) {
       toast.success(
         `${data.type === 'ACCEPTED' ? '모임 참여 신청을 수락하였습니다.' : '모임 참여 신청을 거절하였습니다.'}`,
       );
-      queryClient.invalidateQueries({ queryKey: ['applicants'] });
+      queryClient.invalidateQueries({
+        queryKey: meetingQueryKeys.meetingApplicants._def,
+      });
       close();
     },
     onError: (err, data) => {

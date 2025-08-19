@@ -1,3 +1,4 @@
+import { meetingQueryKeys } from '@/features/meetings/queries/queryKeys';
 import { EditMeetingSchedule } from '@/shared/api/endpoints/users';
 import type { EditMeetingSchedule as EditMeetingScheduleType } from '@/shared/types/entities';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -12,7 +13,9 @@ export default function useEditMeetingScheduleMutation(id: number) {
       EditMeetingSchedule(id, form),
     onSuccess: () => {
       toast.success('모임 수정을 완료하였습니다.');
-      queryClient.invalidateQueries({ queryKey: ['createdMeetingSchedules'] });
+      queryClient.invalidateQueries({
+        queryKey: meetingQueryKeys.createdMeetingSchedule._def,
+      });
       close();
     },
     onError: (err) => {

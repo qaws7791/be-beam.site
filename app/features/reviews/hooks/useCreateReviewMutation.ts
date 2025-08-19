@@ -1,3 +1,4 @@
+import { reviewQueryKeys } from '@/features/reviews/queries/queryKeys';
 import {
   createReview,
   type CreateReviewData,
@@ -17,17 +18,9 @@ export default function useCreateReviewMutation() {
       createReview(meetingId, data),
     onSuccess: () => {
       toast.success('리뷰가 성공적으로 작성되었습니다.');
-      Promise.all([
-        queryClient.invalidateQueries({
-          queryKey: ['reviewable-reviews'],
-        }),
-        queryClient.invalidateQueries({
-          queryKey: ['written-reviews'],
-        }),
-        queryClient.invalidateQueries({
-          queryKey: ['reviews'],
-        }),
-      ]);
+      queryClient.invalidateQueries({
+        queryKey: reviewQueryKeys._def,
+      });
     },
     onError: () => {
       toast.error('리뷰 작성에 실패했습니다.');

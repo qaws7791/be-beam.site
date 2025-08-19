@@ -1,9 +1,10 @@
 import { getMeetingDetail } from '@/shared/api/endpoints/meetings';
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
+import { meetingQueryKeys } from '../queries/queryKeys';
 
 export const meetingQueryOptions = (id: number) =>
   queryOptions({
-    queryKey: ['meeting', id],
+    queryKey: meetingQueryKeys.detail(id).queryKey,
     queryFn: () => getMeetingDetail(id),
   });
 

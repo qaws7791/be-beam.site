@@ -13,7 +13,7 @@ import {
 import Text from '../../../shared/components/ui/Text';
 import { Button } from '../../../shared/components/ui/Button';
 import { Tag } from '../../../shared/components/ui/Tag';
-import { createdMeetingApplicantsQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingApplicants';
+import { createdMeetingApplicantsQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingApplicantsQuery';
 
 export default function CreatedMeetingApplicantsManageContent({
   meetingId,

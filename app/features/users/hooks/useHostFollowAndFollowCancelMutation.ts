@@ -4,11 +4,11 @@ import { API_V1_BASE_URL } from '@/shared/constants/api';
 
 import type { Host } from '@/shared/types/entities';
 import toast from 'react-hot-toast';
+import { userQueryKeys } from '@/features/users/queries/queryKeys';
 
 export default function useHostFollowAndFollowCancelMutation(
   id: number,
   host: Omit<Host, 'id'>,
-  refetchKey: string,
 ) {
   const queryClient = useQueryClient();
 
@@ -26,7 +26,12 @@ export default function useHostFollowAndFollowCancelMutation(
           ? '호스트 팔로우를 취소하였습니다.'
           : '호스트를 팔로우하였습니다.',
       );
-      queryClient.invalidateQueries({ queryKey: [refetchKey] });
+      queryClient.invalidateQueries({
+        queryKey: userQueryKeys.host(id).queryKey,
+      });
+      queryClient.invalidateQueries({
+        queryKey: userQueryKeys.likedHosts._def,
+      });
     },
     onError: (err) => {
       toast.error(

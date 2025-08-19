@@ -1,17 +1,17 @@
-import { getMyMeetingLikes } from '@/shared/api/endpoints/users';
+import {
+  getMyMeetingLikes,
+  type MyMeetingLikesParams,
+} from '@/shared/api/endpoints/users';
 import { queryOptions, useQuery } from '@tanstack/react-query';
+import { meetingQueryKeys } from '../queries/queryKeys';
 
 const myMeetingLikesQueryOptions = ({
   page,
   size,
   type,
-}: {
-  page: number;
-  size: number;
-  type: 'regular' | 'small';
-}) => {
+}: MyMeetingLikesParams) => {
   return queryOptions({
-    queryKey: ['my-meeting-likes', { page, size, type }],
+    queryKey: meetingQueryKeys.likedMeetings({ page, size, type }).queryKey,
     queryFn: () => getMyMeetingLikes({ page, size, type }),
   });
 };

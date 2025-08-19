@@ -1,3 +1,4 @@
+import { reviewQueryKeys } from '@/features/reviews/queries/queryKeys';
 import { getMyReviewLikes } from '@/shared/api/endpoints/users';
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 
@@ -9,7 +10,7 @@ const myReviewLikesQueryOptions = ({
   size: number;
 }) => {
   return queryOptions({
-    queryKey: ['my-review-likes', { page, size }],
+    queryKey: reviewQueryKeys.likedReviews({ page, size }).queryKey,
     queryFn: () => getMyReviewLikes({ page, size }),
   });
 };

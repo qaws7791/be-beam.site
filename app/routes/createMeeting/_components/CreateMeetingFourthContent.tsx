@@ -22,6 +22,7 @@ import { TimeInput } from '@/shared/components/common/TimeInput';
 import { AddressInput } from '@/shared/components/common/AddressInput';
 import { useNavigate } from 'react-router';
 import { cn } from '@/styles/tailwind';
+import { meetingQueryKeys } from '@/features/meetings/queries/queryKeys';
 
 interface CreateMeetingFourthContentProps {
   tab: number;
@@ -126,7 +127,7 @@ export default function CreateMeetingFourthContent({
     },
     onSuccess: () => {
       toast.success('모임 개설을 완료하였습니다.');
-      queryClient.invalidateQueries({ queryKey: ['meetings'] });
+      queryClient.invalidateQueries({ queryKey: meetingQueryKeys._def });
       navigate('/meetings');
     },
     onError: (err) => {

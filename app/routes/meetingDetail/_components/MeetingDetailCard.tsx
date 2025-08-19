@@ -158,7 +158,7 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
     disable,
   } = getMeetingButtonProps(meeting, open as () => void);
 
-  const { mutate: likeMeeting, isPending } = useLikeMeetingMutation('meeting');
+  const { mutate: likeMeeting, isPending } = useLikeMeetingMutation();
 
   return (
     <div className="box-border flex h-[657px] flex-1 flex-col justify-between rounded-xl border-1 border-gray-300 bg-white px-7 py-10">

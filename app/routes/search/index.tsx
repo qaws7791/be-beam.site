@@ -78,7 +78,7 @@ export default function Search() {
 function AllSearchResults({ query }: { query: string }) {
   const [, setSearchParams] = useSearchParams();
   const { data } = useSearchTotalQuery({ search: query });
-  const { mutate: likeMeeting, isPending } = useLikeMeetingMutation('meetings');
+  const { mutate: likeMeeting, isPending } = useLikeMeetingMutation();
   const { user } = useUserSession();
   const navigate = useNavigate();
   return (

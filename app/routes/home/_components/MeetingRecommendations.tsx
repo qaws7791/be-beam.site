@@ -49,9 +49,7 @@ export default function MeetingRecommendations({
     },
   ];
 
-  const { mutate: likeMeeting, isPending } = useLikeMeetingMutation(
-    'recommendationMeetings',
-  );
+  const { mutate: likeMeeting, isPending } = useLikeMeetingMutation();
 
   return (
     <div className={`${className} w-full text-left`}>

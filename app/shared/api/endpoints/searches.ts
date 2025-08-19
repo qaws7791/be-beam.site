@@ -54,7 +54,6 @@ export const getTotalSearchResult = async ({ search }: SearchTotalParams) => {
 
 export type SearchMeetingParams = {
   search: string;
-  page: number;
   size: number;
 };
 
@@ -78,18 +77,16 @@ export type SearchMeetingResult = {
   };
 };
 
-export const getSearchMeetingResult = async ({
-  search,
-  page,
-  size,
-}: SearchMeetingParams) => {
+export const getSearchMeetingResult = async (
+  params: SearchMeetingParams,
+  page: number,
+) => {
   const res = await axiosInstance.get<APIResponse<SearchMeetingResult>>(
     `/searches/meetings`,
     {
       params: {
-        search,
+        ...params,
         page,
-        size,
       },
       baseURL: API_V1_BASE_URL,
     },
@@ -99,7 +96,6 @@ export const getSearchMeetingResult = async ({
 
 export type SearchGuidebookParams = {
   search: string;
-  page: number;
   size: number;
 };
 
@@ -119,18 +115,16 @@ export type SearchGuidebookResult = {
   };
 };
 
-export const getSearchGuidebookResult = async ({
-  search,
-  page,
-  size,
-}: SearchGuidebookParams) => {
+export const getSearchGuidebookResult = async (
+  params: SearchGuidebookParams,
+  page: number,
+) => {
   const res = await axiosInstance.get<APIResponse<SearchGuidebookResult>>(
     `/searches/guidebooks`,
     {
       params: {
-        search,
+        ...params,
         page,
-        size,
       },
       baseURL: API_V1_BASE_URL,
     },
@@ -140,7 +134,6 @@ export const getSearchGuidebookResult = async ({
 
 export type SearchHostParams = {
   search: string;
-  page: number;
   size: number;
 };
 
@@ -161,18 +154,16 @@ export type SearchHostResult = {
   };
 };
 
-export const getSearchHostResult = async ({
-  search,
-  page,
-  size,
-}: SearchHostParams) => {
+export const getSearchHostResult = async (
+  params: SearchHostParams,
+  page: number,
+) => {
   const res = await axiosInstance.get<APIResponse<SearchHostResult>>(
     `/searches/hosts`,
     {
       params: {
-        search,
+        ...params,
         page,
-        size,
       },
       baseURL: API_V1_BASE_URL,
     },

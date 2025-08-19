@@ -3,12 +3,13 @@ import {
   type GetReviewableReviewsParams,
 } from '@/shared/api/endpoints/users';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { reviewQueryKeys } from '@/features/reviews/queries/queryKeys';
 
 export function reviewableReviewsQueryOptions(
   params: GetReviewableReviewsParams,
 ) {
   return {
-    queryKey: ['reviewable-reviews', params],
+    queryKey: reviewQueryKeys.reviewableReviews(params).queryKey,
     queryFn: () => getReviewableReviews(params),
   };
 }

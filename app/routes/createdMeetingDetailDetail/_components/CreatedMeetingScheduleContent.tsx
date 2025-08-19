@@ -31,7 +31,7 @@ import {
 import { createdMeetingIntroQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingIntroQuery';
 import { createdMeetingScheduleQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingScheduleQuery';
 import { createdMeetingDetailQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingDetailQuery';
-import { createdMeetingApplicantsQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingApplicants';
+import { createdMeetingApplicantsQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingApplicantsQuery';
 
 export default function CreatedMeetingScheduleContent({
   meetingId,

@@ -1,9 +1,10 @@
 import { getCreatedMeetingDetail } from '@/shared/api/endpoints/users';
 import { queryOptions, useQuery } from '@tanstack/react-query';
+import { meetingQueryKeys } from '../queries/queryKeys';
 
 export const createdMeetingDetailQueryOptions = (id: number) =>
   queryOptions({
-    queryKey: ['createdMeetingDetail', id],
+    queryKey: meetingQueryKeys.createdMeetingDetail(id).queryKey,
     queryFn: async () => getCreatedMeetingDetail(id),
   });
 

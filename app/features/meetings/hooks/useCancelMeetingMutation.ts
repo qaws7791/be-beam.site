@@ -2,10 +2,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import toast from 'react-hot-toast';
 import { cancelMeeting } from '@/shared/api/endpoints/meetings';
+import { meetingQueryKeys } from '@/features/meetings/queries/queryKeys';
 
 export default function useCancelMeetingMutation(
   id: number,
-  refetchKey: string,
   statusType: 'participating' | 'applied',
 ) {
   const queryClient = useQueryClient();
@@ -19,7 +19,7 @@ export default function useCancelMeetingMutation(
       toast.success(
         `${statusType === 'participating' ? '모임 중도 이탈을' : '모임 취소를'} 신청하였습니다.`,
       );
-      queryClient.invalidateQueries({ queryKey: [refetchKey] });
+      queryClient.invalidateQueries({ queryKey: meetingQueryKeys._def });
       close();
     },
     onError: (err) => {

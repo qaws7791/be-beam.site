@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { EditCreateMeetingIntroType } from '@/shared/types/components';
 import toast from 'react-hot-toast';
 import { EditMeetingIntro } from '@/shared/api/endpoints/users';
+import { meetingQueryKeys } from '@/features/meetings/queries/queryKeys';
 
 export default function useEditMeetingIntroMutation(
   id: number,
@@ -15,7 +16,9 @@ export default function useEditMeetingIntroMutation(
       EditMeetingIntro(id, form, existingImages),
     onSuccess: () => {
       toast.success('모임 수정을 완료하였습니다.');
-      queryClient.invalidateQueries({ queryKey: ['createdMeetingIntro'] });
+      queryClient.invalidateQueries({
+        queryKey: meetingQueryKeys.createdMeetingIntro._def,
+      });
       close();
     },
     onError: (err) => {

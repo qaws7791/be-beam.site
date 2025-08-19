@@ -3,6 +3,7 @@ import { EditMeetingDetail } from '@/shared/api/endpoints/users';
 
 import type { EditMeetingDetailType } from '@/shared/types/components';
 import toast from 'react-hot-toast';
+import { meetingQueryKeys } from '@/features/meetings/queries/queryKeys';
 
 export default function useEditMeetingDetailMutation(id: number) {
   const queryClient = useQueryClient();
@@ -11,7 +12,9 @@ export default function useEditMeetingDetailMutation(id: number) {
     mutationFn: (data: EditMeetingDetailType) => EditMeetingDetail(id, data),
     onSuccess: () => {
       toast.success('모임을 수정하였습니다.');
-      queryClient.invalidateQueries({ queryKey: ['createdMeetingDetail'] });
+      queryClient.invalidateQueries({
+        queryKey: meetingQueryKeys.createdMeetingDetail._def,
+      });
       close();
     },
     onError: (err) => {

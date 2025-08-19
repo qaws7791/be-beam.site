@@ -22,7 +22,7 @@ import CreatedMeetingAttendanceManageContent from '@/routes/createdMeetingDetail
 import { metaTemplates } from '@/shared/config/meta-templates';
 import type { Route } from '.react-router/types/app/routes/createdMeetingDetailManage/+types';
 import { requireAuthMiddleware } from '@/shared/server/auth';
-import { createdMeetingApplicantsQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingApplicants';
+import { createdMeetingApplicantsQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingApplicantsQuery';
 import { createdMeetingParticipantsQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingParticipantsQuery';
 import { createdMeetingAttendanceQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingAttendanceQuery';
 
