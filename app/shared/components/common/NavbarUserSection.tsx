@@ -28,7 +28,10 @@ export default function NavbarUserSection({
 
   return (
     <div className="flex items-center justify-center gap-x-4">
-      <button className="cursor-pointer">
+      <button
+        className="cursor-pointer"
+        onClick={() => navigate('/myPage/likes/regular')}
+      >
         <img src="/images/icons/like.svg" alt="like_icon" />
       </button>
       <Popover>
