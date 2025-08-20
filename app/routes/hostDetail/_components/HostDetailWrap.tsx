@@ -25,8 +25,8 @@ export default function HostDetailWrap({ id }: { id: number }) {
 
   const { data: host } = useHostQuery(id);
 
-  const { mutate: followHost, isPending: isPending } =
-    useHostFollowAndFollowCancelMutation(id, host, 'hostDetail');
+  const { mutate: followHost, isPending } =
+    useHostFollowAndFollowCancelMutation(id, host);
 
   const { open } = useModalStore();
 

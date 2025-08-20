@@ -37,7 +37,6 @@ export default function ApplyMeetingModal() {
   const { data: myInfo } = useMyInfoQuery();
   const { mutate: applyMeeting, isPending } = useApplyMeetingMutation(
     meeting.id,
-    'meeting',
   );
 
   function hasAllFields(obj: MyInfoResult) {
