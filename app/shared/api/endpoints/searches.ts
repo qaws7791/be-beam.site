@@ -24,12 +24,14 @@ export type SearchTotalResult = {
     address: Meeting['address'];
     liked: boolean;
   }[];
+  meetingsCount: number;
   guidebooks: {
     id: Guidebook['id'];
     title: Guidebook['title'];
     thumbnailImage: ImageType;
     description: Guidebook['description'];
   }[];
+  guidebooksCount: number;
   hosts: {
     id: Host['id'];
     nickname: Host['hostName'];
@@ -37,6 +39,7 @@ export type SearchTotalResult = {
     introduction: Host['hostInstruction'];
     liked: boolean;
   }[];
+  hostsCount: number;
 };
 
 export const getTotalSearchResult = async ({ search }: SearchTotalParams) => {
