@@ -1,32 +1,36 @@
-import { ImageFilterChip } from '@/features/reviews/components/ImageFilterChip';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/shared/components/ui/Tabs';
-import { RatingFilter } from '@/shared/components/common/RatingFilter';
 import WideReviewCard from '@/routes/reviews/_components/WideReviewCard';
 import CommonTemplate from '@/shared/components/layout/CommonTemplate';
 import useReviewsQuery from '@/features/reviews/hooks/useReviewsQuery';
 import useReviewsParams from '@/features/reviews/hooks/useReviewsParams';
-import { RadioGroup, RadioGroupItem } from '@radix-ui/react-radio-group';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
 import { metaTemplates } from '@/shared/config/meta-templates';
+import { TabNav, TabNavLink } from '@/shared/components/ui/TabNav';
+import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
+import ReviewFilters from '@/routes/reviews/_components/ReviewFilters';
 
 export function meta() {
   return metaTemplates.reviews();
 }
 
+const REVIEW_TABS = [
+  {
+    value: 'all',
+    label: '전체',
+  },
+  {
+    value: 'regular',
+    label: '정기모임',
+  },
+  {
+    value: 'small',
+    label: '소모임',
+  },
+];
+
 export default function Reviews() {
-  const {
-    params,
-    handleUpdateRecruitmentType,
-    handleUpdateSort,
-    handleUpdateType,
-    handleUpdateRating,
-  } = useReviewsParams();
+  const { params, handleUpdateSort, handleUpdateType, handleUpdateRating } =
+    useReviewsParams();
 
   const { ref, inView } = useInView();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -53,72 +57,33 @@ export default function Reviews() {
         height={524}
       />
       <div className="mt-16 w-full">
-        <Tabs
-          defaultValue="all"
-          className="w-full"
-          value={params.recruitmentType}
-          onValueChange={handleUpdateRecruitmentType}
-        >
-          <TabsList className="w-full">
-            <TabsTrigger value="all">전체</TabsTrigger>
-            <TabsTrigger value="regular">정기모임</TabsTrigger>
-            <TabsTrigger value="small">소모임</TabsTrigger>
-          </TabsList>
-          <div className="mt-4.5 flex w-full items-center justify-between gap-5">
-            <div className="flex items-center gap-5">
-              <ImageFilterChip
-                isActive={params.type === 'image'}
-                onToggle={() =>
-                  handleUpdateType(params.type === 'image' ? 'text' : 'image')
-                }
-              />
-              <RatingFilter
-                rating={params.rating === 'all' ? 0 : Number(params.rating)}
-                onRatingChange={(rating) =>
-                  handleUpdateRating(rating === 0 ? 'all' : rating.toString())
-                }
-              />
-            </div>
-            <div>
-              <RadioGroup
-                defaultValue="recent"
-                className="flex rounded-lg bg-gray-200 p-2"
-                value={params.sort}
-                onValueChange={handleUpdateSort}
-              >
-                <RadioGroupItem
-                  value="recent"
-                  id="sort-recent"
-                  className="rounded-md px-3 py-2 text-b1 text-gray-500 data-[state=checked]:bg-white data-[state=checked]:text-black data-[state=checked]:shadow-[0_0_1.7px_0_rgba(0,0,0,0.08)]"
-                >
-                  최신순
-                </RadioGroupItem>
-
-                <RadioGroupItem
-                  value="likes"
-                  id="sort-like"
-                  className="rounded-md px-3 py-2 text-b1 text-gray-500 data-[state=checked]:bg-white data-[state=checked]:text-black data-[state=checked]:shadow-[0_0_1.7px_0_rgba(0,0,0,0.08)]"
-                >
-                  좋아요순
-                </RadioGroupItem>
-              </RadioGroup>
-            </div>
-          </div>
-          {['all', 'regular', 'small'].map((tab) => (
-            <TabsContent
-              key={tab}
-              value={tab}
-              className="mt-4.5 flex flex-col gap-8"
+        <TabNav>
+          {REVIEW_TABS.map((tab) => (
+            <TabNavLink
+              key={tab.value}
+              to={{
+                search: `?recruitmentType=${tab.value}`,
+              }}
+              isActive={params.recruitmentType === tab.value}
             >
-              {allReviews?.map((review) => (
-                <WideReviewCard key={review.reviewId} review={review} />
-              ))}
-              <div ref={ref}>
-                {isFetchingNextPage && <p>더 많은 후기를 Loading...</p>}
-              </div>
-            </TabsContent>
+              {tab.label}
+            </TabNavLink>
           ))}
-        </Tabs>
+        </TabNav>
+        <ReviewFilters
+          type={params.type}
+          rating={params.rating}
+          sort={params.sort}
+          onTypeChange={handleUpdateType}
+          onRatingChange={handleUpdateRating}
+          onSortChange={handleUpdateSort}
+        />
+        <div className="mt-4.5 flex flex-col gap-8">
+          {allReviews?.map((review) => (
+            <WideReviewCard key={review.reviewId} review={review} />
+          ))}
+          <div ref={ref}>{isFetchingNextPage && <LoadingSpinner />}</div>
+        </div>
       </div>
     </CommonTemplate>
   );
