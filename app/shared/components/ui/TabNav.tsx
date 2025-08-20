@@ -19,7 +19,7 @@ function TabNav({
       <NavigationMenuPrimitive.List
         data-slot="tab-nav-list"
         className={cn(
-          'relative inline-flex w-fit items-start before:absolute before:bottom-0 before:left-0 before:h-[1px] before:w-full before:bg-gray-300',
+          'relative inline-flex w-full items-start before:absolute before:bottom-0 before:left-0 before:h-[1px] before:w-full before:bg-gray-300',
         )}
       >
         {props.children}
