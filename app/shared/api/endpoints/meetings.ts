@@ -24,6 +24,7 @@ export type MeetingListResult = {
     image: ImageType;
     applicantCount: number;
     participantCount: number;
+    liked: boolean;
   }[];
 };
 
@@ -40,7 +41,7 @@ export const getMeetingList = async (
   const url = `/meetings?${searchParams.toString()}&cursor=${pageParam}&size=12`;
   console.log(url);
 
-  const res = await axiosInstance({
+  const res = await axiosInstance<APIResponse<MeetingListResult>>({
     baseURL: API_V2_BASE_URL,
     url: url,
     method: 'GET',
