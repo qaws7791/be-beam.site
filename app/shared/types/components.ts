@@ -68,6 +68,8 @@ export interface FiltersType {
   label: string;
   options: string[];
   values: string[];
+  defaultOption: string;
+  defaultLabel: string;
 }
 
 export interface FilterOption {

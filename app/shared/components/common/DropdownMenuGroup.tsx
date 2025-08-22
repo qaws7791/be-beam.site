@@ -21,13 +21,16 @@ export default function DropdownMenuGroup({
   return (
     <div className="flex w-full gap-3 overflow-x-auto">
       {datas.map((item) => {
-        const selectedValue =
-          selectedFilters[item.label] ??
-          (selectedFilters[item.label] === 'sort' ? 'recent' : 'all');
+        const selectedValue = selectedFilters[item.label];
+
+        const triggerLabel =
+          selectedValue === item.defaultOption
+            ? item.defaultLabel
+            : item.options[item.values.indexOf(selectedValue)];
         return (
           <DropdownMenu key={item.label}>
             <DropdownMenuTrigger className="flex cursor-pointer items-center gap-1 rounded-full border border-gray-200 bg-gray-200 px-3 py-[6px] text-b1 font-medium whitespace-nowrap text-black outline-none">
-              {item.options[item.values.indexOf(selectedValue)]}
+              {triggerLabel}
               <img src="/images/icons/fillDropDown.svg" alt="dropDown_icon" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="min-w-24 bg-gray-200">

@@ -19,6 +19,8 @@ export default function MeetingFilterControls({
       label: 'recruitment-type',
       options: ['전체', '정기모임', '소모임'],
       values: ['all', 'regular', 'small'],
+      defaultOption: 'all',
+      defaultLabel: '모임 종류',
     },
     {
       label: 'recruitment-status',
@@ -31,21 +33,29 @@ export default function MeetingFilterControls({
         'in_progress',
         'completed',
       ],
+      defaultOption: 'all',
+      defaultLabel: '모집 상태',
     },
     {
       label: 'mode',
       options: ['전체', '오프라인', '온라인', '혼합'],
       values: ['all', 'offline', 'online', 'mix'],
+      defaultOption: 'all',
+      defaultLabel: '모임 방식',
     },
     {
       label: 'cost',
       options: ['전체', '무료', '유료'],
       values: ['all', 'free', 'cash'],
+      defaultOption: 'all',
+      defaultLabel: '참가비',
     },
     {
       label: 'sort',
       options: ['최신순', '좋아요순'],
       values: ['recent', 'likes'],
+      defaultOption: 'recent',
+      defaultLabel: '최신순',
     },
   ];
 
