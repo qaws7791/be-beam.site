@@ -20,7 +20,6 @@ import type {
   UserProfile,
 } from '@/shared/types/entities';
 import type { AxiosRequestConfig } from 'axios';
-import axios from 'axios';
 
 export type MyProfileResult = {
   nickname: UserProfile['nickname'];
@@ -254,9 +253,10 @@ export const updateMyProfile = async (params: UpdateMyProfileParams) => {
 
 // 나중에 전부 결과값 타입 추가할 예정
 export async function getCreatedMeetingDetail(id: number) {
-  const res = await axios({
+  const res = await axiosInstance({
+    baseURL: API_V1_BASE_URL,
     method: 'GET',
-    url: `/api/web/v1/meetings/${id}/mypage`,
+    url: `meetings/${id}/mypage/detail`,
   });
   const data = res.data;
   return data.result;
