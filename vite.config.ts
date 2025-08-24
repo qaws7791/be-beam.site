@@ -18,12 +18,10 @@ export default defineConfig(({ mode, isSsrBuild }) => {
       external: ['node:async_hooks'],
     },
     build: {
-      rollupOptions: isSsrBuild
-        ? {
-            external: ['node:async_hooks'],
-            input: './server/app.ts',
-          }
-        : undefined,
+      rollupOptions: {
+        external: ['node:async_hooks'],
+        input: isSsrBuild ? './server/app.ts' : undefined,
+      },
     },
     server: {
       port: 3000,
