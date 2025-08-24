@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, isSsrBuild }) => {
   // 테스트 환경에서는 reactRouter 플러그인 제외
   const plugins = [tailwindcss(), tsconfigPaths()];
 
@@ -18,9 +18,12 @@ export default defineConfig(({ mode }) => {
       external: ['node:async_hooks'],
     },
     build: {
-      rollupOptions: {
-        external: ['node:async_hooks'],
-      },
+      rollupOptions: isSsrBuild
+        ? {
+            external: ['node:async_hooks'],
+            input: './server/app.ts',
+          }
+        : undefined,
     },
     server: {
       port: 3000,
