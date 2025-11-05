@@ -15,8 +15,8 @@ export default function GuideBooksFilterControls({
   const { open } = useModalStore();
 
   return (
-    <div className="flex w-full items-center justify-between">
-      <TabsList className="h-auto gap-4 before:h-0">
+    <div className="flex w-full flex-col gap-6 sm:items-center md:flex-row">
+      <TabsList className="h-auto w-full gap-4 overflow-x-auto pl-4 before:h-0">
         {list.map((type, idx) => (
           <TabsTrigger
             key={idx}
@@ -28,18 +28,20 @@ export default function GuideBooksFilterControls({
         ))}
       </TabsList>
 
-      <Button
-        variant="tertiary"
-        className="h-auto min-w-auto border-gray-300 text-b1 text-black"
-        onClick={() =>
-          open('GUIDEBOOK_FILTER_DIALOG', {
-            initialFilters,
-          })
-        }
-      >
-        <img src="/images/icons/filter.svg" alt="filter_icon" />
-        필터
-      </Button>
+      <div className="flex w-full justify-end pr-4 md:w-auto">
+        <Button
+          variant="outline"
+          className="h-10 rounded-3xl border-gray-300 px-4 text-b1 text-black"
+          onClick={() =>
+            open('GUIDEBOOK_FILTER_DIALOG', {
+              initialFilters,
+            })
+          }
+        >
+          <img src="/images/icons/filter.svg" alt="filter_icon" />
+          필터
+        </Button>
+      </div>
     </div>
   );
 }

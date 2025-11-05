@@ -45,7 +45,7 @@ export default function HostDetail({ loaderData }: Route.ComponentProps) {
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <CommonTemplate>
+      <CommonTemplate className="px-4 pt-22 pb-7 md:pt-41 md:pb-16">
         <Suspense fallback={<LoadingSpinner />}>
           <HostDetailWrap id={id} />
         </Suspense>

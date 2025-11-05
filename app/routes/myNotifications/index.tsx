@@ -72,7 +72,7 @@ export default function MyNotifications() {
   };
 
   return (
-    <div className="flex-1">
+    <div className="mt-4 flex-1 px-4 md:mt-0 md:px-0">
       <div className="flex flex-col gap-2.5">
         <h1 className="text-h2 text-gray-950">나의 알림</h1>
         <p className="text-b2 text-gray-600">

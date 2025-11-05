@@ -19,15 +19,11 @@ export default function NavbarUserSection({
   const logoutMutation = useLogoutMutation();
 
   const handleLogout = () => {
-    logoutMutation.mutate(undefined, {
-      onSuccess: () => {
-        navigate('/login');
-      },
-    });
+    logoutMutation.mutate(undefined);
   };
 
   return (
-    <div className="flex items-center justify-center gap-x-4">
+    <div className="flex shrink-0 items-center justify-center gap-x-4">
       <button
         className="cursor-pointer"
         onClick={() => navigate('/myPage/likes/regular')}

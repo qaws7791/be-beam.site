@@ -32,7 +32,7 @@ export default function useUnlikeReviewMutation() {
           queryKey: reviewQueryKeys.list._def,
         }),
         meetingReviews: queryClient.getQueriesData<
-          InfiniteData<MeetingReviewsResult> | undefined
+          MeetingReviewsResult | undefined
         >({
           queryKey: reviewQueryKeys.meetingReviews._def,
         }),
@@ -69,33 +69,25 @@ export default function useUnlikeReviewMutation() {
       );
 
       // meetingReviews
-      queryClient.setQueriesData<
-        InfiniteData<MeetingReviewsResult | undefined>
-      >(
+      queryClient.setQueriesData<MeetingReviewsResult | undefined>(
         {
           queryKey: reviewQueryKeys.meetingReviews._def,
         },
         (oldData) => {
           if (!oldData) return oldData;
+          const updatedReviews = oldData.reviews.map((review) => {
+            if (review.reviewId === variables.reviewId) {
+              return {
+                ...review,
+                liked: !review.liked,
+                likesCount: review.likesCount - 1,
+              };
+            }
+            return review;
+          });
           return {
             ...oldData,
-            pages: oldData.pages.map((page) => {
-              if (!page) return page;
-              return {
-                ...page,
-                reviews: page.reviews.map((review) => {
-                  console.log(review.reviewId, variables.reviewId);
-                  if (review.reviewId === variables.reviewId) {
-                    return {
-                      ...review,
-                      liked: !review.liked,
-                      likesCount: review.likesCount - 1,
-                    };
-                  }
-                  return review;
-                }),
-              };
-            }),
+            reviews: updatedReviews,
           };
         },
       );

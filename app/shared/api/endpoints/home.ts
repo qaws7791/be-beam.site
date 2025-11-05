@@ -36,9 +36,10 @@ export type RecommendationMeeting = {
   recruitmentStatus: Meeting['recruitmentStatus'];
   recruitmentType: Meeting['recruitmentType'];
   meetingStartTime: MeetingSchedule['meetingStartTime'];
+  meetingEndTime: MeetingSchedule['meetingEndTime'];
+  paymentAmount: Meeting['paymentAmount'];
   thumbnailImage: ImageType;
   liked: Meeting['liked'];
-  address: Meeting['address'];
 };
 
 export type RecommendationMeetingsResult = RecommendationMeeting[];

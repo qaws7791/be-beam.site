@@ -3,7 +3,6 @@ import useLikeMeetingMutation from '@/features/meetings/hooks/useLikeMeetingMuta
 
 import type { MeetingSummary } from '@/shared/types/entities';
 import MeetingCard from '../../../features/meetings/components/MeetingCard';
-import GridGroup from '../../../shared/components/ui/GridGroup';
 
 export interface MeetingListSectionProps {
   meetings: MeetingSummary[];
@@ -19,7 +18,7 @@ export default function MeetingCardGroup({
   const { mutate: likeMeeting, isPending } = useLikeMeetingMutation();
 
   return (
-    <GridGroup columns={4} gap={5} className="mt-8">
+    <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 lg:mt-8 lg:grid-cols-4">
       {meetings?.map((meeting) => (
         <MeetingCard
           key={meeting.id}
@@ -27,8 +26,9 @@ export default function MeetingCardGroup({
           recruitmentStatus={meeting.recruitmentStatus}
           name={meeting.name}
           image={meeting.image}
-          address={meeting.address}
           meetingStartTime={meeting.meetingStartTime}
+          meetingEndTime={meeting.meetingEndTime}
+          paymentAmount={meeting.paymentAmount}
           liked={meeting.liked}
           isLikeBtn={isLikedBtn}
           onClick={() => navigate(`/meeting/${meeting.id}`)}
@@ -38,9 +38,9 @@ export default function MeetingCardGroup({
               likeMeeting(meeting as { id: number; liked: boolean });
             }
           }}
-          classNames="mb-12"
+          classNames="lg:mb-12 mb-6"
         />
       ))}
-    </GridGroup>
+    </div>
   );
 }

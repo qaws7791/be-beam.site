@@ -1,9 +1,8 @@
-import type { meetingReviewFilterType } from '@/routes/meetingDetail/_components/MeetingDetailMeetingReviewsContainer';
+import type { meetingReviewFilterType } from '@/routes/meetingDetail/_components/MeetingDetailReviews';
 import { API_V2_BASE_URL } from '@/shared/constants/api';
 import { axiosInstance } from '@/shared/api/axios';
 import type { APIResponse, CursorPaginationResult } from '@/shared/types/api';
 import type { Meeting, Review } from '@/shared/types/entities';
-import { type AxiosRequestConfig } from 'axios';
 
 export type MeetingReviewsResult = {
   reviews: {
@@ -31,16 +30,12 @@ export type MeetingReviewsParams = {
 };
 
 // TODO: params를 별도의 타입으로 분리 필요
-export const getMeetingReviews = async (
-  params: MeetingReviewsParams,
-  pageParam: number,
-  axiosRequestConfig?: AxiosRequestConfig,
-) => {
+export const getMeetingReviews = async (params: MeetingReviewsParams) => {
   const searchParams = new URLSearchParams({
     sort: params.filters.sort,
     type: params.filters.type,
     rating: params.filters.rating.toString(),
-    cursor: pageParam.toString(),
+    page: params.filters.page.toString(),
     size: '12',
   });
 
@@ -48,7 +43,6 @@ export const getMeetingReviews = async (
     baseURL: API_V2_BASE_URL,
     method: 'GET',
     url: `/meetings/${params.meetingId}/reviews?${searchParams.toString()}`,
-    ...axiosRequestConfig,
   });
   const data = res.data;
   return data.result;

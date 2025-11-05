@@ -59,15 +59,21 @@ export default function MeetingFilterControls({
     },
   ];
 
+  const handleTopicChange = (value: string) => {
+    const newTopicId = value === 'all' ? 'all' : Number(value);
+
+    setFilter({ 'topic-id': newTopicId });
+  };
+
   return (
-    <div className="mt-12">
+    <div className="mt-6 md:mt-10 lg:mt-16">
       <TabsGroup
         categories={topics}
-        selectedCategory={meetingFilters.topic}
-        onCategoryChange={(value) => setFilter({ topic: value })}
+        selectedCategory={String(meetingFilters['topic-id'])}
+        onCategoryChange={handleTopicChange}
       />
 
-      <div className="mt-8 flex w-full items-center justify-between">
+      <div className="mt-4 flex w-full flex-col items-end justify-between lg:mt-8 lg:flex-row lg:items-center">
         <DropdownMenuGroup
           datas={filters}
           selectedFilters={meetingFilters}
@@ -75,7 +81,7 @@ export default function MeetingFilterControls({
         />
         <SearchInput
           placeHolder="입력해주세요"
-          inputStyle="w-full max-w-[400px] px-4 py-3 border-1 border-gray-300 rounded-full"
+          inputStyle="w-full lg:mt-0 mt-3 sm:max-w-[400px] px-4 py-3 border-1 border-gray-300 rounded-full"
           onSearchChange={(search) => setFilter({ search })}
           search={meetingFilters.search}
         />

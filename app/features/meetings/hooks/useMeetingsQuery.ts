@@ -11,9 +11,7 @@ export const meetingsInfiniteQueryOptions = (
     queryFn: ({ pageParam }) => getMeetingList(meetingFilters, pageParam),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
-      return lastPage.pageInfo.hasNext
-        ? lastPage.pageInfo.nextCursor
-        : undefined;
+      return lastPage.pageInfo.hasNext ? lastPage.pageInfo.page + 1 : undefined;
     },
   });
 

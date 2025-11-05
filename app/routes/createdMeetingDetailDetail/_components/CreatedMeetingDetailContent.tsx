@@ -67,7 +67,7 @@ export default function CreatedMeetingDetailContent({
                 <Button
                   key={idx}
                   type="button"
-                  variant="tertiary"
+                  variant="outline"
                   className={cn(
                     'mr-2 h-9 min-w-auto rounded-lg border-1 transition-all duration-700 hover:border-primary hover:bg-primary-light hover:text-primary',
                     field.value === selectionType
@@ -95,7 +95,7 @@ export default function CreatedMeetingDetailContent({
         >
           모집 방식
         </label>
-        <div className="mt-3 w-full">
+        <div className="mt-3 flex w-full flex-wrap gap-2">
           {['오프라인', '온라인', '혼합'].map((mode, idx) => (
             <Controller
               key={idx}
@@ -105,9 +105,9 @@ export default function CreatedMeetingDetailContent({
                 <Button
                   key={idx}
                   type="button"
-                  variant="tertiary"
+                  variant="outline"
                   className={cn(
-                    'mr-2 h-9 min-w-auto rounded-lg border-1 transition-all duration-700 hover:border-primary hover:bg-primary-light hover:text-primary',
+                    'h-9 min-w-auto rounded-lg border-1 transition-all duration-700 hover:border-primary hover:bg-primary-light hover:text-primary',
                     field.value === mode
                       ? 'border-primary bg-primary-light text-primary'
                       : 'border-gray-300',
@@ -250,7 +250,7 @@ export default function CreatedMeetingDetailContent({
 
       <div className="flex w-full justify-center">
         <Button
-          className="mt-5 min-w-100"
+          className="mt-5 w-full max-w-100"
           type="submit"
           disabled={!formState.isValid}
         >

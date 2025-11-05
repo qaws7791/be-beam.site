@@ -55,7 +55,7 @@ export default function SideBar({ user }: { user: UserType }) {
   ];
 
   return (
-    <aside className="sticky top-[100px] w-[230px]">
+    <aside className="sticky top-[100px] hidden w-[230px] md:block">
       <UserProfileCard user={user} />
 
       <div className="mt-6">

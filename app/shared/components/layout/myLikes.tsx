@@ -25,10 +25,10 @@ export default function MyLikesLayout() {
   });
   const currentTab = matchPath?.params['*'];
   return (
-    <div className="flex-1">
-      <div className="flex flex-col gap-2.5">
+    <div className="flex-1 px-4 md:px-0">
+      <div className="flex flex-col pt-4 md:pt-0">
         <h1 className="text-h2 text-gray-950">좋아요 리스트</h1>
-        <p className="text-b2 text-gray-600">
+        <p className="mt-1 text-b2 text-gray-600 md:mt-3">
           내가 좋아하는 모임, 후기를 모아보세요.
         </p>
       </div>

@@ -5,12 +5,19 @@ import MeetingRecommendations from './MeetingRecommendations';
 
 export default function MeetingRecommendationSection() {
   return (
-    <div className="mt-20 flex w-full max-w-[1480px] flex-col items-center pt-10">
-      <Text variant="H1_Bold">다양한 사람들이 다양하게 어우러지는 모임</Text>
-      <Text variant="T1_Regular" color="gray-500" className="mt-3 mb-28">
-        관심사에 맞게 모임을 Pick 하세요
-      </Text>
-
+    <div className="mt-20 flex w-full max-w-[1448px] flex-col items-center pt-10">
+      <div className="flex flex-col items-center p-4">
+        <Text variant="H1_Bold" className="text-center">
+          다양한 사람들이 다양하게 어우러지는 모임
+        </Text>
+        <Text
+          variant="T1_Regular"
+          color="gray-500"
+          className="mt-3 mb-28 text-center"
+        >
+          관심사에 맞게 모임을 Pick 하세요
+        </Text>
+      </div>
       <MeetingRecommendations
         title="좋아요 기반  추천 리스트"
         type="likes"

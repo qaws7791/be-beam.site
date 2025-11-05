@@ -39,7 +39,7 @@ export default function MyInformation() {
   };
 
   return (
-    <div className="flex-1">
+    <div className="mt-4 flex-1 px-4 md:mt-0 md:px-0">
       {/* 헤더 */}
       <div className="flex flex-col gap-2.5">
         <h1 className="text-h2 text-gray-950">개인정보 수정</h1>

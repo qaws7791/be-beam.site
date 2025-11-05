@@ -1,10 +1,11 @@
+import { useMemo } from 'react';
 import useMeetingsQuery from '@/features/meetings/hooks/useMeetingsQuery';
 import MeetingCardGroup from './MeetingCardGroup';
 import useInfiniteScroll from '@/shared/hooks/useInfiniteScroll';
-import { useMemo } from 'react';
-import LoadingSpinner from '../../../shared/components/ui/LoadingSpinner';
+
 import type { UserProfile } from '@/shared/types/entities';
 import type { MeetingListFilters } from '@/features/meetings/schemas/meetingFilters';
+import LoadingSpinner from '../../../shared/components/ui/LoadingSpinner';
 
 interface MeetingWrapProps {
   meetingFilters: MeetingListFilters;
@@ -34,6 +35,7 @@ export default function MeetingWrap({
     return clientMeetings?.pages?.flatMap((page) => page.meetings) || [];
   }, [clientMeetings]);
 
+  console.log('meetings', meetings);
   return (
     <>
       <MeetingCardGroup meetings={meetings} isLikedBtn={user ? true : false} />

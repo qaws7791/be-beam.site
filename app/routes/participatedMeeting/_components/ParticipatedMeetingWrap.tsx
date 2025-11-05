@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useModalStore } from '@/shared/stores/useModalStore';
 import usePagination from '@/shared/hooks/usePagination';
-import { type MyPageMeetingResult } from '@/shared/api/endpoints/mypage';
+import { participatedMeetingsQueryOptions } from '@/features/meetings/hooks/useParticipatedMeetingsQuery';
 
+import { type MyPageMeetingResult } from '@/shared/api/endpoints/mypage';
 import type { MyParticipatedMeetingFilters } from '@/features/mypage/schemas/userFilters';
-import GridGroup from '../../../shared/components/ui/GridGroup';
 import MeetingCard from '../../../features/meetings/components/MeetingCard';
 import MoreDropdownMenu from '../../../shared/components/common/MoreDropdownMenu';
 import { DropdownMenuItem } from '../../../shared/components/ui/DropdownMenu';
@@ -19,7 +19,6 @@ import {
   PaginationPrevious,
 } from '../../../shared/components/ui/Pagination';
 import toast from 'react-hot-toast';
-import { participatedMeetingsQueryOptions } from '@/features/meetings/hooks/useParticipatedMeetingsQuery';
 
 interface ParticipatedMeetingWrapProps {
   filters: MyParticipatedMeetingFilters;
@@ -59,7 +58,7 @@ export default function ParticipatedMeetingWrap({
 
   return (
     <>
-      <GridGroup columns={3} gap={5}>
+      <div className="mx-auto grid w-full grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4 md:gap-5">
         {participatedMeetings?.meetings?.map((meeting: MyPageMeetingResult) => (
           <MeetingCard
             key={meeting.id}
@@ -68,13 +67,13 @@ export default function ParticipatedMeetingWrap({
             userStatus={meeting.userStatus}
             name={meeting.name}
             meetingStartTime={meeting.meetingStartTime}
-            address={meeting.address}
+            meetingEndTime={meeting.meetingEndTime}
             onClick={() => navigate(`/meeting/${meeting.id}`)}
             isLikeBtn={false}
           >
             {filters.status === 'participating' &&
               meeting.userStatus !== '중도이탈신청중' && (
-                <MoreDropdownMenu btnPosition="right-0 top-0 absolute">
+                <MoreDropdownMenu btnPosition="right-0 top-0 absolute bg-transparent">
                   <DropdownMenuItem
                     onSelect={() =>
                       open('CONFIRM_DIALOG', {
@@ -99,7 +98,7 @@ export default function ParticipatedMeetingWrap({
               )}
           </MeetingCard>
         ))}
-      </GridGroup>
+      </div>
 
       <Pagination className="mt-20">
         <PaginationContent>

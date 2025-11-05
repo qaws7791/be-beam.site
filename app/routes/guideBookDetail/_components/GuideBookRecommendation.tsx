@@ -11,7 +11,7 @@ export default function GuideBookRecommendation({
 }) {
   const navigate = useNavigate();
   return (
-    <div className="mt-4 w-full">
+    <div className="mt-8 w-full">
       <Text variant="T3_Semibold">
         <span className="text-primary">소통</span> 관련 추천 가이드북
       </Text>

@@ -1,13 +1,16 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { axiosInstance } from '@/shared/api/axios';
-import { API_V1_BASE_URL } from '@/shared/constants/api';
+import { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { z } from 'zod';
+import { API_V1_BASE_URL } from '@/shared/constants/api';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { axiosInstance } from '@/shared/api/axios';
 import { createMeetingFourthSchema } from '@/features/meetings/schemas/meeting';
-import type { CreateMeeting } from '@/shared/types/components';
 import { format } from 'date-fns';
 
+import { cn } from '@/styles/tailwind';
+import type { CreateMeeting } from '@/shared/types/components';
+import type { z } from 'zod';
 import toast from 'react-hot-toast';
 import { Button } from '@/shared/components/ui/Button';
 import {
@@ -20,10 +23,10 @@ import Text from '@/shared/components/ui/Text';
 import { DateInput } from '@/shared/components/common/DateInput';
 import { TimeInput } from '@/shared/components/common/TimeInput';
 import { AddressInput } from '@/shared/components/common/AddressInput';
-import { useNavigate } from 'react-router';
-import { cn } from '@/styles/tailwind';
 import { meetingQueryKeys } from '@/features/meetings/queries/queryKeys';
 
+import { Checkbox } from '@/shared/components/ui/Checkbox';
+import TrashIcon from '@/shared/components/icons/TrashIcon';
 interface CreateMeetingFourthContentProps {
   tab: number;
   setTab: (tab: number) => void;
@@ -39,6 +42,10 @@ export default function CreateMeetingFourthContent({
 }: CreateMeetingFourthContentProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const [selectedScheduleIds, setSelectedScheduleIds] = useState<
+    Set<number | null>
+  >(new Set());
 
   const { control, handleSubmit, formState } = useForm<
     z.infer<typeof createMeetingFourthSchema>
@@ -141,37 +148,88 @@ export default function CreateMeetingFourthContent({
     createMeeting(form);
   };
 
+  const handleSelectOne = useCallback((fieldId: number, isChecked: boolean) => {
+    setSelectedScheduleIds((prev) => {
+      const newSet = new Set(prev);
+      if (isChecked) {
+        newSet.add(fieldId);
+      } else {
+        newSet.delete(fieldId);
+      }
+      return newSet;
+    });
+  }, []);
+
+  const handleDeleteSelected = useCallback(() => {
+    if (selectedScheduleIds.size === 0) {
+      alert('삭제할 일정을 선택해주세요.');
+      return;
+    }
+
+    const indexesToDelete = fields
+      .map((field, idx) => ({ originIdx: idx, id: field.id }))
+      .filter((_, idx) => selectedScheduleIds.has(idx))
+      .sort((a, b) => b.originIdx - a.originIdx);
+
+    indexesToDelete.forEach((field) => {
+      const idx = fields.findIndex((f) => f.id === field.id);
+      console.log(idx);
+      remove(idx);
+    });
+
+    setSelectedScheduleIds(new Set());
+  }, [selectedScheduleIds, fields, remove]);
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="box-border w-full px-4 md:px-0"
+    >
       <div className="w-full">
         <div className="flex w-full items-center justify-between">
           <div className="rounded-lg bg-gray-200 p-2 text-b3 text-gray-600">
             📢 ‘일정 등록하기’ 버튼을 눌러 추가 일정을 등록할 수 있어요.
           </div>
 
-          <Button
-            type="button"
-            size="sm"
-            className={cn(
-              form.recruitmentType === '소모임' && 'hidden',
-              'px-5',
-            )}
-            onClick={() => {
-              const newSchedule = {
-                meetingDate: '',
-                meetingStartTime: '',
-                meetingEndTime: '',
-                address: '',
-                addressDetail: '',
-              };
+          <div className="flex items-center gap-3">
+            <Button
+              onClick={handleDeleteSelected}
+              disabled={selectedScheduleIds.size === 0}
+              className={cn(
+                form.recruitmentType === '소모임' && 'hidden',
+                'h-12 items-center gap-1 border-1 border-[#FF4D4C] bg-[#ffeded] px-4 py-2 text-[#FF4D4C] hover:bg-[#ffeded]',
+              )}
+            >
+              <TrashIcon />
+              삭제
+            </Button>
+            <Button
+              type="button"
+              size="md"
+              className={cn(
+                form.recruitmentType === '소모임' && 'hidden',
+                'hidden px-5 md:flex',
+              )}
+              onClick={() => {
+                const newSchedule = {
+                  meetingDate: '',
+                  meetingStartTime: '',
+                  meetingEndTime: '',
+                  address: '',
+                  addressDetail: '',
+                };
 
-              append(newSchedule);
-              setForm({ ...form, schedules: [...form.schedules, newSchedule] });
-            }}
-          >
-            <img src="/images/icons/w_plus.svg" alt="plus_icon" />
-            일정 등록하기
-          </Button>
+                append(newSchedule);
+                setForm({
+                  ...form,
+                  schedules: [...form.schedules, newSchedule],
+                });
+              }}
+            >
+              <img src="/images/icons/w_plus.svg" alt="plus_icon" />
+              일정 등록하기
+            </Button>
+          </div>
         </div>
 
         <div className="w-full">
@@ -180,27 +238,45 @@ export default function CreateMeetingFourthContent({
               key={field.id}
               type="single"
               collapsible
-              className="mt-5 box-border w-full rounded-lg border-1 border-gray-300 bg-gray-100 p-5"
+              className={cn(
+                selectedScheduleIds.has(idx)
+                  ? 'border-[#FF4D4C]'
+                  : 'border-gray-300',
+                'mt-5 box-border w-full rounded-lg border-1 bg-gray-100 p-5',
+              )}
             >
               <AccordionItem
                 value="item-1"
                 className="border-b-1 border-gray-400"
               >
                 <AccordionTrigger className="pt-0">
-                  <Text
-                    variant="T2_Semibold"
-                    color="gray-900"
-                    className="text-left"
-                  >
-                    <span
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      id={`select-schedule-${idx}`}
                       className={cn(
                         form.recruitmentType === '소모임' && 'hidden',
+                        'mr-2 size-5 cursor-pointer data-[state=checked]:border-[#FF4D4C] data-[state=checked]:bg-[#FF4D4C]',
                       )}
+                      checked={selectedScheduleIds.has(idx)}
+                      onCheckedChange={(value: boolean) =>
+                        handleSelectOne(idx, value)
+                      }
+                    />
+                    <Text
+                      variant="T2_Semibold"
+                      color="gray-900"
+                      className="text-left"
                     >
-                      {idx + 1}일차_
-                    </span>
-                    일정
-                  </Text>
+                      <span
+                        className={cn(
+                          form.recruitmentType === '소모임' && 'hidden',
+                        )}
+                      >
+                        {idx + 1}일차_
+                      </span>
+                      일정
+                    </Text>
+                  </div>
                 </AccordionTrigger>
 
                 <AccordionContent>
@@ -339,44 +415,44 @@ export default function CreateMeetingFourthContent({
                       )}
                     />
                   </div>
-
-                  <Button
-                    type="button"
-                    className={cn(
-                      form.recruitmentType === '소모임' && 'hidden',
-                      'w-full',
-                    )}
-                    onClick={() => {
-                      remove(idx);
-                      setForm({
-                        ...form,
-                        schedules: form.schedules.filter(
-                          (_, index) => index !== idx,
-                        ),
-                      });
-                    }}
-                  >
-                    삭제
-                  </Button>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
           ))}
+          <Button
+            type="button"
+            size="md"
+            className={cn(
+              form.recruitmentType === '소모임' && 'hidden',
+              'mt-5 flex w-full px-5 md:hidden',
+            )}
+            onClick={() => {
+              const newSchedule = {
+                meetingDate: '',
+                meetingStartTime: '',
+                meetingEndTime: '',
+                address: '',
+                addressDetail: '',
+              };
+
+              append(newSchedule);
+              setForm({
+                ...form,
+                schedules: [...form.schedules, newSchedule],
+              });
+            }}
+          >
+            <img src="/images/icons/w_plus.svg" alt="plus_icon" />
+            일정 등록하기
+          </Button>
         </div>
       </div>
 
-      <div className="mt-20 flex w-full items-center gap-3">
-        <Button
-          type="button"
-          variant="tertiary"
-          onClick={() => setTab(tab - 1)}
-          className="w-[50%]"
-        >
+      <div className="mt-20 grid w-full grid-cols-2 items-center gap-3">
+        <Button type="button" variant="outline" onClick={() => setTab(tab - 1)}>
           이전
         </Button>
-        <Button disabled={!formState.isValid} className="w-[50%]">
-          완료
-        </Button>
+        <Button disabled={!formState.isValid}>완료</Button>
       </div>
     </form>
   );

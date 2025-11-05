@@ -322,7 +322,7 @@ export default function CreatedMeetingScheduleContent({
                 <TooltipTrigger asChild>
                   <span tabIndex={-1}>
                     <Button
-                      className="mt-5 min-w-100"
+                      className="mt-5 w-full max-w-100"
                       type="submit"
                       disabled={!formState.isValid || !isEdit}
                     >
@@ -337,7 +337,7 @@ export default function CreatedMeetingScheduleContent({
             </TooltipProvider>
           ) : (
             <Button
-              className="mt-5 min-w-100"
+              className="mt-5 w-full max-w-100"
               type="submit"
               disabled={!formState.isValid || !isEdit}
             >

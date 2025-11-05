@@ -1,32 +1,23 @@
 import { getMeetingReviews } from '@/shared/api/endpoints/meetingReviews';
-import type { meetingReviewFilterType } from '@/routes/meetingDetail/_components/MeetingDetailMeetingReviewsContainer';
-import { infiniteQueryOptions, useInfiniteQuery } from '@tanstack/react-query';
+import type { meetingReviewFilterType } from '@/routes/meetingDetail/_components/MeetingDetailReviews';
+import { queryOptions, useQuery } from '@tanstack/react-query';
 import { reviewQueryKeys } from '@/features/reviews/queries/queryKeys';
 
-export const meetingReviewsInfiniteQueryOptions = (
+export const meetingReviewsQueryOptions = (
   meetingId: number,
   filters: meetingReviewFilterType,
 ) =>
-  infiniteQueryOptions({
+  queryOptions({
     queryKey: reviewQueryKeys.meetingReviews({
       meetingId,
       filters,
     }).queryKey,
-    queryFn: ({ pageParam }) =>
-      getMeetingReviews({ meetingId, filters }, pageParam),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage) => {
-      return lastPage.pageInfo.hasNext
-        ? lastPage.pageInfo.nextCursor
-        : undefined;
-    },
+    queryFn: () => getMeetingReviews({ meetingId, filters }),
   });
 
 export default function useMeetingReviewsQuery(
   meetingId: number,
   filters: meetingReviewFilterType,
 ) {
-  return useInfiniteQuery(
-    meetingReviewsInfiniteQueryOptions(meetingId, filters),
-  );
+  return useQuery(meetingReviewsQueryOptions(meetingId, filters));
 }

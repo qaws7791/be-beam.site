@@ -19,21 +19,21 @@ export default function TabsGroup({
   children,
   classNames,
 }: TabsGroupProps) {
+  console.log('categories', categories);
   return (
     <Tabs value={selectedCategory} onValueChange={onCategoryChange}>
-      <div className={cn('relative w-full', classNames)}>
-        <TabsList>
+      <div className={cn('relative w-full overflow-x-auto', classNames)}>
+        <TabsList className="before:h-0">
           {categories.map((category) => (
             <TabsTrigger
               key={category.value}
               value={category.value}
-              className="relative mx-3 cursor-pointer after:absolute after:bottom-0 after:left-0 after:h-[3px] after:origin-left after:scale-x-0 after:bg-black after:transition-all after:duration-300 after:content-[''] data-[state=active]:after:scale-x-100"
+              className="relative mx-3 cursor-pointer p-1 text-gray-600 after:h-0 after:transition-all after:duration-300 hover:text-black data-[state=active]:text-black"
             >
               {category.label}
             </TabsTrigger>
           ))}
         </TabsList>
-        <div className="absolute bottom-0 left-0 h-px w-full bg-gray-300" />
       </div>
 
       {children}

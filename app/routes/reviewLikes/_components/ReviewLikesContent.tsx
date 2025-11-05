@@ -16,7 +16,7 @@ export default function ReviewLikesContent() {
   const hasReviews = reviews.length > 0;
 
   return (
-    <div>
+    <div className="mt-8">
       <ReviewGrid reviews={reviews} />
 
       {hasReviews && reviewLikes?.pageInfo && (

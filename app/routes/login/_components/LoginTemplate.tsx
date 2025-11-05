@@ -1,6 +1,6 @@
 export const LoginTemplate = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="mt-25 flex h-[calc(100vh-100px)] flex-col items-center justify-center bg-white">
+    <div className="flex h-screen flex-col items-center justify-center bg-white pt-18 lg:pt-25">
       {children}
     </div>
   );

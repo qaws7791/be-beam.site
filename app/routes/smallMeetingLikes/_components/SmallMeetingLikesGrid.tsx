@@ -12,7 +12,7 @@ export default function SmallMeetingLikesGrid({
   const { isPending, mutate: likeMeeting } = useLikeMeetingMutation();
 
   return (
-    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5">
       {meetings.map((meeting) => (
         <MeetingCard
           key={meeting.id}

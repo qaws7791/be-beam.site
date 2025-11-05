@@ -14,6 +14,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '../../../shared/components/ui/Tooltip';
+import { Tag } from '@/shared/components/ui/Tag';
+import ClockIcon from '@/shared/components/icons/ClockIcon';
+import Text from '@/shared/components/ui/Text';
+import { formatNumberWithComma } from '@/shared/utils/cash';
+import SirenIcon from '@/shared/components/icons/SirenIcon';
 
 export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
   const { open } = useModalStore();
@@ -160,36 +165,40 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
 
   const { mutate: likeMeeting, isPending } = useLikeMeetingMutation();
 
+  const isMeetingStatusCommentBlock =
+    (meeting?.recruitmentStatus === '모집중' &&
+      meeting?.maxParticipants - 2 <= meeting?.applicantCount) ||
+    meeting?.recruitmentStatus === '모임중';
+
+  const meetingStatusComment =
+    meeting?.recruitmentStatus === '모집중' &&
+    meeting?.maxParticipants - 2 <= meeting?.applicantCount
+      ? `${meeting?.maxParticipants - meeting?.applicantCount} 자리 남음`
+      : meeting?.recruitmentStatus === '모임중'
+        ? `${meeting?.participantCount}명 모임 참여 중`
+        : null;
+
   return (
-    <div className="box-border flex h-[657px] flex-1 flex-col justify-between rounded-xl border-1 border-gray-300 bg-white px-7 py-10">
+    <div className="relative box-border flex h-[557px] flex-1 flex-col justify-between rounded-xl border-1 border-gray-300 bg-white px-7 py-10">
+      <Tag
+        variant="tertiary"
+        className={cn(
+          isMeetingStatusCommentBlock ? 'block' : 'hidden',
+          'absolute top-0 left-2 -translate-y-full transform rounded-t-md rounded-b-none bg-[#D01010] px-4 py-5 text-b3 text-white',
+        )}
+      >
+        <span className="flex items-center gap-1">
+          <ClockIcon width={20} height={20} />
+          {meetingStatusComment}
+        </span>
+      </Tag>
+
       <MeetingDetailCardTop meeting={meeting} />
 
-      <div className="mt-8 flex w-full items-center gap-4">
-        <Button
-          variant="tertiary"
-          size="lg"
-          className={cn(
-            meeting?.liked
-              ? 'border-primary bg-primary-light text-primary'
-              : 'border-gray-300 text-gray-700',
-            'gap-1 px-6 text-t1',
-          )}
-          onClick={() => {
-            if (userStatus) {
-              if (isPending) return;
-              likeMeeting(meeting);
-            } else {
-              toast('로그인 후 다시 시도해주세요.');
-            }
-          }}
-        >
-          {meeting?.liked ? (
-            <HeartFillIcon width={28} height={28} />
-          ) : (
-            <HeartIcon width={28} height={28} />
-          )}
-          {meeting.likesCount}
-        </Button>
+      <div className="absolute bottom-0 left-0 box-border w-full px-7 py-10">
+        <Text variant="H2_Semibold" className="text-right">
+          총 {formatNumberWithComma(meeting?.paymentAmount)}원
+        </Text>
 
         {buttonText === '신청하기' && meeting.isHost ? (
           <TooltipProvider>
@@ -198,7 +207,7 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
                 <span tabIndex={-1} className="flex flex-1">
                   <Button
                     size="lg"
-                    className="flex-1 gap-1 text-t3 text-white"
+                    className="mt-7 w-full flex-1 gap-1 text-t3 text-white"
                     onClick={onClickHandler}
                     disabled={disable}
                   >
@@ -214,13 +223,57 @@ export default function MeetingDetailCard({ meeting }: { meeting: Meeting }) {
         ) : (
           <Button
             size="lg"
-            className="flex-1 gap-1 text-t3 text-white"
+            className="mt-7 w-full flex-1 gap-1 text-t3 text-white"
             onClick={onClickHandler}
             disabled={disable}
           >
             {buttonText}
           </Button>
         )}
+
+        <div className="mt-3 grid w-full grid-cols-2 items-center justify-center gap-3">
+          <Button
+            variant="outline"
+            size="lg"
+            className={cn(
+              meeting?.liked
+                ? 'border-primary bg-primary-light text-primary'
+                : 'border-gray-500 text-gray-700',
+              'box-border gap-1 px-6 text-t1',
+            )}
+            onClick={() => {
+              if (userStatus) {
+                if (isPending) return;
+                likeMeeting(meeting);
+              } else {
+                toast('로그인 후 다시 시도해주세요.');
+              }
+            }}
+          >
+            {meeting?.liked ? (
+              <HeartFillIcon width={28} height={28} />
+            ) : (
+              <HeartIcon width={28} height={28} />
+            )}
+            {meeting.likesCount}
+          </Button>
+
+          <Button
+            variant="outline"
+            size="lg"
+            className="box-border gap-1 border-gray-500 px-6 text-t1 text-gray-700"
+            onClick={() => {
+              open('DECLARE_MODAL', {
+                type: 'meeting',
+                id: meeting.id,
+                refetchKey: 'meeting',
+              });
+            }}
+          >
+            <SirenIcon width={28} height={28} />
+            {meeting.isComplaint ? '신고 취소' : '신고'}
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -49,6 +49,7 @@ export default function GuideBookDetail({ loaderData }: Route.ComponentProps) {
 
   return (
     <HydrationBoundary state={dehydratedState}>
+      {/* TODO: 모바일일때 pt 줄여야 함 */}
       <CommonTemplate>
         <Suspense fallback={<LoadingSpinner />}>
           <GuideBookDetailWrap guideBookId={id} />

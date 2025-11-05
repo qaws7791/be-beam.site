@@ -157,8 +157,11 @@ export default function CreateMeetingSecondContent({
   }, [imageFields, setForm]);
 
   return (
-    <form onSubmit={handleSubmit(() => setTab(tab + 1))} className="w-full">
-      <div className="w-full">
+    <form
+      onSubmit={handleSubmit(() => setTab(tab + 1))}
+      className="box-border w-full px-4 md:px-0"
+    >
+      <div>
         <div className="mb-7 w-full">
           <Text variant="T2_Semibold">모임명</Text>
           <Controller
@@ -197,6 +200,9 @@ export default function CreateMeetingSecondContent({
               />
             )}
           />
+          <div className="mt-3 box-border rounded-lg bg-gray-200 p-3 text-b3 text-gray-600">
+            모임 소개를 10자 이상 입력해주세요.
+          </div>
         </div>
 
         <div className="mb-7 w-full">
@@ -210,9 +216,9 @@ export default function CreateMeetingSecondContent({
                   <Button
                     type="button"
                     key={topic.id}
-                    variant="tertiary"
+                    variant="outline"
                     className={cn(
-                      'mt-3 mr-2 h-9 rounded-md border-gray-300 px-4 text-b1',
+                      'mt-3 mr-2 h-9 rounded-full border-gray-300 px-4 text-b1',
                       field.value === topic.id
                         ? 'border-primary bg-primary-light text-primary'
                         : 'bg-white text-black',
@@ -242,7 +248,12 @@ export default function CreateMeetingSecondContent({
             onKeyDown={handleKeyDownOnHashtagInput}
           />
 
-          <div className="mt-3 flex w-full flex-wrap items-center gap-2">
+          <div
+            className={cn(
+              fields.length > 0 ? 'mt-3' : 'mt-0',
+              'flex w-full flex-wrap items-center gap-2',
+            )}
+          >
             {fields.map((field, idx) => (
               <div
                 key={field.id}
@@ -267,13 +278,17 @@ export default function CreateMeetingSecondContent({
               </div>
             ))}
           </div>
+
+          <div className="mt-3 box-border rounded-lg bg-gray-200 p-3 text-b3 text-gray-600">
+            해쉬태그를 1개 이상 입력해주세요.
+          </div>
         </div>
 
         <div className="mb-7 w-full">
           <Text variant="T2_Semibold">사진 등록</Text>
 
-          <div className="mt-3 flex w-full items-start gap-3">
-            <div className="relative h-[316px] w-[316px] rounded-lg border-1 border-gray-300">
+          <div className="mt-3 w-full items-start gap-3 md:flex">
+            <div className="relative aspect-square w-full rounded-lg border-1 border-gray-300 md:h-[316px] md:w-[316px]">
               <img
                 className={cn(
                   thumbnailImagePreview === '' && 'hidden',
@@ -316,16 +331,16 @@ export default function CreateMeetingSecondContent({
               />
             </div>
 
-            <div className="grid flex-1 grid-cols-5 items-start gap-2">
+            <div className="mt-4 flex w-full items-center gap-2 overflow-x-auto md:mt-0 md:grid md:w-auto md:flex-1 md:grid-cols-5 md:items-start">
               {imageFields.map((field, index) => (
                 <div
                   key={field.id}
-                  className="relative aspect-square w-full rounded-lg"
+                  className="relative aspect-square h-25 w-25 rounded-lg md:h-auto md:w-full"
                 >
                   <img
                     src={URL.createObjectURL(field.value)}
                     alt={`추가 이미지 ${index + 1}`}
-                    className="h-full w-full overflow-hidden rounded-lg object-cover"
+                    className="aspect-square h-full w-full overflow-hidden rounded-lg object-cover"
                   />
                   <button
                     type="button"
@@ -343,7 +358,7 @@ export default function CreateMeetingSecondContent({
               <div
                 className={cn(
                   imageFields.length === 10 && 'hidden',
-                  'relative aspect-square w-full rounded-lg border-1 border-gray-300',
+                  'relative aspect-square h-25 w-25 rounded-lg border-1 border-gray-300 md:h-full md:w-full',
                 )}
               >
                 <label className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full border-1 border-white bg-[rgba(0,0,0,0.1)] p-3 transition-all duration-700 hover:bg-[rgba(121,107,107,0.2)]">
@@ -394,21 +409,17 @@ export default function CreateMeetingSecondContent({
               />
             )}
           />
+          <div className="mt-3 box-border rounded-lg bg-gray-200 p-3 text-b3 text-gray-600">
+            호스트 소개를 10자 이상 입력해주세요.
+          </div>
         </div>
       </div>
 
-      <div className="mt-20 flex w-full items-center gap-3">
-        <Button
-          type="button"
-          variant="tertiary"
-          onClick={() => setTab(tab - 1)}
-          className="w-[50%]"
-        >
+      <div className="mt-20 grid w-full grid-cols-2 items-center gap-3">
+        <Button type="button" variant="outline" onClick={() => setTab(tab - 1)}>
           이전
         </Button>
-        <Button disabled={!formState.isValid} className="w-[50%]">
-          다음
-        </Button>
+        <Button disabled={!formState.isValid}>다음</Button>
       </div>
     </form>
   );

@@ -27,7 +27,7 @@ export default function HostsSearchResults({ query }: { query: string }) {
         </div>
       </div>
       {allHosts.length ? (
-        <div className="mt-6 grid grid-cols-4 gap-5">
+        <div className="mt-6 grid grid-cols-[repeat(auto-fill,minmax(256px,1fr))] gap-5 lg:grid-cols-4">
           {allHosts?.map((host) => <HostCard key={host.id} host={host} />)}
           {allHosts?.length > 0 && (
             <div ref={ref}>

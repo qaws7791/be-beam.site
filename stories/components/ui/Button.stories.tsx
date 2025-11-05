@@ -22,11 +22,11 @@ const meta = {
     },
     variant: {
       control: 'radio',
-      options: ['default', 'tertiary'],
+      options: ['default', 'outline'],
     },
     size: {
       control: 'radio',
-      options: ['sm', 'md', 'lg', 'icon'],
+      options: ['md', 'lg'],
     },
   },
 } satisfies Meta<typeof Button>;
@@ -43,9 +43,9 @@ export const Primary: Story = {
   },
 };
 
-export const Tertiary: Story = {
+export const Outline: Story = {
   args: {
-    variant: 'tertiary',
+    variant: 'outline',
     size: 'md',
     children: 'Button',
   },

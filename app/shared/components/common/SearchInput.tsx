@@ -14,6 +14,7 @@ export default function SearchInput({
   inputStyle = 'border-1 border-gray-300',
   onSearchChange,
   search,
+  ...props
 }: SearchInputProps) {
   return (
     <div className={cn('flex items-center justify-between', inputStyle)}>
@@ -22,12 +23,9 @@ export default function SearchInput({
         className="h-auto border-none bg-transparent py-0 shadow-none focus:border-none"
         onChange={(e) => onSearchChange(e.target.value)}
         value={search}
+        {...props}
       />
-      <img
-        src="/images/icons/search.svg"
-        alt="search_icon"
-        className="cursor-pointer"
-      />
+      <img src="/images/icons/search.svg" alt="search_icon" />
     </div>
   );
 }

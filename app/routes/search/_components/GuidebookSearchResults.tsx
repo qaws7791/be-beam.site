@@ -28,7 +28,7 @@ export default function GuidebookSearchResults({ query }: { query: string }) {
         </div>
       </div>
       {allGuidebooks.length ? (
-        <div className="mt-6 grid grid-cols-4 gap-5">
+        <div className="mt-6 grid grid-cols-[repeat(auto-fill,minmax(256px,1fr))] gap-5 lg:grid-cols-4">
           {allGuidebooks?.map((guidebook) => (
             <Link
               className="w-full cursor-pointer overflow-hidden rounded-3xl border-1 border-gray-300"

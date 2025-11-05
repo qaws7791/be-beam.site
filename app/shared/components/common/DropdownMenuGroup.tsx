@@ -6,10 +6,11 @@ import {
   DropdownMenuItem,
 } from '../ui/DropdownMenu';
 import type { FiltersType } from '@/shared/types/components';
+import ArrowDownIcon from '../icons/ArrowDownIcon';
 
 interface DropdownMenuGroupProps {
   datas: FiltersType[];
-  selectedFilters: Record<string, string>;
+  selectedFilters: Record<string, string | number>;
   onDropdownChange: (newFilter: Partial<MeetingListFilters>) => void;
 }
 
@@ -26,12 +27,12 @@ export default function DropdownMenuGroup({
         const triggerLabel =
           selectedValue === item.defaultOption
             ? item.defaultLabel
-            : item.options[item.values.indexOf(selectedValue)];
+            : item.options[item.values.indexOf(String(selectedValue))];
         return (
-          <DropdownMenu key={item.label}>
-            <DropdownMenuTrigger className="flex cursor-pointer items-center gap-1 rounded-full border border-gray-200 bg-gray-200 px-3 py-[6px] text-b1 font-medium whitespace-nowrap text-black outline-none">
+          <DropdownMenu key={item.label} className="flex-shrink-0">
+            <DropdownMenuTrigger className="flex cursor-pointer items-center gap-1 rounded-xl border-2 border-[#e5e5e5] px-3 py-[6px] text-b1 font-medium whitespace-nowrap text-black outline-none">
               {triggerLabel}
-              <img src="/images/icons/fillDropDown.svg" alt="dropDown_icon" />
+              <ArrowDownIcon className="text-[#a1a1a1]" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="min-w-24 bg-gray-200">
               {item.options.map((option, idx) => (

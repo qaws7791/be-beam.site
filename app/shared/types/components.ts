@@ -24,7 +24,8 @@ export interface TextProps {
     | 'gray-100'
     | 'purple'
     | 'brown'
-    | 'primary';
+    | 'primary'
+    | 'dark-primary';
   variant?: TypographyVariant;
   className?: string;
   onClick?: () => void;

@@ -5,15 +5,19 @@ import useUserSession from '@/features/users/hooks/useUserSession';
 import HeartFillIcon from '@/shared/components/icons/HeartFillIcon';
 import HeartIcon from '@/shared/components/icons/HeartIcon';
 
+interface ReviewLikeButtonProps extends React.ComponentProps<'button'> {
+  reviewId: number;
+  liked: boolean;
+  likesCount: number;
+}
+
 export default function ReviewLikeButton({
   reviewId,
   liked,
   likesCount,
-}: {
-  reviewId: number;
-  liked: boolean;
-  likesCount: number;
-}) {
+  className,
+  ...props
+}: ReviewLikeButtonProps) {
   const { user } = useUserSession();
   const likeMutation = useLikeReviewMutation();
   const unlikeMutation = useUnlikeReviewMutation();
@@ -36,9 +40,11 @@ export default function ReviewLikeButton({
         liked
           ? 'border-primary bg-primary-light text-primary'
           : 'border-gray-300 bg-white text-gray-500',
+        className,
       )}
       aria-label={liked ? '좋아요 취소' : '좋아요'}
       onClick={handleLike}
+      {...props}
     >
       {liked ? (
         <HeartFillIcon className="size-6 text-primary" />
