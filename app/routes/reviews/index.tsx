@@ -8,6 +8,7 @@ import { metaTemplates } from '@/shared/config/meta-templates';
 import { TabNav, TabNavLink } from '@/shared/components/ui/TabNav';
 import LoadingSpinner from '@/shared/components/ui/LoadingSpinner';
 import ReviewFilters from '@/routes/reviews/_components/ReviewFilters';
+import Banner from '@/shared/components/common/Banner';
 
 export function meta() {
   return metaTemplates.reviews();
@@ -48,15 +49,19 @@ export default function Reviews() {
   }, [inView, hasNextPage, fetchNextPage, isFetchingNextPage]);
 
   return (
-    <CommonTemplate>
-      <img
-        src="/images/meeting_review_banner.png"
-        alt="후기들이 증명해주는 비빔의 모임"
-        className="rounded-[27px]"
-        width={1480}
-        height={524}
+    <CommonTemplate className="pt-23 pb-10 lg:pt-41 lg:pb-16">
+      <Banner
+        imageUrl="/images/meeting_review_banner.png"
+        height="h-[365px]"
+        className="hidden lg:block"
       />
-      <div className="mt-16 w-full">
+      <Banner
+        imageUrl="/images/m_meeting_review_banner.png"
+        height="h-[220px]"
+        className="lg:hidden"
+      />
+
+      <div className="mt-6 w-full md:mt-10 lg:mt-16">
         <TabNav>
           {REVIEW_TABS.map((tab) => (
             <TabNavLink

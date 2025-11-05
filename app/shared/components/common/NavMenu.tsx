@@ -1,3 +1,4 @@
+import { cn } from '@/styles/tailwind';
 import { NavLink } from 'react-router';
 
 export default function NavMenu() {
@@ -17,21 +18,18 @@ export default function NavMenu() {
   ];
 
   return (
-    <nav className="flex flex-1 gap-16 text-[1.125rem]">
+    <nav className="flex flex-1 gap-20 text-[1.125rem]">
       {navItems.map((item, idx) => (
         <NavLink
           key={idx}
           to={item.to}
-          style={({ isActive, isPending }) => ({
-            color: isActive
-              ? 'var(--color-primary)'
-              : isPending
-                ? 'var(--color-primary)'
-                : 'var(--color-gray-700)',
-            fontSize: 'var(--text-t2)',
-            fontWeight: 'var(--text-t2--font-weight)',
-            lineHeight: 'var(--text-t2--line-height)',
-          })}
+          className={({ isActive, isPending }) =>
+            cn(
+              'text-t2 whitespace-nowrap',
+              isActive ? 'text-primary' : '',
+              isPending ? 'text-primary' : '',
+            )
+          }
         >
           {item.label}
         </NavLink>

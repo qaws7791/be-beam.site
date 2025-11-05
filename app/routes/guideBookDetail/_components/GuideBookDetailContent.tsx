@@ -31,7 +31,7 @@ export default function GuideBookDetailContent({
   ];
 
   return (
-    <div className="box-border w-full py-6">
+    <div className="box-border w-full pt-6">
       <Text variant="T3_Semibold" color="primary">
         {guideBook?.guidebookType}
       </Text>

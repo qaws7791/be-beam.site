@@ -87,7 +87,7 @@ export default function CreatedMeetingDetailManage({
             })
           }
         >
-          <TabsList className="h-auto gap-4 before:h-0">
+          <TabsList className="h-auto w-full gap-4 overflow-auto before:h-0">
             {typeList.map((type, idx) => (
               <TabsTrigger
                 key={idx}

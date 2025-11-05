@@ -17,7 +17,7 @@ export default function GuideBookRecommendationCard({
       className="mb-3 box-border flex w-full cursor-pointer items-center gap-5 rounded-lg border-1 border-gray-300 p-6 transition-all duration-700 hover:bg-gray-100"
     >
       <img
-        className="h-20 w-20 border-1 border-gray-300 object-cover"
+        className="h-20 w-20 rounded-md border-1 border-gray-300 object-cover"
         src={thumbnailImage}
         alt="guideBook_thumbnail"
       />

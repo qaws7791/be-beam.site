@@ -19,6 +19,7 @@ import RequestedMeetingWrap from '@/routes/requestedMeeting/_components/Requeste
 import type { Route } from '.react-router/types/app/routes/requestedMeeting/+types';
 import { requireAuthMiddleware } from '@/shared/server/auth';
 import { appliedMeetingsQueryOptions } from '@/features/meetings/hooks/useAppliedMeetingsQuery';
+import MypageMeetingMobileTab from '@/features/mypage/components/MypageMeetingMobileTab';
 
 export function meta() {
   return metaTemplates.requestedMeeting();
@@ -71,19 +72,20 @@ export default function RequestedMeeting({ loaderData }: Route.ComponentProps) {
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <div className="flex-1">
-        <div className="w-full">
-          <Text variant="H2_Semibold" className="mb-3">
+      <div className="w-full flex-1">
+        <MypageMeetingMobileTab selectedTab={'requested'} />
+        <div className="mt-4 w-full px-4 md:mt-0 md:px-0">
+          <Text variant="H2_Semibold" className="mb-1 md:mb-3">
             신청 모임
           </Text>
-          <Text variant="B2_Medium" color="gray-600" className="mb-16">
+          <Text variant="B2_Medium" color="gray-600" className="mb-6 md:mb-16">
             내가 신청 중인 모임을 한눈에 확인 할 수 있어요.
           </Text>
         </div>
 
         <Tabs
           defaultValue="applied"
-          className="text-b1"
+          className="px-4 text-b1 md:px-0"
           value={filters.status}
           onValueChange={(value) =>
             setFilter({

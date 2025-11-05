@@ -1,7 +1,8 @@
-import ThreeDotHorizontalIcon from '../../../shared/components/icons/ThreeDotHorizontalIcon';
-import StarIcon from '../../../shared/components/icons/StarIcon';
 import { Link } from 'react-router';
-import ArrowRightIcon from '../../../shared/components/icons/ArrowRightIcon';
+import useReportComplaintMutation from '@/features/report/hooks/useReportComplaintMutation';
+
+import { cn } from '@/styles/tailwind';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,7 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '../../../shared/components/ui/Dialog';
-import useReportComplaintMutation from '@/features/report/hooks/useReportComplaintMutation';
+
 import ReportForm from '../../../features/report/components/ReportForm';
 import { ReviewUpdateForm } from '../../../features/reviews/components/ReviewUpdateForm';
 import {
@@ -33,6 +34,12 @@ import useUpdateReviewMutation from '@/features/reviews/hooks/useUpdateReviewMut
 import useDeleteReviewMutation from '@/features/reviews/hooks/useDeleteReviewMutation';
 import { ImageViewerModal } from '../../../shared/components/common/ImageViewerModal';
 import ReviewLikeButton from '@/features/reviews/components/ReviewLikeButton';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+
+import ThreeDotHorizontalIcon from '../../../shared/components/icons/ThreeDotHorizontalIcon';
+import StarIcon from '../../../shared/components/icons/StarIcon';
+import ArrowRightIcon from '../../../shared/components/icons/ArrowRightIcon';
 
 interface WideReviewCardProps {
   reviewId: number;
@@ -48,17 +55,17 @@ interface WideReviewCardProps {
   meeting: {
     id: number;
     name: string;
-    recruitmentType: '정기모임' | '소모임';
-    image: string;
+    recruitmentType?: '정기모임' | '소모임';
+    image?: string;
   };
 }
 
-const MAX_IMAGES_DISPLAY = 4;
-
 export default function WideReviewCard({
   review,
+  isMeetingDetail = false,
 }: {
   review: WideReviewCardProps;
+  isMeetingDetail?: boolean;
 }) {
   const updateReviewMutation = useUpdateReviewMutation();
   const deleteReviewMutation = useDeleteReviewMutation();
@@ -70,13 +77,9 @@ export default function WideReviewCard({
     null,
   );
 
-  const hasMoreImages = review.images.length > MAX_IMAGES_DISPLAY;
-
-  const displayImages = review.images.slice(0, MAX_IMAGES_DISPLAY);
-
   return (
     <>
-      <div className="rounded-2xl border border-gray-300 px-[37px] pt-8 pb-7">
+      <div className="rounded-2xl border border-gray-300 px-4 pt-6 pb-5 md:px-[37px] md:pt-8 md:pb-7">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4.5">
             <img
@@ -94,7 +97,7 @@ export default function WideReviewCard({
           <div>
             <DropdownMenu>
               <DropdownMenuTrigger>
-                <ThreeDotHorizontalIcon className="size-6 text-black" />
+                <ThreeDotHorizontalIcon className="size-6 text-gray-700" />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 {review.myReview ? (
@@ -117,52 +120,44 @@ export default function WideReviewCard({
         </div>
         <div className="mt-4 flex items-center">
           {Array.from({ length: review.rating }, (_, i) => i + 1).map((i) => (
-            <StarIcon key={i} className="size-6 text-gray-700" />
+            <StarIcon key={i} className="size-6 text-yellow-500" />
           ))}
         </div>
+
         <div className="mt-5.5">
           <p className="text-b3 text-gray-600">{review.text}</p>
         </div>
 
         {review.images.length > 0 && (
           <div className="mt-5.5">
-            <div className="flex max-w-[840px] flex-wrap gap-2">
-              {displayImages.map((image, index) => {
-                const isLastImage = index === MAX_IMAGES_DISPLAY - 1;
-                const shouldShowOverlay = hasMoreImages && isLastImage;
-
+            <Swiper slidesPerView="auto" spaceBetween={8} grabCursor>
+              {review.images.map((image, index) => {
                 return (
-                  <div
+                  <SwiperSlide
                     key={image + review.reviewId + index}
-                    className="relative"
+                    className="!w-auto"
                   >
-                    <img
-                      src={image}
-                      alt="review"
-                      className={`size-37 shrink-0 cursor-pointer rounded-lg object-cover`}
-                      onClick={() => setSelectedImageIndex(index)}
-                    />
-                    {shouldShowOverlay && (
-                      <div
-                        className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-lg bg-black/50"
+                    <div className="relative">
+                      <img
+                        src={image}
+                        alt="review"
+                        className="size-28 shrink-0 cursor-pointer rounded-lg object-cover md:size-37"
                         onClick={() => setSelectedImageIndex(index)}
-                      >
-                        <span className="text-b1 text-white">사진 더 보기</span>
-                      </div>
-                    )}
-                  </div>
+                      />
+                    </div>
+                  </SwiperSlide>
                 );
               })}
-            </div>
+            </Swiper>
           </div>
         )}
 
-        <div className="mt-6">
+        <div className={cn(isMeetingDetail ? 'hidden' : 'block', 'mt-6')}>
           <Link
             to={`/meeting/${review.meeting.id}`}
-            className="flex items-center gap-1 text-t3 text-gray-600"
+            className="inline-flex items-center gap-1 text-t3 text-gray-600"
           >
-            <p>`{review.meeting.name}` 모임 보러가기</p>
+            <p>{review.meeting.name}</p>
             <ArrowRightIcon className="size-6" />
           </Link>
         </div>

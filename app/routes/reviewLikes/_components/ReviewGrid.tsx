@@ -7,7 +7,7 @@ export default function ReviewGrid({
   reviews: MyReviewLikesResult['reviews'];
 }) {
   return (
-    <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-5">
       {reviews.map((review) => (
         <div key={review.reviewId}>
           <ReviewLikeCard {...review} />

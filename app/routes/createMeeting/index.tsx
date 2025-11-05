@@ -94,12 +94,14 @@ export default function CreatedMeeting() {
       <Tabs value={String(tab)} className="relative">
         <div className="mt-5 flex w-full justify-center">
           <TabsList className="h-auto py-8 text-t3 before:h-0">
-            {tabList.map((tab1) => (
+            {tabList.map((tab1, index) => (
               <div key={tab1.value} className="flex flex-col items-center">
                 <TabsTrigger
                   value={String(tab1.value)}
                   className={cn(
-                    "= relative z-2 mx-3 h-9 w-9 cursor-pointer rounded-full bg-gray-300 text-white after:absolute after:top-1/2 after:left-[calc(100%+4px)] after:h-[2px] after:w-[80px] after:-translate-y-1/2 after:border-t-[2px] after:content-[''] last:after:hidden data-[state=active]:bg-primary data-[state=active]:after:bg-transparent",
+                    'relative z-2 mx-3 h-9 w-9 cursor-pointer rounded-full bg-gray-300 p-0 text-white data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:after:bg-transparent',
+                    index !== tabList.length - 1 &&
+                      "after:absolute after:top-1/2 after:left-[calc(100%+4px)] after:h-[2px] after:w-[80px] after:-translate-y-1/2 after:border-t-[2px] after:content-['']",
                     tab > tab1.value && 'bg-primary',
                     tab1.value >= tab && tab1.value < tabList.length - 1
                       ? 'after:border-dashed after:border-gray-500'
@@ -109,7 +111,11 @@ export default function CreatedMeeting() {
                   )}
                 >
                   {tab > tab1.value ? (
-                    <img src="/images/icons/w_check.svg" alt="check_icon" />
+                    <img
+                      src="/images/icons/w_check.svg"
+                      alt="check_icon"
+                      className="size-6"
+                    />
                   ) : (
                     tab1.value + 1
                   )}

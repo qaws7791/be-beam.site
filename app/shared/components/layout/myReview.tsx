@@ -11,10 +11,10 @@ export default function MyReviewLayout() {
     end: true,
   });
   return (
-    <div className="flex-1">
-      <div>
+    <div className="flex-1 px-4 md:px-0">
+      <div className="pt-4 md:pt-0">
         <h1 className="text-h2">나의 후기</h1>
-        <p className="mt-2.5 text-b2 text-gray-600">
+        <p className="mt-1 text-b2 text-gray-600 md:mt-3">
           참여 완료한 모임의 후기를 작성할 수 있어요.
         </p>
       </div>

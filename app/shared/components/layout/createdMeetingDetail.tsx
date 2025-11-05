@@ -37,7 +37,7 @@ export default function CreatedMeetingDetail({
   return (
     <HydrationBoundary state={dehydratedState}>
       <Suspense fallback={<LoadingSpinner />}>
-        <CommonTemplate>
+        <CommonTemplate className="max-w-[1024px]">
           <CreatedMeetingDetailWrap meetingId={id} />
           <Outlet />
         </CommonTemplate>
@@ -82,12 +82,6 @@ export function CreatedMeetingDetailWrap({ meetingId }: { meetingId: number }) {
         <Text variant="H1_Bold" className="mb-5">
           {intro?.name}
         </Text>
-
-        <img
-          className="h-[480px] w-full rounded-md object-cover"
-          src={intro?.meetingThumbnail}
-          alt="meeting_thumbnail"
-        />
       </div>
 
       <div className="mt-7 w-full py-5">
@@ -98,8 +92,8 @@ export function CreatedMeetingDetailWrap({ meetingId }: { meetingId: number }) {
             setTab(value);
           }}
         >
-          <div className="relative w-full text-t2">
-            <TabsList className="gap-8">
+          <div className="relative w-full overflow-auto text-t2">
+            <TabsList>
               {tabList.map((category) => (
                 <TabsTrigger
                   key={category.value}

@@ -31,4 +31,5 @@ export const colorStyles = {
   purple: 'text-[#3940E4]',
   brown: 'text-[#381F1F]',
   primary: 'text-[var(--color-primary)]',
+  'dark-primary': 'text-[#D97300]',
 };

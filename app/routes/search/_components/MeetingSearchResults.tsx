@@ -31,7 +31,7 @@ export default function MeetingSearchResults({ query }: { query: string }) {
         </div>
       </div>
       {allMeetings.length ? (
-        <div className="mt-6 grid grid-cols-4 gap-5">
+        <div className="mt-6 grid grid-cols-[repeat(auto-fill,minmax(256px,1fr))] gap-5 lg:grid-cols-4">
           {allMeetings?.map((meeting) => (
             <MeetingCard
               key={meeting.id}

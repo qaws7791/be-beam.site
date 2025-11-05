@@ -22,7 +22,7 @@ export type MyPageMeetingResult = {
   recruitmentStatus: Meeting['recruitmentStatus'];
   thumbnailImage: MeetingSummary['image'];
   meetingStartTime: MeetingSchedule['meetingStartTime'];
-  address: Meeting['address'];
+  meetingEndTime: MeetingSchedule['meetingEndTime'];
   userStatus: Meeting['userStatus'];
 };
 
@@ -48,7 +48,7 @@ export const getParticipationMeetingList = async (
   const res = await axiosInstance<APIResponse<MyPageMeetingListResult>>({
     method: 'GET',
     baseURL: API_V2_BASE_URL,
-    url: `/users/meetings/participation?${searchParams.toString()}&size=9`,
+    url: `/users/meetings/participation?${searchParams.toString()}&size=12`,
   });
   const data = res.data;
   return data.result;
@@ -71,7 +71,7 @@ export const getApplicationMeetingList = async (
   const res = await axiosInstance<APIResponse<MyPageMeetingListResult>>({
     method: 'GET',
     baseURL: API_V2_BASE_URL,
-    url: `/users/meetings/application?${searchParams.toString()}&size=9`,
+    url: `/users/meetings/application?${searchParams.toString()}&size=12`,
   });
   const data = res.data;
   return data.result;
@@ -94,7 +94,7 @@ export const getOpeningMeetingList = async (
   const res = await axiosInstance<APIResponse<MyPageMeetingListResult>>({
     method: 'GET',
     baseURL: API_V2_BASE_URL,
-    url: `/users/meetings/created?${searchParams.toString()}&size=9`,
+    url: `/users/meetings/created?${searchParams.toString()}&size=12`,
   });
   const data = res.data;
   return data.result;

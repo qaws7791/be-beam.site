@@ -18,7 +18,7 @@ export default function MyProfile() {
   };
 
   return (
-    <div className="max-w-[800px] flex-1">
+    <div className="mx-auto mt-4 max-w-[800px] flex-1 px-4 md:mt-0 md:px-0">
       {/* 헤더 */}
       <div className="flex flex-col gap-2.5">
         <h1 className="text-h2 text-gray-950">프로필 정보</h1>

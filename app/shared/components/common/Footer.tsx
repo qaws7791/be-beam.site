@@ -2,8 +2,8 @@ import Text from '@/shared/components/ui/Text';
 
 export default function Footer() {
   return (
-    <div className="w-full border-t-1 border-gray-300 py-20">
-      <div className="mx-auto w-[1480px]">
+    <div className="mx-auto box-border w-full max-w-[1480px] border-t-1 border-gray-300 px-4 py-20">
+      <div className="mx-auto w-full max-w-[1480px]">
         <Text variant="B3_Regular" color="gray-600">
           be:beam
         </Text>

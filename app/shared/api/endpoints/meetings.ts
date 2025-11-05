@@ -1,5 +1,9 @@
 import { axiosInstance } from '@/shared/api/axios';
-import { API_V1_BASE_URL, API_V2_BASE_URL } from '@/shared/constants/api';
+import {
+  API_V1_BASE_URL,
+  API_V2_BASE_URL,
+  API_V3_BASE_URL,
+} from '@/shared/constants/api';
 import type { APIResponse, CursorPaginationResult } from '@/shared/types/api';
 import type {
   GuidebookRecommendation,
@@ -20,10 +24,10 @@ export type MeetingListResult = {
     recruitmentStatus: Meeting['recruitmentStatus'];
     recruitmentType: Meeting['recruitmentType'];
     meetingStartTime: MeetingSchedule['meetingStartTime'];
-    address: MeetingSchedule['address'];
+    meetingEndTime: MeetingSchedule['meetingEndTime'];
     image: ImageType;
     applicantCount: number;
-    participantCount: number;
+    participantCount?: number;
     liked: boolean;
   }[];
 };
@@ -38,11 +42,11 @@ export const getMeetingList = async (
       searchParams.append(key, String(value));
     }
   });
-  const url = `/meetings?${searchParams.toString()}&cursor=${pageParam}&size=12`;
+  const url = `/meetings?${searchParams.toString()}&page=${pageParam}&size=12`;
   console.log(url);
 
   const res = await axiosInstance<APIResponse<MeetingListResult>>({
-    baseURL: API_V2_BASE_URL,
+    baseURL: API_V3_BASE_URL,
     url: url,
     method: 'GET',
   });

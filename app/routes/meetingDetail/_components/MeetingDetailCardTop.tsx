@@ -1,96 +1,80 @@
-import { formatNumberWithComma } from '@/shared/utils/cash';
-
 import type { Meeting } from '@/shared/types/entities';
 import { Tag } from '../../../shared/components/ui/Tag';
 import Text from '../../../shared/components/ui/Text';
 import RecruitmentTypeAndTopic from './RecruitmentTypeAndTopic';
-import MeetingCardInfoItemWrap from './MeetingCardInfoItemWrap';
 import TitleAndDescription from '../../../shared/components/common/TitleAndDes';
+import { cn } from '@/styles/tailwind';
 
 export default function MeetingDetailCardTop({
   meeting,
+  isBlock = 'block',
 }: {
   meeting: Meeting;
+  isBlock?: string;
 }) {
-  const meetingStatusComment =
-    meeting?.recruitmentStatus === '모집예정'
-      ? '현재 모임 모집 예정입니다 !'
-      : meeting?.recruitmentStatus === '모집중' ||
-          meeting?.recruitmentStatus === '모집마감'
-        ? `📢 현재 0명이 모임 신청 중이에요 !`
-        : meeting?.recruitmentStatus === '모임중'
-          ? `📢 현재 ${meeting?.participantCount}명이 모임 참여 중이에요 !`
-          : `📢 총 ${meeting?.participantCount}명이 모임에 참여했습니다 !`;
-
   return (
-    <div className="w-full">
+    <div
+      className={cn(
+        isBlock,
+        'box-border w-full rounded-t-4xl bg-white px-8 pt-8 pb-4 lg:rounded-none lg:px-0 lg:py-0',
+      )}
+    >
       <RecruitmentTypeAndTopic
         recruitmentType={meeting?.recruitmentType}
         topic={meeting?.topic}
       />
 
-      <Text variant="H2_Semibold" className="mt-6">
+      <Text variant="H2_Semibold" className="mt-3 lg:mt-6">
+        <span className="mr-2 text-gray-500">{meeting?.recruitmentStatus}</span>
         {meeting?.name}
       </Text>
 
-      <div className="mt-5 flex items-center gap-x-2">
-        <Text
-          variant="B1_Semibold"
-          color="primary"
-          className="box-border rounded-lg border-1 border-primary bg-[#FFFAF0] px-4 py-2"
+      <div className="mt-4 flex items-center gap-x-2 text-b1">
+        <Tag
+          variant="primary"
+          className="rounded-full border-1 border-primary px-5 py-4"
         >
           {meeting?.meetingMode}
-        </Text>
-        <Text
-          variant="B1_Semibold"
-          color="primary"
-          className="box-border rounded-lg border-1 border-primary bg-[#FFFAF0] px-4 py-2"
+        </Tag>
+        <Tag
+          variant="primary"
+          className="rounded-full border-1 border-primary px-5 py-4"
         >
           {meeting?.selectionType}
-        </Text>
-      </div>
-
-      <div className="mt-5 flex items-center justify-between">
-        <TitleAndDescription
-          title="모집 기간"
-          titleStyle="text-b2 text-gray-600"
-          wrapStyle="flex items-center gap-2"
-        >
-          <Text variant="B2_Medium">
-            {meeting?.recruitingStartTime?.slice(0, 10)} ~
-            {meeting?.recruitingEndTime?.slice(0, 10)}
-          </Text>
-        </TitleAndDescription>
-
-        <Tag
-          variant={
-            meeting?.recruitmentStatus === '모집예정'
-              ? 'primary'
-              : meeting?.recruitmentStatus === '모집중'
-                ? 'blue'
-                : meeting?.recruitmentStatus === '모집마감'
-                  ? 'tertiary'
-                  : meeting?.recruitmentStatus === '모임중'
-                    ? 'pink'
-                    : 'brown'
-          }
-        >
-          {meeting?.recruitmentStatus}
         </Tag>
       </div>
 
-      <Tag
-        variant="tertiary"
-        className="mt-4 rounded-md px-2 py-5 text-b3 text-gray-600"
+      <TitleAndDescription
+        title="모집 기간"
+        titleStyle="text-b2 text-gray-600"
+        wrapStyle="mt-6 flex items-center gap-2"
       >
-        {meetingStatusComment}
-      </Tag>
+        <Text variant="B2_Medium">
+          {`${meeting?.recruitingStartTime?.slice(0, 10)} ~ ${meeting?.recruitingEndTime?.slice(0, 10)}`}
+        </Text>
+      </TitleAndDescription>
 
-      <MeetingCardInfoItemWrap meeting={meeting} />
+      <TitleAndDescription
+        title="모집 인원"
+        titleStyle="text-b2 text-gray-600"
+        wrapStyle="mt-1 flex items-center gap-2"
+      >
+        <Text variant="B2_Medium">
+          {`${meeting?.minParticipants}명 ~ ${meeting?.maxParticipants}명`}
+        </Text>
+      </TitleAndDescription>
 
-      <Text variant="H2_Semibold" className="mt-5 text-right">
-        총 {formatNumberWithComma(meeting?.paymentAmount)}원
-      </Text>
+      <div className="mt-5 flex items-center gap-2">
+        {meeting?.hashtags?.map((hashtag, idx) => (
+          <Tag
+            key={idx}
+            variant="primary"
+            className="mr-1 rounded-md border-none bg-transparent p-0 text-b1 lg:mr-0 lg:bg-[#FFE2CE] lg:px-2 lg:py-1"
+          >
+            {`#${hashtag}`}
+          </Tag>
+        ))}
+      </div>
     </div>
   );
 }

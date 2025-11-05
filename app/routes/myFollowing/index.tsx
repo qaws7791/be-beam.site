@@ -20,10 +20,10 @@ export function meta() {
 
 export default function MyFollowingPage() {
   return (
-    <div className="flex-1">
-      <div className="flex flex-col gap-2.5">
+    <div className="mt-4 flex-1 px-4 md:mt-0 md:px-0">
+      <div className="flex flex-col">
         <h1 className="text-h2 text-gray-950">팔로잉 리스트</h1>
-        <p className="text-b2 text-gray-600">
+        <p className="mt-1 text-b2 text-gray-600 md:mt-3">
           내가 팔로잉하는 호스트를 모아보세요.
         </p>
       </div>
@@ -90,7 +90,7 @@ function FollowingGrid({
   }[];
 }) {
   return (
-    <div className="mt-8 grid flex-1 grid-cols-3 gap-x-5 gap-y-8">
+    <div className="mt-8 grid w-full flex-1 grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5">
       {hosts.map((host) => (
         <FollowingCard key={host.id} host={host} />
       ))}

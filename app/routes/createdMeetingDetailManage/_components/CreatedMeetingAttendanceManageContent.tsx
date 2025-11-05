@@ -44,7 +44,7 @@ export default function CreatedMeetingAttendanceManageContent({
           key={attendance.scheduleId}
           type="single"
           collapsible
-          className="mt-5 box-border w-full rounded-lg border-1 border-gray-300 bg-gray-100 px-10 pt-1 pb-5"
+          className="mt-5 box-border w-full rounded-lg border-1 border-gray-300 bg-gray-100 px-4 pt-1 pb-5 md:px-10"
         >
           <AccordionItem value="item-1" className="border-b-1 border-gray-400">
             <AccordionTrigger>
@@ -74,7 +74,7 @@ export default function CreatedMeetingAttendanceManageContent({
                   >
                     <div className="flex items-center gap-4">
                       <img
-                        className="h-12 w-12 rounded-full border-1 border-gray-300 object-cover"
+                        className="size-8 rounded-full border-1 border-gray-300 object-cover"
                         src={participant.image}
                         alt="profile_image"
                       />

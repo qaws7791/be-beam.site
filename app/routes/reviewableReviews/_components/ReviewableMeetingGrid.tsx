@@ -7,7 +7,7 @@ export default function ReviewableMeetingGrid({
   reviews: GetReviewableReviewsResult['reviews'];
 }) {
   return (
-    <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+    <div className="mx-auto grid w-full grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4 md:gap-5">
       {reviews.map((review) => (
         <div key={review.meetingId}>
           <ReviewableMeetingCard

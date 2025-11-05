@@ -38,7 +38,7 @@ export default function AllSearchResults({ query }: { query: string }) {
           </div>
         </div>
         {data?.meetings.length ? (
-          <div className="mt-6 grid grid-cols-4 gap-5">
+          <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {data?.meetings.map((meeting) => (
               <MeetingCard
                 key={meeting.id}
@@ -88,7 +88,7 @@ export default function AllSearchResults({ query }: { query: string }) {
           </div>
         </div>
         {data?.guidebooks.length ? (
-          <div className="mt-6 grid grid-cols-4 gap-5">
+          <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {data?.guidebooks.map((guidebook) => (
               <Link
                 className="w-full cursor-pointer overflow-hidden rounded-3xl border-1 border-gray-300"
@@ -143,7 +143,7 @@ export default function AllSearchResults({ query }: { query: string }) {
           </div>
         </div>
         {data?.hosts.length ? (
-          <div className="mt-6 grid grid-cols-4 gap-5">
+          <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {data?.hosts.map((host) => <HostCard key={host.id} host={host} />)}
           </div>
         ) : (

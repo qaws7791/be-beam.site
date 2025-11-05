@@ -246,7 +246,7 @@ export default function CreatedMeetingDetailIntroWrap({
                 <Button
                   type="button"
                   key={topic.id}
-                  variant="tertiary"
+                  variant="outline"
                   className={cn(
                     'mt-3 mr-2 h-9 rounded-md border-gray-300 px-4 text-b1',
                     field.value === topic.id
@@ -325,40 +325,37 @@ export default function CreatedMeetingDetailIntroWrap({
 
         <div
           className={cn(
-            images.length > 0 && 'flex',
+            images.length > 0 &&
+              'grid grid-cols-[repeat(auto-fill,minmax(128px,1fr))]',
             'w-full items-center gap-2',
           )}
         >
-          <div className="flex items-center gap-2">
-            {images.map((image, idx) => (
-              <div key={idx} className="relative">
-                <img
-                  className="h-32 w-32 overflow-hidden rounded-lg border-1 border-gray-300 object-cover"
-                  src={image}
-                  alt="meeting_thumbnail_image"
-                />
-                <button
-                  className="absolute top-2 right-2 cursor-pointer rounded-full bg-gray-300"
-                  onClick={() => {
-                    removeImage(idx);
-                    setImages((prev) =>
-                      prev.filter((_, index) => index !== idx),
-                    );
-                    setExistingImages((prev) =>
-                      prev.filter((_, index) => index !== idx),
-                    );
-                  }}
-                >
-                  <img src="/images/icons/close.svg" alt="close_icon" />
-                </button>
-              </div>
-            ))}
-          </div>
+          {images.map((image, idx) => (
+            <div key={idx} className="relative aspect-square">
+              <img
+                className="h-full min-h-32 w-full min-w-32 overflow-hidden rounded-lg border-1 border-gray-300 object-cover"
+                src={image}
+                alt="meeting_thumbnail_image"
+              />
+              <button
+                className="absolute top-2 right-2 cursor-pointer rounded-full bg-gray-300"
+                onClick={() => {
+                  removeImage(idx);
+                  setImages((prev) => prev.filter((_, index) => index !== idx));
+                  setExistingImages((prev) =>
+                    prev.filter((_, index) => index !== idx),
+                  );
+                }}
+              >
+                <img src="/images/icons/close.svg" alt="close_icon" />
+              </button>
+            </div>
+          ))}
 
           <label
             className={cn(
               images.length >= 10 && 'hidden',
-              'flex h-32 w-32 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-500',
+              'flex aspect-square h-full min-h-32 w-full min-w-32 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-gray-500',
             )}
           >
             <input
@@ -402,7 +399,7 @@ export default function CreatedMeetingDetailIntroWrap({
 
       <div className="flex w-full justify-center">
         <Button
-          className="mt-5 min-w-100"
+          className="mt-5 w-full max-w-100"
           type="submit"
           disabled={!formState.isValid || images.length === 0}
         >

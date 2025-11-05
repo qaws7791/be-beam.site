@@ -17,12 +17,13 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/shared/components/ui/Tabs';
-import CreatedMeetingWrap from '@/routes/createMeeting/_components/CreatedMeetingWrap';
+import CreatedMeetingWrap from '@/routes/createdMeeting/_components/CreatedMeetingWrap';
 import Text from '@/shared/components/ui/Text';
 import { metaTemplates } from '@/shared/config/meta-templates';
 import type { Route } from '.react-router/types/app/routes/createdMeeting/+types';
 import { requireAuthMiddleware } from '@/shared/server/auth';
 import { createdMeetingsQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingsQuery';
+import MypageMeetingMobileTab from '@/features/mypage/components/MypageMeetingMobileTab';
 
 export function meta() {
   return metaTemplates.createdMeeting();
@@ -71,19 +72,20 @@ export default function CreatedMeeting({ loaderData }: Route.ComponentProps) {
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <div className="flex-1">
-        <div className="w-full">
-          <Text variant="H2_Semibold" className="mb-3">
+      <div className="w-full flex-1">
+        <MypageMeetingMobileTab selectedTab={'created'} />
+        <div className="mt-4 w-full px-4 md:mt-0 md:px-0">
+          <Text variant="H2_Semibold" className="mb-1 md:mb-3">
             내가 개설한 모임
           </Text>
-          <Text variant="B2_Medium" color="gray-600" className="mb-16">
+          <Text variant="B2_Medium" color="gray-600" className="mb-6 md:mb-16">
             내가 개설한 모임을 한눈에 확인 할 수 있어요.
           </Text>
         </div>
 
         <Tabs
           defaultValue="regular"
-          className="text-b1"
+          className="px-4 text-b1 md:px-0"
           value={filters.type}
           onValueChange={(value) =>
             setFilter({

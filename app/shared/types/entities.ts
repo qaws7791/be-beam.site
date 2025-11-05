@@ -63,6 +63,7 @@ export interface Meeting {
   participantCount: number;
   minParticipants: number;
   maxParticipants: number;
+  applicantCount: number;
   recruitingStartTime: string;
   recruitingEndTime: string;
   meetingMode: string;
@@ -83,6 +84,7 @@ export interface Meeting {
   reviewable: boolean;
   userStatus: string;
   isHost: boolean;
+  isComplaint: boolean;
 }
 
 export interface MeetingApplicants {
@@ -188,7 +190,8 @@ export interface MeetingSummary {
   recruitmentStatus?: string;
   image: ImageType;
   meetingStartTime: string;
-  address: string;
+  meetingEndTime: string;
+  paymentAmount?: number;
   liked?: boolean;
 }
 
@@ -199,7 +202,7 @@ export interface MyPageMeetingSummary {
   recruitmentStatus: string;
   thumbnailImage: string;
   meetingStartTime: string;
-  address: string;
+  meetingEndTime: string;
   userStatus: string;
 }
 

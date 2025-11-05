@@ -44,14 +44,14 @@ export default function GuideBookDetailWrap({
       {!guideBook ? (
         <p>가이드북 정보를 찾을 수 없습니다.</p>
       ) : (
-        <div className="flex items-start gap-10">
-          <div className="sticky top-[100px] w-full max-w-[500px] self-start">
+        <div className="flex flex-col items-start px-4 lg:flex-row lg:gap-10 2xl:px-0">
+          <div className="top-[100px] mx-auto w-full max-w-[500px] self-start lg:sticky">
             <Slider
               images={guideBook.images}
               delay={5000}
               isCount={true}
               slideWidth="w-full"
-              slideHeight="h-[480px]"
+              slideHeight="h-auto aspect-square"
             />
             <Button
               onClick={handleDownloadClick}

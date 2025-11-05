@@ -2,12 +2,12 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import useDeleteMeetingMutation from '@/features/meetings/hooks/useDeleteMeetingMutation';
+import { createdMeetingsQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingsQuery';
 import { useModalStore } from '@/shared/stores/useModalStore';
 import usePagination from '@/shared/hooks/usePagination';
-import { type MyPageMeetingResult } from '@/shared/api/endpoints/mypage';
 
+import { type MyPageMeetingResult } from '@/shared/api/endpoints/mypage';
 import type { MyCreatedMeetingFilters } from '@/features/mypage/schemas/userFilters';
-import GridGroup from '../../../shared/components/ui/GridGroup';
 import MeetingCard from '../../../features/meetings/components/MeetingCard';
 import {
   Pagination,
@@ -20,7 +20,6 @@ import {
 import { DropdownMenuItem } from '../../../shared/components/ui/DropdownMenu';
 import MoreDropdownMenu from '../../../shared/components/common/MoreDropdownMenu';
 import toast from 'react-hot-toast';
-import { createdMeetingsQueryOptions } from '@/features/meetings/hooks/useCreatedMeetingsQuery';
 
 interface CreatedMeetingWrapProps {
   filters: MyCreatedMeetingFilters;
@@ -62,7 +61,7 @@ export default function CreatedMeetingWrap({
 
   return (
     <>
-      <GridGroup columns={3} gap={5}>
+      <div className="mx-auto grid w-full grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4 md:gap-5">
         {createdMeetings?.meetings?.map((meeting: MyPageMeetingResult) => (
           <MeetingCard
             key={meeting.id}
@@ -71,14 +70,14 @@ export default function CreatedMeetingWrap({
             recruitmentStatus={meeting.recruitmentStatus}
             name={meeting.name}
             meetingStartTime={meeting.meetingStartTime}
-            address={meeting.address}
+            meetingEndTime={meeting.meetingEndTime}
             onClick={() => navigate(`/myPage/created/${meeting.id}/intro`)}
             isLikeBtn={false}
           >
             {meeting.recruitmentStatus !== '모집마감' &&
               meeting.recruitmentStatus !== '모임중' &&
               meeting.recruitmentStatus !== '모임완료' && (
-                <MoreDropdownMenu btnPosition="right-0 top-0 absolute">
+                <MoreDropdownMenu btnPosition="right-0 top-0 absolute bg-transparent">
                   <DropdownMenuItem
                     onSelect={() => {
                       open('CONFIRM_DIALOG', {
@@ -100,7 +99,7 @@ export default function CreatedMeetingWrap({
               )}
           </MeetingCard>
         ))}
-      </GridGroup>
+      </div>
 
       <Pagination className="mt-20">
         <PaginationContent>

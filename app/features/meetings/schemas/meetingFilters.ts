@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const MeetingListFilterSchema = z.object({
   search: z.string().default(''),
-  topic: z.string().default('all'),
+  'topic-id': z.union([z.coerce.number(), z.literal('all')]).default('all'),
   'recruitment-type': z.enum(['all', 'regular', 'small']).default('all'),
   'recruitment-status': z
     .enum([

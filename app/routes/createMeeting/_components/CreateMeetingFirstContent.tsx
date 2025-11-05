@@ -97,7 +97,7 @@ export default function CreateMeetingFirstContent({
   }, [meetingTypeTab, isGuideBookRefer, selectedGuideBook, setForm]);
 
   return (
-    <div className="w-full">
+    <div className="box-border w-full p-4 md:px-0">
       <div className="w-full">
         <Text variant="T2_Semibold" className="mb-4">
           모임 분류

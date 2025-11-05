@@ -8,9 +8,16 @@ import ArrowRightIcon from '../icons/ArrowRightIcon';
 import CheckIcon from '../icons/CheckIcon';
 
 function DropdownMenu({
+  className,
   ...props
-}: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) {
-  return <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />;
+}: React.ComponentProps<typeof DropdownMenuPrimitive.Root> & {
+  className?: string;
+}) {
+  return (
+    <div className={cn(className)}>
+      <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />
+    </div>
+  );
 }
 
 function DropdownMenuPortal({
@@ -72,7 +79,7 @@ function DropdownMenuItem({
       data-slot="dropdown-menu-item"
       data-inset={inset}
       className={cn(
-        "relative flex cursor-default cursor-pointer items-center gap-2 rounded-sm px-5 py-[7px] text-sm outline-hidden select-none focus:bg-gray-200 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-gray-600",
+        "relative flex cursor-pointer items-center gap-2 rounded-sm px-5 py-[7px] text-sm outline-hidden select-none focus:bg-gray-200 data-[inset]:pl-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-gray-600",
         className,
       )}
       {...props}

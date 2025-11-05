@@ -6,7 +6,9 @@ export interface APIResponse<T> {
 }
 
 export interface CursorPaginationResult {
-  nextCursor: number;
+  page: number;
   size: number;
   hasNext: boolean;
+  totalPages: number;
+  totalElements: number;
 }

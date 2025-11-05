@@ -10,7 +10,6 @@ import {
 } from '../../../shared/components/ui/Tabs';
 import Text from '../../../shared/components/ui/Text';
 import MeetingCard from '../../../features/meetings/components/MeetingCard';
-import GridGroup from '../../../shared/components/ui/GridGroup';
 import useMeetingRecommendationQuery from '@/features/meetings/hooks/useMeetingRecommendationsQuery';
 import LoadingSpinner from '../../../shared/components/ui/LoadingSpinner';
 import useLikeMeetingMutation from '@/features/meetings/hooks/useLikeMeetingMutation';
@@ -53,7 +52,9 @@ export default function MeetingRecommendations({
 
   return (
     <div className={`${className} w-full text-left`}>
-      <Text variant="H2_Semibold">{title}</Text>
+      <Text variant="H2_Semibold" className="px-4">
+        {title}
+      </Text>
 
       <div className="mt-6 mb-5 flex w-full items-center gap-3">
         <Tabs
@@ -64,7 +65,7 @@ export default function MeetingRecommendations({
             setTab(value as 'all' | 'regular' | 'small')
           }
         >
-          <div className="flex w-full items-center justify-between">
+          <div className="flex w-full items-center justify-between px-4">
             <TabsList className="h-auto gap-3 before:h-0">
               {tabList.map((data, idx) => (
                 <TabsTrigger
@@ -89,36 +90,40 @@ export default function MeetingRecommendations({
 
           {tabList?.map((tab, idx) => (
             <TabsContent key={idx} value={tab.value} className="mt-5 w-full">
-              <GridGroup columns={4}>
-                {isLoading ? (
-                  <LoadingSpinner />
-                ) : (
-                  <>
-                    {datas?.map((meeting: RecommendationMeeting) => (
-                      <MeetingCard
-                        key={meeting.id}
-                        name={meeting.name}
-                        image={meeting.thumbnailImage}
-                        recruitmentStatus={meeting.recruitmentStatus}
-                        recruitmentType={meeting.recruitmentType}
-                        meetingStartTime={meeting.meetingStartTime.slice(0, 10)}
-                        address={meeting.address}
-                        onClick={() => navigate(`/meeting/${meeting.id}`)}
-                        onLikeClick={() => {
-                          if (isPending) return;
-                          if (meeting) {
-                            likeMeeting(
-                              meeting as { id: number; liked: boolean },
-                            );
-                          }
-                        }}
-                        isLikeBtn={user}
-                        liked={meeting.liked}
-                      />
-                    ))}
-                  </>
-                )}
-              </GridGroup>
+              <div className="overflow-x-auto pl-4">
+                <div className="flex gap-4 md:grid md:grid-cols-4">
+                  {isLoading ? (
+                    <LoadingSpinner />
+                  ) : (
+                    <>
+                      {datas?.map((meeting: RecommendationMeeting) => (
+                        <MeetingCard
+                          classNames="w-[40vw] md:w-full shrink-0"
+                          key={meeting.id}
+                          name={meeting.name}
+                          image={meeting.thumbnailImage}
+                          recruitmentStatus={meeting.recruitmentStatus}
+                          recruitmentType={meeting.recruitmentType}
+                          meetingStartTime={meeting.meetingStartTime}
+                          meetingEndTime={meeting.meetingEndTime}
+                          paymentAmount={meeting.paymentAmount}
+                          onClick={() => navigate(`/meeting/${meeting.id}`)}
+                          onLikeClick={() => {
+                            if (isPending) return;
+                            if (meeting) {
+                              likeMeeting(
+                                meeting as { id: number; liked: boolean },
+                              );
+                            }
+                          }}
+                          isLikeBtn={user}
+                          liked={meeting.liked}
+                        />
+                      ))}
+                    </>
+                  )}
+                </div>
+              </div>
             </TabsContent>
           ))}
         </Tabs>

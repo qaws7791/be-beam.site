@@ -9,14 +9,16 @@ import {
 } from '@/features/guidebooks/schemas/guideBooksFilters';
 import { useUrlFilters } from '@/shared/hooks/userUrlFilters';
 import { metaTemplates } from '@/shared/config/meta-templates';
+import { guideBooksInfiniteQueryOptions } from '@/features/guidebooks/hooks/useGuideBooksQuery';
 
+import type { Route } from '.react-router/types/app/routes/guideBooks/+types';
 import type { FilterOption } from '@/shared/types/components';
+import CommonTemplate from '@/shared/components/layout/CommonTemplate';
+import Banner from '@/shared/components/common/Banner';
 import { Tabs } from '@/shared/components/ui/Tabs';
 import GuideBooksFilterControls from '@/routes/guideBooks/_components/TargetTypeTab';
-import GuideBooksContent from '@/routes/guideBooks/_components/GuideBooksContent';
-import type { Route } from '.react-router/types/app/routes/guideBooks/+types';
-import { guideBooksInfiniteQueryOptions } from '@/features/guidebooks/hooks/useGuideBooksQuery';
 // import SearchInput from '@/components/molecules/SearchInput';
+import GuideBooksContent from '@/routes/guideBooks/_components/GuideBooksContent';
 
 export function meta() {
   return metaTemplates.guideBooks();
@@ -100,14 +102,19 @@ export default function GuideBooks({ loaderData }: Route.ComponentProps) {
 
   return (
     <HydrationBoundary state={dehydratedState}>
-      <div>
-        <img
-          src="/images/guideBook_banner.png"
-          alt="가이드북 배너"
-          className="mt-25 h-[490px] w-full object-cover"
+      <CommonTemplate className="pt-23 pb-10 lg:pt-41 lg:pb-16">
+        <Banner
+          imageUrl="/images/guideBook_banner.png"
+          height="h-[365px]"
+          className="hidden lg:block"
+        />
+        <Banner
+          imageUrl="/images/m_guideBook_banner.png"
+          height="h-[220px]"
+          className="lg:hidden"
         />
 
-        <div className="mx-auto w-full max-w-[1480px] py-16">
+        <div className="mt-6 w-full md:mt-10 lg:mt-16">
           <Tabs
             defaultValue="all"
             className="text-b1"
@@ -139,7 +146,7 @@ export default function GuideBooks({ loaderData }: Route.ComponentProps) {
               onSearchChange={setFilter}
               search={filters.search}
         /> */}
-      </div>
+      </CommonTemplate>
     </HydrationBoundary>
   );
 }
